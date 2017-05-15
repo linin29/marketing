@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tunicorn.marketing.mapper.MajorTypeMapper">
+	<resultMap id="MajorTypeMap" type="com.tunicorn.marketing.vo.MajorTypeVO">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="last_update" property="lastUpdateTime"  javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+	 </resultMap>
+    
+   <insert id="createMajorType" parameterType="com.tunicorn.marketing.vo.MajorTypeVO" useGeneratedKeys="true"  keyProperty="id">
+    insert into major_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+        create_time,
+      <if test="lastUpdateTime != null" >
+        last_update,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+        now(),
+      <if test="lastUpdateTime != null" >
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateMajorType"  parameterType="com.tunicorn.marketing.vo.MajorTypeVO">
+	  UPDATE major_type 
+	  <trim prefix="set" suffixOverrides=",">
+			<if test="name != null and name !=''">
+			    name=#{name},
+			</if>
+			<if test="description != null description !=''">
+			    description=#{description},
+			</if>
+			<if test="status != null and status !=''">
+			    status=#{status},
+			</if>
+	 </trim>
+		 WHERE id=#{id}
+	</update>
+	<select id="getMajorTypeListByBO" resultMap="MajorTypeMap" parameterType="com.tunicorn.marketing.bo.MajorTypeBO">
+		select id, `name`, description, create_time, last_update, status
+		from major_type
+		where `status` = 'active'
+		<if test="name != null and name != ''">
+			and `name` like concat(concat('%',#{name}),'%')
+		</if>
+		order by create_time desc
+		limit #{startNum}, #{perPage}
+	</select>
+	<select id="getMajorTypeCount" resultType="int" parameterType="com.tunicorn.marketing.bo.MajorTypeBO">
+		select count(*)
+		from major_type
+		where `status` = 'active'
+		<if test="name != null and name != ''">
+			and `name` like concat(concat('%',#{name}),'%')
+		</if>
+	</select>
+</mapper>

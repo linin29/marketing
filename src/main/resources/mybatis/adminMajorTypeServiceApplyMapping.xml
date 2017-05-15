@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tunicorn.marketing.mapper.AdminMajorTypeServiceApplyMappingMapper">
+	<resultMap id="AdminServiceApplyResultMap" type="com.tunicorn.marketing.vo.AdminMajorTypeServiceApplyMappingVO">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="major_type_id" property="majorTypeId" jdbcType="INTEGER" />
+		<result column="service_apply_id" property="serviceApplyId" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
+		<result column="last_update" property="lastUpdateTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+	</resultMap>
+    <insert id="batchInsertMajorTypeApplicationMapping" useGeneratedKeys="true" parameterType="java.util.List">  
+        Insert into admin_major_type_service_apply_mapping (major_type_id, service_apply_id, create_time) 
+        values  
+	    <foreach collection="list" item="item" index="index"  separator=",">  
+	        (#{item.majorTypeId}, #{item.serviceApplyId}, now())
+	    </foreach>  
+    </insert>  
+    <delete id="batchDeleteMajorTypeApplicationMapping" parameterType="java.util.List">
+        delete from admin_major_type_service_apply_mapping where id in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+</mapper>
+

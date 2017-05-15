@@ -1,0 +1,57 @@
+/*common*/
+.table th ,.table td{text-align: center;}
+ul li{list-style-type: none;}
+
+/*任务列表*/
+.task_list{margin: 0px 15px;}
+.content_list{margin: 30px 40px 20px 40px;}
+.task_list_input{width:150px;display: inline-block;}
+.btn_style1{margin:0 10px;}
+.pages{margin: 5px auto;text-align: right;}
+
+/*统计列表*/
+.count_list{margin: 0px 15px;}
+.content_list{margin: 30px 40px 20px 40px;}
+
+
+/*新建任务页面css*/
+.img_icorn{width: 30px;height: 30px;}
+.create_task_input{width:300px;margin: 20px;}
+.choose-box-body{margin: 20px 0px;}
+.paddingLeft{padding-left: 130px;}
+.choose_btn{margin-right: 25px;}
+.fileinput-button input { position: absolute; top: 0; right: 0; margin: 0; opacity: 0; -ms-filter: 'alpha(opacity=0)'; font-size: 200px; direction: ltr; cursor: pointer;}
+.st_camera{width: 22px;height: 20px;}
+/* .static_img{max-width:870px; max-height:270px;} */
+.pageList{margin: 20px;}
+.count_number{margin: 0 10px;}
+.table th ,.table td{text-align: center;}
+.count_table{width: 920px;margin: 20px;}
+.modal{background: rgba(0, 0, 0, 0.3);}
+.preview_box{min-height: 480px;}
+.model_head{height: 43px;border-bottom: 2px solid green;}
+.box-header{margin-top: -23px;}
+.box-body ul{list-style: none;margin:0;padding:0;}
+.preview{width: 215px;height: 260px;}
+.max_width{max-width: 1400px;}
+.min_width{min-width: 1200px;}
+.preview_img{height: 400px;overflow-y:auto;overflow-x: hidden;width: 100%; }
+.preview_img li{float: left;margin: 3px 0 3px 5px;}
+.gallery-controls {  position: relative;  left: 8px;  top: -251px;  display: inline-block;}
+.resourceNo { width: 40px;}
+.content_width{width: 960px;}
+.box-title{margin-bottom: 16px;}
+.notice{width:100%}
+.notice p{margin-top:20px;text-align: center;}
+
+.brand-list{border: 3px solid #ddd;box-shadow: 0 0 3px #333;height:400px;overflow-y:scroll;}
+.icorn-brand{display:inline;width:36px;height:37px;border: 1px solid #dddddd;margin-top: 2px;margin-left:2px;}
+.changeline{word-break:break-all;font-size:16px;margin-top:-37px;padding-left: 40px;}
+.form-group{min-height:35px;}
+.cropper-view-box {
+    outline: 3px solid #ea230a !important;
+    outline-color: #ea230a !important;
+}
+.cropper-point {
+    background-color: #ea230a !important;
+}

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tunicorn.marketing.mapper.TaskImagesMapper">
+	<resultMap id="TaskImagesResultMap" type="com.tunicorn.marketing.vo.TaskImagesVO">
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="task_id" property="taskId" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="order_no" property="orderNo" jdbcType="INTEGER" />
+		<result column="image_path" property="imagePath" jdbcType="VARCHAR" />
+		<result column="full_path" property="fullPath" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="last_update" property="lastUpdateTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+	</resultMap>
+	<insert id="batchInsertTaskImages" parameterType="java.util.List">
+		Insert into task_images (id, name, task_id, user_id, order_no, image_path, full_path, create_time)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id}, #{item.name}, #{item.taskId}, #{item.userId}, #{item.orderNo}, #{item.imagePath},  #{item.fullPath}, now())
+		</foreach>
+	</insert>
+	
+	<update id="updateTaskImage" parameterType="com.tunicorn.marketing.vo.TaskImagesVO">
+		UPDATE task_images
+		<trim prefix="set" suffixOverrides=",">
+			<if test="name != null and name !=''">
+				name=#{name},
+			</if>
+			<if test="orderNo != null and orderNo !=''">
+				order_no=#{orderNo},
+			</if>
+			<if test="status != null and status !=''">
+				status=#{status},
+			</if>
+			<if test="imagePath != null and imagePath !=''">
+				image_path=#{imagePath},
+			</if>
+			<if test="fullPath != null and fullPath !=''">
+				full_path=#{fullPath},
+			</if>
+		</trim>
+		WHERE id=#{id}
+   </update>
+   
+   <update id="batchUpdateTaskImages"  parameterType="java.util.List">  
+       <foreach collection="list" item="item" index="index" open="" close="" separator=";">  
+        update task_images   
+         <set>  
+        order_no = ${item.resourceOrder}  
+         </set>  
+        where id = '${item.resourceId}'  
+       </foreach>  
+    </update> 
+    <select id="getTaskImagesListByTaskId" resultMap="TaskImagesResultMap">
+		select id, name, task_id, user_id, order_no, image_path, full_path, create_time
+		from task_images
+		where `status` = 'active'
+		<if test="taskId != null and taskId != ''">
+			and task_id = #{taskId}
+		</if>
+		order by order_no
+	</select>
+	
+	<select id="getTaskImagesById" resultMap="TaskImagesResultMap">
+		select id, name, task_id, user_id, order_no, image_path, full_path, create_time
+		from task_images
+		where `status` = 'active'
+		<if test="taskImageId != null and taskImageId != ''">
+			and id = #{taskImageId}
+		</if>
+	</select>
+</mapper>

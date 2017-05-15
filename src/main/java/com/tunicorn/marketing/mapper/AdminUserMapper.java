@@ -1,0 +1,27 @@
+package com.tunicorn.marketing.mapper;
+
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import com.tunicorn.marketing.vo.UserVO;
+
+public interface AdminUserMapper {
+
+	@Results({ @Result(property = "userName", column = "username"),
+			@Result(property = "createTime", column = "create_time") })
+	@Select("select * from admin_user where username = #{userName} and status='active'")
+	public UserVO getUserByUserName(String userName);
+
+	@Results({ @Result(property = "createTime", column = "create_time") })
+	@Select("select * from admin_user where id = #{userId} and status = 'active'")
+	public UserVO getUserByID(String userId);
+
+	@Update("update admin_user set password=#{password} where id=#{id} and status='active'")
+	public Boolean updateUserPassword(UserVO user);
+
+	@Update("update admin_user set status='deleted' where id=#{userId}")
+	public Boolean deleteUser(@Param("userId") String userId);
+}

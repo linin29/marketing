@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tunicorn.marketing.mapper.ApiCallingSummaryMapper">
+	<resultMap id="ApiCallingSummaryResultMap" type="com.tunicorn.marketing.vo.ApiCallingSummaryVO">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="api_method" property="apiMethod" jdbcType="VARCHAR" />
+		<result column="api_name" property="apiName" jdbcType="VARCHAR" />
+		<result column="calling_day" property="callingDay" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="calling_times" property="callingTimes" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="last_update" property="lastUpdateTime"  javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+	 </resultMap>
+    
+    <select id="getApiCallingSummaryList" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
+    	select id, api_method, api_name, calling_day, user_name, calling_times, create_time ,last_update,status
+    	from api_calling_count 
+    	where `status` = 'active'
+    	<if test="apiMethod != null and apiMethod != ''">
+    		and api_method = #{apiMethod}
+    	</if>
+    	<if test="apiName != null and apiName != ''">
+    		and api_name = #{apiName}
+    	</if>
+    	<if test="callingDay != null and callingDay != ''">
+    		and calling_day = #{callingDay}
+    	</if>
+    	<if test="userName != null and userName != ''">
+    		and user_name = #{userName}
+    	</if>
+    	<if test="callingTimes != null and callingTimes != ''">
+    		and calling_times = #{callingTimes}
+    	</if>
+    	limit #{startNum}, #{perPage}
+    </select>
+    <select id="getApiCallingSummaryListByVO" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.vo.ApiCallingSummaryVO">
+    	select id, api_method, api_name, calling_day, user_name, calling_times, create_time ,last_update,status
+    	from api_calling_count 
+    	where `status` = 'active'
+    	<if test="apiMethod != null and apiMethod != ''">
+    		and api_method = #{apiMethod}
+    	</if>
+    	<if test="apiName != null and apiName != ''">
+    		and api_name = #{apiName}
+    	</if>
+    	<if test="callingDay != null and callingDay != ''">
+    		and calling_day = #{callingDay}
+    	</if>
+    	<if test="userName != null and userName != ''">
+    		and user_name = #{userName}
+    	</if>
+    	<if test="callingTimes != null and callingTimes != ''">
+    		and calling_times = #{callingTimes}
+    	</if>
+    </select>
+    <select id="getApiCallingSummary" resultType="int" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
+    	select count(*)
+    	from api_calling_count 
+    	where `status` = 'active'
+    	<if test="apiMethod != null and apiMethod != ''">
+    		and api_method = #{apiMethod}
+    	</if>
+    	<if test="apiName != null and apiName != ''">
+    		and api_name = #{apiName}
+    	</if>
+    	<if test="callingDay != null and callingDay != ''">
+    		and calling_day = #{callingDay}
+    	</if>
+    	<if test="userName != null and userName != ''">
+    		and user_name = #{userName}
+    	</if>
+    	<if test="callingTimes != null and callingTimes != ''">
+    		and calling_times = #{callingTimes}
+    	</if>
+    </select>
+</mapper>

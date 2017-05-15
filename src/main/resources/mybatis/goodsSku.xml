@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tunicorn.marketing.mapper.GoodsSkuMapper">
+	<resultMap id="GoodsSkuMap" type="com.tunicorn.marketing.vo.GoodsSkuVO">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="major_type" property="majorType" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="order" property="order" jdbcType="INTEGER" />
+		<result column="is_show" property="isShow" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="last_update" property="lastUpdateTime"  javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+	 </resultMap>
+    
+   <insert id="createGoodsSku" parameterType="com.tunicorn.marketing.vo.GoodsSkuVO" useGeneratedKeys="true"  keyProperty="id">
+    insert into goods_sku
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="majorType != null" >
+        major_type,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+        create_time,
+      <if test="lastUpdateTime != null" >
+        last_update,
+      </if>
+      <if test="order != null" >
+        order,
+      </if>
+      <if test="isShow != null" >
+        is_show,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="majorType != null" >
+        #{majorType,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+        now(),
+      <if test="lastUpdateTime != null" >
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="order != null" >
+        #{order,jdbcType=INTEGER},
+      </if>
+      <if test="isShow != null" >
+        #{isShow,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+    
+  <update id="updateGoodsSku"  parameterType="com.tunicorn.marketing.vo.GoodsSkuVO">
+	  UPDATE goods_sku
+	  <trim prefix="set" suffixOverrides=",">
+			<if test="name != null and name !=''">
+			    name=#{name},
+			</if>
+			<if test="majorType != null majorType !=''">
+			    major_type=#{majorType},
+			</if>
+			<if test="description != null description !=''">
+			    description=#{description},
+			</if>
+			<if test="order != null order !=''">
+			    order=#{order},
+			</if>
+			<if test="isShow != null isShow !=''">
+			    is_show=#{isShow},
+			</if>
+			<if test="status != null and status !=''">
+			    status=#{status},
+			</if>
+	 </trim>
+		 WHERE id=#{id}
+   </update>
+   	<select id="getGoodsSkuListByBO" resultMap="GoodsSkuMap" parameterType="com.tunicorn.marketing.bo.GoodsSkuBO">
+		select id, `name`, description, major_type, order, is_show, create_time, last_update, status
+		from goods_sku
+		where `status` = 'active'
+		<if test="order != null and order != ''">
+			and order = #{order}
+		</if>
+		<if test="majorType != null and majorType != ''">
+			and major_type = #{majorType}
+		</if>
+		<if test="isShow != null and isShow != ''">
+			and is_show = #{isShow}
+		</if>
+		<if test="name != null and name != ''">
+			and `name` like concat(concat('%',#{name}),'%')
+		</if>
+		order by create_time desc
+		limit #{startNum}, #{perPage}
+	</select>
+	<select id="getGoodsSkuCount" resultType="int" parameterType="com.tunicorn.marketing.bo.GoodsSkuBO">
+		select count(*)
+		from goods_sku
+		where `status` = 'active'
+		<if test="order != null and order != ''">
+			and order = #{order}
+		</if>
+		<if test="majorType != null and majorType != ''">
+			and major_type = #{majorType}
+		</if>
+		<if test="isShow != null and isShow != ''">
+			and is_show = #{isShow}
+		</if>
+		<if test="name != null and name != ''">
+			and `name` like concat(concat('%',#{name}),'%')
+		</if>
+	</select>
+	<update id="batchDeleteGoodsSku" parameterType="com.tunicorn.marketing.vo.GoodsSkuVO">
+        UPDATE goods_sku 	  
+        <trim prefix="set" suffixOverrides=",">
+			<if test="status != null and status !=''">
+			    status=#{status},
+			</if>
+	    </trim>
+		 WHERE major_type = #{majorType}
+    </update>
+</mapper>

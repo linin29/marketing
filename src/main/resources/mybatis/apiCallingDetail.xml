@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tunicorn.marketing.mapper.ApiCallingDetailMapper">
+	<resultMap id="ApiCallingDetailResultMap" type="com.tunicorn.marketing.vo.ApiCallingDetailVO">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="api_method" property="apiMethod" jdbcType="VARCHAR" />
+		<result column="api_name" property="apiName" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="calling_status" property="callingStatus" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="pictures" property="pictures" jdbcType="INTEGER" />
+		<result column="last_update" property="lastUpdateTime"  javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+	 </resultMap>
+    
+    <select id="getApiCallingDetail" resultMap="ApiCallingDetailResultMap" parameterType="com.tunicorn.marketing.vo.ApiCallingDetailVO">
+    	select id, api_method, api_name, user_name, calling_status, create_time, pictures, last_update, status
+    	from api_calling_detail
+    	where `status` = 'active'
+    	<if test="apiMethod != null and apiMethod != ''">
+    		and api_method = #{apiMethod}
+    	</if>
+    	<if test="apiName != null and apiName != ''">
+    		and api_name = #{apiName}
+    	</if>
+    </select>
+</mapper>

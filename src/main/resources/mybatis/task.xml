@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tunicorn.marketing.mapper.TaskMapper">
+	<resultMap id="TaskResultMap" type="com.tunicorn.marketing.vo.TaskVO">
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="task_status" property="taskStatus" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
+		<result column="last_update" property="lastUpdateTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="stitch_image_path" property="stitchImagePath" jdbcType="VARCHAR" />
+		<result column="result" property="result" jdbcType="VARCHAR" />
+		<result column="rows" property="rows" jdbcType="VARCHAR" />
+		<result column="major_type" property="majorType" jdbcType="VARCHAR" />
+	</resultMap>
+
+   <insert id="createTask" parameterType="com.tunicorn.marketing.vo.TaskVO">
+    insert into task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="taskStatus != null" >
+        task_status,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+        create_time,
+      <if test="lastUpdateTime != null" >
+        last_update,
+      </if>
+      <if test="stitchImagePath != null" >
+        stitch_image_path,
+      </if>
+      <if test="result != null" >
+        result,
+      </if>
+       <if test="rows != null" >
+        rows,
+      </if>
+       <if test="majorType != null" >
+        major_type,
+       </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="taskStatus != null" >
+        #{taskStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+        now(),
+      <if test="lastUpdateTime != null" >
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stitchImagePath != null" >
+        #{stitchImagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="rows != null" >
+        #{rows,jdbcType=VARCHAR},
+      </if>
+      <if test="majorType != null" >
+        #{majorType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+	<select id="getTaskList" resultMap="TaskResultMap" parameterType="com.tunicorn.marketing.bo.TaskBO">
+		select id, id as _id,  `name`, task_status, task_status as status, user_id, user_id as author,
+		 create_time,create_time as createdAt, stitch_image_path, result, rows, major_type,last_update as updatedAt
+		from task
+		where `status` = 'active'
+		<if test="userId != null and userId != ''">
+			and user_id = #{userId}
+		</if>
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+			and `name` like concat(concat('%',#{name}),'%')
+		</if>
+		order by create_time desc
+		limit #{startNum}, #{perPage}
+	</select>
+	<select id="getTaskListByVO" resultMap="TaskResultMap" parameterType="com.tunicorn.marketing.vo.TaskVO">
+		select id, `name`, task_status, user_id, create_time,
+		stitch_image_path, result, rows, major_type
+		from task
+		where `status` = 'active'
+		<if test="userId != null and userId != ''">
+			and user_id = #{userId}
+		</if>
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+			and `name` like concat(concat('%',#{name}),'%')
+		</if>
+		order by create_time desc
+	</select>
+	<select id="getTaskCount" resultType="int" parameterType="com.tunicorn.marketing.bo.TaskBO">
+		select count(*)
+		from task
+		where `status` = 'active'
+		<if test="userId != null and userId != ''">
+			and user_id = #{userId}
+		</if>
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+			and `name` like concat(concat('%',#{name}),'%')
+		</if>
+	</select>
+	<update id="updateTask" parameterType="com.tunicorn.marketing.vo.TaskVO">
+		UPDATE task
+		<trim prefix="set" suffixOverrides=",">
+			<if test="name != null and name !=''">
+				name=#{name},
+			</if>
+			<if test="taskStatus != null and taskStatus !=''">
+				task_status=#{taskStatus},
+			</if>
+			<if test="status != null and status !=''">
+				status=#{status},
+			</if>
+			<if test="majorType != null and majorType !=''">
+				major_type=#{majorType},
+			</if>
+			<if test="result != null and result !=''">
+				result=#{result},
+			</if>
+		</trim>
+		WHERE id=#{id}
+	</update>
+	<select id="getTaskById" resultMap="TaskResultMap" parameterType="string">
+		select id, `name`, task_status, user_id, create_time,
+		stitch_image_path, result, rows, major_type
+		from task
+		where `status` = 'active'
+		and id = #{taskId}
+	</select>
+</mapper>
+

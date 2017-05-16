@@ -32,6 +32,7 @@
     	<if test="callingTimes != null and callingTimes != ''">
     		and calling_times = #{callingTimes}
     	</if>
+    	order by calling_day desc
     	limit #{startNum}, #{perPage}
     </select>
     <select id="getApiCallingSummaryListByVO" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.vo.ApiCallingSummaryVO">

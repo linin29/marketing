@@ -67,7 +67,7 @@
 	                       <#list goodResults as goodResult>
 	                        <#if goodResult.isShow && (goodResult.num?eval >0)>
 	               	         <div class="form-group">
-		               		   <img class="icorn-brand" src="${springMacroRequestContext.contextPath}/image/sku.png">
+		               		   <span class="icorn-brand"></span>
 		               		   <div class="changeline" produce="${goodResult_index}"><a href="javascript:void(0);" onclick="getCrops(${goodResult_index})">${goodResult.goods_desc}(${goodResult.num})</a></div>  
 	           			     </div>
 	           			    </#if>
@@ -373,18 +373,33 @@
                       if(!majorType){
                     	  majorType = $("#taskMajorType").val();
                       }
-                      getGoodsSku(majorType);
+                      showCropList(results);
                   }else{
                       noty({text: data.errmsg, layout: "topCenter", type: "warning", timeout: 3000});
                       $('#status').attr('status', 'identify_failure');
                   }
               });
-          });
+        });
 		function getTaskName() {
 			var taskName = $("#taskName").val();
 			if (!taskName) {
 				$("#taskName").val("未命名-" + Date.now());
 			}
+		}
+		
+		function showCropList(results){
+			html = '<div class="brand-list col-sm-3" >';
+			for(var k in results){
+				if(results[k].isShow && results[k].num>0){
+					html += '<div class="form-group">'+
+						    '<span class="icorn-brand"></span>'+
+					        '<div class="changeline" produce="'+ k +'"><a href="javascript:void(0);" onclick="getCrops('+ k +')">'+ results[k].goods_desc + '(' + results[k].num +')</a></div></div>';
+				}
+			}
+			html += '</div>';
+			$("#stitch_image .brand-list").remove();
+  			$("#brandListp").show();
+  		 	$("#stitch_image").append(html);
 		}
 		
 		function getGoodsSku(majorType){

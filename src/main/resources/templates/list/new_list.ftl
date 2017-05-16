@@ -63,12 +63,12 @@
 	                   </div>
 	                   <#if task?? && task.taskStatus?? && task.taskStatus=='identify_success'>
 	                   <div class="brand-list col-sm-3 " >
-	                     <#if goodsSkus?? && (goodsSkus?size > 0)>
-	                       <#list goodsSkus as goodsSku>
-	                        <#if goodsSku.isShow>
+	                     <#if goodResults?? && (goodResults?size > 0)>
+	                       <#list goodResults as goodResult>
+	                        <#if goodResult.isShow && (goodResult.num?eval >0)>
 	               	         <div class="form-group">
-		               		   <img class="icorn-brand" title="${task.majorType}" src="${springMacroRequestContext.contextPath}/image/${task.majorType}.png">
-		               		   <div class="changeline" produce="${goodsSku_index}"><a href="javascript:void(0);" onclick="getCrops(${goodsSku_index})">${goodsSku.description}</a></div>  
+		               		   <img class="icorn-brand" src="${springMacroRequestContext.contextPath}/image/sku.png">
+		               		   <div class="changeline" produce="${goodResult_index}"><a href="javascript:void(0);" onclick="getCrops(${goodResult_index})">${goodResult.goods_desc}(${goodResult.num})</a></div>  
 	           			     </div>
 	           			    </#if>
 	           			   </#list>

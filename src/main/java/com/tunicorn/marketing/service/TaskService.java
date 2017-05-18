@@ -281,7 +281,9 @@ public class TaskService {
 	@Transactional
 	public ServiceResponseBO taskIdentify(String taskId, String userId) {
 		TaskVO taskVO = taskMapper.getTaskById(taskId);
-		if (taskVO != null && taskVO.getStitchImagePath() != null) {
+		if (taskVO != null && taskVO.getStitchImagePath() != null 
+				&& (taskVO.getTaskStatus().equals(MarketingConstants.TASK_STATUS_STITCH_SUCCESS)
+						|| taskVO.getTaskStatus().equals(MarketingConstants.TASK_STATUS_STITCH_FAILURE))) {
 			MarketingIdentifyRequestParam param = new MarketingIdentifyRequestParam();
 			param.setMajor_type(taskVO.getMajorType());
 			param.setTask_id(taskId);

@@ -26,6 +26,7 @@ import com.tunicorn.common.api.Message;
 import com.tunicorn.common.entity.UploadFile;
 import com.tunicorn.marketing.api.CommonAjaxResponse;
 import com.tunicorn.marketing.api.MarketingAPI;
+import com.tunicorn.marketing.api.param.MarketingIdentifyMockRequestParam;
 import com.tunicorn.marketing.api.param.MarketingIdentifyRequestParam;
 import com.tunicorn.marketing.api.param.MarketingStitcherRequestParam;
 import com.tunicorn.marketing.bo.ApiCallingSummaryBO;
@@ -41,6 +42,7 @@ import com.tunicorn.marketing.mapper.ApiCallingDetailMapper;
 import com.tunicorn.marketing.mapper.ApiCallingSummaryMapper;
 import com.tunicorn.marketing.mapper.GoodsSkuMapper;
 import com.tunicorn.marketing.mapper.MajorTypeMapper;
+import com.tunicorn.marketing.mapper.TaskDumpMapper;
 import com.tunicorn.marketing.mapper.TaskImagesMapper;
 import com.tunicorn.marketing.mapper.TaskMapper;
 import com.tunicorn.marketing.mapper.UserMapper;
@@ -61,6 +63,8 @@ public class TaskService {
 	private static Logger logger = Logger.getLogger(TaskService.class);
 	@Autowired
 	private TaskMapper taskMapper;
+	@Autowired
+	private TaskDumpMapper taskDumpMapper;
 	@Autowired
 	private TaskImagesMapper taskImagesMapper;
 	@Autowired
@@ -284,11 +288,23 @@ public class TaskService {
 		if (taskVO != null && taskVO.getStitchImagePath() != null 
 				&& (taskVO.getTaskStatus().equals(MarketingConstants.TASK_STATUS_STITCH_SUCCESS)
 						|| taskVO.getTaskStatus().equals(MarketingConstants.TASK_STATUS_STITCH_FAILURE))) {
-			MarketingIdentifyRequestParam param = new MarketingIdentifyRequestParam();
-			param.setMajor_type(taskVO.getMajorType());
-			param.setTask_id(taskId);
-			CommonAjaxResponse result = MarketingAPI.identify(param);
-
+			
+			CommonAjaxResponse result = null;
+			String fileName = getFileNameByStitcherImage("/mnt/storage4/marketing"+taskVO.getStitchImagePath());
+			String data = getResultByFileName(fileName);
+			String USE_IDENTIFY_MOCK = ConfigUtils.getInstance().getConfigValue("use.identify.mock");
+			if(!StringUtils.isBlank(data) && USE_IDENTIFY_MOCK.equals("true")){
+				//use mock data
+				ObjectNode node = JsonUtil.toObjectNode(data);
+				result = CommonAjaxResponse.toSuccess(node);
+			}else{
+				//Call really service
+				MarketingIdentifyRequestParam param = new MarketingIdentifyRequestParam();
+				param.setMajor_type(taskVO.getMajorType());
+				param.setTask_id(taskId);
+				result = MarketingAPI.identify(param);
+			}
+			
 			String apiName = MarketingConstants.API_MARKETING + taskId + "/identify";
 			String apiMethod = MarketingConstants.POST;
 			String status = MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS;
@@ -776,5 +792,28 @@ public class TaskService {
 		}
 		return majorTypeList;
 	}
-
+	
+	private String getFileNameByStitcherImage(String stitcherImagePath){
+		MarketingIdentifyMockRequestParam param = new MarketingIdentifyMockRequestParam(); 
+		param.setImagePath(stitcherImagePath);
+		CommonAjaxResponse result = MarketingAPI.identifyMock(param);
+		if(result.getSuccess()){
+			ObjectNode node = (ObjectNode) result.getData();
+			return node.get("fileName").asText();
+		}else{
+			return null;
+		}
+	}
+	private String getResultByFileName(String fileName){
+		if(!StringUtils.isBlank(fileName)){
+			String data = taskDumpMapper.getResultByFileName(fileName);
+			if(!StringUtils.isBlank(data)){
+				return data;
+			}else{
+				return null;
+			}
+		}else{
+			return null;
+		}
+	}
 }

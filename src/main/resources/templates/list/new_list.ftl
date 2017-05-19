@@ -264,6 +264,7 @@
                      $('#status').attr('status', 'image_uploaded');
                      $('#status').text('(当前状态：image_uploaded)');
                      noty({text: '保存成功', layout: "topCenter", type: "warning", timeout: 2000});
+                     $('#preview_modal').modal('hide');
                      var defaultImage = '<a href="${springMacroRequestContext.contextPath}/image/2.png" target="_blank">'+
                                         '<img id="stitched" src="${springMacroRequestContext.contextPath}/image/2.png"class="img-thumbnail static_img"></a>';
                      $("#image_default").html(defaultImage);

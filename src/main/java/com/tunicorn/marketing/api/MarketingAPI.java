@@ -53,14 +53,14 @@ public class MarketingAPI {
 		String retValue = HttpClientUtils.post(url, headers, params.convertToJSON());
 
 		if (StringUtils.isBlank(retValue)) {
-			Message message = MessageUtils.getInstance().getMessage(String.format("%s_error", apiErrMsgTag));
+			Message message = MessageUtils.getInstance().getMessage("marketing_call_service_failure");
 			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
+		logger.info("The response from backend marketing server:" + retValue);
 
 		ObjectNode node = JsonUtil.toObjectNode(retValue);
-		logger.info("The response from backend marketing server:" + retValue);
 		if (node == null) {
-			Message message = MessageUtils.getInstance().getMessage(String.format("invalid_%s_return", apiErrMsgTag));
+			Message message = MessageUtils.getInstance().getMessage("marketing_call_service_failure");
 			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
 

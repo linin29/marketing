@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Select;
 
 public interface TaskDumpMapper {
 
-	@Select("select id, name, result from task_dump where name = #{fileName}")
+	@Select("select result from task_dump where name = #{fileName}")
 	public String getResultByFileName(@Param("fileName") String fileName);
 
 

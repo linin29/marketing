@@ -805,12 +805,9 @@ public class TaskService {
 		CommonAjaxResponse result = MarketingAPI.identifyMock(param);
 		if(result.getSuccess()){
 			ObjectNode node = (ObjectNode) result.getData();
-			ObjectNode name = (ObjectNode) node.findValue("name");
-			return name.asText();
-//			ObjectNode resultnode = (ObjectNode)node.get("result");
-//			ArrayNode resultsnode = (ArrayNode)resultnode.get("results");
-//			ObjectNode results = (ObjectNode)resultsnode.get(0);	
-//			return results.get("name").asText();
+			String filePath = node.findValue("imagePath").asText();
+			int idx = filePath.lastIndexOf("/");
+			return filePath.substring(idx+1);
 		}else{
 			return null;
 		}

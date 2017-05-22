@@ -296,7 +296,7 @@ public class TaskService {
 			String USE_IDENTIFY_MOCK = ConfigUtils.getInstance().getConfigValue("use.identify.mock");
 			if(!StringUtils.isBlank(data) && USE_IDENTIFY_MOCK.equals("true")){
 				//Use mock data
-				logger.info("use mock");
+				logger.info("use mock with file:" + fileName);
 				ObjectNode node = JsonUtil.toObjectNode(data);
 				result = CommonAjaxResponse.toSuccess(node);
 			}else{

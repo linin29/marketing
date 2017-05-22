@@ -32,6 +32,7 @@ public class MarketingAPI {
 				MarketingConstants.MARKETING_IDENTIFY_SERVICE);
 	}
 	
+	//Mock method
 	public static CommonAjaxResponse identifyMock(MarketingIdentifyMockRequestParam params) {
 		return callCoreService(MarketingConstants.CORE_SERVER_MARKETING_IDENTIFY_MOCK_URL, params,
 				MarketingConstants.MARKETING_IDENTIFY_MOCK_SERVICE);
@@ -52,6 +53,7 @@ public class MarketingAPI {
 				headers.put(MarketingConstants.MAJOR_TYPE, requestParams.getMajor_type());
 			}
 		}else if (StringUtils.endsWith(MarketingConstants.MARKETING_IDENTIFY_MOCK_SERVICE, apiErrMsgTag)) {
+			//Mock setup
 			url = ConfigUtils.getInstance().getConfigValue("marketing.mock.service.url");
 		}
 		headers.put("Content-Type", "application/json");

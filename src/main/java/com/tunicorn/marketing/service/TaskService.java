@@ -288,13 +288,14 @@ public class TaskService {
 		if (taskVO != null && taskVO.getStitchImagePath() != null 
 				&& (taskVO.getTaskStatus().equals(MarketingConstants.TASK_STATUS_STITCH_SUCCESS)
 						|| taskVO.getTaskStatus().equals(MarketingConstants.TASK_STATUS_STITCH_FAILURE))) {
-			
 			CommonAjaxResponse result = null;
+			
+			//prepare for mock
 			String fileName = getFileNameByStitcherImage("/mnt/storage4/marketing"+taskVO.getStitchImagePath());
 			String data = getResultByFileName(fileName);
 			String USE_IDENTIFY_MOCK = ConfigUtils.getInstance().getConfigValue("use.identify.mock");
 			if(!StringUtils.isBlank(data) && USE_IDENTIFY_MOCK.equals("true")){
-				//use mock data
+				//Use mock data
 				ObjectNode node = JsonUtil.toObjectNode(data);
 				result = CommonAjaxResponse.toSuccess(node);
 			}else{
@@ -793,13 +794,21 @@ public class TaskService {
 		return majorTypeList;
 	}
 	
+	/*
+	 * the follow section is a mock for testing. will be remove in feature 
+	 */
 	private String getFileNameByStitcherImage(String stitcherImagePath){
 		MarketingIdentifyMockRequestParam param = new MarketingIdentifyMockRequestParam(); 
 		param.setImagePath(stitcherImagePath);
 		CommonAjaxResponse result = MarketingAPI.identifyMock(param);
 		if(result.getSuccess()){
 			ObjectNode node = (ObjectNode) result.getData();
-			return node.get("fileName").asText();
+			ObjectNode name = (ObjectNode) node.findValue("name");
+			return name.asText();
+//			ObjectNode resultnode = (ObjectNode)node.get("result");
+//			ArrayNode resultsnode = (ArrayNode)resultnode.get("results");
+//			ObjectNode results = (ObjectNode)resultsnode.get(0);	
+//			return results.get("name").asText();
 		}else{
 			return null;
 		}

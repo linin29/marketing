@@ -296,10 +296,12 @@ public class TaskService {
 			String USE_IDENTIFY_MOCK = ConfigUtils.getInstance().getConfigValue("use.identify.mock");
 			if(!StringUtils.isBlank(data) && USE_IDENTIFY_MOCK.equals("true")){
 				//Use mock data
+				logger.info("use mock");
 				ObjectNode node = JsonUtil.toObjectNode(data);
 				result = CommonAjaxResponse.toSuccess(node);
 			}else{
 				//Call really service
+				logger.info("call service");
 				MarketingIdentifyRequestParam param = new MarketingIdentifyRequestParam();
 				param.setMajor_type(taskVO.getMajorType());
 				param.setTask_id(taskId);

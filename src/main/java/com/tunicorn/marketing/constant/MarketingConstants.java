@@ -20,6 +20,7 @@ public class MarketingConstants {
 
 	public static final String CORE_SERVER_MARKETING_STITCHER_URL = "/montage";
 	public static final String CORE_SERVER_MARKETING_IDENTIFY_URL = "/statistics";
+	public static final String CORE_SERVER_MARKETING_IDENTIFY_MOCK_URL = "/statistics_mock";
 
 	public static final String MARKETING_STITCHER_API_NAME = "stitcher";
 	public static final String MARKETING_IDENTIFY_API_NAME = "identify";
@@ -47,6 +48,7 @@ public class MarketingConstants {
 
 	public static final String MARKETING_STITCHER_SERVICE = "marketing_stitcher_service";
 	public static final String MARKETING_IDENTIFY_SERVICE = "marketing_identify_service";
+	public static final String MARKETING_IDENTIFY_MOCK_SERVICE = "marketing_identify_mock_service";
 
 	public static final String API_MARKETING = "/api/marketing/";
 	public static final String PIC_MARKETING = "/pic/marketing";
@@ -55,4 +57,5 @@ public class MarketingConstants {
 
 	public static final String TASK_ID = "taskId";
 	public static final String MAJOR_TYPE = "major_type";
+	
 }

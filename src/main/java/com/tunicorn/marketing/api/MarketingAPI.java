@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tunicorn.common.Constant;
 import com.tunicorn.common.api.Message;
 import com.tunicorn.common.api.param.IRequestParam;
+import com.tunicorn.marketing.api.param.MarketingIdentifyMockRequestParam;
 import com.tunicorn.marketing.api.param.MarketingIdentifyRequestParam;
 import com.tunicorn.marketing.api.param.MarketingStitcherRequestParam;
 import com.tunicorn.marketing.constant.MarketingConstants;
@@ -30,6 +31,12 @@ public class MarketingAPI {
 		return callCoreService(MarketingConstants.CORE_SERVER_MARKETING_IDENTIFY_URL, params,
 				MarketingConstants.MARKETING_IDENTIFY_SERVICE);
 	}
+	
+	//Mock method
+	public static CommonAjaxResponse identifyMock(MarketingIdentifyMockRequestParam params) {
+		return callCoreService(MarketingConstants.CORE_SERVER_MARKETING_IDENTIFY_MOCK_URL, params,
+				MarketingConstants.MARKETING_IDENTIFY_MOCK_SERVICE);
+	}
 
 	private static CommonAjaxResponse callCoreService(String uri, IRequestParam params, String apiErrMsgTag) {
 		String url = ConfigUtils.getInstance().getConfigValue("marketing.service.url") + uri;
@@ -40,12 +47,14 @@ public class MarketingAPI {
 			if (StringUtils.isNotBlank(requestParams.getMajor_type())) {
 				headers.put(MarketingConstants.MAJOR_TYPE, requestParams.getMajor_type());
 			}
-		}
-		if (StringUtils.endsWith(MarketingConstants.MARKETING_IDENTIFY_SERVICE, apiErrMsgTag)) {
+		}else if (StringUtils.endsWith(MarketingConstants.MARKETING_IDENTIFY_SERVICE, apiErrMsgTag)) {
 			MarketingIdentifyRequestParam requestParams = (MarketingIdentifyRequestParam) params;
 			if (StringUtils.isNotBlank(requestParams.getMajor_type())) {
 				headers.put(MarketingConstants.MAJOR_TYPE, requestParams.getMajor_type());
 			}
+		}else if (StringUtils.endsWith(MarketingConstants.MARKETING_IDENTIFY_MOCK_SERVICE, apiErrMsgTag)) {
+			//Mock setup
+			url = ConfigUtils.getInstance().getConfigValue("marketing.mock.service.url");
 		}
 		headers.put("Content-Type", "application/json");
 		logger.info(url);

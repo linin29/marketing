@@ -445,7 +445,7 @@ BEGIN
 		INSERT INTO `major_type`(`id`, `name`, `description`, `create_time`) VALUES (2, 'chocolate', '巧克力', now());
 		INSERT INTO `major_type`(`id`, `name`, `description`, `create_time`) VALUES (3, 'beer', '啤酒', now());
 		INSERT INTO `major_type`(`id`, `name`, `description`, `create_time`) VALUES (4, 'driedmilk', '奶粉', now());
-		INSERT INTO `major_type`(`id`, `name`, `description`, `create_time`) VALUES (5, 'cookie', '蛋糕', now());
+		INSERT INTO `major_type`(`id`, `name`, `description`, `create_time`) VALUES (5, 'cookie', '饼干', now());
 		
 		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (1, 'driedmilk', 'NESTLE Senior mainstream milk powder 400g pouch', '雀巢中老年营养奶粉400g', 0, now());
 		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`,`create_time`) VALUES (2, 'driedmilk', 'NESTLE YinYang JianXin Senior mainstream Hi-Cal fish oil milk powder 800g tin', '雀巢怡养健心中老年高钙营养奶粉鱼油配方800g', 1, now());

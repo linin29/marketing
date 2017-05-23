@@ -2,11 +2,11 @@ package com.tunicorn.marketing.service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +15,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -62,7 +64,6 @@ import com.tunicorn.marketing.vo.TaskVO;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.JsonUtil;
 import com.tunicorn.util.MessageUtils;
-import com.tunicorn.util.SecurityUtils;
 
 @Service
 public class TaskService {
@@ -305,6 +306,7 @@ public class TaskService {
 				String origin_file = getOriginFile(taskVO.getId());
 				if (origin_file != null){
 //					String[] fileNameInfo = getFileNameByStitcherImage(origin_file); 
+					logger.info("origin_file: " + origin_file);
 					String[] fileNameInfo = getFileNameMD5(origin_file);
 					if(fileNameInfo != null){
 						String fileName = fileNameInfo[0];
@@ -857,22 +859,32 @@ public class TaskService {
 //		}
 		
 		
-		MessageDigest md5;
+//		MessageDigest md5;
+//		String md5String = "";
+//		try {
+//			md5 = MessageDigest.getInstance("MD5");
+//			FileInputStream fis = new FileInputStream(new File(stitcherImagePath));  
+//			byte[] read = new byte[1024];  
+//			int len = 0;  
+//		    while((len = fis.read(read))!= -1){ 
+//		        md5.update(read);
+//		    }  
+//		    md5String = new BigInteger(1, md5.digest()).toString(16);
+//		    System.out.println("---MD5---" + md5String);
+//		    fis.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+		
+		FileInputStream fis;
 		String md5String = "";
 		try {
-			md5 = MessageDigest.getInstance("MD5");
-			FileInputStream fis = new FileInputStream(new File(stitcherImagePath));  
-			byte[] read = new byte[1024];  
-			int len = 0;  
-		    while((len = fis.read(read))!= -1){ 
-		        md5.update(read);
-		    }  
-		    md5String = new BigInteger(1, md5.digest()).toString(16);
-		    System.out.println("---MD5---" + md5String);
-		    fis.close();
+			fis = new FileInputStream(stitcherImagePath);
+			md5String = DigestUtils.md5Hex(IOUtils.toByteArray(fis));   
+	        IOUtils.closeQuietly(fis);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}   
 		
 		return new String[]{md5String, "10000"};
 	}

@@ -882,6 +882,7 @@ public class TaskService {
 			fis = new FileInputStream(stitcherImagePath);
 			md5String = DigestUtils.md5Hex(IOUtils.toByteArray(fis));   
 	        IOUtils.closeQuietly(fis);
+	        logger.info("---MD5---" + md5String);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}   

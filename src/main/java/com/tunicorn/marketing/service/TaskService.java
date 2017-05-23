@@ -2,11 +2,8 @@ package com.tunicorn.marketing.service;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -838,44 +835,6 @@ public class TaskService {
 		}
 	}
 	private String[] getFileNameMD5(String stitcherImagePath) {
-		String content ="";
-//		try {
-//			File file = new File(stitcherImagePath);
-//			FileReader fr = new FileReader(file);
-//			BufferedReader br = new BufferedReader(fr);
-//			int n = 0;
-//			for(;;)
-//			{
-//				n++;
-//				String temp = br.readLine();
-//				content+=temp;
-//				if(temp==null){
-//					br.close();
-//					break;
-//				}
-//			}
-//		}catch (IOException ex) {
-//			ex.printStackTrace();
-//		}
-		
-		
-//		MessageDigest md5;
-//		String md5String = "";
-//		try {
-//			md5 = MessageDigest.getInstance("MD5");
-//			FileInputStream fis = new FileInputStream(new File(stitcherImagePath));  
-//			byte[] read = new byte[1024];  
-//			int len = 0;  
-//		    while((len = fis.read(read))!= -1){ 
-//		        md5.update(read);
-//		    }  
-//		    md5String = new BigInteger(1, md5.digest()).toString(16);
-//		    System.out.println("---MD5---" + md5String);
-//		    fis.close();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-		
 		FileInputStream fis;
 		String md5String = "";
 		try {
@@ -891,7 +850,7 @@ public class TaskService {
 	}
 	private String getResultByFileName(String fileName, Double score){
 		if(!StringUtils.isBlank(fileName)){
-			String data = taskDumpMapper.getResultByFileName(fileName, score);
+			String data = taskDumpMapper.getResultByMD5(fileName);
 			if(!StringUtils.isBlank(data)){
 				return data;
 			}else{

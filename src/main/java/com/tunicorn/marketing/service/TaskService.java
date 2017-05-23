@@ -302,7 +302,8 @@ public class TaskService {
 					String[] fileNameInfo = getFileNameByStitcherImage(origin_file);
 					if(fileNameInfo != null){
 						String fileName = fileNameInfo[0];
-						String score = fileNameInfo[1].split("\\.")[0];
+						String score = fileNameInfo[1];
+						logger.info("score: " + score);
 						String data = getResultByFileName(fileName, Double.parseDouble(score));
 						if(!StringUtils.isBlank(data)){
 							logger.info("use mock with file: " + fileNameInfo[0]);

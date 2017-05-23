@@ -1,10 +1,12 @@
 package com.tunicorn.marketing.service;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -835,30 +837,43 @@ public class TaskService {
 	}
 	private String[] getFileNameMD5(String stitcherImagePath) {
 		String content ="";
+//		try {
+//			File file = new File(stitcherImagePath);
+//			FileReader fr = new FileReader(file);
+//			BufferedReader br = new BufferedReader(fr);
+//			int n = 0;
+//			for(;;)
+//			{
+//				n++;
+//				String temp = br.readLine();
+//				content+=temp;
+//				if(temp==null){
+//					br.close();
+//					break;
+//				}
+//			}
+//		}catch (IOException ex) {
+//			ex.printStackTrace();
+//		}
+		
+		
+		MessageDigest md5;
+		String md5String = "";
 		try {
-			File file = new File(stitcherImagePath);
-			FileReader fr = new FileReader(file);
-			BufferedReader br = new BufferedReader(fr);
-			System.out.println("-----------Now is content of file(Reading):----------");
-			int n = 0;
-			for(;;)
-			{
-				n++;
-				String temp = br.readLine();
-				System.out.println("Line"+n+":");
-				System.out.println(temp);
-				content+=temp;
-				if(temp==null){
-					System.out.println("----------OVER---------");
-					br.close();
-					break;
-				}
-			}
-		}catch (IOException ex) {
-			ex.printStackTrace();
+			md5 = MessageDigest.getInstance("MD5");
+			FileInputStream fis = new FileInputStream(new File(stitcherImagePath));  
+			byte[] read = new byte[1024];  
+			int len = 0;  
+		    while((len = fis.read(read))!= -1){ 
+		        md5.update(read);
+		    }  
+		    md5String = new BigInteger(1, md5.digest()).toString(16);
+		    System.out.println("---MD5---" + md5String);
+		    fis.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		String md5String = SecurityUtils.encryptByMD5(content);
-		System.out.println("---MD5---" + md5String);
+		
 		return new String[]{md5String, "10000"};
 	}
 	private String getResultByFileName(String fileName, Double score){
@@ -874,7 +889,6 @@ public class TaskService {
 		}
 	}	
 
-	
 	private String getOriginFile(String taskId){
 		List<TaskImagesVO> images = taskImagesMapper.getTaskImagesListByTaskId(taskId);
 		if(images.size() != 1){

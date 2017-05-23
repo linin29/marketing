@@ -297,13 +297,20 @@ public class TaskService {
 			String[] mock_major_type = ConfigUtils.getInstance().getConfigValue("identify.mock.type").split(":");
 			List<String> tempList = Arrays.asList(mock_major_type);
 			if (USE_IDENTIFY_MOCK.equals("true") && tempList.contains(taskVO.getMajorType())){
-				String fileName = getFileNameByStitcherImage("/mnt/storage4/marketing"+taskVO.getStitchImagePath());
-				String data = getResultByFileName(fileName);
-				if(!StringUtils.isBlank(data)){
-					logger.info("use mock with file:" + fileName);
-					ObjectNode node = JsonUtil.toObjectNode(data);
-					result = CommonAjaxResponse.toSuccess(node);
-					isMock = true;
+				String origin_file = getOriginFile(taskVO.getId());
+				if (origin_file != null){
+					String[] fileNameInfo = getFileNameByStitcherImage(origin_file);
+					if(fileNameInfo != null){
+						String fileName = fileNameInfo[0];
+						String score = fileNameInfo[1].split("\\.")[0];
+						String data = getResultByFileName(fileName, Double.parseDouble(score));
+						if(!StringUtils.isBlank(data)){
+							logger.info("use mock with file: " + fileNameInfo[0]);
+							ObjectNode node = JsonUtil.toObjectNode(data);
+							result = CommonAjaxResponse.toSuccess(node);
+							isMock = true;
+						}
+					}
 				}
 			}
 			//*************mock end*************
@@ -807,22 +814,23 @@ public class TaskService {
 	/*
 	 * the follow section is a mock for testing. will be remove in feature 
 	 */
-	private String getFileNameByStitcherImage(String stitcherImagePath){
+	private String[] getFileNameByStitcherImage(String stitcherImagePath){
 		MarketingIdentifyMockRequestParam param = new MarketingIdentifyMockRequestParam(); 
 		param.setImagePath(stitcherImagePath);
 		CommonAjaxResponse result = MarketingAPI.identifyMock(param);
 		if(result.getSuccess()){
 			ObjectNode node = (ObjectNode) result.getData();
 			String filePath = node.findValue("imagePath").asText();
+			String score = node.findValue("score").asText();
 			int idx = filePath.lastIndexOf("/");
-			return filePath.substring(idx+1);
+			return new String[]{filePath.substring(idx+1), score};
 		}else{
 			return null;
 		}
 	}
-	private String getResultByFileName(String fileName){
+	private String getResultByFileName(String fileName, Double score){
 		if(!StringUtils.isBlank(fileName)){
-			String data = taskDumpMapper.getResultByFileName(fileName);
+			String data = taskDumpMapper.getResultByFileName(fileName, score);
 			if(!StringUtils.isBlank(data)){
 				return data;
 			}else{
@@ -830,6 +838,14 @@ public class TaskService {
 			}
 		}else{
 			return null;
+		}
+	}
+	private String getOriginFile(String taskId){
+		List<TaskImagesVO> images = taskImagesMapper.getTaskImagesListByTaskId(taskId);
+		if(images.size() != 1){
+			return null;
+		}else{
+			return images.get(0).getFullPath();
 		}
 	}
 }

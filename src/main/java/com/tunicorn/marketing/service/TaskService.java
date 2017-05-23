@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -289,18 +290,25 @@ public class TaskService {
 				&& (taskVO.getTaskStatus().equals(MarketingConstants.TASK_STATUS_STITCH_SUCCESS)
 						|| taskVO.getTaskStatus().equals(MarketingConstants.TASK_STATUS_STITCH_FAILURE))) {
 			CommonAjaxResponse result = null;
+			Boolean isMock = false;
 			
-			//prepare for mock
-			String fileName = getFileNameByStitcherImage("/mnt/storage4/marketing"+taskVO.getStitchImagePath());
-			String data = getResultByFileName(fileName);
+			//*************mock begin*************
 			String USE_IDENTIFY_MOCK = ConfigUtils.getInstance().getConfigValue("use.identify.mock");
-			if(!StringUtils.isBlank(data) && USE_IDENTIFY_MOCK.equals("true")){
-				//Use mock data
-				logger.info("use mock with file:" + fileName);
-				ObjectNode node = JsonUtil.toObjectNode(data);
-				result = CommonAjaxResponse.toSuccess(node);
-			}else{
-				//Call really service
+			String[] mock_major_type = ConfigUtils.getInstance().getConfigValue("identify.mock.type").split(":");
+			List<String> tempList = Arrays.asList(mock_major_type);
+			if (USE_IDENTIFY_MOCK.equals("true") && tempList.contains(taskVO.getMajorType())){
+				String fileName = getFileNameByStitcherImage("/mnt/storage4/marketing"+taskVO.getStitchImagePath());
+				String data = getResultByFileName(fileName);
+				if(!StringUtils.isBlank(data)){
+					logger.info("use mock with file:" + fileName);
+					ObjectNode node = JsonUtil.toObjectNode(data);
+					result = CommonAjaxResponse.toSuccess(node);
+					isMock = true;
+				}
+			}
+			//*************mock end*************
+			
+			if(!isMock){
 				logger.info("call service");
 				MarketingIdentifyRequestParam param = new MarketingIdentifyRequestParam();
 				param.setMajor_type(taskVO.getMajorType());

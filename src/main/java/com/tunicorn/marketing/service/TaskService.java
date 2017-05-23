@@ -1,6 +1,8 @@
 package com.tunicorn.marketing.service;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -58,6 +60,7 @@ import com.tunicorn.marketing.vo.TaskVO;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.JsonUtil;
 import com.tunicorn.util.MessageUtils;
+import com.tunicorn.util.SecurityUtils;
 
 @Service
 public class TaskService {
@@ -299,7 +302,8 @@ public class TaskService {
 			if (USE_IDENTIFY_MOCK.equals("true") && tempList.contains(taskVO.getMajorType())){
 				String origin_file = getOriginFile(taskVO.getId());
 				if (origin_file != null){
-					String[] fileNameInfo = getFileNameByStitcherImage(origin_file);
+//					String[] fileNameInfo = getFileNameByStitcherImage(origin_file); 
+					String[] fileNameInfo = getFileNameMD5(origin_file);
 					if(fileNameInfo != null){
 						String fileName = fileNameInfo[0];
 						String score = fileNameInfo[1];
@@ -829,6 +833,34 @@ public class TaskService {
 			return null;
 		}
 	}
+	private String[] getFileNameMD5(String stitcherImagePath) {
+		String content ="";
+		try {
+			File file = new File(stitcherImagePath);
+			FileReader fr = new FileReader(file);
+			BufferedReader br = new BufferedReader(fr);
+			System.out.println("-----------Now is content of file(Reading):----------");
+			int n = 0;
+			for(;;)
+			{
+				n++;
+				String temp = br.readLine();
+				System.out.println("Line"+n+":");
+				System.out.println(temp);
+				content+=temp;
+				if(temp==null){
+					System.out.println("----------OVER---------");
+					br.close();
+					break;
+				}
+			}
+		}catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		String md5String = SecurityUtils.encryptByMD5(content);
+		System.out.println("---MD5---" + md5String);
+		return new String[]{md5String, "10000"};
+	}
 	private String getResultByFileName(String fileName, Double score){
 		if(!StringUtils.isBlank(fileName)){
 			String data = taskDumpMapper.getResultByFileName(fileName, score);
@@ -840,7 +872,9 @@ public class TaskService {
 		}else{
 			return null;
 		}
-	}
+	}	
+
+	
 	private String getOriginFile(String taskId){
 		List<TaskImagesVO> images = taskImagesMapper.getTaskImagesListByTaskId(taskId);
 		if(images.size() != 1){

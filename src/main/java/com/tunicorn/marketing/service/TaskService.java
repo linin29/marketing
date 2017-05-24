@@ -267,7 +267,7 @@ public class TaskService {
 
 		String apiName = MarketingConstants.API_MARKETING + taskId + "/stitcher";
 		String apiMethod = MarketingConstants.POST;
-		String status = MarketingConstants.TASK_STATUS_STITCHING;
+		String status = MarketingConstants.TASK_STATUS_PENDING;
 		if (!result.getSuccess()) {
 			return new ServiceResponseBO(false, "marketing_call_service_failure");
 		}

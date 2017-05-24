@@ -26,6 +26,7 @@ public class MarketingConstants {
 	public static final String MARKETING_IDENTIFY_API_NAME = "identify";
 
 	public static final String TASK_STATUS_IMAGE_UPLOADED = "image_uploaded";
+	public static final String TASK_STATUS_PENDING = "pending";
 	public static final String TASK_STATUS_STITCHING = "stitching";
 	public static final String TASK_STATUS_STITCH_FAILURE = "stitch_failure";
 	public static final String TASK_STATUS_STITCH_SUCCESS = "stitch_success";

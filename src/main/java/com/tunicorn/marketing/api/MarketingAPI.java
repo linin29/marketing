@@ -74,8 +74,8 @@ public class MarketingAPI {
 		}
 
 		if (!Boolean.parseBoolean(node.get(Constant.CORE_SERVICE_SUCCESS_FLAG).asText())) {
-			ObjectNode jsonNode = JsonUtil.createJsonNode();
-			return CommonAjaxResponse.toSuccess(jsonNode);
+			Message message = MessageUtils.getInstance().getMessage("marketing_call_service_failure");
+			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
 
 		return CommonAjaxResponse.toSuccess(node);

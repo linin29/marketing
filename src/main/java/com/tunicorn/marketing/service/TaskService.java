@@ -334,6 +334,7 @@ public class TaskService {
 			String status = MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS;
 			if (!result.getSuccess()) {
 				status = MarketingConstants.TASK_STATUS_IDENTIFY_FAILURE;
+				
 			}
 			IdentifyUpdateParamBO updateParam = new IdentifyUpdateParamBO();
 			updateParam.setApiMethod(apiMethod);
@@ -342,7 +343,7 @@ public class TaskService {
 			updateParam.setStatus(status);
 			updateParam.setTaskId(taskId);
 			updateParam.setUserId(userId);
-			updateParam.setResultStr(result.getData().toString());
+			updateParam.setResultStr(result.getData()!=null ? result.getData().toString() : "");
 			ObjectNode fResults = this.updateTaskStatusByIdentify(updateParam);
 			if (fResults != null) {
 				return new ServiceResponseBO(fResults);
@@ -603,7 +604,7 @@ public class TaskService {
 		if (result > 0) {
 			TaskVO tempTaskVO = taskMapper.getTaskById(updateParam.getTaskId());
 			if (tempTaskVO != null) {
-				getObjectNode(node, updateParam.getResultStr(), tempTaskVO);
+				node = getObjectNode(node, updateParam.getResultStr(), tempTaskVO);
 			}
 			StitcherUpdateParamBO stitcherUpdateParam = new StitcherUpdateParamBO();
 			stitcherUpdateParam.setApiMethod(updateParam.getApiMethod());
@@ -734,6 +735,8 @@ public class TaskService {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}else{
+			node = null;
 		}
 		return node;
 	}

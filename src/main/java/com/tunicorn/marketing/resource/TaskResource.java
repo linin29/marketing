@@ -33,7 +33,9 @@ import com.tunicorn.marketing.bo.OrderBO;
 import com.tunicorn.marketing.bo.ServiceResponseBO;
 import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
+import com.tunicorn.marketing.service.MajorTypeService;
 import com.tunicorn.marketing.service.TaskService;
+import com.tunicorn.marketing.vo.MajorTypeApiVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
 import com.tunicorn.marketing.vo.TaskVO;
 import com.tunicorn.marketing.vo.TokenVO;
@@ -48,6 +50,8 @@ public class TaskResource extends BaseResource {
 
 	@Autowired
 	private TaskService taskService;
+	@Autowired
+	private MajorTypeService majorTypeService; 
 
 	@RequestMapping(value = "/tasks", method = RequestMethod.POST)
 	@ResponseBody
@@ -286,5 +290,18 @@ public class TaskResource extends BaseResource {
 		int totalCount = taskService.getTaskCount(taskBO);
 		int pages = (int) Math.ceil((float) totalCount / MarketingConstants.PAGINATION_ITEMS_PER_PAGE);
 		return TaskListAjaxResponse.toSuccess(taskVOs, totalCount, currentPage == 0 ? 1 : currentPage, pages);
+	}
+	
+	@RequestMapping(value = "/majorTypes", method = RequestMethod.GET)
+	@ResponseBody
+	public CommonAjaxResponse majorTypeList(HttpServletRequest request) {
+
+		AjaxResponse tokenStatus = checkToken(request);
+		if (!tokenStatus.getSuccess()) {
+			return CommonAjaxResponse.toFailure(tokenStatus.getErrorCode(), tokenStatus.getErrorMessage());
+		}
+
+		List<MajorTypeApiVO> majorTypes = majorTypeService.getMajorTypeListForApi();
+		return CommonAjaxResponse.toSuccess(majorTypes);
 	}
 }

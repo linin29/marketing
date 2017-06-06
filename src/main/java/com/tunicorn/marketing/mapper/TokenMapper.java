@@ -23,7 +23,7 @@ public interface TokenMapper {
 	    @Result(property = "accessToken", column = "access_token"),
 	    @Result(property = "expiresTime", column = "expires_time")
 	})
-	@Select("select id, user_id, access_token, expires_time from token where app_id=#{appId} and user_id=#{userId} and client_id=#{clientId} and status='active'") 
+	@Select("select id, user_id, access_token, expires_time from token where app_id=#{appId} and user_id=#{userId} and client_id=#{clientId} and status='active' limit 1") 
 	public TokenVO getTokenByInfo(@Param("appId") int appId, @Param("userId") String userId, @Param("clientId") String clientId);
 	
 	@Update("update token set status = 'deleted' where access_token = #{token}") 

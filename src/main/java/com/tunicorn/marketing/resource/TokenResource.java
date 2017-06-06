@@ -36,7 +36,7 @@ public class TokenResource extends BaseResource {
 	
 	@RequestMapping(value = "/token", method = RequestMethod.POST)
 	@ResponseBody
-	public String createTask(HttpServletRequest request,
+	public synchronized String  createTask(HttpServletRequest request,
 			@RequestParam(value = "grant_type") String grantType,
 			@RequestParam(value = "client_id") String clientId,
 			@RequestParam(value = "client_secret") String clientSecret) {

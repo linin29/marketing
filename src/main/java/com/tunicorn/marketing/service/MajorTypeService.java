@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.tunicorn.marketing.bo.MajorTypeBO;
 import com.tunicorn.marketing.mapper.MajorTypeMapper;
+import com.tunicorn.marketing.vo.MajorTypeApiVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
 
 @Service
@@ -29,5 +30,9 @@ public class MajorTypeService {
 
 	public int getMajorTypeCount(MajorTypeBO majorTypeBO) {
 		return majorTypeMapper.getMajorTypeCount(majorTypeBO);
+	}
+	
+	public List<MajorTypeApiVO> getMajorTypeListForApi(){
+		return majorTypeMapper.getMajorTypeListForApi();
 	}
 }

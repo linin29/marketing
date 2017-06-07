@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
 import com.tunicorn.marketing.bo.MajorTypeBO;
+import com.tunicorn.marketing.vo.MajorTypeApiVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
 
 public interface MajorTypeMapper {
@@ -22,4 +23,7 @@ public interface MajorTypeMapper {
 	public List<MajorTypeVO> getMajorTypeListByBO(MajorTypeBO majorTypeBO);
 
 	public int getMajorTypeCount(MajorTypeBO majorTypeBO);
+	
+	@Select("select `name`, description from major_type where status='active'")
+	public List<MajorTypeApiVO> getMajorTypeListForApi();
 }

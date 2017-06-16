@@ -40,6 +40,7 @@ public class TokenResource extends BaseResource {
 			@RequestParam(value = "grant_type") String grantType,
 			@RequestParam(value = "client_id") String clientId,
 			@RequestParam(value = "client_secret") String clientSecret) {
+		logger.info("key: " + clientId + ", Secret: " + clientSecret);
 		ApplicationVO app = applicationService.getApplicationByKeyAndSecret(clientId, clientSecret);
 		if (app==null) {
 			Message message = MessageUtils.getInstance().getMessage("key_secret_invalid");

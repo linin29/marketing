@@ -258,7 +258,8 @@ public class TaskController extends BaseController {
 		if (response.isSuccess()) {
 			return IdentifyAjaxResponse.toSuccess(((ObjectNode) response.getResult()).get("data"),
 					((ObjectNode) response.getResult()).get("rows"), (ArrayNode)(((ObjectNode) response.getResult()).get("crops")),
-					(ArrayNode)(((ObjectNode) response.getResult()).get("rows_length")));
+					(ArrayNode)(((ObjectNode) response.getResult()).get("rows_length")),
+					((ObjectNode) response.getResult()).get("results_border").asText());
 		} else {
 			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
 			return IdentifyAjaxResponse.toFailure(message.getCode(), message.getMessage());

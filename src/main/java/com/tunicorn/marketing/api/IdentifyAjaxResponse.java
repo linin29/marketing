@@ -13,6 +13,7 @@ public class IdentifyAjaxResponse {
 	private Object rows;
 	private ArrayNode crops;
 	private ArrayNode rows_length;
+	private String results_border;
 
 	private IdentifyAjaxResponse(Object data) {
 		this.success = true;
@@ -33,6 +34,15 @@ public class IdentifyAjaxResponse {
 		this.rows_length = rows_length;
 	}
 
+	private IdentifyAjaxResponse(Object data, Object rows, ArrayNode crops, ArrayNode rows_length, String results_border) {
+		this.success = true;
+		this.data = data;
+		this.rows = rows;
+		this.crops = crops;
+		this.rows_length = rows_length;
+		this.results_border = results_border;
+		
+	}
 	private IdentifyAjaxResponse(int errcode, String errmsg) {
 		this.success = false;
 		this.errcode = errcode;
@@ -56,6 +66,10 @@ public class IdentifyAjaxResponse {
 		return new IdentifyAjaxResponse(data, rows, crops, rows_length);
 	}
 
+	public static IdentifyAjaxResponse toSuccess(Object data, Object rows, ArrayNode crops, ArrayNode rows_length, String results_border) {
+		return new IdentifyAjaxResponse(data, rows, crops, rows_length, results_border);
+	}
+	
 	public Boolean getSuccess() {
 		return success;
 	}
@@ -118,6 +132,14 @@ public class IdentifyAjaxResponse {
 
 	public void setRows_length(ArrayNode rows_length) {
 		this.rows_length = rows_length;
+	}
+
+	public String getResults_border() {
+		return results_border;
+	}
+
+	public void setResults_border(String results_border) {
+		this.results_border = results_border;
 	}
 
 }

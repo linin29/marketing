@@ -54,11 +54,17 @@
                    <div class="row" id="stitch_image">
 	                   <div id="image_default"  align="center"  class="col-sm-8">
 		                   <#if task?? && task.taskStatus?? && (task.taskStatus!='stitching' && task.taskStatus!='image_uploaded') && task.stitchImagePath??>
-		                     <a href="/pic/marketing${stitchImagePath}" target="_blank">
-		                           <img style="width:auto; height:400px;padding:0;" id="stitched" src="/pic/marketing${stitchImagePath}" class="img-thumbnail static_img"></a>
+		                     <#if task.taskStatus=='identify_success'>
+		                     	<a href="/pic/marketing${stitchBorderImagePath}" target="_blank">
+		                     <#else>
+		                     	<a href="/pic/marketing${stitchImagePath}" target="_blank">
+		                     </#if>	
+		                           <img style="width:auto; height:400px;padding:0;" id="stitched" src="/pic/marketing${stitchImagePath}" class="img-thumbnail static_img">
+		                        </a>
 		                   <#else>
 		                        <a href="${springMacroRequestContext.contextPath}/image/2.png" target="_blank">
-		                           <img id="stitched" src="${springMacroRequestContext.contextPath}/image/2.png"class="img-thumbnail static_img"></a>
+		                           <img id="stitched" src="${springMacroRequestContext.contextPath}/image/2.png"class="img-thumbnail static_img">
+		                        </a>
 		                   </#if>
 	                   </div>
 	                   <#if task?? && task.taskStatus?? && task.taskStatus=='identify_success'>
@@ -375,6 +381,7 @@
                     	  majorType = $("#taskMajorType").val();
                       }
                       showCropList(results);
+                      $('#image_default a').attr('href', '/pic/marketing'+data.results_border);
                   }else{
                       noty({text: data.errmsg, layout: "topCenter", type: "warning", timeout: 3000});
                       $('#status').attr('status', 'identify_failure');

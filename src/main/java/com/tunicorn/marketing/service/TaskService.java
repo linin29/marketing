@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -456,6 +457,20 @@ public class TaskService {
 			return new ServiceResponseBO(false, "marketing_parameter_invalid");
 		}
 	}
+	
+	public String getBorderImagePath(TaskVO taskVO){
+		ObjectMapper mapper = new ObjectMapper();
+		if (taskVO.getResult()!=null) {
+			String resultStr = (String)taskVO.getResult();
+			try {
+				ObjectNode nodeResult = (ObjectNode) mapper.readTree(resultStr);
+				return nodeResult.get("results_border").asText();
+			} catch (Exception e) {
+				logger.info("parse json fail, " + e);
+			}
+		}
+		return "";
+	}
 
 	public List<GoodsBO> getResultList(TaskVO taskVO) {
 		ObjectMapper mapper = new ObjectMapper();
@@ -731,6 +746,7 @@ public class TaskService {
 					}
 					node.put("crops", (ArrayNode) nodeResult.findValue("crops"));
 					node.put("rows_length", (ArrayNode) nodeResult.findValue("Rowslength"));
+					node.put("results_border", (ArrayNode) nodeResult.findValue("results_border"));
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

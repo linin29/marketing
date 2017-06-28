@@ -132,6 +132,7 @@ public class TaskController extends BaseController {
 				} else {
 					model.addAttribute("rows", rowsStr);
 				}
+				model.addAttribute("stitchBorderImagePath", taskService.getBorderImagePath(taskVO));
 			}
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
 					&& taskVO.getResult()!=null) {

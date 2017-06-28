@@ -54,7 +54,7 @@
                    <div class="row" id="stitch_image">
 	                   <div id="image_default"  align="center"  class="col-sm-8">
 		                   <#if task?? && task.taskStatus?? && (task.taskStatus!='stitching' && task.taskStatus!='image_uploaded') && task.stitchImagePath??>
-		                     <#if task.taskStatus=='identify_success'>
+		                     <#if task.taskStatus=='identify_success' && stitchBorderImagePath!=''>
 		                     	<a href="/pic/marketing${stitchBorderImagePath}" target="_blank">
 		                     <#else>
 		                     	<a href="/pic/marketing${stitchImagePath}" target="_blank">

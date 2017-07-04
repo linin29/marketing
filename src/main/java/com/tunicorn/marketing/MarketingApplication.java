@@ -32,7 +32,8 @@ public class MarketingApplication extends WebMvcConfigurerAdapter {
 		.excludePathPatterns("/login")
 		.excludePathPatterns("/api/**")
 		.excludePathPatterns("/user/**")
-		.excludePathPatterns("/showView/**");
+		.excludePathPatterns("/showView/**")
+		.excludePathPatterns("/**/crops/**");
 	}
 
 	@Bean

@@ -145,11 +145,45 @@ public class TaskController extends BaseController {
 				model.addAttribute("stitchImagePath", taskVO.getStitchImagePath() + "?random=" + new Date().getTime());
 			}
 		}
-
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList());
 		model.addAttribute("task", taskVO);
 		model.addAttribute("images", imagesVOs);
 		return "list/new_list";
+	}
+	
+	@RequestMapping(value = "/showView/{taskId}", method = RequestMethod.GET)
+	public String viewTask(HttpServletRequest request, Model model, @PathVariable("taskId") String taskId) {
+		TaskVO taskVO = taskService.getTaskById(taskId);
+		List<TaskImagesVO> imagesVOs = taskService.getTaskImagesListByTaskId(taskId);
+
+		if (taskVO != null) {
+			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
+					&& StringUtils.isNotBlank(taskVO.getRows())) {
+				String rowsStr = taskVO.getRows();
+				if (rowsStr.charAt(rowsStr.length() - 1) == MarketingConstants.COMMA) {
+					model.addAttribute("rows", rowsStr.substring(0, rowsStr.length() - 1));
+				} else {
+					model.addAttribute("rows", rowsStr);
+				}
+				model.addAttribute("stitchBorderImagePath", taskService.getBorderImagePath(taskVO));
+			}
+			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
+					&& taskVO.getResult()!=null) {
+				model.addAttribute("goodResults", taskService.getResultList(taskVO));
+			}
+			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())) {
+				model.addAttribute("goodsSkus", taskService.getGoods(taskVO.getMajorType()));
+			}
+			if (StringUtils.isNotBlank(taskVO.getStitchImagePath())) {
+				model.addAttribute("stitchImagePath", taskVO.getStitchImagePath() + "?random=" + new Date().getTime());
+			}
+		}
+		
+		
+		model.addAttribute("majorTypes", taskService.getMajorTypeVOList());
+		model.addAttribute("task", taskVO);
+		model.addAttribute("images", imagesVOs);
+		return "list/task_view";
 	}
 
 	@RequestMapping(value = "/task/search", method = RequestMethod.GET)

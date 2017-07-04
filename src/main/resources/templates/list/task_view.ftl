@@ -1,3 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+         <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>图麟科技海量图像/视频搜索识别开放平台</title>
+	<link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/bootstrap.css">
+	<link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/font-awesome.min.css">
+	<link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/iconfont.css">
+	<link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/jquery-jvectormap-1.2.2.css">
+	<link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/AdminLTE.css">
+	<link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/_all-skins.min.css">
+	<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery.min.js"></script>
+	<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery.noty.packaged.js" ></script>
+	<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/bootstrap.js"></script>
+	<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/app.min.js"></script>
+	<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery.ui.widget.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery.form.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery.iframe-transport.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery.fileupload.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery.fileupload-process.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery.fileupload-validate.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery-editable-select.min.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/lodash.min.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/moment.min.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/masonry.pkgd.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/bootstrap-select.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/bootstrap-paginator.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/cropper.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/tunicorn-cloud.js" ></script>
+    <link href="${springMacroRequestContext.contextPath}/css/jquery-fileupload.css" rel="stylesheet">
+    <link href="${springMacroRequestContext.contextPath}/css/jquery-fileupload-ui.css" rel="stylesheet">
+    <link href="${springMacroRequestContext.contextPath}/css/jquery-editable-select.min.css" rel="stylesheet">
+    <link href="${springMacroRequestContext.contextPath}/css/bootstrap-select.css" rel="stylesheet">
+    <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/style.css"  type="text/css">
+     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/cropper.css"  type="text/css">
+	<style type="text/css">
+		.skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu>li.active>a {
+			color: #fff;
+			background: #1e282c;
+			border-left-color: #00a65a;
+		}
+		.content-wrapper, .right-side {
+			min-height: 100%;
+			background-color: #fff;
+		}
+		.navbar a:hover{
+			background-color:green
+		}
+		.light{
+			color:#fff;
+		}
+		.default{
+			color:#8aa4af;
+		}
+	</style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+	<div class="wrapper">
+	  <section class="content-wrapper" style="margin-left: 0px;">
+	   	<div id="content" style="margin-left: -11px;padding-top: 1px;margin-bottom: -20px;">
+
+
 <style type="text/css">
    body {padding-right:0px !important;}
    img {max-width: 100%;}
@@ -11,41 +75,6 @@
                    <span id="status" status="<#if task??>${task.taskStatus}<#else>task_init</#if>" style="margin-left:30px;">(当前状态：<#if task??>${task.taskStatus}<#else>task_init</#if>)</span>
                    <input id="taskName" type="text" <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
                    <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>
-               </h4>
-           </li>
-           <li>
-               <h4>
-                   <img class="img_icorn" src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
-                   <span>选择货架照片</span>
-                   <div class="choose-box-body">
-                       <div class="row paddingLeft">
-                           <div class="col-xs-1" style="width: 125px;">
-                               <span class="btn btn-success btn-sm fileinput-button pull-right">
-                                   <img src="${springMacroRequestContext.contextPath}/image/camera_icorn.png" class="st_camera">
-                                   <span>上传图片</span>
-                                   <form id="image-form" action="#" method="post" enctype="" class="form-horizontal">
-                                       <input id="image-upload" type="file" name="images" multiple="multiple" accept="image/jpeg,image/png,image/bmp,image/jpg" class="pic-upload">
-                                       <input id="taskId" type="hidden" name="taskId" value="<#if task??>${task.id}<#else>-1</#if>">
-                                       <input id="taskLabel" type="hidden" name="taskLabel" <#if task??> value="${task.name}"</#if>>
-                                   </form>
-                               </span>
-                           </div>
-                           <div class="col-xs-1 choose_btn">
-                                <button id="preview" type="button" class="btn btn-success">预览照片</button>
-                           </div>
-                           <div  class="col-xs-1 choose_btn">
-                               <button id="merge-pre" type="button" class="btn btn-success">拼接图片</button>
-                           </div>
-                           <div class="col-xs-1 choose_btn">
-                                <button id="taskStatus" type="button" class="btn btn-success">获取状态</button>
-                           </div>
-                           <#if task??>
-	                           <div class="col-xs-1">
-	                                <a href="${springMacroRequestContext.contextPath}/showView/${task.id}" target="_blank"><button type="button" class="btn btn-success">查看信息</button></a>
-	                           </div>
-	                       </#if>    
-                       </div>
-                   </div>
                </h4>
            </li>
            <li>
@@ -94,7 +123,6 @@
                <h4 style="padding-bottom: 28px;">
                    <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
                    <span>货架数据</span>
-                   <button id="count" type="button" class="btn btn-success count_number">统计数据</button>
                    <table id="countInfo" class="table table-bordered table-hover table-condensed count_table">
                        <thead>
                             <tr><th colspan="2">货架总层数</th><td colspan="3"><#if rows??>${rows}<#else>0</#if></td></tr>
@@ -556,3 +584,9 @@
      	 }); 
 		}
 </script>
+
+	   	</div>		
+	</section>
+	</div>
+</body>
+</html>

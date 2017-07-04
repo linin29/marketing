@@ -169,6 +169,8 @@ BEGIN
           `result` text,
           `rows` varchar(100) DEFAULT NULL,
           `major_type` varchar(20) DEFAULT NULL,
+		  `host` varchar(50) DEFAULT NULL,
+		  `need_stitch` int(11) DEFAULT '1' COMMENT '是否去重,默认为去重',
 		  PRIMARY KEY (`id`),
 		  KEY `user_task_fk_idx` (`user_id`),
 		  KEY `idx_task_name` (`name`)

@@ -146,4 +146,12 @@ public class IdentifyAjaxResponse {
 		this.results_border = results_border;
 	}
 
+	public long getTotal_area() {
+		return total_area;
+	}
+
+	public void setTotal_area(long total_area) {
+		this.total_area = total_area;
+	}
+
 }

@@ -781,6 +781,7 @@ public class TaskService {
 					}
 					node.put("crops", (ArrayNode) nodeResult.findValue("crops"));
 					node.put("rows_length", (ArrayNode) nodeResult.findValue("Rowslength"));
+					node.put("total_area", nodeResult.findValue("total_area"));
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

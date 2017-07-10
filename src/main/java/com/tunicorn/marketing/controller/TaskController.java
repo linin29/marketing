@@ -50,7 +50,7 @@ public class TaskController extends BaseController {
 
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
 	public String export(HttpServletRequest request, Model model) {
-		
+		model.addAttribute("majorTypes", taskService.getMajorTypeVOList());
 		model.addAttribute("totalCount", 1);
 		model.addAttribute("currentPage", 1);
 		return "list/exportData";

@@ -251,7 +251,7 @@
                     $("#image_default").html(defaultImage);
                     $("#brandListp").hide();
                     $("#stitch_image .brand-list").remove();
-                    $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=2>0</td></tr>');
+                    $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=1>0</td><th colspan="2">货架总面积</th><td colspan="1">0</td></tr>');
                 },
                 error:function(XmlHttpRequest,textStatus,errorThrown){
                     var taskId = $('#taskId').val();
@@ -286,7 +286,7 @@
                      $("#image_default").html(defaultImage);
                      $("#brandListp").hide();
                      $("#stitch_image .brand-list").remove();
-                     $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=2>0</td></tr>');
+                     $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=1>0</td><th colspan="2">货架总面积</th><td colspan="1">0</td></tr>');
                  }else{
                      noty({text: data.errmsg, layout: "topCenter", type: "warning", timeout: 2000});
                  }
@@ -311,7 +311,7 @@
                       if (task_status=='stitch_success' || task_status=='stitch_failure'){
                           $('img#stitched').attr('src', data.data.image + '?random=' + Date.now()).css('height', '400px');
                           $('img#stitched').parent().attr('href', data.data.image + '?random=' + Date.now());
-                          $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=2>'+data.data.rows+'</td></tr>');
+                          $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=1>'+data.data.rows+'</td><th colspan="2">货架总面积</th><td colspan="1">' + data.data.totalArea + '</td></tr>');
                           
                           if(task_status=='stitch_failure'){
 	                    	  if(data.data.errorIndices){

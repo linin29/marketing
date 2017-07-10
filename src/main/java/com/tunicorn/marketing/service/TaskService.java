@@ -234,6 +234,20 @@ public class TaskService {
 				if (StringUtils.isNotBlank(rows)) {
 					newNode.put("rows", rows.substring(0, rows.length() - 1));
 				}
+				String resultStr = (String)taskVO.getResult();
+				if(StringUtils.isNotBlank(resultStr)){
+					ObjectMapper tempMapper = new ObjectMapper();
+					ObjectNode nodeResult;
+					try {
+						nodeResult = (ObjectNode) tempMapper.readTree(resultStr);
+						JsonNode jsonNode = nodeResult.findValue("total_area");
+						if (jsonNode != null) {
+							newNode.put("totalArea", jsonNode.asText());
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			return new ServiceResponseBO(newNode);
 		} else {

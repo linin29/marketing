@@ -191,7 +191,9 @@ public class TaskController extends BaseController {
 				try {
 					nodeResult = (ObjectNode) mapper.readTree(resultStr);
 					JsonNode jsonNode = nodeResult.findValue("total_area");
-					model.addAttribute("totalArea", jsonNode.asText());
+					if (jsonNode != null) {
+						model.addAttribute("totalArea", jsonNode.asText());
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

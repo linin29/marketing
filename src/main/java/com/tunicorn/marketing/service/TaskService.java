@@ -234,6 +234,20 @@ public class TaskService {
 				if (StringUtils.isNotBlank(rows)) {
 					newNode.put("rows", rows.substring(0, rows.length() - 1));
 				}
+				String resultStr = (String)taskVO.getResult();
+				if(StringUtils.isNotBlank(resultStr)){
+					ObjectMapper tempMapper = new ObjectMapper();
+					ObjectNode nodeResult;
+					try {
+						nodeResult = (ObjectNode) tempMapper.readTree(resultStr);
+						JsonNode jsonNode = nodeResult.findValue("total_area");
+						if (jsonNode != null) {
+							newNode.put("totalArea", jsonNode.asText());
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			return new ServiceResponseBO(newNode);
 		} else {
@@ -495,6 +509,13 @@ public class TaskService {
 							goods.setNum(oNode.get("num").toString());
 							goods.setRatio(f1 + "%");
 							goods.setIsShow(goodsSkuVO.getIsShow());
+							ArrayNode jsonNodesCrops = (ArrayNode) nodeResult.findValue("crops");
+							if(jsonNodesCrops!=null && jsonNodesCrops.size()>0){
+								ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(i);
+								if (oNodeCrops.get("ori_area") != null) {
+									goods.setOri_area(oNodeCrops.get("ori_area").asText());
+								}
+							}
 							if (oNode.get("list_rows") != null) {
 								String rows = oNode.get("list_rows").toString();
 								goods.setRows(rows.substring(1, rows.length() - 1));

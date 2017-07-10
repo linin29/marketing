@@ -8,6 +8,7 @@ public class GoodsBO {
 	private String num;
 	private Boolean isShow;
 	private String rows;
+	private String ori_area;
 
 	public String getRows() {
 		return rows;
@@ -55,6 +56,14 @@ public class GoodsBO {
 
 	public void setNum(String num) {
 		this.num = num;
+	}
+
+	public String getOri_area() {
+		return ori_area;
+	}
+
+	public void setOri_area(String ori_area) {
+		this.ori_area = ori_area;
 	}
 
 }

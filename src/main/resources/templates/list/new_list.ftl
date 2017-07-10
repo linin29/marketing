@@ -97,7 +97,10 @@
                    <button id="count" type="button" class="btn btn-success count_number">统计数据</button>
                    <table id="countInfo" class="table table-bordered table-hover table-condensed count_table">
                        <thead>
-                            <tr><th colspan="2">货架总层数</th><td colspan="3"><#if rows??>${rows}<#else>0</#if></td></tr>
+                            <tr>
+                            	<th colspan="2">货架总层数</th><td colspan="1"><#if rows??>${rows}<#else>0</#if></td>
+                            	<th colspan="2">货架总面积</th><td colspan="1"><#if totalArea??>${totalArea}<#else>0</#if></td>
+                            </tr>
                        </thead>
                        <tbody>
                          <#if goodResults?? && (goodResults?size > 0)>
@@ -106,6 +109,7 @@
                               <th>占比</th>
                               <th>牌面数</th>
                               <th>货架位置</th>
+                              <th>sku面积</th>
                             </tr>
                          <#list goodResults as goodResult>
                            <#if goodResult.isShow>
@@ -114,6 +118,7 @@
                               <td>${goodResult.ratio}</td>
                               <td>${goodResult.num}</td>
                               <td>${goodResult.rows!""}</td>
+                              <td>${goodResult.ori_area!""}</td>
                             </tr>
                            </#if>
                          </#list>
@@ -246,7 +251,7 @@
                     $("#image_default").html(defaultImage);
                     $("#brandListp").hide();
                     $("#stitch_image .brand-list").remove();
-                    $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=2>0</td></tr>');
+                    $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=1>0</td><th colspan="2">货架总面积</th><td colspan="1">0</td></tr>');
                 },
                 error:function(XmlHttpRequest,textStatus,errorThrown){
                     var taskId = $('#taskId').val();
@@ -281,7 +286,7 @@
                      $("#image_default").html(defaultImage);
                      $("#brandListp").hide();
                      $("#stitch_image .brand-list").remove();
-                     $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=2>0</td></tr>');
+                     $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=1>0</td><th colspan="2">货架总面积</th><td colspan="1">0</td></tr>');
                  }else{
                      noty({text: data.errmsg, layout: "topCenter", type: "warning", timeout: 2000});
                  }
@@ -306,7 +311,7 @@
                       if (task_status=='stitch_success' || task_status=='stitch_failure'){
                           $('img#stitched').attr('src', data.data.image + '?random=' + Date.now()).css('height', '400px');
                           $('img#stitched').parent().attr('href', data.data.image + '?random=' + Date.now());
-                          $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=2>'+data.data.rows+'</td></tr>');
+                          $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=1>'+data.data.rows+'</td><th colspan="2">货架总面积</th><td colspan="1">' + data.data.totalArea + '</td></tr>');
                           
                           if(task_status=='stitch_failure'){
 	                    	  if(data.data.errorIndices){

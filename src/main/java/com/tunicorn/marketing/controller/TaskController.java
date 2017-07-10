@@ -1,5 +1,6 @@
 package com.tunicorn.marketing.controller;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tunicorn.common.api.Message;
@@ -142,6 +145,20 @@ public class TaskController extends BaseController {
 				}
 				model.addAttribute("stitchBorderImagePath", taskService.getBorderImagePath(taskVO));
 			}
+			String resultStr = (String)taskVO.getResult();
+			if(StringUtils.isNotBlank(resultStr)){
+				ObjectMapper mapper = new ObjectMapper();
+				ObjectNode nodeResult;
+				try {
+					nodeResult = (ObjectNode) mapper.readTree(resultStr);
+					JsonNode jsonNode = nodeResult.findValue("total_area");
+					if (jsonNode != null) {
+						model.addAttribute("totalArea", jsonNode.asText());
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
 					&& taskVO.getResult()!=null) {
 				model.addAttribute("goodResults", taskService.getResultList(taskVO));
@@ -174,6 +191,20 @@ public class TaskController extends BaseController {
 					model.addAttribute("rows", rowsStr);
 				}
 				model.addAttribute("stitchBorderImagePath", taskService.getBorderImagePath(taskVO));
+			}
+			String resultStr = (String)taskVO.getResult();
+			if(StringUtils.isNotBlank(resultStr)){
+				ObjectMapper mapper = new ObjectMapper();
+				ObjectNode nodeResult;
+				try {
+					nodeResult = (ObjectNode) mapper.readTree(resultStr);
+					JsonNode jsonNode = nodeResult.findValue("total_area");
+					if (jsonNode != null) {
+						model.addAttribute("totalArea", jsonNode.asText());
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
 					&& taskVO.getResult()!=null) {

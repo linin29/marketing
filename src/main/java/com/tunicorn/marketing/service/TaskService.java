@@ -496,8 +496,12 @@ public class TaskService {
 							goods.setRatio(f1 + "%");
 							goods.setIsShow(goodsSkuVO.getIsShow());
 							ArrayNode jsonNodesCrops = (ArrayNode) nodeResult.findValue("crops");
-							ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(i);
-							goods.setOri_area(oNodeCrops.get("ori_area").asText());
+							if(jsonNodesCrops!=null && jsonNodesCrops.size()>0){
+								ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(i);
+								if (oNodeCrops.get("ori_area") != null) {
+									goods.setOri_area(oNodeCrops.get("ori_area").asText());
+								}
+							}
 							if (oNode.get("list_rows") != null) {
 								String rows = oNode.get("list_rows").toString();
 								goods.setRows(rows.substring(1, rows.length() - 1));

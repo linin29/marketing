@@ -126,7 +126,10 @@
                    <span>货架数据</span>
                    <table id="countInfo" class="table table-bordered table-hover table-condensed count_table">
                        <thead>
-                            <tr><th colspan="2">货架总层数</th><td colspan="3"><#if rows??>${rows}<#else>0</#if></td></tr>
+                            <tr>
+                            	<th colspan="2">货架总层数</th><td colspan="1"><#if rows??>${rows}<#else>0</#if></td>
+                            	<th colspan="2">货架总面积</th><td colspan="1"><#if totalArea??>${totalArea}<#else>0</#if></td>
+                            </tr>
                        </thead>
                        <tbody>
                          <#if goodResults?? && (goodResults?size > 0)>
@@ -135,6 +138,7 @@
                               <th>占比</th>
                               <th>牌面数</th>
                               <th>货架位置</th>
+                              <th>sku面积</th>
                             </tr>
                          <#list goodResults as goodResult>
                            <#if goodResult.isShow>
@@ -143,6 +147,7 @@
                               <td>${goodResult.ratio}</td>
                               <td>${goodResult.num}</td>
                               <td>${goodResult.rows!""}</td>
+                               <td>${goodResult.ori_area!""}</td>
                             </tr>
                            </#if>
                          </#list>

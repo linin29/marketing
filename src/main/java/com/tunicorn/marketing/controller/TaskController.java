@@ -144,11 +144,12 @@ public class TaskController extends BaseController {
 				try {
 					nodeResult = (ObjectNode) mapper.readTree(resultStr);
 					JsonNode jsonNode = nodeResult.findValue("total_area");
-					model.addAttribute("totalArea", jsonNode.asText());
+					if (jsonNode != null) {
+						model.addAttribute("totalArea", jsonNode.asText());
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
 			}
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
 					&& taskVO.getResult()!=null) {
@@ -182,6 +183,18 @@ public class TaskController extends BaseController {
 					model.addAttribute("rows", rowsStr);
 				}
 				model.addAttribute("stitchBorderImagePath", taskService.getBorderImagePath(taskVO));
+			}
+			String resultStr = (String)taskVO.getResult();
+			if(StringUtils.isNotBlank(resultStr)){
+				ObjectMapper mapper = new ObjectMapper();
+				ObjectNode nodeResult;
+				try {
+					nodeResult = (ObjectNode) mapper.readTree(resultStr);
+					JsonNode jsonNode = nodeResult.findValue("total_area");
+					model.addAttribute("totalArea", jsonNode.asText());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
 					&& taskVO.getResult()!=null) {

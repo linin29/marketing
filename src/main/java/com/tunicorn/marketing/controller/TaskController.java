@@ -45,6 +45,14 @@ public class TaskController extends BaseController {
 	@Autowired
 	private TaskService taskService;
 
+	@RequestMapping(value = "/export", method = RequestMethod.GET)
+	public String export(HttpServletRequest request, Model model) {
+		
+		model.addAttribute("totalCount", 1);
+		model.addAttribute("currentPage", 1);
+		return "list/exportData";
+	}
+	
 	@RequestMapping(value = "/calling", method = RequestMethod.GET)
 	public String calling(HttpServletRequest request, Model model) {
 		UserVO user = getCurrentUser(request);

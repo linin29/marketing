@@ -382,8 +382,16 @@
                       var html1 = '';
                       for(var k in results){
                     	  if(results[k].isShow){
+                    		  var totalOriArea = 0;
+                    		  if(crops){
+                    			  for(var j in crops){
+                    				  if(crops[j].produce == (parseInt(k) + 1)){
+                    					  totalOriArea += parseInt(crops[j].ori_area);
+                    				  }
+                    			  } 
+                    		  }
                               html1 += '<tr><td colspan="2">' + results[k].goods_desc + '</td><td>'+ results[k].ratio +'</td><td>' + results[k].num + '</td>'+
-                              '<td>' + (results[k].list_rows).toString() + '</td><td>' + crops[k].ori_area + '</td></tr>';
+                              '<td>' + (results[k].list_rows).toString() + '</td><td>' + totalOriArea + '</td></tr>';
                     	  }
                       }
                       $("#countInfo").html(html0+html1);

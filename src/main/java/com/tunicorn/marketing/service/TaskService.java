@@ -1,5 +1,7 @@
 package com.tunicorn.marketing.service;
 
+import static org.mockito.Matchers.intThat;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -514,10 +515,15 @@ public class TaskService {
 							goods.setIsShow(goodsSkuVO.getIsShow());
 							ArrayNode jsonNodesCrops = (ArrayNode) nodeResult.findValue("crops");
 							if (jsonNodesCrops != null && jsonNodesCrops.size() > 0) {
-								ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(i);
-								if (oNodeCrops != null && oNodeCrops.get("ori_area") != null) {
-									goods.setOri_area(oNodeCrops.get("ori_area").asText());
+								int totalOriArea = 0;
+								for (int j = 0; j < jsonNodesCrops.size(); j++) {
+									ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(j);
+									if (oNodeCrops != null && oNodeCrops.get("produce") != null
+											&& oNodeCrops.get("produce").asInt() == (i + 1) && oNodeCrops.get("ori_area")!=null) {
+										totalOriArea +=oNodeCrops.get("ori_area").asInt();
+									}
 								}
+								goods.setOri_area(String.valueOf(totalOriArea));
 							}
 							if (oNode.get("list_rows") != null) {
 								String rows = oNode.get("list_rows").toString();
@@ -993,17 +999,21 @@ public class TaskService {
 								rowsBuffer.append(row).append("，");
 							}
 						}
-					}
-				}
-				ArrayNode jsonNodesCrops = (ArrayNode) nodeResult.findValue("crops");
-				if (jsonNodesCrops != null && jsonNodesCrops.size() > 0) {
-					for (int j = 0; j < jsonNodesCrops.size(); j++) {
-						ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(j);
-						if (oNodeCrops != null && oNodeCrops.get("ori_area") != null) {
-							oriAreaBuffer.append(",").append(oNodeCrops.get("ori_area").asText());
+						ArrayNode jsonNodesCrops = (ArrayNode) nodeResult.findValue("crops");
+						if (jsonNodesCrops != null && jsonNodesCrops.size() > 0) {
+							int totalOriArea = 0;
+							for (int j = 0; j < jsonNodesCrops.size(); j++) {
+								ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(j);
+								if (oNodeCrops != null && oNodeCrops.get("produce") != null
+										&& oNodeCrops.get("produce").asInt() == (i + 1) && oNodeCrops.get("ori_area")!=null) {
+									totalOriArea +=oNodeCrops.get("ori_area").asInt();
+								}
+							}
+							oriAreaBuffer.append(",").append(totalOriArea);
 						}
 					}
 				}
+				
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

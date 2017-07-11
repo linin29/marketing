@@ -1,7 +1,5 @@
 package com.tunicorn.marketing.service;
 
-import static org.mockito.Matchers.intThat;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

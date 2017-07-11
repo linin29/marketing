@@ -515,7 +515,7 @@ public class TaskService {
 							ArrayNode jsonNodesCrops = (ArrayNode) nodeResult.findValue("crops");
 							if (jsonNodesCrops != null && jsonNodesCrops.size() > 0) {
 								ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(i);
-								if (oNodeCrops.get("ori_area") != null) {
+								if (oNodeCrops != null && oNodeCrops.get("ori_area") != null) {
 									goods.setOri_area(oNodeCrops.get("ori_area").asText());
 								}
 							}

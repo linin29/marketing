@@ -98,8 +98,8 @@ BEGIN
 	SET @ret = 0;
 	CALL CheckTableExist("privilege", @ret);
 	IF @ret = 1 THEN 
-		INSERT INTO `privilege` (`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES ('3', NULL, '数据导出', '/export', '数据导出一级菜单', '3', '2017-07-10 17:32:50', now());
-		INSERT INTO `role_privilege_mapping` (`id`, `role_id`, `privilege_id`, `create_time`) VALUES ('3', '1', '3', '2017-07-10 17:33:05', now());
+		INSERT INTO `privilege` (`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES ('3', NULL, '数据导出', '/export', '数据导出一级菜单', '3', now());
+		INSERT INTO `role_privilege_mapping` (`id`, `role_id`, `privilege_id`, `create_time`) VALUES ('3', '1', '3', now());
 	END IF;
 END//
 

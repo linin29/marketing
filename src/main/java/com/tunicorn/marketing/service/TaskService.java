@@ -122,7 +122,7 @@ public class TaskService {
 				TaskImagesVO taskImagesVO = new TaskImagesVO();
 				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), createTaskVO.getId(),
 						ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
-				if(file==null){
+				if (file == null) {
 					return new ServiceResponseBO(false, "marketing_save_upload_file_error");
 				}
 				taskImagesVO.setId((Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13))
@@ -179,7 +179,7 @@ public class TaskService {
 			node.put(MarketingConstants.TASK_ID, taskId);
 			node.put("length", images.size());
 			return new ServiceResponseBO(node);
-		} else if(result == -1){
+		} else if (result == -1) {
 			return new ServiceResponseBO(false, "marketing_save_upload_file_error");
 		} else {
 			return new ServiceResponseBO(false, "marketing_db_error");
@@ -195,7 +195,7 @@ public class TaskService {
 			newNode.put("task_status", taskVO.getTaskStatus());
 			newNode.put("success", true);
 			if (StringUtils.equals(taskVO.getTaskStatus(), MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS)) {
-				if (taskVO.getResult()!=null) {
+				if (taskVO.getResult() != null) {
 					newNode = this.getObjectNode(taskVO);
 				}
 			} else if (StringUtils.equals(taskVO.getTaskStatus(), MarketingConstants.TASK_STATUS_IDENTIFY_FAILURE)) {
@@ -207,7 +207,7 @@ public class TaskService {
 			} else if (StringUtils.equals(taskVO.getTaskStatus(), MarketingConstants.TASK_STATUS_STITCH_FAILURE)) {
 				Message message = MessageUtils.getInstance().getMessage("marketing_stitch_failure");
 				String rows = taskVO.getRows();
-				String result = (String)taskVO.getResult();
+				String result = (String) taskVO.getResult();
 				newNode.put("image", MarketingConstants.PIC_MARKETING + taskVO.getStitchImagePath());
 				newNode.put("rows", 0);
 				newNode.put("totalArea", 0);
@@ -236,8 +236,8 @@ public class TaskService {
 				if (StringUtils.isNotBlank(rows)) {
 					newNode.put("rows", rows.substring(0, rows.length() - 1));
 				}
-				String resultStr = (String)taskVO.getResult();
-				if(StringUtils.isNotBlank(resultStr)){
+				String resultStr = (String) taskVO.getResult();
+				if (StringUtils.isNotBlank(resultStr)) {
 					ObjectMapper tempMapper = new ObjectMapper();
 					ObjectNode nodeResult;
 					try {
@@ -306,28 +306,29 @@ public class TaskService {
 	@Transactional
 	public ServiceResponseBO taskIdentify(String taskId, String userId) {
 		TaskVO taskVO = taskMapper.getTaskById(taskId);
-		if (taskVO != null && taskVO.getStitchImagePath() != null 
+		if (taskVO != null && taskVO.getStitchImagePath() != null
 				&& (taskVO.getTaskStatus().equals(MarketingConstants.TASK_STATUS_STITCH_SUCCESS)
 						|| taskVO.getTaskStatus().equals(MarketingConstants.TASK_STATUS_STITCH_FAILURE))) {
 			CommonAjaxResponse result = null;
 			Boolean isMock = false;
-			
-			//*************mock begin*************
+
+			// *************mock begin*************
 			String USE_IDENTIFY_MOCK = ConfigUtils.getInstance().getConfigValue("use.identify.mock");
 			String[] mock_major_type = ConfigUtils.getInstance().getConfigValue("identify.mock.type").split(":");
 			List<String> tempList = Arrays.asList(mock_major_type);
-			if (USE_IDENTIFY_MOCK.equals("true") && tempList.contains(taskVO.getMajorType())){
+			if (USE_IDENTIFY_MOCK.equals("true") && tempList.contains(taskVO.getMajorType())) {
 				String origin_file = getOriginFile(taskVO.getId());
-				if (origin_file != null){
-//					String[] fileNameInfo = getFileNameByStitcherImage(origin_file); 
+				if (origin_file != null) {
+					// String[] fileNameInfo =
+					// getFileNameByStitcherImage(origin_file);
 					logger.info("origin_file: " + origin_file);
 					String[] fileNameInfo = getFileNameMD5(origin_file);
-					if(fileNameInfo != null){
+					if (fileNameInfo != null) {
 						String fileName = fileNameInfo[0];
 						String score = fileNameInfo[1];
 						logger.info("score: " + score);
 						String data = getResultByFileName(fileName, Double.parseDouble(score));
-						if(!StringUtils.isBlank(data)){
+						if (!StringUtils.isBlank(data)) {
 							logger.info("use mock with file: " + fileNameInfo[0]);
 							ObjectNode node = JsonUtil.toObjectNode(data);
 							result = CommonAjaxResponse.toSuccess(node);
@@ -336,22 +337,22 @@ public class TaskService {
 					}
 				}
 			}
-			//*************mock end*************
-			
-			if(!isMock){
+			// *************mock end*************
+
+			if (!isMock) {
 				logger.info("call service");
 				MarketingIdentifyRequestParam param = new MarketingIdentifyRequestParam();
 				param.setMajor_type(taskVO.getMajorType());
 				param.setTask_id(taskId);
 				result = MarketingAPI.identify(param);
 			}
-			
+
 			String apiName = MarketingConstants.API_MARKETING + taskId + "/identify";
 			String apiMethod = MarketingConstants.POST;
 			String status = MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS;
 			if (!result.getSuccess()) {
 				status = MarketingConstants.TASK_STATUS_IDENTIFY_FAILURE;
-				
+
 			}
 			IdentifyUpdateParamBO updateParam = new IdentifyUpdateParamBO();
 			updateParam.setApiMethod(apiMethod);
@@ -360,7 +361,7 @@ public class TaskService {
 			updateParam.setStatus(status);
 			updateParam.setTaskId(taskId);
 			updateParam.setUserId(userId);
-			updateParam.setResultStr(result.getData()!=null ? result.getData().toString() : "");
+			updateParam.setResultStr(result.getData() != null ? result.getData().toString() : "");
 			ObjectNode fResults = this.updateTaskStatusByIdentify(updateParam);
 			if (fResults != null) {
 				return new ServiceResponseBO(fResults);
@@ -473,11 +474,11 @@ public class TaskService {
 			return new ServiceResponseBO(false, "marketing_parameter_invalid");
 		}
 	}
-	
-	public String getBorderImagePath(TaskVO taskVO){
+
+	public String getBorderImagePath(TaskVO taskVO) {
 		ObjectMapper mapper = new ObjectMapper();
-		if (taskVO.getResult()!=null) {
-			String resultStr = (String)taskVO.getResult();
+		if (taskVO.getResult() != null) {
+			String resultStr = (String) taskVO.getResult();
 			try {
 				ObjectNode nodeResult = (ObjectNode) mapper.readTree(resultStr);
 				return nodeResult.get("results_border").asText();
@@ -491,8 +492,8 @@ public class TaskService {
 	public List<GoodsBO> getResultList(TaskVO taskVO) {
 		ObjectMapper mapper = new ObjectMapper();
 		List<GoodsBO> goodsResult = new ArrayList<GoodsBO>();
-		if (taskVO.getResult()!=null) {
-			String resultStr = (String)taskVO.getResult();
+		if (taskVO.getResult() != null) {
+			String resultStr = (String) taskVO.getResult();
 			try {
 				ObjectNode nodeResult = (ObjectNode) mapper.readTree(resultStr);
 				List<GoodsSkuVO> goodArr = getGoods(taskVO.getMajorType());
@@ -512,7 +513,7 @@ public class TaskService {
 							goods.setRatio(f1 + "%");
 							goods.setIsShow(goodsSkuVO.getIsShow());
 							ArrayNode jsonNodesCrops = (ArrayNode) nodeResult.findValue("crops");
-							if(jsonNodesCrops!=null && jsonNodesCrops.size()>0){
+							if (jsonNodesCrops != null && jsonNodesCrops.size() > 0) {
 								ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(i);
 								if (oNodeCrops.get("ori_area") != null) {
 									goods.setOri_area(oNodeCrops.get("ori_area").asText());
@@ -585,7 +586,7 @@ public class TaskService {
 		List<CropBO> cropBOs = new ArrayList<CropBO>();
 		TaskVO taskVO = taskMapper.getTaskById(taskId);
 		if (taskVO != null) {
-			String result = (String)taskVO.getResult();
+			String result = (String) taskVO.getResult();
 			if (StringUtils.isNotBlank(result)) {
 				ObjectMapper mapper = new ObjectMapper();
 				ObjectNode nodeResult;
@@ -714,6 +715,33 @@ public class TaskService {
 
 	}
 
+	public List<String> getTaskExportData(String majorType,String startTime, String endTime) {
+		List<String> result = new ArrayList<String>();
+		TaskVO taskVO = new TaskVO();
+		taskVO.setTaskStatus(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
+		taskVO.setMajorType(majorType);
+		if(StringUtils.isNotBlank(startTime)){
+			taskVO.setStartTime(startTime);
+		}
+		if(StringUtils.isNotBlank(endTime)){
+			taskVO.setEndTime(endTime);
+		}
+		List<TaskVO> tasks = taskMapper.getTaskListByVO(taskVO);
+		if (tasks != null && tasks.size() > 0) {
+			String goodSkuHead = getGoodSkuHead(majorType);
+			result.add(goodSkuHead);
+			for (TaskVO tempTask : tasks) {
+				String resultStr = (String) tempTask.getResult();
+				if (StringUtils.isNotBlank(resultStr)) {
+					StringBuffer taskBodyBuffer = new StringBuffer();
+					taskBodyBuffer.append(tempTask.getId()).append(getGoodSkuStr(resultStr));
+					result.add(taskBodyBuffer.toString());
+				}
+			}
+		}
+		return result;
+	}
+
 	private int addImages(String taskId, String userId, List<MultipartFile> images) {
 		int result = 0;
 		if (images != null && images.size() > 0) {
@@ -727,7 +755,7 @@ public class TaskService {
 				TaskImagesVO taskImagesVO = new TaskImagesVO();
 				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), taskId,
 						ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
-				if(file==null){
+				if (file == null) {
 					logger.error("Save form-data file failure");
 					return -1;
 				}
@@ -775,7 +803,7 @@ public class TaskService {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}else{
+		} else {
 			node = null;
 		}
 		return node;
@@ -787,7 +815,7 @@ public class TaskService {
 		ObjectNode node = mapper.createObjectNode();
 		node.put("task_status", tempTaskVO.getTaskStatus());
 		node.put("success", true);
-		String resultStr = (String)tempTaskVO.getResult();
+		String resultStr = (String) tempTaskVO.getResult();
 		if (StringUtils.isNotBlank(resultStr)) {
 			try {
 				JsonNode nodeResult = mapper.readTree(resultStr);
@@ -860,57 +888,126 @@ public class TaskService {
 		}
 		return majorTypeList;
 	}
-	
+
 	/*
-	 * the follow section is a mock for testing. will be remove in feature 
+	 * the follow section is a mock for testing. will be remove in feature
 	 */
-	private String[] getFileNameByStitcherImage(String stitcherImagePath){
-		MarketingIdentifyMockRequestParam param = new MarketingIdentifyMockRequestParam(); 
+	private String[] getFileNameByStitcherImage(String stitcherImagePath) {
+		MarketingIdentifyMockRequestParam param = new MarketingIdentifyMockRequestParam();
 		param.setImagePath(stitcherImagePath);
 		CommonAjaxResponse result = MarketingAPI.identifyMock(param);
-		if(result.getSuccess()){
+		if (result.getSuccess()) {
 			ObjectNode node = (ObjectNode) result.getData();
 			String filePath = node.findValue("imagePath").asText();
 			String score = node.findValue("score").asText();
 			int idx = filePath.lastIndexOf("/");
-			return new String[]{filePath.substring(idx+1), score};
-		}else{
+			return new String[] { filePath.substring(idx + 1), score };
+		} else {
 			return null;
 		}
 	}
+
 	private String[] getFileNameMD5(String stitcherImagePath) {
 		FileInputStream fis;
 		String md5String = "";
 		try {
 			fis = new FileInputStream(stitcherImagePath);
-			md5String = DigestUtils.md5Hex(IOUtils.toByteArray(fis));   
-	        IOUtils.closeQuietly(fis);
-	        logger.info("---MD5---" + md5String);
+			md5String = DigestUtils.md5Hex(IOUtils.toByteArray(fis));
+			IOUtils.closeQuietly(fis);
+			logger.info("---MD5---" + md5String);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}   
-		
-		return new String[]{md5String, "10000"};
+		}
+
+		return new String[] { md5String, "10000" };
 	}
-	private String getResultByFileName(String fileName, Double score){
-		if(!StringUtils.isBlank(fileName)){
+
+	private String getResultByFileName(String fileName, Double score) {
+		if (!StringUtils.isBlank(fileName)) {
 			String data = taskDumpMapper.getResultByMD5(fileName);
-			if(!StringUtils.isBlank(data)){
+			if (!StringUtils.isBlank(data)) {
 				return data;
-			}else{
+			} else {
 				return null;
 			}
-		}else{
+		} else {
 			return null;
 		}
-	}	
+	}
 
-	private String getOriginFile(String taskId){
+	private String getOriginFile(String taskId) {
 		List<TaskImagesVO> images = taskImagesMapper.getTaskImagesListByTaskId(taskId);
-		if(images.size() != 1){
+		if (images.size() != 1) {
 			return null;
-		}else{
+		} else {
 			return images.get(0).getFullPath();
 		}
+	}
+	
+	private String getGoodSkuHead(String majorType){
+		List<GoodsSkuVO> goodArr = getGoods(majorType);
+		
+		StringBuffer ratioBuffer = new StringBuffer();
+		StringBuffer numBuffer = new StringBuffer();
+		StringBuffer oriAreaBuffer = new StringBuffer();
+		StringBuffer rowsBuffer = new StringBuffer();
+		StringBuffer result = new StringBuffer();
+		
+		for (GoodsSkuVO goodsSku : goodArr) {
+			ratioBuffer.append(",").append(goodsSku.getName()).append("货架占比");
+			numBuffer.append(",").append(goodsSku.getName()).append("牌面数");
+			oriAreaBuffer.append(",").append(goodsSku.getName()).append("像素面积");
+			rowsBuffer.append(",").append(goodsSku.getName()).append("货架位置");
+		}
+		
+		return result.append("图麟任务ID").append(ratioBuffer).append(numBuffer).append(oriAreaBuffer).append(rowsBuffer).toString();
+	}
+	
+	private String getGoodSkuStr(String resultStr) {
+		StringBuffer result = new StringBuffer();
+		StringBuffer ratioBuffer = new StringBuffer();
+		StringBuffer numBuffer = new StringBuffer();
+		StringBuffer oriAreaBuffer = new StringBuffer();
+		StringBuffer rowsBuffer = new StringBuffer();
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode nodeResult;
+		
+		try {
+			nodeResult = (ObjectNode) mapper.readTree(resultStr);
+			if (nodeResult != null) {
+				ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodResults");
+				if (jsonNodes != null && jsonNodes.size() > 0) {
+					for (int i = 0; i < jsonNodes.size(); i++) {
+						ObjectNode oNode = (ObjectNode) jsonNodes.get(i);
+						BigDecimal b = new BigDecimal(Float.parseFloat(oNode.get("ratio").toString()) * 100);
+						double f1 = b.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+						ratioBuffer.append(",").append(f1 + "%");
+						numBuffer.append(",").append(oNode.get("num").toString());
+						JsonNode listRows = oNode.get("list_rows");
+						rowsBuffer.append(",");
+						if (listRows != null && listRows.size() > 0) {
+							for (int k = 0; k < listRows.size(); k++) {
+								String row = listRows.get(k).asText();
+								rowsBuffer.append(row).append("，");
+							}
+						}
+					}
+				}
+				ArrayNode jsonNodesCrops = (ArrayNode) nodeResult.findValue("crops");
+				if (jsonNodesCrops != null && jsonNodesCrops.size() > 0) {
+					for (int j = 0; j < jsonNodesCrops.size(); j++) {
+						ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(j);
+						if (oNodeCrops.get("ori_area") != null) {
+							oriAreaBuffer.append(",").append(oNodeCrops.get("ori_area").asText());
+						}
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return result.append(ratioBuffer).append(numBuffer).append(oriAreaBuffer).append(rowsBuffer).toString();
 	}
 }

@@ -1,11 +1,20 @@
 package com.tunicorn.marketing.controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -50,10 +59,132 @@ public class TaskController extends BaseController {
 
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
 	public String export(HttpServletRequest request, Model model) {
+		UserVO user = getCurrentUser(request);
+		model.addAttribute("user", user);
+		
+		TaskBO taskBO = new TaskBO();
+		taskBO.setUserId(user.getId());
+		SimpleDateFormat sdFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
+		Date date = new Date();
+		taskBO.setEndTime(sdFormat.format(date));
+		Date before2Day = getBefore2Day(date);
+		taskBO.setStartTime(sdFormat.format(before2Day));
+		taskBO.setTaskStatus(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
+		
+		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
+		int totalCount = taskService.getTaskCount(taskBO);
+		
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList());
-		model.addAttribute("totalCount", 1);
+		model.addAttribute("taskStatus", MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
+		model.addAttribute("tasks", taskVOs);
+		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", 1);
 		return "list/exportData";
+	}
+	
+	@RequestMapping(value = "/export/search", method = RequestMethod.GET)
+	public String searchExport(HttpServletRequest request, Model model) {
+		UserVO user = getCurrentUser(request);
+		model.addAttribute("user", user);
+
+		TaskBO taskBO = new TaskBO();
+		taskBO.setUserId(user.getId());
+		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
+			taskBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("majorType"))) {
+			String majorType = request.getParameter("majorType");
+			taskBO.setMajorType(majorType);
+			model.addAttribute("majorType", majorType);
+		}
+		if (StringUtils.isNotBlank(request.getParameter("startTime"))) {
+			String startTime = request.getParameter("startTime");
+			model.addAttribute("startTime", startTime);
+			taskBO.setStartTime(startTime);
+		}
+		if (StringUtils.isNotBlank(request.getParameter("endTime"))) {
+			String endTime = request.getParameter("endTime");
+			model.addAttribute("endTime", endTime);
+			taskBO.setEndTime(endTime);
+		}
+		if (StringUtils.isNotBlank(request.getParameter("taskStatus"))) {
+			String taskStatus = request.getParameter("taskStatus");
+			model.addAttribute("taskStatus", taskStatus);
+			taskBO.setTaskStatus(taskStatus);
+		}
+		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
+		int totalCount = taskService.getTaskCount(taskBO);
+		
+		model.addAttribute("majorTypes", taskService.getMajorTypeVOList());
+		model.addAttribute("tasks", taskVOs);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("currentPage", taskBO.getPageNum() + 1);
+		return "list/exportData";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/exportData")
+	public String exportIpMac(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String majorType = request.getParameter("majorType");
+		String startTime = request.getParameter("startTime");
+		String endTime = request.getParameter("endTime");
+		List<String> dataList = taskService.getTaskExportData(majorType,startTime,endTime);
+		 response.setCharacterEncoding("UTF-8"); 
+		SimpleDateFormat dfs = new SimpleDateFormat("yyyyMMddHHmmss");
+		Date time = new Date();
+		String formatTime = dfs.format(time);
+		String filename = "task_" + formatTime + ".csv";
+		
+		response.setHeader("contentType", "text/html; charset=utf-8");
+		response.setContentType("application/octet-stream");
+		response.addHeader("Content-Disposition", "attachment; filename=" + filename);
+		
+		String realPath = request.getSession().getServletContext().getRealPath("/");
+		String path = realPath + "/" + filename;
+		File file = new File(path);
+		BufferedInputStream bis = null;
+		BufferedOutputStream out = null;
+		FileWriterWithEncoding fwwe = new FileWriterWithEncoding(file, "UTF-8");
+		fwwe.write(new String(new byte[] { (byte) 0xEF, (byte) 0xBB,(byte) 0xBF }));
+		BufferedWriter bw = new BufferedWriter(fwwe);
+		if (dataList != null && !dataList.isEmpty()) {
+			for (String data : dataList) {
+				bw.write(data);
+				bw.write("\n");
+			}
+		}
+		bw.close();
+		fwwe.close();
+		try {
+			bis = new BufferedInputStream(new FileInputStream(file));
+			out = new BufferedOutputStream(response.getOutputStream());
+			byte[] buff = new byte[2048];
+			while (true) {
+				int bytesRead;
+				if (-1 == (bytesRead = bis.read(buff, 0, buff.length))) {
+					break;
+				}
+				out.write(buff, 0, bytesRead);
+			}
+			file.deleteOnExit();
+		} catch (IOException e) {
+			throw e;
+		} finally {
+			try {
+				if (bis != null) {
+					bis.close();
+				}
+				if (out != null) {
+					out.flush();
+					out.close();
+				}
+			} catch (IOException e) {
+				throw e;
+			}
+		}
+		//delAllFile(cp + "download/");
+		return null;
+
 	}
 	
 	@RequestMapping(value = "/calling", method = RequestMethod.GET)
@@ -386,4 +517,12 @@ public class TaskController extends BaseController {
 	public List<GoodsSkuVO> getGoodsSkuList(HttpServletRequest request) {
 		return taskService.getGoods(request.getParameter("majorType"));
 	}
+	
+	private Date getBefore2Day(Date date) {  
+        Calendar calendar = Calendar.getInstance();  
+        calendar.setTime(date);  
+        calendar.add(Calendar.DAY_OF_MONTH, -2);  
+        date = calendar.getTime();  
+        return date;  
+    } 
 }

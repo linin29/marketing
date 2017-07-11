@@ -20,7 +20,7 @@
                         <th>任务名</th>
                         <th>任务Id</th>
                         <th>类型</th>
-                        <th>修改时间</th>
+                        <th>更新时间</th>
                         <th>状态</th>
                         <th>操作</th>
                     </tr>

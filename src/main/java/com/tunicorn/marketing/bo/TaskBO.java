@@ -5,6 +5,9 @@ public class TaskBO extends PaginationBO {
 	private String name;
 	private String taskStatus;
 	private String userId;
+	private String majorType;
+	private String startTime;
+	private String endTime;
 
 	public String getUserId() {
 		return userId;
@@ -36,6 +39,30 @@ public class TaskBO extends PaginationBO {
 
 	public void setTaskStatus(String taskStatus) {
 		this.taskStatus = taskStatus;
+	}
+
+	public String getMajorType() {
+		return majorType;
+	}
+
+	public void setMajorType(String majorType) {
+		this.majorType = majorType;
+	}
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
 	}
 
 }

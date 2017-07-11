@@ -125,27 +125,28 @@ public class TaskController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/exportData")
 	public String exportIpMac(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		UserVO user = getCurrentUser(request);
 		String majorType = request.getParameter("majorType");
 		String startTime = request.getParameter("startTime");
 		String endTime = request.getParameter("endTime");
-		List<String> dataList = taskService.getTaskExportData(majorType,startTime,endTime);
-		 response.setCharacterEncoding("UTF-8"); 
+		List<String> dataList = taskService.getTaskExportData(majorType, startTime, endTime, user.getId());
+		response.setCharacterEncoding("UTF-8");
 		SimpleDateFormat dfs = new SimpleDateFormat("yyyyMMddHHmmss");
 		Date time = new Date();
 		String formatTime = dfs.format(time);
 		String filename = "task_" + formatTime + ".csv";
-		
+
 		response.setHeader("contentType", "text/html; charset=utf-8");
 		response.setContentType("application/octet-stream");
 		response.addHeader("Content-Disposition", "attachment; filename=" + filename);
-		
+
 		String realPath = request.getSession().getServletContext().getRealPath("/");
 		String path = realPath + "/" + filename;
 		File file = new File(path);
 		BufferedInputStream bis = null;
 		BufferedOutputStream out = null;
 		FileWriterWithEncoding fwwe = new FileWriterWithEncoding(file, "UTF-8");
-		fwwe.write(new String(new byte[] { (byte) 0xEF, (byte) 0xBB,(byte) 0xBF }));
+		fwwe.write(new String(new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF }));
 		BufferedWriter bw = new BufferedWriter(fwwe);
 		if (dataList != null && !dataList.isEmpty()) {
 			for (String data : dataList) {
@@ -275,23 +276,24 @@ public class TaskController extends BaseController {
 				}
 				model.addAttribute("stitchBorderImagePath", taskService.getBorderImagePath(taskVO));
 			}
-			String resultStr = (String)taskVO.getResult();
-			if(StringUtils.isNotBlank(resultStr)){
-				ObjectMapper mapper = new ObjectMapper();
-				ObjectNode nodeResult;
-				try {
-					nodeResult = (ObjectNode) mapper.readTree(resultStr);
-					JsonNode jsonNode = nodeResult.findValue("total_area");
-					if (jsonNode != null) {
-						model.addAttribute("totalArea", jsonNode.asText());
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
-					&& taskVO.getResult()!=null) {
+					&& taskVO.getResult() != null) {
 				model.addAttribute("goodResults", taskService.getResultList(taskVO));
+				String resultStr = (String) taskVO.getResult();
+				if (StringUtils.isNotBlank(resultStr)) {
+					ObjectMapper mapper = new ObjectMapper();
+					ObjectNode nodeResult;
+					try {
+						nodeResult = (ObjectNode) mapper.readTree(resultStr);
+						JsonNode jsonNode = nodeResult.findValue("total_area");
+						if (jsonNode != null) {
+							model.addAttribute("totalArea", jsonNode.asText());
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())) {
 				model.addAttribute("goodsSkus", taskService.getGoods(taskVO.getMajorType()));
@@ -322,23 +324,24 @@ public class TaskController extends BaseController {
 				}
 				model.addAttribute("stitchBorderImagePath", taskService.getBorderImagePath(taskVO));
 			}
-			String resultStr = (String)taskVO.getResult();
-			if(StringUtils.isNotBlank(resultStr)){
-				ObjectMapper mapper = new ObjectMapper();
-				ObjectNode nodeResult;
-				try {
-					nodeResult = (ObjectNode) mapper.readTree(resultStr);
-					JsonNode jsonNode = nodeResult.findValue("total_area");
-					if (jsonNode != null) {
-						model.addAttribute("totalArea", jsonNode.asText());
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
-					&& taskVO.getResult()!=null) {
+					&& taskVO.getResult() != null) {
 				model.addAttribute("goodResults", taskService.getResultList(taskVO));
+				String resultStr = (String) taskVO.getResult();
+				if (StringUtils.isNotBlank(resultStr)) {
+					ObjectMapper mapper = new ObjectMapper();
+					ObjectNode nodeResult;
+					try {
+						nodeResult = (ObjectNode) mapper.readTree(resultStr);
+						JsonNode jsonNode = nodeResult.findValue("total_area");
+						if (jsonNode != null) {
+							model.addAttribute("totalArea", jsonNode.asText());
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())) {
 				model.addAttribute("goodsSkus", taskService.getGoods(taskVO.getMajorType()));

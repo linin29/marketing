@@ -715,11 +715,12 @@ public class TaskService {
 
 	}
 
-	public List<String> getTaskExportData(String majorType,String startTime, String endTime) {
+	public List<String> getTaskExportData(String majorType,String startTime, String endTime, String userId) {
 		List<String> result = new ArrayList<String>();
 		TaskVO taskVO = new TaskVO();
 		taskVO.setTaskStatus(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
 		taskVO.setMajorType(majorType);
+		taskVO.setUserId(userId);
 		if(StringUtils.isNotBlank(startTime)){
 			taskVO.setStartTime(startTime);
 		}

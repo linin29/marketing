@@ -166,7 +166,6 @@ public class TaskController extends BaseController {
 				}
 				out.write(buff, 0, bytesRead);
 			}
-			file.deleteOnExit();
 		} catch (IOException e) {
 			throw e;
 		} finally {
@@ -182,7 +181,7 @@ public class TaskController extends BaseController {
 				throw e;
 			}
 		}
-		//delAllFile(cp + "download/");
+		file.delete();
 		return null;
 
 	}

@@ -73,6 +73,10 @@ dataExport=(function(){
 		$('input:checkbox[name=taskStatus]:checked').each(function(i){
 			taskStatus = $(this).val();
 		});
+		if(!majorType){
+			 noty({text: '请选择品类', layout: "topCenter", type: "warning", timeout: 2000});
+			 return;
+		}
 		var page = 0;
 		if (pageNum) {
 			page = pageNum -1;

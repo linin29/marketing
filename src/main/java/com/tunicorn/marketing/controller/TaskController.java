@@ -71,13 +71,10 @@ public class TaskController extends BaseController {
 		taskBO.setStartTime(sdFormat.format(before2Day));
 		taskBO.setTaskStatus(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
 		
-		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
-		int totalCount = taskService.getTaskCount(taskBO);
-		
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList());
 		model.addAttribute("taskStatus", MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
-		model.addAttribute("tasks", taskVOs);
-		model.addAttribute("totalCount", totalCount);
+		//model.addAttribute("tasks", taskVOs);
+		model.addAttribute("totalCount", 0);
 		model.addAttribute("currentPage", 1);
 		return "list/exportData";
 	}

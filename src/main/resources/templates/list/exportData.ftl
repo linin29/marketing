@@ -6,7 +6,7 @@
     <div class="panel-default" style="margin-bottom:0px">
          <div class="data_list_header" style="margin-left: 2%;">
        	 	<h3>数据导出
-            	<small>本次查询共<span id="number">${totalCount}</span>数据</small>
+            	<small>本次查询共<span id="number">${totalCount!0}</span>数据</small>
         	</h3>
     	</div>
         <div class="panel-body">

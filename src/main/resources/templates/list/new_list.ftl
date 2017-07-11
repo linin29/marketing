@@ -376,12 +376,14 @@
                   $('#waiting').modal('hide');
                   if(data.success){
                       var results = data.data;
-                      var html0 = '<tr><th colspan=2>货架总层数</th><td colspan=3>'+data.rows+'</td></tr>'+
-                                  '<tr><th colspan="2">产品名称</th><th>占比</th><th>牌面数</th><th>货架位置</th></tr>'
+                      var crops = data.crops;
+                      var html0 = '<tr><th colspan=2>货架总层数</th><td colspan=1>'+data.rows+'</td><th colspan="2">货架总面积</th><td colspan="1">' + data.total_area + '</td></tr>'+
+                                  '<tr><th colspan="2">产品名称</th><th>占比</th><th>牌面数</th><th>货架位置</th><th>sku面积</th></tr>'
                       var html1 = '';
                       for(var k in results){
                     	  if(results[k].isShow){
-                              html1 += '<tr><td colspan="2">' + results[k].goods_desc + '</td><td>'+ results[k].ratio +'</td><td>' + results[k].num + '</td><td>' + (results[k].list_rows).toString() + '</td></tr>';
+                              html1 += '<tr><td colspan="2">' + results[k].goods_desc + '</td><td>'+ results[k].ratio +'</td><td>' + results[k].num + '</td>'+
+                              '<td>' + (results[k].list_rows).toString() + '</td><td>' + crops[k].ori_area + '</td></tr>';
                     	  }
                       }
                       $("#countInfo").html(html0+html1);

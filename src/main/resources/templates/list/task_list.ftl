@@ -20,7 +20,7 @@
                         <th>任务名</th>
                         <th>任务Id</th>
                         <th>类型</th>
-                        <th>创建时间</th>
+                        <th>修改时间</th>
                         <th>状态</th>
                         <th>操作</th>
                     </tr>
@@ -31,7 +31,7 @@
                        <td>${task.name!""}</td>
                        <td>${task.id!""}</td>
                        <td>${task.majorType!""}</td>
-                       <td>${task.createTime!""}</td>
+                       <td>${task.lastUpdateTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
                        <td>${task.taskStatus!""}</td>
                        <td><a href="javascript:void(0);" onclick="getTaskDetail('${task.id}')" class="ajax-link">查看</a></td>
                    </tr>

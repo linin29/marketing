@@ -210,6 +210,7 @@ public class TaskService {
 				String result = (String)taskVO.getResult();
 				newNode.put("image", MarketingConstants.PIC_MARKETING + taskVO.getStitchImagePath());
 				newNode.put("rows", 0);
+				newNode.put("totalArea", 0);
 				if (StringUtils.isNotBlank(rows)) {
 					newNode.put("rows", rows.substring(0, rows.length() - 1));
 				}
@@ -231,6 +232,7 @@ public class TaskService {
 				newNode.put("image", MarketingConstants.PIC_MARKETING + taskVO.getStitchImagePath());
 				String rows = taskVO.getRows();
 				newNode.put("rows", 0);
+				newNode.put("totalArea", 0);
 				if (StringUtils.isNotBlank(rows)) {
 					newNode.put("rows", rows.substring(0, rows.length() - 1));
 				}

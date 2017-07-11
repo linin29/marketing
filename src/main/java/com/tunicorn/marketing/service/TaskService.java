@@ -999,7 +999,7 @@ public class TaskService {
 				if (jsonNodesCrops != null && jsonNodesCrops.size() > 0) {
 					for (int j = 0; j < jsonNodesCrops.size(); j++) {
 						ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(j);
-						if (oNodeCrops.get("ori_area") != null) {
+						if (oNodeCrops != null && oNodeCrops.get("ori_area") != null) {
 							oriAreaBuffer.append(",").append(oNodeCrops.get("ori_area").asText());
 						}
 					}

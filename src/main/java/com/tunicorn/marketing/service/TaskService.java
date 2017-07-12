@@ -256,7 +256,6 @@ public class TaskService {
 		}
 	}
 
-	@Transactional
 	public ServiceResponseBO taskStitcher(String taskId, Boolean needStitch, String majorType, String userId) {
 		TaskVO taskVO = taskMapper.getTaskById(taskId);
 		if (taskVO == null) {
@@ -287,7 +286,7 @@ public class TaskService {
 		updateParam.setStatus(status);
 		updateParam.setTaskId(taskId);
 		updateParam.setUserId(userId);
-		ObjectNode fResults = this.updateTaskStatusByStitcher(updateParam);
+		this.updateTaskStatusByStitcher(updateParam);
 		
 		param.setNeed_stitch(needStitch);
 		param.setMajor_type(majorType);
@@ -296,11 +295,13 @@ public class TaskService {
 
 		if (!result.getSuccess()) {
 			return new ServiceResponseBO(false, "marketing_call_service_failure");
-		}
-		if (fResults != null) {
-			return new ServiceResponseBO(fResults);
 		} else {
-			return new ServiceResponseBO(false, "marketing_stitch_failure");
+			ObjectNode fResults = this.updateApiCalling(updateParam);
+			if (fResults != null) {
+				return new ServiceResponseBO(fResults);
+			} else {
+				return new ServiceResponseBO(false, "marketing_stitch_failure");
+			}
 		}
 	}
 
@@ -621,19 +622,13 @@ public class TaskService {
 		return cropBOs;
 	}
 
-	private ObjectNode updateTaskStatusByStitcher(StitcherUpdateParamBO updateParam) {
+	private int updateTaskStatusByStitcher(StitcherUpdateParamBO updateParam) {
 		TaskVO taskVO = new TaskVO();
 		taskVO.setId(updateParam.getTaskId());
 		taskVO.setTaskStatus(updateParam.getStatus());
 		taskVO.setMajorType(updateParam.getMajorType());
 		int result = taskMapper.updateTask(taskVO);
-		if (result > 0) {
-			this.updateApiCalling(updateParam);
-		}
-		ObjectMapper mapper = new ObjectMapper();
-		ObjectNode node = mapper.createObjectNode();
-		node.put(MarketingConstants.TASK_ID, updateParam.getTaskId());
-		return node;
+		return result;
 	}
 
 	private ObjectNode updateTaskStatusByIdentify(IdentifyUpdateParamBO updateParam) {
@@ -664,7 +659,7 @@ public class TaskService {
 		return node;
 	}
 
-	private void updateApiCalling(StitcherUpdateParamBO updateParam) {
+	private ObjectNode updateApiCalling(StitcherUpdateParamBO updateParam) {
 		int taskImagesCount = taskImagesMapper.getTaskImagesCountByTaskId(updateParam.getTaskId());
 		UserVO userVO = userMapper.getUserByID(updateParam.getUserId());
 		String userName = "";
@@ -714,6 +709,10 @@ public class TaskService {
 		apiCallingDetailVO.setPictures((int) taskImagesCount);
 		apiCallingDetailVO.setUserName(userName);
 		apiCallingDetailMapper.insertApiCallingDetail(apiCallingDetailVO);
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode node = mapper.createObjectNode();
+		node.put(MarketingConstants.TASK_ID, updateParam.getTaskId());
+		return node;
 	}
 
 	public List<GoodsSkuVO> getGoods(String majorType) {

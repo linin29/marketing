@@ -748,6 +748,7 @@ public class TaskService {
 					} else {
 						newRows = rows;
 					}
+					newRows = newRows.replaceAll(",", "，");
 					taskBodyBuffer.append(tempTask.getId()).append(getGoodSkuStr(resultStr,newRows));
 					result.add(taskBodyBuffer.toString());
 				}
@@ -1020,6 +1021,8 @@ public class TaskService {
 								}
 							}
 							oriAreaBuffer.append(",").append(totalOriArea);
+						}else{
+							oriAreaBuffer.append(",").append(0);
 						}
 					}
 				}

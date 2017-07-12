@@ -276,17 +276,10 @@ public class TaskService {
 		if (!this.getMajorTypeList().contains(majorType)) {
 			return new ServiceResponseBO(false, "marketing_type_invalid");
 		}
-		param.setNeed_stitch(needStitch);
-		param.setMajor_type(majorType);
-		param.setTask_id(taskId);
-		CommonAjaxResponse result = MarketingAPI.stitcher(param);
-
 		String apiName = MarketingConstants.API_MARKETING + taskId + "/stitcher";
 		String apiMethod = MarketingConstants.POST;
 		String status = MarketingConstants.TASK_STATUS_PENDING;
-		if (!result.getSuccess()) {
-			return new ServiceResponseBO(false, "marketing_call_service_failure");
-		}
+		
 		StitcherUpdateParamBO updateParam = new StitcherUpdateParamBO();
 		updateParam.setApiMethod(apiMethod);
 		updateParam.setApiName(apiName);
@@ -295,6 +288,15 @@ public class TaskService {
 		updateParam.setTaskId(taskId);
 		updateParam.setUserId(userId);
 		ObjectNode fResults = this.updateTaskStatusByStitcher(updateParam);
+		
+		param.setNeed_stitch(needStitch);
+		param.setMajor_type(majorType);
+		param.setTask_id(taskId);
+		CommonAjaxResponse result = MarketingAPI.stitcher(param);
+
+		if (!result.getSuccess()) {
+			return new ServiceResponseBO(false, "marketing_call_service_failure");
+		}
 		if (fResults != null) {
 			return new ServiceResponseBO(fResults);
 		} else {
@@ -739,7 +741,15 @@ public class TaskService {
 				String resultStr = (String) tempTask.getResult();
 				if (StringUtils.isNotBlank(resultStr)) {
 					StringBuffer taskBodyBuffer = new StringBuffer();
-					taskBodyBuffer.append(tempTask.getId()).append(getGoodSkuStr(resultStr));
+					String rows = tempTask.getRows();
+					String newRows="";
+					if (StringUtils.isNotBlank(rows) && StringUtils.equals(String.valueOf(MarketingConstants.COMMA),
+							rows.substring(rows.length() - 1))) {
+						newRows = rows.substring(0, rows.length() - 1);
+					} else {
+						newRows = rows;
+					}
+					taskBodyBuffer.append(tempTask.getId()).append(getGoodSkuStr(resultStr,newRows));
 					result.add(taskBodyBuffer.toString());
 				}
 			}
@@ -965,10 +975,12 @@ public class TaskService {
 			rowsBuffer.append(",").append(goodsSku.getName()).append("货架位置");
 		}
 		
-		return result.append("图麟任务ID").append(ratioBuffer).append(numBuffer).append(oriAreaBuffer).append(rowsBuffer).toString();
+		return result.append("图麟任务ID").append(ratioBuffer).append(numBuffer)
+				.append(oriAreaBuffer).append(rowsBuffer)
+				.append(",货架总面积").append(",货架总层数").toString();
 	}
 	
-	private String getGoodSkuStr(String resultStr) {
+	private String getGoodSkuStr(String resultStr, String rows) {
 		StringBuffer result = new StringBuffer();
 		StringBuffer ratioBuffer = new StringBuffer();
 		StringBuffer numBuffer = new StringBuffer();
@@ -976,6 +988,7 @@ public class TaskService {
 		StringBuffer rowsBuffer = new StringBuffer();
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode nodeResult;
+		String totalArea = "";
 		
 		try {
 			nodeResult = (ObjectNode) mapper.readTree(resultStr);
@@ -1011,12 +1024,15 @@ public class TaskService {
 						}
 					}
 				}
-				
+				if (nodeResult.findValue("total_area") != null) {
+					totalArea = nodeResult.findValue("total_area").asText();
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		return result.append(ratioBuffer).append(numBuffer).append(oriAreaBuffer).append(rowsBuffer).toString();
+		return result.append(ratioBuffer).append(numBuffer).append(oriAreaBuffer)
+				.append(rowsBuffer).append(",").append(totalArea).append(",").append(rows).toString();
 	}
 }

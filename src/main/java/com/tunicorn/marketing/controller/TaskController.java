@@ -119,6 +119,32 @@ public class TaskController extends BaseController {
 		return "list/exportData";
 	}
 	
+	@RequestMapping(value = "/task/count", method = RequestMethod.GET)
+	@ResponseBody
+	public CommonAjaxResponse taskCount(HttpServletRequest request) {
+		UserVO user = getCurrentUser(request);
+
+		TaskBO taskBO = new TaskBO();
+		taskBO.setUserId(user.getId());
+		if (StringUtils.isNotBlank(request.getParameter("majorType"))) {
+			String majorType = request.getParameter("majorType");
+			taskBO.setMajorType(majorType);
+		}
+		if (StringUtils.isNotBlank(request.getParameter("startTime"))) {
+			String startTime = request.getParameter("startTime");
+			taskBO.setStartTime(startTime);
+		}
+		if (StringUtils.isNotBlank(request.getParameter("endTime"))) {
+			String endTime = request.getParameter("endTime");
+			taskBO.setEndTime(endTime);
+		}
+		taskBO.setTaskStatus(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
+
+		int totalCount = taskService.getTaskCount(taskBO);
+		
+		return CommonAjaxResponse.toSuccess(totalCount);
+	}
+	
 	@ResponseBody
 	@RequestMapping("/exportData")
 	public String exportIpMac(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -131,14 +157,14 @@ public class TaskController extends BaseController {
 		SimpleDateFormat dfs = new SimpleDateFormat("yyyyMMddHHmmss");
 		Date time = new Date();
 		String formatTime = dfs.format(time);
-		String filename = "task_" + formatTime + ".csv";
+		String fileName = majorType + "_" + formatTime + ".csv";
 
 		response.setHeader("contentType", "text/html; charset=utf-8");
 		response.setContentType("application/octet-stream");
-		response.addHeader("Content-Disposition", "attachment; filename=" + filename);
+		response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
 
 		String realPath = request.getSession().getServletContext().getRealPath("/");
-		String path = realPath + "/" + filename;
+		String path = realPath + "/" + fileName;
 		File file = new File(path);
 		BufferedInputStream bis = null;
 		BufferedOutputStream out = null;

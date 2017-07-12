@@ -17,7 +17,27 @@ dataExport=(function(){
 				 noty({text: '请选择品类', layout: "topCenter", type: "warning", timeout: 2000});
 				 return;
 			}
-			 window.open(marketing_url +"/exportData?majorType=" + majorType+"&startTime=" + startTime + "&endTime=" + endTime);  
+			$.ajax({
+				 type: 'GET',
+				 url: marketing_url + '/task/count',
+				 data:{
+					 startTime:startTime,
+					 endTime:endTime,
+					 majorType:majorType
+				 },
+				 success: function(data) {
+				 	if(data && data.success && data.data > 0){
+				 		window.open(marketing_url +"/exportData?majorType=" + majorType+"&startTime=" + startTime + "&endTime=" + endTime);  
+				 	}else{
+				 		noty({text: '当前品类无可导出数据', layout: "topCenter", type: "warning", timeout: 2000});
+				 		return;
+				 	}
+		    	},
+		    	error: function(data) {
+		    		//返回500错误页面
+		    		$("html").html(data.responseText);
+		    	}
+			});
 		}); 
 	};
 	function initDate() {

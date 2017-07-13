@@ -483,7 +483,11 @@ public class TaskService {
 			String resultStr = (String) taskVO.getResult();
 			try {
 				ObjectNode nodeResult = (ObjectNode) mapper.readTree(resultStr);
-				return nodeResult.get("results_border").asText();
+				if (nodeResult.get("results_border") != null) {
+					return nodeResult.get("results_border").asText();
+				} else {
+					return "";
+				}
 			} catch (Exception e) {
 				logger.info("parse json fail, " + e);
 			}
@@ -748,12 +752,53 @@ public class TaskService {
 					} else {
 						newRows = rows;
 					}
+					newRows = newRows.replaceAll(",", "，");
 					taskBodyBuffer.append(tempTask.getId()).append(getGoodSkuStr(resultStr,newRows));
 					result.add(taskBodyBuffer.toString());
 				}
 			}
 		}
 		return result;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public ObjectNode getTaskResult(String taskId){
+		TaskVO taskVO = this.getTaskById(taskId);
+		ObjectMapper tempMapper = new ObjectMapper();
+		ObjectNode node = tempMapper.createObjectNode();
+		ArrayNode jsonNodes = tempMapper.createArrayNode();
+		
+		if (taskVO != null) {
+			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
+					&& StringUtils.isNotBlank(taskVO.getRows())) {
+				String rowsStr = taskVO.getRows();
+				if (rowsStr.charAt(rowsStr.length() - 1) == MarketingConstants.COMMA) {
+					node.put("rows", rowsStr.substring(0, rowsStr.length() - 1));
+				} else {
+					node.put("rows", rowsStr);
+				}
+			}
+			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
+					&& taskVO.getResult() != null) {
+				node.put("goodResults", jsonNodes.addPOJO(this.getResultList(taskVO)).get(0));
+				String resultStr = (String) taskVO.getResult();
+				if (StringUtils.isNotBlank(resultStr)) {
+					ObjectMapper mapper = new ObjectMapper();
+					ObjectNode nodeResult = null;
+					try {
+						nodeResult = (ObjectNode) mapper.readTree(resultStr);
+						JsonNode jsonNode = nodeResult.findValue("total_area");
+						if (jsonNode != null) {
+							node.put("totalArea", jsonNode.asText());
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					node.put("crops", (ArrayNode) nodeResult.findValue("crops"));
+				}
+			}
+		}
+		return node;
 	}
 
 	private int addImages(String taskId, String userId, List<MultipartFile> images) {
@@ -1020,6 +1065,8 @@ public class TaskService {
 								}
 							}
 							oriAreaBuffer.append(",").append(totalOriArea);
+						}else{
+							oriAreaBuffer.append(",").append(0);
 						}
 					}
 				}

@@ -198,15 +198,15 @@
 		$('#image-upload').change(function(e){
 			var taskName = $("#taskName").val();
 			if (!/\S/.test(taskName)) {
-				noty({text: 'task name is not null!', layout: "topCenter", type: "warning", timeout: 1000});
+				noty({text: '任务名无效!', layout: "topCenter", type: "warning", timeout: 1000});
                 return;
 			}
             if(this.files.length == 0){
-                noty({text: 'no files selected!', layout: "topCenter", type: "warning", timeout: 1000});
+                noty({text: '没有选择图片文件!', layout: "topCenter", type: "warning", timeout: 1000});
                 return;
             };
-            if(this.files.length > 9){
-                noty({text: 'files max num is 9!', layout: "topCenter", type: "warning", timeout: 1000});
+            if(this.files.length > 20){
+                noty({text: '图片最多上传20张!', layout: "topCenter", type: "warning", timeout: 1000});
                 return;
             };
         	/* for (var i = 0; i < this.files.length; i++) {
@@ -218,7 +218,7 @@
             //pre-deal
             var taskId = $('#taskId').val();
             if (taskId=='0'){
-                noty({text: 'current task not finished!', layout: "topCenter", type: "warning", timeout: 1000});
+                noty({text: '当前任务未结束!', layout: "topCenter", type: "warning", timeout: 1000});
                 return;
             }else if(taskId=='-1'){
                 $('#taskId').val(0);

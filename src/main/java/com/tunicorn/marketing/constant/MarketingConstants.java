@@ -41,7 +41,7 @@ public class MarketingConstants {
 	public static final char COMMA = ',';
 	public static final String POINT = ".";
 
-	public static final int IMAGE_MAX_COUNT = 9;
+	public static final int IMAGE_MAX_COUNT = 20;
 	public static final int IMAGE_MAX_SIZE = 5;
 	public static final int FIVE_IMAGES = 5;
 

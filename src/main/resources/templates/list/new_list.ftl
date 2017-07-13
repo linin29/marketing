@@ -355,7 +355,7 @@
                            	  majorType = $("#taskMajorType").val();
                              }
                              showCropList(results);
-                             $('#stitched').attr('src', ''/pic/marketing'+ taskId +'results.jpg?random=');
+                             $('#stitched').attr('src', ''/pic/marketing'+ taskId +'results.jpg?random='); 
                              $('#image_default a').attr('href', '/pic/marketing'+data.results_border);
            	          	},
            	          	error: function(data) {

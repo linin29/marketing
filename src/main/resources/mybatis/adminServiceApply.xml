@@ -19,14 +19,6 @@
         	<result column="major_type_name" property="name" jdbcType="VARCHAR"/>
         </collection>
 	</resultMap>
-	<resultMap id="AdminServiceApplyAssetResultMap" type="com.tunicorn.marketing.vo.AdminServiceApplyAssetVO">
-        <result column="id" property="id" jdbcType="INTEGER"/>
-        <result column="service_apply_id" property="serviceApplyId" jdbcType="INTEGER"/>
-        <result column="display_name" property="displayName" jdbcType="VARCHAR"/>
-        <result column="file_path" property="filePath" jdbcType="VARCHAR"/>
-        <result column="file_size" property="fileSize" jdbcType="INTEGER"/>
-        <result column="file_ext" property="fileExt" jdbcType="VARCHAR"/>
-	 </resultMap>
 
    <insert id="createAdminServiceApply" parameterType="com.tunicorn.marketing.vo.AdminServiceApplyVO">
     insert into admin_service_apply
@@ -169,14 +161,6 @@
 		</if>
 	    <if test="id != null and id != ''">
 			and asa.id = #{id}
-		</if>
-	</select>
-	<select id="getAdminServiceApplyAssetList" resultMap="AdminServiceApplyAssetResultMap" parameterType="com.tunicorn.marketing.vo.AdminServiceApplyAssetVO">
-		select id, face_id, display_name, file_path, file_size, file_ext
-		from admin_service_apply_asset
-		where `status` = 'active'
-	    <if test="serviceApplyId != null and serviceApplyId != ''">
-			and service_apply_id = #{serviceApplyId}
 		</if>
 	</select>
 </mapper>

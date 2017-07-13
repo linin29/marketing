@@ -1,0 +1,56 @@
+/*common*/
+ul li{
+	list-style: none;
+}
+.cl{
+	clear: both;
+}
+.clearBottom{
+	margin-bottom: 0px;
+}
+.word-wrap{
+	word-break:break-all;
+	width:10%;
+}
+.newline{
+	width:90%; 
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+/*service-request.html*/
+#request-header{
+	margin: 10px;
+}
+.new-server{
+	width:100px;
+	position: absolute;
+    right: -10px;
+}
+.wid{
+	width: 30%;
+}
+.application-name{
+    outline: none;
+    border: none;
+}
+/*type-deploy.html*/
+.new-type{
+	position: absolute;
+	right: 26px;
+}
+
+#type-content{
+	margin-top: 44px;
+}
+
+/*login.html*/
+#loginBox{
+	width: 400px;
+	height: 250px;
+	background-color: #FFFFFF;
+	box-shadow:0 0 4px;
+	margin: 0 auto;
+	margin-top:9%;
+	padding: 10px;
+}

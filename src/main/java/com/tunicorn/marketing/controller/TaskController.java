@@ -381,6 +381,13 @@ public class TaskController extends BaseController {
 		return "list/task_view";
 	}
 
+	@RequestMapping(value = "/taskResult/{taskId}", method = RequestMethod.GET)
+	@ResponseBody
+	public CommonAjaxResponse taskResult(HttpServletRequest request, @PathVariable("taskId") String taskId) {
+		ObjectNode node = taskService.getTaskResult(taskId);
+		return CommonAjaxResponse.toSuccess(node);
+	}
+
 	@RequestMapping(value = "/task/search", method = RequestMethod.GET)
 	public String searchTask(HttpServletRequest request, Model model) {
 		UserVO user = getCurrentUser(request);

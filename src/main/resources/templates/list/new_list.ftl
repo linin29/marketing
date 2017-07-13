@@ -94,7 +94,7 @@
                <h4 style="padding-bottom: 28px;">
                    <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
                    <span>货架数据</span>
-                   <button id="count" type="button" class="btn btn-success count_number">统计数据</button>
+                   <!-- <button id="count" type="button" class="btn btn-success count_number">统计数据</button> -->
                    <table id="countInfo" class="table table-bordered table-hover table-condensed count_table">
                        <thead>
                             <tr>
@@ -118,7 +118,7 @@
                               <td>${goodResult.ratio}</td>
                               <td>${goodResult.num}</td>
                               <td>${goodResult.rows!""}</td>
-                              <td>${goodResult.ori_area!""}</td>
+                              <td>${goodResult.ori_area!0}</td>
                             </tr>
                            </#if>
                          </#list>
@@ -320,6 +320,48 @@
 	                              noty({text: data.data.result.errmsg, layout: "topCenter", type: "warning", timeout: 3000});
 	                    	  }
 	                      }
+                      }else if(task_status=='identify_success'){
+              			$.ajax({
+           	      		 type: 'GET',
+           	      		 url: '${springMacroRequestContext.contextPath}/taskResult/' + taskId,
+           	      		 success: function(data) {
+                             var results = data.data.goodResults;
+                             var crops = data.data.crops;
+                             var totalArea = 0;
+                             if(data.data.totalArea){
+                            	 totalArea = data.data.totalArea;
+                             }
+                             var html0 = '<tr><th colspan=2>货架总层数</th><td colspan=1>'+data.data.rows+'</td><th colspan="2">货架总面积</th><td colspan="1">' + totalArea + '</td></tr>'+
+                                         '<tr><th colspan="2">产品名称</th><th>占比</th><th>牌面数</th><th>货架位置</th><th>sku面积</th></tr>'
+                             var html1 = '';
+                             for(var k in results){
+                           	  if(results[k].isShow){
+                           		  var totalOriArea = 0;
+                           		  if(crops){
+                           			  for(var j in crops){
+                           				  if(crops[j].produce == (parseInt(k) + 1)){
+                           					  totalOriArea += parseInt(crops[j].ori_area);
+                           				  }
+                           			  } 
+                           		  }
+                                     html1 += '<tr><td colspan="2">' + results[k].goods_desc + '</td><td>'+ results[k].ratio +'</td><td>' + results[k].num + '</td>'+
+                                     '<td>' + (results[k].rows ==null?"":results[k].rows) + '</td><td>' + totalOriArea + '</td></tr>';
+                           	  }
+                             }
+                             $("#countInfo").html(html0+html1);
+                             $('#status').attr('status', 'identify_success').text('(当前状态：identify_success)');
+                             var majorType = $("#majorType").val();
+                             if(!majorType){
+                           	  majorType = $("#taskMajorType").val();
+                             }
+                             showCropList(results);
+                             $('#image_default a').attr('href', '/pic/marketing'+data.results_border);
+           	          	},
+           	          	error: function(data) {
+           	          		//返回500错误页面
+           	          		$("html").html(data.responseText);
+           	          	}
+           	      	 });
                       }
                   }else{
                       noty({text: data.errmsg, layout: "topCenter", type: "warning", timeout: 3000});

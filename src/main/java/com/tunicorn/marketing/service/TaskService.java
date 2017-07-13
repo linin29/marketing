@@ -674,10 +674,12 @@ public class TaskService {
 		if (taskImagesCount > 0) {
 			callingStatus = "Success";
 		}
-		int callingTimes = 1;
-		if (taskImagesCount > MarketingConstants.FIVE_IMAGES) {
-			callingTimes = 2;
+		int callingTimes = taskImagesCount / MarketingConstants.FIVE_IMAGES;
+		int mod = taskImagesCount % MarketingConstants.FIVE_IMAGES; //one step per five images
+		if (mod > 0) {
+			callingTimes += 1;
 		}
+		callingTimes *= 2;  //stitch and identify 
 		ApiCallingSummaryVO apiCallingSummaryVO = new ApiCallingSummaryVO();
 		apiCallingSummaryVO.setApiMethod(updateParam.getApiMethod());
 		String newApiName = "";

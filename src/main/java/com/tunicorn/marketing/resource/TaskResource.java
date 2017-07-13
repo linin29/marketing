@@ -119,29 +119,29 @@ public class TaskResource extends BaseResource {
 		}
 	}
 
-	@RequestMapping(value = "/{taskId}/identify", method = RequestMethod.POST)
-	@ResponseBody
-	public IdentifyAjaxResponse identify(HttpServletRequest request, @PathVariable("taskId") String taskId) {
-
-		AjaxResponse tokenStatus = checkToken(request);
-		if (!tokenStatus.getSuccess()) {
-			return IdentifyAjaxResponse.toFailure(tokenStatus.getErrorCode(), tokenStatus.getErrorMessage());
-		}
-
-		TokenVO token = (TokenVO) tokenStatus.getData();
-
-		ServiceResponseBO response = taskService.taskIdentify(taskId, token.getUserId());
-		if (response.isSuccess()) {
-			return IdentifyAjaxResponse.toSuccess(((ObjectNode) response.getResult()).get("data"),
-					((ObjectNode) response.getResult()).get("rows"), (ArrayNode)(((ObjectNode) response.getResult()).get("crops")),
-					(ArrayNode)(((ObjectNode) response.getResult()).get("rows_length")),
-					((ObjectNode) response.getResult()).get("results_border").asText(),
-					((ObjectNode) response.getResult()).get("total_area").asLong());
-		} else {
-			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
-			return IdentifyAjaxResponse.toFailure(message.getCode(), message.getMessage());
-		}
-	}
+//	@RequestMapping(value = "/{taskId}/identify", method = RequestMethod.POST)
+//	@ResponseBody
+//	public IdentifyAjaxResponse identify(HttpServletRequest request, @PathVariable("taskId") String taskId) {
+//
+//		AjaxResponse tokenStatus = checkToken(request);
+//		if (!tokenStatus.getSuccess()) {
+//			return IdentifyAjaxResponse.toFailure(tokenStatus.getErrorCode(), tokenStatus.getErrorMessage());
+//		}
+//
+//		TokenVO token = (TokenVO) tokenStatus.getData();
+//
+//		ServiceResponseBO response = taskService.taskIdentify(taskId, token.getUserId());
+//		if (response.isSuccess()) {
+//			return IdentifyAjaxResponse.toSuccess(((ObjectNode) response.getResult()).get("data"),
+//					((ObjectNode) response.getResult()).get("rows"), (ArrayNode)(((ObjectNode) response.getResult()).get("crops")),
+//					(ArrayNode)(((ObjectNode) response.getResult()).get("rows_length")),
+//					((ObjectNode) response.getResult()).get("results_border").asText(),
+//					((ObjectNode) response.getResult()).get("total_area").asLong());
+//		} else {
+//			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
+//			return IdentifyAjaxResponse.toFailure(message.getCode(), message.getMessage());
+//		}
+//	}
 
 	@RequestMapping(value = "/{taskId}/status", method = RequestMethod.GET)
 	@ResponseBody

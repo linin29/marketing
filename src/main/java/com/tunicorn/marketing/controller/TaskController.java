@@ -73,7 +73,6 @@ public class TaskController extends BaseController {
 		
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList());
 		model.addAttribute("taskStatus", MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
-		//model.addAttribute("tasks", taskVOs);
 		model.addAttribute("totalCount", 0);
 		model.addAttribute("currentPage", 1);
 		return "list/exportData";
@@ -207,7 +206,6 @@ public class TaskController extends BaseController {
 		}
 		file.delete();
 		return null;
-
 	}
 	
 	@RequestMapping(value = "/calling", method = RequestMethod.GET)

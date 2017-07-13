@@ -951,6 +951,7 @@ public class TaskService {
 	/*
 	 * the follow section is a mock for testing. will be remove in feature
 	 */
+	@SuppressWarnings("unused")
 	private String[] getFileNameByStitcherImage(String stitcherImagePath) {
 		MarketingIdentifyMockRequestParam param = new MarketingIdentifyMockRequestParam();
 		param.setImagePath(stitcherImagePath);

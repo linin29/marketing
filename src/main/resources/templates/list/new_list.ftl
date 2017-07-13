@@ -355,7 +355,7 @@
                            	  majorType = $("#taskMajorType").val();
                              }
                              showCropList(results);
-                             $('#stitched').attr('src', '/pic/marketing'+ taskId +'results.jpg?random='); 
+                             $('#stitched').attr('src', '/pic/marketing/'+ taskId +'/results.jpg?random='+ $.now()); 
                              $('#image_default a').attr('href', '/pic/marketing'+data.results_border);
            	          	},
            	          	error: function(data) {
@@ -393,14 +393,15 @@
               }
               $('#waiting').modal({keyboard: false, backdrop: 'static'});
               $('#status').attr('status', 'stitching');
+              $('#status').text('(当前状态：stitching)');
                $.post('${springMacroRequestContext.contextPath}/'+taskId+'/stitcher', JSON.stringify(postdata)).done(function (data) {
                   $('#waiting').modal('hide');
                   if(data.success){
                       noty({text: "正在开始合并，请稍后查询状态!", layout: "topCenter", type: "warning", timeout: 3000});
-                      $('#status').attr('status', 'stitch_success');
                   }else{
                       noty({text: data.errmsg, layout: "topCenter", type: "warning", timeout: 3000});
                       $('#status').attr('status', 'image_uploaded');
+              		  $('#status').text('(当前状态：image_uploaded)');
                   }
               }); 
           });

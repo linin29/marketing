@@ -64,7 +64,7 @@
 		                     <#else>
 		                     	<a href="/pic/marketing${stitchImagePath}" target="_blank">
 		                     </#if>	
-		                           <img style="width:auto; height:400px;padding:0;" id="stitched" src="/pic/marketing${stitchImagePath}" class="img-thumbnail static_img">
+		                           <img style="width:auto; height:400px; padding:0;" id="stitched" src="/pic/marketing${stitchImagePath}" class="img-thumbnail static_img">
 		                        </a>
 		                   <#else>
 		                        <a href="${springMacroRequestContext.contextPath}/image/2.png" target="_blank">
@@ -355,6 +355,7 @@
                            	  majorType = $("#taskMajorType").val();
                              }
                              showCropList(results);
+                             $('#stitched').attr('src', ''/pic/marketing'+ taskId +'results.jpg?random=');
                              $('#image_default a').attr('href', '/pic/marketing'+data.results_border);
            	          	},
            	          	error: function(data) {

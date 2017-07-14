@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -37,13 +38,15 @@ public class MajorTypeController extends BaseController {
 		model.addAttribute("user", user);
 
 		MajorTypeBO majorTypeBO = new MajorTypeBO();
-
+		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
+			majorTypeBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
+		}
 		List<MajorTypeVO> majorTypeVOs = majorTypeService.getMajorTypeListByBO(majorTypeBO);
 		int totalCount = majorTypeService.getMajorTypeCount(majorTypeBO);
 
 		model.addAttribute("majorTypes", majorTypeVOs);
 		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("currentPage", 1);
+		model.addAttribute("currentPage", majorTypeBO.getPageNum() + 1);
 		return "admin/majortype/major_type";
 	}
 
@@ -72,7 +75,7 @@ public class MajorTypeController extends BaseController {
 			Message message = MessageUtils.getInstance().getMessage("marketing_major_type_not_existed");
 			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
-		majorTypeService.updateMajorType(majorTypeVO);
+		majorTypeService.updateMajorType(majorType);
 		return AjaxResponse.toSuccess(null);
 	}
 

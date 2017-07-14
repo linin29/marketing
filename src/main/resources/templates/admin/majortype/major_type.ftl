@@ -16,13 +16,13 @@
 			    		<th style="text-align:center">操作</th>
 		    		</tr>
 		    		<#list majorTypes as majorType>
-		    		<tr class="tableTr" style="text-align:center">
+		    		<tr class="tableTr" majortypeid=${majorType.id} style="text-align:center">
 			    		<td class="name">${majorType.name!}</td>
-			    		<td class="description_${majorType.id!}" style="width: 80px;"><p class="newline">${majorType.description!}</p></td>
+			    		<td class="description" style="width: 80px;"><p class="newline">${majorType.description!}</p></td>
 			    		<td>${majorType.createTime!}</td>
 			    		<td>
-			    			<button class="btn btn-success" id="modify_${majorType.id!}" onclick="majorType.edit();">修改</button>
-			    			<button class="btn btn-danger" id="delete_${majorType.id!}">删除</button>
+			    			<button class="btn btn-success" id="modify_${majorType.id!}" onclick="majorType.edit(this, ${majorType.id});">修改</button>
+			    			<button class="btn btn-danger deleteMajorType" majortypeid="${majorType.id}">删除</button>
 			    		</td>
 		    		</tr>
 		    		</#list>
@@ -40,6 +40,7 @@
 	        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        	<h4 class="modal-title" id="myModalLabel">新建类型</h4>
 	      	</div>
+	      	<input id="majorTypeId" type="hidden" >
 	      	<div class="modal-body">
 	        	<div class="form-group">
                     <span class="control-label col-sm-3 text-right" >名称：</span>
@@ -64,6 +65,23 @@
 	      	</div>
 	    </div>
   	</div>
+</div>
+<div class="modal fade" id="deleteAreaModal" tabindex="-1" role="dialog" aria-labelledby="deleteAreaModalLabel">
+	<div class="modal-dialog" role="document">
+	     <div class="modal-content">
+	         <div class="modal-header">
+	             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	             <h4 class="modal-title" id="deleteAreaModalLabel">确认删除</h4>
+	         </div>
+	         <div class="modal-body">
+	            <p>确认删除吗？<b>(一旦删除将不可恢复，请谨慎操作！)</b></p>  
+	        </div>
+	        <div class="modal-footer" style="border-top-color: #ffffff">
+	             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+	             <button type="button" class="btn btn-success" id="majorType_delete">确定</button>
+	        </div>
+	   </div>
+	</div>
 </div>
 <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/major_type.js"></script>
 <script type="text/javascript">

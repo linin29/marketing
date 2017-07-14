@@ -43,7 +43,7 @@
 			<if test="name != null and name !=''">
 			    name=#{name},
 			</if>
-			<if test="description != null description !=''">
+			<if test="description != null and description !=''">
 			    description=#{description},
 			</if>
 			<if test="status != null and status !=''">

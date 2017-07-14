@@ -37,7 +37,13 @@
 					    		<td>${adminServiceApply.id}</td>
 					    		<td>${adminServiceApply.creator.name}</td>
 					    		<td>${adminServiceApply.appBusinessName}</td>
-					    		<td><p class="newline">coffe，cookie，coffee，cof</p></td>
+					    		<td><p class="newline">
+					    			<#if adminServiceApply.majorTypes?? && (adminServiceApply.majorTypes?size>0)>
+	   								   <#list adminServiceApply.majorTypes as majorType>
+	   		                              ${majorType.name} <#if majorType_has_next>,</#if>
+	   		                           </#list>
+   								    </#if>
+								</p></td>
 					    		<td>${adminServiceApply.maxCallNumber}</td>
 					    		<td><a href="javascript:void(0)">查看</a></td>
 					    		<td>${adminServiceApply.statusStr}</td>

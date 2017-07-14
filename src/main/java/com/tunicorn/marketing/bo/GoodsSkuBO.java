@@ -5,7 +5,8 @@ public class GoodsSkuBO extends PaginationBO {
 	private long majorTypeId;
 	private int order;
 	private Boolean isShow;
-
+	private String majorType;
+	
 	public String getName() {
 		return name;
 	}
@@ -36,6 +37,14 @@ public class GoodsSkuBO extends PaginationBO {
 
 	public void setIsShow(Boolean isShow) {
 		this.isShow = isShow;
+	}
+
+	public String getMajorType() {
+		return majorType;
+	}
+
+	public void setMajorType(String majorType) {
+		this.majorType = majorType;
 	}
 
 }

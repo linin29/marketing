@@ -30,7 +30,7 @@
         last_update,
       </if>
       <if test="order != null" >
-        order,
+        `order`,
       </if>
       <if test="isShow != null" >
         is_show,
@@ -72,7 +72,7 @@
 			    description=#{description},
 			</if>
 			<if test="order != null order !=''">
-			    order=#{order},
+			    `order`=#{order},
 			</if>
 			<if test="isShow != null isShow !=''">
 			    is_show=#{isShow},
@@ -84,11 +84,11 @@
 		 WHERE id=#{id}
    </update>
    	<select id="getGoodsSkuListByBO" resultMap="GoodsSkuMap" parameterType="com.tunicorn.marketing.bo.GoodsSkuBO">
-		select id, `name`, description, major_type, order, is_show, create_time, last_update, status
+		select id, `name`, description, major_type, `order`, is_show, create_time, last_update, status
 		from goods_sku
 		where `status` = 'active'
 		<if test="order != null and order != ''">
-			and order = #{order}
+			and `order` = #{order}
 		</if>
 		<if test="majorType != null and majorType != ''">
 			and major_type = #{majorType}
@@ -107,7 +107,7 @@
 		from goods_sku
 		where `status` = 'active'
 		<if test="order != null and order != ''">
-			and order = #{order}
+			and `order` = #{order}
 		</if>
 		<if test="majorType != null and majorType != ''">
 			and major_type = #{majorType}

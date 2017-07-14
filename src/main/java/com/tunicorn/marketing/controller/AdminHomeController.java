@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -72,22 +71,5 @@ public class AdminHomeController extends BaseController {
 		}
 
 		return result;
-	}
-	
-	private String getIndexUrl(List<Menu> menus){
-		String indexUrl = "";
-		if (menus != null && menus.size() > 0) {
-			Menu menu = menus.get(0);
-			List<Menu> subMenus = menu.getSubMenus();
-			if (StringUtils.isNotBlank(menu.getUrl())) {
-				indexUrl = menu.getUrl();
-			} else if (subMenus != null && subMenus.size() > 0) {
-				indexUrl = subMenus.get(0).getUrl();
-			}
-		}
-		if(StringUtils.isBlank(indexUrl)){
-			indexUrl = "/dashboard/init";
-		}
-		return indexUrl;
 	}
 }

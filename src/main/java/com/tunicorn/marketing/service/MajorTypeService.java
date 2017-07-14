@@ -36,8 +36,8 @@ public class MajorTypeService {
 		return majorTypeMapper.getMajorTypeListForApi();
 	}
 	
-	public int getMajorTypeByName(String name){
-		return majorTypeMapper.getMajorTypeByName(name);
+	public int getMajorTypeCountByName(String name){
+		return majorTypeMapper.getMajorTypeCountByName(name);
 	}
 	
 	public MajorTypeVO getMajorTypeById(long majorTypeId){

@@ -50,7 +50,7 @@ public class MajorTypeController extends BaseController {
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ResponseBody
 	public AjaxResponse createMajorType(HttpServletRequest request, @RequestBody MajorTypeVO majorType) {
-		if (majorTypeService.getMajorTypeByName(majorType.getName()) > 0) {
+		if (majorTypeService.getMajorTypeCountByName(majorType.getName()) > 0) {
 			Message message = MessageUtils.getInstance().getMessage("marketing_major_type_existed");
 			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}

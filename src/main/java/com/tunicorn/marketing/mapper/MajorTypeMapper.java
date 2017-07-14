@@ -29,7 +29,7 @@ public interface MajorTypeMapper {
 	public List<MajorTypeApiVO> getMajorTypeListForApi();
 	
 	@Select("select count(*) from major_type where name=#{name} and status='active'")
-	public int getMajorTypeByName(@Param("name") String name);
+	public int getMajorTypeCountByName(@Param("name") String name);
 	
 	@Select("select id, `name`, description, create_time from major_type where id=#{majorTypeId} and status='active'")
 	public MajorTypeVO getMajorTypeById(@Param("majorTypeId") long majorTypeId);

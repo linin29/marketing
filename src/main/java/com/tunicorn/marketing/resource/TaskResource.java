@@ -21,12 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tunicorn.common.api.Message;
 import com.tunicorn.common.entity.AjaxResponse;
 import com.tunicorn.marketing.api.CommonAjaxResponse;
-import com.tunicorn.marketing.api.IdentifyAjaxResponse;
 import com.tunicorn.marketing.api.ImageListAjaxResponse;
 import com.tunicorn.marketing.api.TaskListAjaxResponse;
 import com.tunicorn.marketing.bo.OrderBO;

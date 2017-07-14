@@ -39,4 +39,8 @@ public class MajorTypeService {
 	public int getMajorTypeByName(String name){
 		return majorTypeMapper.getMajorTypeByName(name);
 	}
+	
+	public MajorTypeVO getMajorTypeById(long majorTypeId){
+		return majorTypeMapper.getMajorTypeById(majorTypeId);
+	}
 }

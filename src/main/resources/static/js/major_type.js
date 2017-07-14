@@ -103,6 +103,8 @@ majorType=(function(){
 				        	}
 						});
 			 		},500)		 		
+			 	}else{
+			 		noty({text: data.errorMessage, layout: 'topCenter', type: 'warning', timeout: 2000});
 			 	} 
 			 },
 			 error: function(data) {

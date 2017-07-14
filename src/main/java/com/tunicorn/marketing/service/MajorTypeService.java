@@ -35,4 +35,8 @@ public class MajorTypeService {
 	public List<MajorTypeApiVO> getMajorTypeListForApi(){
 		return majorTypeMapper.getMajorTypeListForApi();
 	}
+	
+	public int getMajorTypeByName(String name){
+		return majorTypeMapper.getMajorTypeByName(name);
+	}
 }

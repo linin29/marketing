@@ -50,9 +50,9 @@ public class AdminLoginController {
 		}
 		model.addAttribute("regiserable", regiserable);
 		if (user == null) {
-			return "login/login";
+			return "admin/login/login";
 		} else {
-			return "redirect:dashboard/index";
+			return "redirect:admin/dashboard/index";
 		}
 	}
 

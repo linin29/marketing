@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.tunicorn.marketing.interceptor.AdminLoginInterceptor;
 import com.tunicorn.marketing.interceptor.LoginInterceptor;
 import com.tunicorn.util.ConfigUtils; 
 
@@ -30,6 +31,16 @@ public class MarketingApplication extends WebMvcConfigurerAdapter {
 		.excludePathPatterns("/css/**") 
 		.excludePathPatterns("/image/**")
 		.excludePathPatterns("/login")
+		.excludePathPatterns("/api/**")
+		.excludePathPatterns("/user/**")
+		.excludePathPatterns("/showView/**")
+		.excludePathPatterns("/**/crops/**").excludePathPatterns("/admin/**");
+		
+		registry.addInterceptor(new AdminLoginInterceptor()).addPathPatterns("/admin/**").excludePathPatterns("/js/**")
+		.excludePathPatterns("/fonts/**")
+		.excludePathPatterns("/css/**") 
+		.excludePathPatterns("/image/**")
+		.excludePathPatterns("/admin/login")
 		.excludePathPatterns("/api/**")
 		.excludePathPatterns("/user/**")
 		.excludePathPatterns("/showView/**")

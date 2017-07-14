@@ -2,6 +2,7 @@ package com.tunicorn.marketing.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -26,4 +27,7 @@ public interface MajorTypeMapper {
 	
 	@Select("select `name`, description from major_type where status='active'")
 	public List<MajorTypeApiVO> getMajorTypeListForApi();
+	
+	@Select("select count(*) from major_type where name=#{name} and status='active'")
+	public int getMajorTypeByName(@Param("name") String name);
 }

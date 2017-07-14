@@ -13,6 +13,7 @@ DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS CreateMarketingTables;
 DROP PROCEDURE IF EXISTS CreateInitialUser;
 DROP PROCEDURE IF EXISTS CreatePrivileges;
+DROP PROCEDURE IF EXISTS CreateAdminPrivileges;
 DROP PROCEDURE IF EXISTS CreateApplication;
 DROP PROCEDURE IF EXISTS CreateGoodsSku;
 
@@ -631,6 +632,27 @@ BEGIN
 	END IF;
 END//
 
+DELIMITER //
+CREATE PROCEDURE CreateAdminPrivileges()
+BEGIN
+	SET @ret = 0;
+	CALL CheckDataExist("admin_privilege", "id=1", @ret);
+	IF @ret = 0 THEN
+		INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (1, NULL, '服务申请', '/admin/service/apply', '服务申请一级菜单', 1, now());
+        INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (2, NULL, '服务管理', '/admin/service/manage', '服务管理一级菜单', 2, now());
+        INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (3, NULL, '主类型配置', '/admin/majortype', '主类型配置一级菜单', 3, now());
+        INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (4, NULL, 'SKU配置', '/admin/sku', 'SKU配置一级菜单', 4, now());
+        
+        INSERT INTO `admin_role`(`id`, `name`, `description`, `create_time`) VALUES (1, 'admin', '管理员', now());
+        INSERT INTO `admin_user_role_mapping`(`id`, `user_id`,`role_id`, `create_time`) VALUES (1, 1, 1, now());
+        
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (1, 1, 1, now());
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (2, 1, 2, now());
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (3, 1, 3, now());
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (4, 1, 4, now());
+	END IF;
+END//
+
 DELIMITER ;
 
 CALL CreateMarketingTables();
@@ -638,6 +660,7 @@ CALL CreateInitialUser();
 CALL CreatePrivileges();
 CALL CreateApplication();
 CALL CreateGoodsSku();
+CALL CreateAdminPrivileges();
 
 DROP PROCEDURE IF EXISTS CheckTableExist;
 DROP PROCEDURE IF EXISTS CheckColumnExist;
@@ -650,3 +673,4 @@ DROP PROCEDURE IF EXISTS CreateInitialUser;
 DROP PROCEDURE IF EXISTS CreatePrivileges;
 DROP PROCEDURE IF EXISTS CreateApplication;
 DROP PROCEDURE IF EXISTS CreateGoodsSku;
+DROP PROCEDURE IF EXISTS CreateAdminPrivileges;

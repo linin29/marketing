@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tunicorn.marketing.mapper.AdminServiceApplyAssetMapper">
+	<resultMap id="AdminServiceApplyAssetResultMap" type="com.tunicorn.marketing.vo.AdminServiceApplyAssetVO">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="service_apply_id" property="serviceApplyId" jdbcType="INTEGER" />
+		<result column="display_name" property="displayName" jdbcType="VARCHAR" />
+		<result column="file_path" property="filePath" jdbcType="VARCHAR" />
+		<result column="file_ext" property="fileExt" jdbcType="VARCHAR" />
+		<result column="file_size" property="fileSize" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
+		<result column="last_update" property="lastUpdateTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+	</resultMap>
+    <insert id="batchInsertServiceApplyAsset" useGeneratedKeys="true" parameterType="java.util.List">  
+        Insert into admin_service_apply_asset (service_apply_id, display_name, file_path, file_size, file_ext, create_time) 
+        values  
+	    <foreach collection="list" item="item" index="index"  separator=",">  
+	        (#{item.serviceApplyId}, #{item.displayName}, #{item.filePath}, #{item.fileSize}, #{item.fileExt}, now())
+	    </foreach>  
+    </insert>
+    <select id="getAdminServiceApplyAssetList" resultMap="AdminServiceApplyAssetResultMap" parameterType="com.tunicorn.marketing.vo.AdminServiceApplyAssetVO">
+		select id, face_id, display_name, file_path, file_size, file_ext
+		from admin_service_apply_asset
+		where `status` = 'active'
+	    <if test="serviceApplyId != null and serviceApplyId != ''">
+			and service_apply_id = #{serviceApplyId}
+		</if>
+	</select>  
+	<delete id="deleteAdminServiceApplyAssetByApplyId">
+        delete from admin_service_apply_asset where service_apply_id = #{applyId}
+    </delete>
+</mapper>

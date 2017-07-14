@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tunicorn.marketing.bo.GoodsSkuBO;
 import com.tunicorn.marketing.mapper.GoodsSkuMapper;
@@ -15,6 +16,7 @@ public class GoodsSkuService {
 	@Autowired
 	private GoodsSkuMapper goodsSkuMapper;
 
+	@Transactional
 	public int createGoodsSku(GoodsSkuVO goodsSkuVO) {
 		List<GoodsSkuVO> goodsSkuVOs = goodsSkuMapper.getGoodsSkuListByMajorType(goodsSkuVO.getMajorType());
 		if (goodsSkuVOs != null && goodsSkuVOs.size() > 0) {
@@ -25,6 +27,7 @@ public class GoodsSkuService {
 		return result;
 	}
 
+	@Transactional
 	public int updateGoodsSku(GoodsSkuVO goodsSkuVO) {
 		return goodsSkuMapper.updateGoodsSku(goodsSkuVO);
 	}

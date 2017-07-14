@@ -3,6 +3,10 @@ package com.tunicorn.marketing.vo;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.tunicorn.marketing.constant.MarketingConstants;
+
 public class AdminServiceApplyVO {
 	private long id;
 	private int userId;
@@ -17,7 +21,8 @@ public class AdminServiceApplyVO {
 	private Date lastUpdate;
 	private String status;
 	private List<MajorTypeVO> majorTypes;
-
+	private UserVO creator;
+	private String statusStr;
 	public List<MajorTypeVO> getMajorTypes() {
 		return majorTypes;
 	}
@@ -122,4 +127,18 @@ public class AdminServiceApplyVO {
 		this.status = status;
 	}
 
+	public UserVO getCreator() {
+		return creator;
+	}
+
+	public void setCreator(UserVO creator) {
+		this.creator = creator;
+	}
+	public String getStatusStr() {
+		if(StringUtils.isNotBlank(applyStatus)) {
+			statusStr = MarketingConstants.SERVICE_STATUS_NAME_MAPPING.get(applyStatus);
+		}
+		
+		return statusStr;
+	}
 }

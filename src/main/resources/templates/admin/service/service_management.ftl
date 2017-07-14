@@ -3,7 +3,7 @@
   			<div class="panel-body">
     			<div id="request-header" class="row">
 					<div class="col-sm-3">
-  						<input type="text" class="form-control" placeholder="请输入应用商品名称">
+  						<input type="text" class="form-control" placeholder="请输入应用商名称">
 					</div>
 					<div class="col-sm-3">
   						<select style="width:70%;height: 34px;">

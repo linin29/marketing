@@ -3,7 +3,6 @@ package com.tunicorn.marketing.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,8 +53,13 @@ public class AdminServiceApplyService {
 		return adminServiceApplyMapper.updateMajorTypeApplicationMapping(applicationMappingVO);
 	}
 
-	public AdminServiceApplyVO getAdminServiceApplyById(@Param("id") int id) {
+	public AdminServiceApplyVO getAdminServiceApplyById(long id) {
 		return adminServiceApplyMapper.getAdminServiceApplyById(id);
+	}
+	
+	public List<AdminServiceApplyAssetVO> getAdminServiceApplyAssetList(
+			AdminServiceApplyAssetVO adminServiceApplyAssetVO){
+		return adminServiceApplyAssetMapper.getAdminServiceApplyAssetList(adminServiceApplyAssetVO);
 	}
 
 	private void addApplyAsset(long applyId, List<MultipartFile> images) {

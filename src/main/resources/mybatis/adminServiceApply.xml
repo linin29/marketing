@@ -12,11 +12,15 @@
 		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
 		<result column="apply_status" property="applyStatus" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
-		<result column="last_update" property="lastUpdateTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="last_update" property="lastUpdate" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
 		<collection property="majorTypes" ofType="com.tunicorn.marketing.vo.MajorTypeVO">
         	<result column="major_type_id" property="id" jdbcType="INTEGER"/>
         	<result column="major_type_name" property="name" jdbcType="VARCHAR"/>
+        </collection>
+        <collection property="creator" ofType="com.tunicorn.marketing.vo.UserVO">
+        	<result column="creatorId" property="id" jdbcType="INTEGER"/>
+        	<result column="creatorName" property="name" jdbcType="VARCHAR"/>
         </collection>
 	</resultMap>
 
@@ -92,10 +96,12 @@
   </insert>
 	<select id="getAdminServiceApplyList" resultMap="AdminServiceApplyResultMap" parameterType="com.tunicorn.marketing.bo.AdminServiceApplyBO">
 		select asa.id,  asa.user_id, asa.app_business_name, asa.app_business_address, asa.app_business_mobile, asa.app_business_contacts,
-		asa.max_call_number, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id
+		asa.max_call_number, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
+		au.name as creatorName
 		from admin_service_apply asa 
 		left join admin_major_type_service_apply_mapping amt on asa.id = amt.service_apply_id
 		left join major_type mt  on mt.id = amt.major_type_id
+		left join admin_user au on au.id=asa.creator_id
 		where asa.`status` = 'active'
 		<if test="applyStatus != null and applyStatus != ''">
 			and asa.apply_status = #{applyStatus}

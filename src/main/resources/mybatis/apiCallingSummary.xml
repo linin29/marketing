@@ -23,16 +23,16 @@
     	<if test="apiName != null and apiName != ''">
     		and api_name = #{apiName}
     	</if>
-    	<if test="callingDay != null and callingDay != ''">
-    		and calling_day = #{callingDay}
+    	<if test="startDate != null and startDate != ''">
+    		and calling_day <![CDATA[ >= #{startDate}]]>
+    	</if>
+    	<if test="endDate != null and endDate != ''">
+    		and calling_day <![CDATA[ <= #{endDate}]]>
     	</if>
     	<if test="userName != null and userName != ''">
     		and user_name = #{userName}
     	</if>
-    	<if test="callingTimes != null and callingTimes != ''">
-    		and calling_times = #{callingTimes}
-    	</if>
-    	order by calling_day desc
+    	order by calling_day DESC
     	limit #{startNum}, #{perPage}
     </select>
     <select id="getApiCallingSummaryListByVO" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.vo.ApiCallingSummaryVO">
@@ -65,14 +65,34 @@
     	<if test="apiName != null and apiName != ''">
     		and api_name = #{apiName}
     	</if>
-    	<if test="callingDay != null and callingDay != ''">
-    		and calling_day = #{callingDay}
+    	<if test="startDate != null and startDate != ''">
+    		and calling_day <![CDATA[ >= #{startDate}]]>
+    	</if>
+    	<if test="endDate != null and endDate != ''">
+    		and calling_day <![CDATA[ <= #{endDate}]]>
     	</if>
     	<if test="userName != null and userName != ''">
     		and user_name = #{userName}
     	</if>
-    	<if test="callingTimes != null and callingTimes != ''">
-    		and calling_times = #{callingTimes}
+    </select>
+    <select id="getApiCallingSum" resultType="int" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
+    	select sum(calling_times)
+    	from api_calling_count 
+    	where `status` = 'active'
+    	<if test="apiMethod != null and apiMethod != ''">
+    		and api_method = #{apiMethod}
+    	</if>
+    	<if test="apiName != null and apiName != ''">
+    		and api_name = #{apiName}
+    	</if>
+    	<if test="startDate != null and startDate != ''">
+    		and calling_day <![CDATA[ >= #{startDate}]]>
+    	</if>
+    	<if test="endDate != null and endDate != ''">
+    		and calling_day <![CDATA[ <= #{endDate}]]>
+    	</if>
+    	<if test="userName != null and userName != ''">
+    		and user_name = #{userName}
     	</if>
     </select>
 </mapper>

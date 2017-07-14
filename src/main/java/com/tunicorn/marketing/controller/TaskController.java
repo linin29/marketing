@@ -209,54 +209,25 @@ public class TaskController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/calling", method = RequestMethod.GET)
-	public String calling(HttpServletRequest request, Model model) {
+	public String calling(HttpServletRequest request, ApiCallingSummaryBO apiCallingSummaryBO, Model model) {
 		UserVO user = getCurrentUser(request);
-		model.addAttribute("user", user);
-
-		ApiCallingSummaryBO apiCallingSummaryBO = new ApiCallingSummaryBO();
 		apiCallingSummaryBO.setUserName(user.getUserName());
-
-		List<ApiCallingSummaryVO> apiCallingCounts = taskService.getApiCallingSummaryList(apiCallingSummaryBO);
-		int totalCount = taskService.getApiCallingSummary(apiCallingSummaryBO);
-
-		int callingCount = 0;
-		if (apiCallingCounts != null && apiCallingCounts.size() > 0) {
-			for (ApiCallingSummaryVO apiCallingCountVO : apiCallingCounts) {
-				callingCount += apiCallingCountVO.getCallingTimes();
-			}
-		}
-
-		model.addAttribute("callingCount", callingCount);
-		model.addAttribute("callings", apiCallingCounts);
-		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("currentPage", 1);
-		return "list/count_list";
-	}
-
-	@RequestMapping(value = "/calling/search", method = RequestMethod.GET)
-	public String searchCalling(HttpServletRequest request, Model model) {
-		UserVO user = getCurrentUser(request);
-		model.addAttribute("user", user);
-
-		ApiCallingSummaryBO apiCallingSummaryBO = new ApiCallingSummaryBO();
-		apiCallingSummaryBO.setUserName(user.getUserName());
-		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
-			apiCallingSummaryBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
+		
+		if(StringUtils.isBlank(apiCallingSummaryBO.getStartDate())){
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			long startDate = new Date().getTime() - 5 * 24 * 60 * 60 * 1000;
+			apiCallingSummaryBO.setStartDate(formatter.format(new Date(startDate)));
 		}
 
 		List<ApiCallingSummaryVO> apiCallingCounts = taskService.getApiCallingSummaryList(apiCallingSummaryBO);
 		int totalCount = taskService.getApiCallingSummary(apiCallingSummaryBO);
-
-		int callingCount = 0;
-		if (apiCallingCounts != null && apiCallingCounts.size() > 0) {
-			for (ApiCallingSummaryVO apiCallingCountVO : apiCallingCounts) {
-				callingCount += apiCallingCountVO.getCallingTimes();
-			}
-		}
+		int callingCount = taskService.getApiCallingSum(apiCallingSummaryBO);
 
 		model.addAttribute("callingCount", callingCount);
 		model.addAttribute("callings", apiCallingCounts);
 		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("startDate", apiCallingSummaryBO.getStartDate());
+		model.addAttribute("endDate", apiCallingSummaryBO.getEndDate());
 		model.addAttribute("currentPage", apiCallingSummaryBO.getPageNum() + 1);
 		return "list/count_list";
 	}

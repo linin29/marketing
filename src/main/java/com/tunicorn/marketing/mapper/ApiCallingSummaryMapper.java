@@ -24,4 +24,6 @@ public interface ApiCallingSummaryMapper {
 	public List<ApiCallingSummaryVO> getApiCallingSummaryListByVO(ApiCallingSummaryVO apiCallingSummaryVO);
 	
 	public int getApiCallingSummary(ApiCallingSummaryBO apiCallingSummaryBO);
+	
+	public int getApiCallingSum(ApiCallingSummaryBO apiCallingSummaryBO);
 }

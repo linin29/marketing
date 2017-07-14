@@ -588,6 +588,10 @@ public class TaskService {
 	public int getApiCallingSummary(ApiCallingSummaryBO apiCallingSummaryBO) {
 		return apiCallingSummaryMapper.getApiCallingSummary(apiCallingSummaryBO);
 	}
+	
+	public int getApiCallingSum(ApiCallingSummaryBO apiCallingSummaryBO) {
+		return apiCallingSummaryMapper.getApiCallingSum(apiCallingSummaryBO);
+	}
 
 	public List<MajorTypeVO> getMajorTypeVOList() {
 		return majorTypeMapper.getMajorTypeList();

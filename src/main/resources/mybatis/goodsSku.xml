@@ -8,7 +8,7 @@
 		<result column="description" property="description" jdbcType="VARCHAR" />
 		<result column="order" property="order" jdbcType="INTEGER" />
 		<result column="is_show" property="isShow" jdbcType="INTEGER" />
-		<result column="create_time" property="createTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
 		<result column="last_update" property="lastUpdateTime"  javaType="java.sql.Date" jdbcType="TIMESTAMP" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
 	 </resultMap>

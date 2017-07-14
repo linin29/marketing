@@ -10,16 +10,16 @@
 	    	<table class="table table-bordered">
 		    	<tbody class="">
 		    		<tr style="background-color:#ddd;">
-			    		<th style="text-align:center">名称</th>
-			    		<th style="text-align:center">描述</th>
-			    		<th style="text-align:center">创建时间</th>
-			    		<th style="text-align:center">操作</th>
+			    		<th style="text-align:center;width:30%">名称</th>
+			    		<th style="text-align:center;width:30%">描述</th>
+			    		<th style="text-align:center;width:20%">创建时间</th>
+			    		<th style="text-align:center;width:30%">操作</th>
 		    		</tr>
 		    		<#list majorTypes as majorType>
 		    		<tr class="tableTr" majortypeid=${majorType.id} style="text-align:center">
 			    		<td class="name">${majorType.name!}</td>
 			    		<td class="description" style="width: 80px;"><p class="newline">${majorType.description!}</p></td>
-			    		<td>${majorType.createTime!}</td>
+			    		<td>${majorType.createTime}</td>
 			    		<td>
 			    			<button class="btn btn-success" id="modify_${majorType.id!}" onclick="majorType.edit(this, ${majorType.id});">修改</button>
 			    			<button class="btn btn-danger deleteMajorType" majortypeid="${majorType.id}">删除</button>

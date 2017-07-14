@@ -59,6 +59,15 @@ public class AdminServiceController extends BaseController {
 		model.addAttribute("currentPage", 1);
 		return "admin/service/service_apply";
 	}
+	
+	@RequestMapping(value = "/detail/{applyId}", method = RequestMethod.GET)
+	@ResponseBody
+	public CommonAjaxResponse detail(HttpServletRequest request, @PathVariable("applyId") Long applyId) {
+		UserVO user = getCurrentUser(request);
+		AdminServiceApplyVO adminServiceApplyVO = adminServiceApplyService.getAdminServiceApplyById(applyId);
+		return CommonAjaxResponse.toSuccess(adminServiceApplyVO);
+	}
+
 
 	@RequestMapping(value = "/apply/search", method = RequestMethod.GET)
 	public String serviceApplySearch(HttpServletRequest request, HttpServletResponse resp, Model model) {
@@ -106,11 +115,48 @@ public class AdminServiceController extends BaseController {
 
 	@RequestMapping(value = "/manage", method = RequestMethod.GET)
 	public String serviceManage(HttpServletRequest request, HttpServletResponse resp, Model model) {
+		UserVO user = getCurrentUser(request);
+
+		AdminServiceApplyBO adminServiceApplyBO = new AdminServiceApplyBO();
+		adminServiceApplyBO.setCreatorId(Integer.valueOf(user.getId()));
+		List<AdminServiceApplyVO> adminServiceApplyVOs = adminServiceApplyService
+				.getAdminServiceApplyList(adminServiceApplyBO);
+		int totalCount = adminServiceApplyService.getAdminServiceApplyCount(adminServiceApplyBO);
+		
+		model.addAttribute("majorTypes", majorTypeService.getMajorTypeList());
+		model.addAttribute("adminUsers", adminUserService.getAdminUserList());
+		model.addAttribute("adminServiceApplys", adminServiceApplyVOs);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("currentPage", 1);
 		return "admin/service/service_management";
 	}
 
 	@RequestMapping(value = "/manage/search", method = RequestMethod.GET)
 	public String serviceManageSearch(HttpServletRequest request, HttpServletResponse resp, Model model) {
+		UserVO user = getCurrentUser(request);
+
+		AdminServiceApplyBO adminServiceApplyBO = new AdminServiceApplyBO();
+		adminServiceApplyBO.setCreatorId(Integer.valueOf(user.getId()));
+		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
+			adminServiceApplyBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("appBusinessName"))) {
+			adminServiceApplyBO.setAppBusinessName(request.getParameter("appBusinessName"));
+			model.addAttribute("appBusinessName", request.getParameter("appBusinessName"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("applyStatus"))) {
+			adminServiceApplyBO.setApplyStatus(request.getParameter("applyStatus"));
+			model.addAttribute("applyStatus", request.getParameter("applyStatus"));
+		}
+		List<AdminServiceApplyVO> adminServiceApplyVOs = adminServiceApplyService
+				.getAdminServiceApplyList(adminServiceApplyBO);
+		int totalCount = adminServiceApplyService.getAdminServiceApplyCount(adminServiceApplyBO);
+		
+		model.addAttribute("adminUsers", adminUserService.getAdminUserList());
+		model.addAttribute("majorTypes", majorTypeService.getMajorTypeList());
+		model.addAttribute("adminServiceApplys", adminServiceApplyVOs);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("currentPage", adminServiceApplyBO.getPageNum() + 1);
 		return "admin/service/service_management";
 	}
 

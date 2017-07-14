@@ -158,13 +158,7 @@
 		from admin_service_apply asa 
 		left join admin_major_type_service_apply_mapping amt on asa.id = amt.service_apply_id
 		left join major_type mt  on mt.id = amt.major_type_id
-		where `status` = 'active'
-		<if test="applyStatus != null and applyStatus != ''">
-			and apply_status = #{applyStatus}
-		</if>
-		<if test="name != null and name != ''">
-			and asa.app_business_name like concat(concat('%',#{appBusinessName}),'%')
-		</if>
+		where asa.`status` = 'active'
 	    <if test="id != null and id != ''">
 			and asa.id = #{id}
 		</if>

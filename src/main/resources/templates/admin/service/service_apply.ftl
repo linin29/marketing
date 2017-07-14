@@ -25,29 +25,29 @@
   			    	<table class="table table-bordered">
 					    <tbody class="">
 					    	<tr>
-					    		<th>申请Id</th>
-					    		<th>创建人</th>
-					    		<th>应用商</th>
-					    		<th>申请服务</th>
-					    		<th>调用总次数</th>
-					    		<th>合同图片</th>
-					    		<th>状态</th>
-					    		<th>创建时间</th>
-					    		<th>操作</th>
+					    		<th style="width:5%">申请Id</th>
+					    		<th style="width:10%">创建人</th>
+					    		<th style="width:20%">应用商</th>
+					    		<th style="width:20%">申请服务</th>
+					    		<th style="width:8%">调用总次数</th>
+					    		<th style="width:7%">合同图片</th>
+					    		<th style="width:5%">状态</th>
+					    		<th style="width:10%">创建时间</th>
+					    		<th style="width:15%">操作</th>
 					    	</tr>
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
 				         		<#list adminServiceApplys as adminServiceApply>
 					    	<tr>
-					    		<td id="application-Id">${adminServiceApply.id}</td>
-					    		<td id="create-user">${adminServiceApply.creator.name}</td>
-					    		<td id="application-company">${adminServiceApply.appBusinessName}</td>
-					    		<td id="application-server" style="width: 80px;"><p class="newline">coffe，cookie，coffee，cof</p></td>
-					    		<td id="numbers">${adminServiceApply.maxCallNumber}</td>
-					    		<td id="image"><a href="javascript:void(0)">查看</a></td>
-					    		<td id=status>${adminServiceApply.statusStr}</td>
-					    		<td id="ser-number">${adminServiceApply.createTime}</td>
+					    		<td>${adminServiceApply.id}</td>
+					    		<td>${adminServiceApply.creator.name}</td>
+					    		<td>${adminServiceApply.appBusinessName}</td>
+					    		<td><p class="newline">coffe，cookie，coffee，cof</p></td>
+					    		<td>${adminServiceApply.maxCallNumber}</td>
+					    		<td><a href="javascript:void(0)">查看</a></td>
+					    		<td>${adminServiceApply.statusStr}</td>
+					    		<td>${adminServiceApply.createTime}</td>
 					    		<td>
-					    			<button class="btn btn-success" id='info'>详情</button>
+					    			<button class="info btn btn-success" applyid="${adminServiceApply.id}">详情</button>
 					    			<button class="btn btn-success" id="modify">变更（更正）</button>
 					    		</td>
 					    	</tr>
@@ -95,7 +95,7 @@
 			                <h5><strong>合同信息</strong></h5>
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
-			                		<tr>
+			                		<tr id="upload-book-tr">
 			                			<td class="wid">上传合同：</td>
 			                			<td><input  class="application-name" type="file" id="upload-book" /></td>
 			                		</tr>
@@ -144,7 +144,7 @@
 			                	</tbody>
 			                </table>
 			           	</div>	
-			      	    <div class="form-group">
+			      	    <!-- <div class="form-group">
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
 			                		<tr>
@@ -161,7 +161,7 @@
 			                		</tr>
 			                	</tbody>
 			                </table>
-			           	</div>
+			           	</div> -->
 			      	</div>
 			      	<div class="modal-footer">
 			        	<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

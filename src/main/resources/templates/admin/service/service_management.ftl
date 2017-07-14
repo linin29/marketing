@@ -14,7 +14,7 @@
   						</select>
 					</div>
 					<div class="col-sm-3">
-  						<input type="button" class=" btn btn-success" value="搜索" style="width:100px;" />
+  						<input id="query" type="button" class=" btn btn-success" value="搜索" style="width:100px;" />
 					</div>
 				</div>
   			    <div id="request-content">
@@ -31,34 +31,28 @@
 					    		<th>创建时间</th>
 					    		<th>操作</th>
 					    	</tr>
+					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
+				         		<#list adminServiceApplys as adminServiceApply>
 					    	<tr>
-					    		<td>1</td>
-					    		<td>admin</td>
-					    		<td>家乐福天鹅湖店</td>
-					    		<td style="width: 80px;"><p class="newline">coffe，cookie，coffee，cof</p></td>
-					    		<td>10000</td>
-					    		<td><a href="###">查看</a></td>
-					    		<td>已创建</td>
-					    		<td>2017/5/4</td>
+					    		<td>${adminServiceApply.id}</td>
+					    		<td>${adminServiceApply.creator.name}</td>
+					    		<td>${adminServiceApply.appBusinessName}</td>
+					    		<td><p class="newline">coffe，cookie，coffee，cof</p></td>
+					    		<td>${adminServiceApply.maxCallNumber}</td>
+					    		<td><a href="javascript:void(0)">查看</a></td>
+					    		<td>${adminServiceApply.statusStr}</td>
+					    		<td>${adminServiceApply.createTime}</td>
 					    		<td>
-					    			<button class="btn btn-success" id="server-info">详情</button>
-					    			<button class="btn btn-success" id="approval">审批</button>
-					    			<button class="btn btn-danger">删除</button>
+					    			<button class="info btn btn-success" applyid="${adminServiceApply.id}">详情</button>
+					    			<button class="btn btn-success" id="modify">变更（更正）</button>
 					    		</td>
 					    	</tr>
+					    	     </#list>
+					    	</#if>
 					    </tbody>
 					</table>
   			    </div>
   		        <div id="table_paginator" style="margin-top: -10px; margin-bottom: -10px; text-align:center; display:block;">
-					<ul class="pagination">
-					    <li><a href="#">&laquo;</a></li>
-					    <li><a href="#">1</a></li>
-					    <li><a href="#">2</a></li>
-					    <li><a href="#">3</a></li>
-					    <li><a href="#">4</a></li>
-					    <li><a href="#">5</a></li>
-					    <li><a href="#">&raquo;</a></li>
-					</ul>
 				</div>		
   			</div>
     	</div>
@@ -162,21 +156,11 @@
 			    </div>
 		  	</div>
 		</div>
-		<script type="text/javascript">
-			$(function(){
-				$("#server-info").click(function(){
-					$("#myModalLabel").text("服务管理详情");	
-					$("#server-management-model").modal("show");
-				});
-				$("#approval").click(function(){
-					$("#myModalLabel").text("服务管理审批");
-					$("#server-management-model").modal("show");
-				});
-				$('#server-type').selectpicker({
-		        	width:"100%"
-		        });
-		        $('#admin-type').selectpicker({
-		        	width:"100%"
-		        });
-			})
-		</script>
+<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/adminService.js"></script>
+<script type="text/javascript">
+	$(function() {
+		var currentPage = "${currentPage}";
+		var totalCount = "${totalCount?c}";
+		adminService.serviceManageInit(currentPage, totalCount);
+	});
+</script>

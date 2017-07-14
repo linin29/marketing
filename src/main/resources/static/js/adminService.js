@@ -9,18 +9,23 @@ adminService = (function(){
 			queryService();
 		});
 		$("#new-server").click(function(){
+			$("#upload-book-tr").show();
 			$("#new-server-model").modal("show");
 		}); 
+		$("#saveService").click(function(){
+			saveService();
+		});
 		$("#modify").click(function(){
+			$("#upload-book-tr").show();
 			$("#myModalLabel").text("修改申请");	
 			$("#new-server-model").modal("show");
-		})
-		$("#info").click(function(){					
-		 var cont=$('#application-company').text(); 
-		 $("#myModalLabel").text("服务申请详情");	
+		});
+		$(".info").click(function(){
+			$("#upload-book-tr").hide();
+			$("#myModalLabel").text("服务申请详情");	
 			$("#new-server-model").modal("show");
-			$("#ser-name").val(cont);
-		})
+			detail($(this).attr("applyid"));
+		});
 		$('#server-type').selectpicker({
         	width:"100%"
         });
@@ -28,7 +33,49 @@ adminService = (function(){
         	width:"100%"
         });
 	};
-	
+	function serviceManageInit(currentPage, totalCount){
+		if(totalCount != "0"){
+			initPagination(currentPage, totalCount);
+		}
+		$("#server-info").click(function(){
+			$("#myModalLabel").text("服务管理详情");	
+			$("#server-management-model").modal("show");
+		});
+		$("#approval").click(function(){
+			$("#myModalLabel").text("服务管理审批");
+			$("#server-management-model").modal("show");
+		});
+		$('#server-type').selectpicker({
+        	width:"100%"
+        });
+        $('#admin-type').selectpicker({
+        	width:"100%"
+        });
+	}
+	function saveService(){
+		
+	}
+	function detail(applyId){
+		$.ajax({
+			 type: 'GET',
+			 url: marketing_url + '/admin/service/detail/' + applyId,
+			 success: function(data) {
+			 	if(data && data.success){
+			 		$("#ser-name").val(data.data.appBusinessName);
+			 		$("#ser-address").val(data.data.appBusinessAddress);
+			 		$("#ser-phone-person").val(data.data.appBusinessContacts);
+			 		$("#ser-phone").val(data.data.appBusinessMobile);
+			 		$("#application-number").val(data.data.maxCallNumber);
+			 		$("#ser-user-name").val(data.data.appBusinessName);
+			 		$("#ser-email").val(data.data.appBusinessName);
+			 	}
+	    	},
+	    	error: function(data) {
+	    		//返回500错误页面
+	    		$("html").html(data.responseText);
+	    	}
+		});
+	}
 	function queryService(pageNum){
 		var majorType = $("#majorType").val();
 		var appBusinessName = $("#appBusinessName").val();
@@ -73,6 +120,7 @@ adminService = (function(){
 		queryService(pageNum);
 	};
 	return {
-		serviceApplyInit:serviceApplyInit
+		serviceApplyInit:serviceApplyInit,
+		serviceManageInit:serviceManageInit
 	}
 })()

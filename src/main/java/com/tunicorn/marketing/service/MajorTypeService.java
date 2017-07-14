@@ -43,4 +43,8 @@ public class MajorTypeService {
 	public MajorTypeVO getMajorTypeById(long majorTypeId){
 		return majorTypeMapper.getMajorTypeById(majorTypeId);
 	}
+	
+	public List<MajorTypeVO> getMajorTypeList(){
+		return majorTypeMapper.getMajorTypeList();
+	}
 }

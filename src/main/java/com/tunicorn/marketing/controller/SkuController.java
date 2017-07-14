@@ -20,6 +20,7 @@ import com.tunicorn.common.entity.AjaxResponse;
 import com.tunicorn.marketing.bo.GoodsSkuBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.GoodsSkuService;
+import com.tunicorn.marketing.service.MajorTypeService;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.MessageUtils;
@@ -31,6 +32,9 @@ public class SkuController extends BaseController {
 
 	@Autowired
 	private GoodsSkuService goodsSkuService;
+	@Autowired
+	private 
+	MajorTypeService majorTypeService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String sku(HttpServletRequest request, Model model) {
@@ -42,6 +46,7 @@ public class SkuController extends BaseController {
 		List<GoodsSkuVO> goodsSkuVOs = goodsSkuService.getGoodsSkuListByBO(goodsSkuBO);
 		int totalCount = goodsSkuService.getGoodsSkuCount(goodsSkuBO);
 
+		model.addAttribute("majorTypes", majorTypeService.getMajorTypeList());
 		model.addAttribute("GoodsSkus", goodsSkuVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", 1);
@@ -63,6 +68,7 @@ public class SkuController extends BaseController {
 		List<GoodsSkuVO> goodsSkuVOs = goodsSkuService.getGoodsSkuListByBO(goodsSkuBO);
 		int totalCount = goodsSkuService.getGoodsSkuCount(goodsSkuBO);
 
+		model.addAttribute("majorTypes", majorTypeService.getMajorTypeList());
 		model.addAttribute("GoodsSkus", goodsSkuVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", goodsSkuBO.getPageNum() + 1);

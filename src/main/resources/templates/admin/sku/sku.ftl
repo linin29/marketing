@@ -2,6 +2,19 @@
   			<div class="panel-heading">SKU配置</div>
   			<div class="panel-body">
     			<div id="request-header" class="row">
+    				<div class="col-sm-3">
+  						<select style="width:70%;height: 34px;">
+  							<option value="">请选择类型</option>
+  							<#if majorTypes?? && (majorTypes?size > 0)>
+				         		<#list majorTypes as majorType>
+					      		 <option value='${majorType.name}'>${majorType.description}</option>
+					     		</#list>
+				     		</#if>
+  						</select>
+					</div>
+					<div class="col-sm-3">
+  						<input type="button" class=" btn btn-success" value="搜索" style="width:100px;" />
+					</div>
 					<div class="new-type">
   						<input type="button" class=" btn btn-success new-server" id="new-SKU" value="新建类型" />
 					</div>

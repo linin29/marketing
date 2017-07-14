@@ -6,13 +6,15 @@
   						<input type="text" class="form-control" placeholder="请输入应用商品名称">
 					</div>
 					<div class="col-sm-3">
-  						<input type="button" class=" btn btn-success" value="搜索" style="width:100px;" />
-					</div>
-					<div class="col-sm-3">
   						<select style="width:70%;height: 34px;">
   							<option value="">请选择状态</option>
-  							<option value="">已创建</option>
+  							<option value="created">已创建</option>
+  							<option value="opened">已开通</option>
+  							<option value="rejected">已驳回</option>
   						</select>
+					</div>
+					<div class="col-sm-3">
+  						<input type="button" class=" btn btn-success" value="搜索" style="width:100px;" />
 					</div>
 					<div class="col-sm-3">
   						<input type="button" class=" btn btn-success new-server" id="new-server" value="新建申请" />

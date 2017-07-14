@@ -1,17 +1,4 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>图麟科技</title>
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
-		<link rel="stylesheet" type="text/css" href="css/bootstrap-select.css"/>
-		<link rel="stylesheet" type="text/css" href="style.css"/>
-		<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-		<script src="js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
-		<script src="js/bootstrap-select.js" type="text/javascript" charset="utf-8"></script>
-	</head>
-	<body>
-		<div class="panel panel-default clearBottom">
+<div class="panel panel-default clearBottom">
   			<div class="panel-heading">服务管理</div>
   			<div class="panel-body">
     			<div id="request-header" class="row">
@@ -19,13 +6,15 @@
   						<input type="text" class="form-control" placeholder="请输入应用商品名称">
 					</div>
 					<div class="col-sm-3">
-  						<input type="button" class=" btn btn-success" value="搜索" style="width:100px;" />
-					</div>
-					<div class="col-sm-3">
   						<select style="width:70%;height: 34px;">
   							<option value="">请选择状态</option>
-  							<option value="">已创建</option>
+  							<option value="created">已创建</option>
+  							<option value="opened">已开通</option>
+  							<option value="rejected">已驳回</option>
   						</select>
+					</div>
+					<div class="col-sm-3">
+  						<input type="button" class=" btn btn-success" value="搜索" style="width:100px;" />
 					</div>
 				</div>
   			    <div id="request-content">
@@ -191,7 +180,3 @@
 		        });
 			})
 		</script>
-	</body>
-		
-	</body>
-</html>

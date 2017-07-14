@@ -212,7 +212,7 @@ public class TaskController extends BaseController {
 		apiCallingSummaryBO.setUserName(user.getUserName());
 		
 		if(StringUtils.isBlank(apiCallingSummaryBO.getStartDate())){
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			long startDate = new Date().getTime() - 5 * 24 * 60 * 60 * 1000;
 			apiCallingSummaryBO.setStartDate(formatter.format(new Date(startDate)));
 		}

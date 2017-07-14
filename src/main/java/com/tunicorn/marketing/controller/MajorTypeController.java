@@ -48,7 +48,6 @@ public class MajorTypeController extends BaseController {
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ResponseBody
 	public AjaxResponse createMajorType(HttpServletRequest request, @RequestBody MajorTypeVO majorType) {
-		UserVO user = getCurrentUser(request);
 		if (majorTypeService.getMajorTypeByName(majorType.getName()) > 0) {
 			Message message = MessageUtils.getInstance().getMessage("dface_area_existed");
 			return AjaxResponse.toFailure(message.getCode(), message.getMessage());

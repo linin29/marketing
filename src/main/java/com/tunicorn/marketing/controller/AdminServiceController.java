@@ -161,6 +161,34 @@ public class AdminServiceController extends BaseController {
 		adminServiceApplyService.updateAdminServiceApply(adminServiceApplyVO, images);
 		return AjaxResponse.toSuccess(null);
 	}
+	
+	@RequestMapping(value = "/{applyId}/approve", method = RequestMethod.POST)
+	@ResponseBody
+	public AjaxResponse approveService(HttpServletRequest request, @PathVariable("applyId") long applyId,
+			@RequestBody AdminServiceApplyVO adminServiceApplyVO) {
+		adminServiceApplyVO.setId(applyId);
+		AdminServiceApplyVO applyVO = adminServiceApplyService.getAdminServiceApplyById(applyId);
+		if (applyVO == null) {
+			Message message = MessageUtils.getInstance().getMessage("marketing_service_apply_not_existed");
+			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
+		adminServiceApplyService.approveAdminServiceApply(adminServiceApplyVO);
+		return AjaxResponse.toSuccess(null);
+	}
+	
+	@RequestMapping(value = "/{applyId}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public AjaxResponse deleteService(HttpServletRequest request, @PathVariable("applyId") long applyId) {
+		AdminServiceApplyVO adminServiceApplyVO = new AdminServiceApplyVO();
+		adminServiceApplyVO.setId(applyId);
+		AdminServiceApplyVO applyVO = adminServiceApplyService.getAdminServiceApplyById(applyId);
+		if (applyVO == null) {
+			Message message = MessageUtils.getInstance().getMessage("marketing_service_apply_not_existed");
+			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
+		adminServiceApplyService.deleteAdminServiceApply(adminServiceApplyVO);
+		return AjaxResponse.toSuccess(null);
+	}
 
 	@RequestMapping(value = "/manage", method = RequestMethod.GET)
 	public String serviceManage(HttpServletRequest request, HttpServletResponse resp, Model model) {

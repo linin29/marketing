@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tunicorn.common.entity.UploadFile;
 import com.tunicorn.marketing.bo.AdminServiceApplyBO;
+import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.mapper.AdminMajorTypeServiceApplyMappingMapper;
 import com.tunicorn.marketing.mapper.AdminServiceApplyAssetMapper;
 import com.tunicorn.marketing.mapper.AdminServiceApplyMapper;
@@ -47,6 +48,12 @@ public class AdminServiceApplyService {
 		updateApplyAsset(adminServiceApplyVO.getId(), images);
 		return result;
 	}
+	
+	@Transactional
+	public int approveAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO) {
+		int result = adminServiceApplyMapper.updateAdminServiceApply(adminServiceApplyVO);
+		return result;
+	}
 
 	public List<AdminServiceApplyVO> getAdminServiceApplyList(AdminServiceApplyBO adminServiceApplyBO) {
 		return adminServiceApplyMapper.getAdminServiceApplyList(adminServiceApplyBO);
@@ -67,6 +74,15 @@ public class AdminServiceApplyService {
 	public List<AdminServiceApplyAssetVO> getAdminServiceApplyAssetList(
 			AdminServiceApplyAssetVO adminServiceApplyAssetVO){
 		return adminServiceApplyAssetMapper.getAdminServiceApplyAssetList(adminServiceApplyAssetVO);
+	}
+	
+	@Transactional
+	public int deleteAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO) {
+		adminServiceApplyVO.setStatus(MarketingConstants.STATUS_DELETED);
+		int result = adminServiceApplyMapper.updateAdminServiceApply(adminServiceApplyVO);
+		adminMajorTypeServiceApplyMappingMapper.deleteMajorTypeApplicationMappingByApplyId(adminServiceApplyVO.getId());
+		adminServiceApplyAssetMapper.deleteAdminServiceApplyAssetByApplyId(adminServiceApplyVO.getId());
+		return result;
 	}
 
 	private void addApplyAsset(long applyId, List<MultipartFile> images) {

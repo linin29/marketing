@@ -25,6 +25,7 @@ public class AdminServiceApplyVO {
 	private String statusStr;
 	private String username;
 	private String email;
+	private String rejectReason;
 
 	public String getUsername() {
 		return username;
@@ -152,6 +153,14 @@ public class AdminServiceApplyVO {
 
 	public void setCreator(UserVO creator) {
 		this.creator = creator;
+	}
+
+	public String getRejectReason() {
+		return rejectReason;
+	}
+
+	public void setRejectReason(String rejectReason) {
+		this.rejectReason = rejectReason;
 	}
 
 	public String getStatusStr() {

@@ -9,9 +9,9 @@
 					<input id="initApplyStatus" type="hidden" <#if applyStatus??> value="${applyStatus}"</#if>>
   						<select id="applyStatus" style="width:70%;height: 34px;">
   							<option value="">请选择状态</option>
-  							<option value="created">已创建</option>
-  							<option value="opened">已开通</option>
-  							<option value="rejected">已驳回</option>
+  							<option value="created" <#if applyStatus?? && applyStatus=='created'>selected</#if>>已创建</option>
+  							<option value="opened" <#if applyStatus?? && applyStatus=='opened'>selected</#if>>已开通</option>
+  							<option value="rejected" <#if applyStatus?? && applyStatus=='rejected'>selected</#if>>已驳回</option>
   						</select>
 					</div>
 					<div class="col-sm-3">
@@ -54,7 +54,9 @@
 					    		<td>${adminServiceApply.createTime}</td>
 					    		<td>
 					    			<button class="info btn btn-success" applyid="${adminServiceApply.id}">详情</button>
-					    			<button class="btn btn-success" id="modify">变更</button>
+					    			<#if adminServiceApply.applyStatus == 'created' || adminServiceApply.applyStatus == 'rejected'>
+					    			<button class="btn btn-success modify" applyid="${adminServiceApply.id}"><#if adminServiceApply.applyStatus == 'created'>变更<#else>更正</#if></button>
+					    			</#if>
 					    		</td>
 					    	</tr>
 					    	     </#list>

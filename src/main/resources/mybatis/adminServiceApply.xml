@@ -6,6 +6,7 @@
 		<result column="user_id" property="userId" jdbcType="INTEGER" />
 		<result column="username" property="username" jdbcType="VARCHAR" />
 		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="reject_reason" property="rejectReason" jdbcType="VARCHAR" />
 		<result column="app_business_name" property="appBusinessName" jdbcType="VARCHAR" />
 		<result column="app_business_address" property="appBusinessAddress" jdbcType="VARCHAR" />
 		<result column="app_business_mobile" property="appBusinessMobile" jdbcType="VARCHAR" />
@@ -111,7 +112,7 @@
 	<select id="getAdminServiceApplyList" resultMap="AdminServiceApplyResultMap" parameterType="com.tunicorn.marketing.bo.AdminServiceApplyBO">
 		select asa.id,  asa.user_id, asa.app_business_name, asa.app_business_address, asa.app_business_mobile, asa.app_business_contacts,
 		asa.max_call_number, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
-		au.name as creatorName, asa.username, asa.email
+		au.name as creatorName, asa.username, asa.email, asa.reject_reason
 		from admin_service_apply asa 
 		left join admin_major_type_service_apply_mapping amt on asa.id = amt.service_apply_id
 		left join major_type mt  on mt.id = amt.major_type_id
@@ -148,6 +149,12 @@
 			<if test="applyStatus != null and applyStatus !=''">
 				apply_status=#{applyStatus},
 			</if>
+			<if test="status != null and status !=''">
+				`status` = #{status},
+			</if>
+			<if test="rejectReason != null and rejectReason !=''">
+				reject_reason = #{rejectReason},
+			</if>
 		</trim>
 		WHERE id=#{id}
 	</update>
@@ -169,7 +176,7 @@
 	<select id="getAdminServiceApplyById" resultMap="AdminServiceApplyResultMap" parameterType="int">
 		select asa.id,  asa.user_id, asa.app_business_name, asa.app_business_address, asa.app_business_mobile, asa.app_business_contacts,
 		asa.max_call_number, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
-		asa.username, asa.email
+		asa.username, asa.email, asa.reject_reason
 		from admin_service_apply asa 
 		left join admin_major_type_service_apply_mapping amt on asa.id = amt.service_apply_id
 		left join major_type mt  on mt.id = amt.major_type_id

@@ -3,26 +3,31 @@ var adminService = adminService || {};
 adminService = (function(){
 	function serviceApplyInit(currentPage, totalCount){
 		if(totalCount != "0"){
-			initPagination(currentPage, totalCount);
+			initPagination(currentPage, totalCount, '/admin/service/apply/search');
 		}
 		$("#query").click(function(){
-			queryService();
+			queryService('/admin/service/apply/search');
 		});
 		$("#new-server").click(function(){
 			$("#sure").hide();
 			$("#saveService").show();
 			$("#upload-book-tr").show();
+			$("#applyId").val("");
 			$("#new-server-model").modal("show");
+			$("#new-server-model").find("input").removeAttr("disabled");
 		}); 
 		$("#saveService").click(function(){
 			saveService();
 		});
-		$("#modify").click(function(){
+		$(".modify").click(function(){
 			$("#sure").hide();
 			$("#saveService").show();
 			$("#upload-book-tr").show();
+			$("#applyId").val($(this).attr("applyid"));
+			detail($(this).attr("applyid"));
 			$("#myModalLabel").text("修改申请");	
 			$("#new-server-model").modal("show");
+			$("#new-server-model").find("input").removeAttr("disabled");
 		});
 		$(".info").click(function(){
 			$("#upload-book-tr").hide();
@@ -31,6 +36,7 @@ adminService = (function(){
 			$("#saveService").hide();
 			$("#new-server-model").modal("show");
 			detail($(this).attr("applyid"));
+			$("#new-server-model").find("input").attr("disabled","disabled"); 
 		});
 		$(".showAgreementModel").click(function(){
 			$("#showagreementModel").modal("show");
@@ -50,14 +56,15 @@ adminService = (function(){
 	};
 	function serviceManageInit(currentPage, totalCount){
 		if(totalCount != "0"){
-			initPagination(currentPage, totalCount);
+			initPagination(currentPage, totalCount, '/admin/service/manage/search');
 		}
 		$("#server-info").click(function(){
 			$("#myModalLabel").text("服务管理详情");	
 			$("#server-management-model").modal("show");
 		});
-		$("#approval").click(function(){
+		$(".approve").click(function(){
 			$("#myModalLabel").text("服务管理审批");
+			detail($(this).attr("applyid"));
 			$("#server-management-model").modal("show");
 		});
 		$('#server-type').selectpicker({
@@ -66,6 +73,52 @@ adminService = (function(){
         $('#admin-type').selectpicker({
         	width:"100%"
         });
+		$("#query").click(function(){
+			queryService('/admin/service/manage/search');
+		});
+		$(".info").click(function(){
+			$("#upload-book-tr").hide();
+			$("#myModalLabel").text("服务申请详情");	
+			$("#sure").show();
+			$("#openService").hide();
+			$("#rejectService").hide();
+			$("#server-management-model").modal("show");
+			detail($(this).attr("applyid"));
+			$("#server-management-model").find("input").attr("disabled","disabled"); 
+		});
+		$(".showAgreementModel").click(function(){
+			$("#showagreementModel").modal("show");
+			view($(this).attr("applyid"));
+		});
+		$(".deleteService").click(function(){
+			$("#deleteAreaModal").attr('applyid', $(this).attr("applyid"));
+			$("#deleteAreaModal").modal("show");
+		});
+		$(".openService").click(function(){
+			$("#deleteAreaModal").attr('applyid', $(this).attr("applyid"));
+			$("#deleteAreaModal").modal("show");
+		});
+		$('#service_delete').on('click', function(e){
+			 var applyId = $("#deleteAreaModal").attr('applyid');
+			 $.ajax({
+					type: 'DELETE',
+					url: marketing_url + '/admin/service/' + applyId,
+					dataType: 'json', 
+					success: function(data) {
+						if (!data.success) {
+							noty({text: data.errorMessage, layout: 'topCenter', type: 'error', timeout: 2000});
+							return;
+						}else{
+							noty({text: "删除成功", layout: 'topCenter', type: 'success', timeout: 2000});
+							$("#deleteAreaModal").modal('hide');
+							$('.tableTr[applyid=' + applyId + ']').remove();
+						} 
+		        	},
+		        	error: function(data) {
+		        		noty({text: '删除失败', layout: 'topCenter', type: 'error', timeout: 2000});
+		        	}
+				});
+		 });
 	}
 	function saveService(){
 		var appBusinessName=$('#ser-name').val();
@@ -193,7 +246,6 @@ adminService = (function(){
 			 		$("#server-type").val(majorTypeArray);
 			 		$('#server-type').selectpicker('val', majorTypeArray);
 			 	    $('#server-type').selectpicker('refresh');
-			 	    $("#new-server-model").find("input").attr("disabled","disabled"); 
 			 	}
 	    	},
 	    	error: function(data) {
@@ -238,7 +290,7 @@ adminService = (function(){
 		}
         return true;
     };
-	function queryService(pageNum){
+	function queryService(url, pageNum){
 		var majorType = $("#majorType").val();
 		var appBusinessName = $("#appBusinessName").val();
 		var applyStatus = $("#applyStatus").val();
@@ -248,7 +300,7 @@ adminService = (function(){
 		}
 		$.ajax({
 			 type: 'GET',
-			 url: marketing_url + '/admin/service/apply/search',
+			 url: marketing_url + url,
 			 data:{
 				 pageNum:page,
 				 appBusinessName:appBusinessName,
@@ -263,14 +315,14 @@ adminService = (function(){
 	    	}
 		});
 	};
-	function initPagination(currentPage, totalCount) {
+	function initPagination(currentPage, totalCount, url) {
 		var options = {
 			alignment: 'center',
 	        currentPage: currentPage,
 	        totalPages: Math.ceil(totalCount / dface.constants.PAGINATION_ITEMS_PER_PAGE),
 	        numberOfPages: dface.constants.PAGINATION_ITEMS_PER_PAGE,
 	        onPageClicked: function (event, originalEvent, type, page) {
-	        	doPaginationClicked(page);
+	        	doPaginationClicked(url, page);
 	        }
 		};
 		
@@ -278,8 +330,8 @@ adminService = (function(){
 		$("#table_paginator").show();
 	};
 	
-	function doPaginationClicked(pageNum) {
-		queryService(pageNum);
+	function doPaginationClicked(url, pageNum) {
+		queryService(url, pageNum);
 	};
 	return {
 		serviceApplyInit:serviceApplyInit,

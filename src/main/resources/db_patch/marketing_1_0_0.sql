@@ -349,6 +349,7 @@ BEGIN
 		`max_call_number` INT(20) NOT NULL,
 		`creator_id` INT(11) NOT NULL,
 		`create_time` DATETIME DEFAULT NULL,
+		`reject_reason` varchar(256),
 		`apply_status` ENUM('created','opened','rejected') NOT NULL DEFAULT 'created',
 		`last_update` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		`status` ENUM('active','deleted','inactive') NOT NULL DEFAULT 'active',

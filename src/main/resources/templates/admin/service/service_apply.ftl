@@ -27,11 +27,11 @@
 					    	<tr>
 					    		<th style="width:5%">申请Id</th>
 					    		<th style="width:10%">创建人</th>
-					    		<th style="width:20%">应用商</th>
+					    		<th style="width:15%">应用商</th>
 					    		<th style="width:20%">申请服务</th>
 					    		<th style="width:8%">调用总次数</th>
 					    		<th style="width:7%">合同图片</th>
-					    		<th style="width:5%">状态</th>
+					    		<th style="width:10%">状态</th>
 					    		<th style="width:10%">创建时间</th>
 					    		<th style="width:15%">操作</th>
 					    	</tr>
@@ -49,12 +49,12 @@
    								    </#if>
 									</p></td>
 					    		<td>${adminServiceApply.maxCallNumber}</td>
-					    		<td><a href="javascript:void(0)">查看</a></td>
+					    		<td><a href="javascript:void(0)"  applyid="${adminServiceApply.id}" class="showAgreementModel">查看</a></td>
 					    		<td>${adminServiceApply.statusStr}</td>
 					    		<td>${adminServiceApply.createTime}</td>
 					    		<td>
 					    			<button class="info btn btn-success" applyid="${adminServiceApply.id}">详情</button>
-					    			<button class="btn btn-success" id="modify">变更（更正）</button>
+					    			<button class="btn btn-success" id="modify">变更</button>
 					    		</td>
 					    	</tr>
 					    	     </#list>
@@ -70,6 +70,7 @@
     	<div class="modal fade" id="new-server-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		  	<div class="modal-dialog" role="document">
 			    <div class="modal-content">
+			    <input id="applyId" type="hidden" >
 			      	<div class="modal-header">
 			        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			        	<h4 class="modal-title" id="myModalLabel">新建申请</h4>
@@ -103,12 +104,12 @@
 			                	<tbody>
 			                		<tr id="upload-book-tr">
 			                			<td class="wid">上传合同：</td>
-			                			<td><input  class="application-name" type="file" id="upload-book" /></td>
+			                			<td><input  class="application-name" multiple type="file" id="upload-book" /></td>
 			                		</tr>
-			                		<tr>
+			                		<!-- <tr>
 			                			<td class="wid">合同张数：</td>
 			                			<td><input  class="application-name" type="text" id="agreement-number" placeholder="输入合同张数"/></td>
-			                		</tr>
+			                		</tr> -->
 			                	</tbody>
 			                </table>
 			           	</div>	
@@ -119,10 +120,10 @@
 			                		<tr>
 			                			<td class="wid">申请服务：</td>
 			                			<td>
-			                				<select class="selectpicker" multiple id="server-type" id="ser-type">
+			                				<select class="selectpicker" multiple id="server-type">
 											<#if majorTypes?? && (majorTypes?size > 0)>
 				         						<#list majorTypes as majorType>
-					      							 <option value='${majorType.name}'>${majorType.description}</option>
+					      							 <option value='${majorType.id}'>${majorType.description}</option>
 					     						</#list>
 				     						</#if>
 											</select>
@@ -172,10 +173,35 @@
 			      	<div class="modal-footer">
 			        	<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 			        	<button id="saveService" type="button" class="btn btn-success">保存</button>
+			        	<button id="sure" type="button" style="display:none;" class="btn btn-success"  data-dismiss="modal">确定</button>
 			      	</div>
+			      	<div class="form-group has-feedback" style='margin-left: 170px; margin-top: -55px;position: absolute;'>
+	      	    		<font color="red" id="errorMsg"></font>
+	      			</div>
 			    </div>
 		  	</div>
 		</div>
+		<div class="modal fade" id="showagreementModel" tabindex="-1" role="dialog" aria-labelledby="showagreementLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header" style='height: 44px;'>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4  class="modal-title pull-left">合同预览</h4>
+					</div>
+					<div class="modal-body">
+				        <div class="form-group" >
+				             <div style="border:1px solid #000"></div>
+				        </div>
+				        <div class='form-group'>
+				           <div class="row" id="agreement-show"></div>
+				        </div>
+					</div>
+					<div class="modal-footer" style="border-top-color: #fff;padding: 0px 15px 15px 15px;">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					</div>
+				</div>
+			</div>
+		</div>		
 <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/adminService.js"></script>
 <script type="text/javascript">
 	$(function() {

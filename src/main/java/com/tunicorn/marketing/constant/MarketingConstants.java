@@ -67,4 +67,7 @@ public class MarketingConstants {
 		SERVICE_STATUS_NAME_MAPPING.put("rejected", "已驳回");
 	}
 	
+	public static final String MARKETING_IMAGE_BASE_PATH = com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath") 
+			+ ConfigUtils.getInstance().getConfigValue("marketing.image.root.path");
+	
 }

@@ -112,7 +112,7 @@ majorType=(function(){
 			 error: function(data) {
 				 noty({text: '保存失败', layout: 'topCenter', type: 'warning', timeout: 2000});
 			 }
-		})
+		});
 	};
 	function queryMajorType(pageNum){
 		var page = 0;

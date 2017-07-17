@@ -2,6 +2,10 @@ package com.tunicorn.marketing.vo;
 
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.tunicorn.marketing.constant.MarketingConstants;
+
 public class AdminServiceApplyAssetVO {
 	private long id;
 	private long serviceApplyId;
@@ -12,6 +16,7 @@ public class AdminServiceApplyAssetVO {
 	private Date createTime;
 	private Date lastUpdate;
 	private String status;
+	private String realPath;
 
 	public long getId() {
 		return id;
@@ -84,5 +89,13 @@ public class AdminServiceApplyAssetVO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
+	public String getRealPath() {
+		if(StringUtils.isNotBlank(filePath)) {
+			realPath = filePath.replace(MarketingConstants.MARKETING_IMAGE_BASE_PATH, MarketingConstants.PIC_MARKETING);
+		} else {
+			realPath = "";
+		}
+		
+		return realPath;
+	}
 }

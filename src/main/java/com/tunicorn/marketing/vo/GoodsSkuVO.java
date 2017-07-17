@@ -6,7 +6,6 @@ public class GoodsSkuVO {
 	private long id;
 	private String name;
 	private String description;
-	private long majorTypeId;
 	private int order;
 	private Date createTime;
 	private Date lastUpdateTime;
@@ -52,14 +51,6 @@ public class GoodsSkuVO {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public long getMajorTypeId() {
-		return majorTypeId;
-	}
-
-	public void setMajorTypeId(long majorTypeId) {
-		this.majorTypeId = majorTypeId;
 	}
 
 	public int getOrder() {

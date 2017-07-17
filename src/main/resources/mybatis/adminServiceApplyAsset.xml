@@ -20,7 +20,7 @@
 	    </foreach>  
     </insert>
     <select id="getAdminServiceApplyAssetList" resultMap="AdminServiceApplyAssetResultMap" parameterType="com.tunicorn.marketing.vo.AdminServiceApplyAssetVO">
-		select id, face_id, display_name, file_path, file_size, file_ext
+		select id, display_name, file_path, file_size, file_ext
 		from admin_service_apply_asset
 		where `status` = 'active'
 	    <if test="serviceApplyId != null and serviceApplyId != ''">

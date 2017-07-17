@@ -1,5 +1,7 @@
 package com.tunicorn.marketing.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +29,7 @@ import com.tunicorn.marketing.service.AdminUserService;
 import com.tunicorn.marketing.service.MajorTypeService;
 import com.tunicorn.marketing.vo.AdminServiceApplyAssetVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyVO;
+import com.tunicorn.marketing.vo.MajorTypeVO;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.MessageUtils;
 
@@ -63,7 +66,6 @@ public class AdminServiceController extends BaseController {
 	@RequestMapping(value = "/detail/{applyId}", method = RequestMethod.GET)
 	@ResponseBody
 	public CommonAjaxResponse detail(HttpServletRequest request, @PathVariable("applyId") Long applyId) {
-		UserVO user = getCurrentUser(request);
 		AdminServiceApplyVO adminServiceApplyVO = adminServiceApplyService.getAdminServiceApplyById(applyId);
 		return CommonAjaxResponse.toSuccess(adminServiceApplyVO);
 	}
@@ -96,6 +98,53 @@ public class AdminServiceController extends BaseController {
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", adminServiceApplyBO.getPageNum() + 1);
 		return "admin/service/service_apply";
+	}
+	
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@ResponseBody
+	public AjaxResponse createService(HttpServletRequest request,
+			@RequestParam(value = "images", required = false) List<MultipartFile> images) {
+		UserVO user = getCurrentUser(request);
+		
+		AdminServiceApplyVO adminServiceApplyVO = new AdminServiceApplyVO();
+		if(StringUtils.isNotBlank(request.getParameter("appBusinessName"))){
+			adminServiceApplyVO.setAppBusinessName(request.getParameter("appBusinessName"));
+		}
+		if(StringUtils.isNotBlank(request.getParameter("appBusinessAddress"))){
+			adminServiceApplyVO.setAppBusinessAddress(request.getParameter("appBusinessAddress"));
+		}
+		if(StringUtils.isNotBlank(request.getParameter("appBusinessContacts"))){
+			adminServiceApplyVO.setAppBusinessContacts(request.getParameter("appBusinessContacts"));
+		}
+		if(StringUtils.isNotBlank(request.getParameter("appBusinessMobile"))){
+			adminServiceApplyVO.setAppBusinessMobile(request.getParameter("appBusinessMobile"));
+		}
+		if(StringUtils.isNotBlank(request.getParameter("maxCallNumber"))){
+			adminServiceApplyVO.setMaxCallNumber(Long.valueOf(request.getParameter("maxCallNumber")));
+		}
+		if(StringUtils.isNotBlank(request.getParameter("majorTypes"))){
+			List<MajorTypeVO> majorTypes = new ArrayList<MajorTypeVO>();
+			String[] majortypeArray = request.getParameter("majorTypes").split(",");
+			for (String majorTypeId : majortypeArray) {
+				MajorTypeVO majorTypeVO = new MajorTypeVO();
+				majorTypeVO.setId(Long.valueOf(majorTypeId));
+				majorTypes.add(majorTypeVO);
+			}
+			adminServiceApplyVO.setMajorTypes(majorTypes);
+		}
+		if(StringUtils.isNotBlank(request.getParameter("username"))){
+			adminServiceApplyVO.setUsername(request.getParameter("username"));
+		}
+		if(StringUtils.isNotBlank(request.getParameter("email"))){
+			adminServiceApplyVO.setEmail(request.getParameter("email"));
+		}
+		adminServiceApplyVO.setCreatorId(Integer.valueOf(user.getId()));
+		int result = adminServiceApplyService.createAdminServiceApply(adminServiceApplyVO, images);
+		if (result == 0) {
+			Message message = MessageUtils.getInstance().getMessage("marketing_major_type_create_failed");
+			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
+		return AjaxResponse.toSuccess(null);
 	}
 	
 	@RequestMapping(value = "/{applyId}/update", method = RequestMethod.POST)

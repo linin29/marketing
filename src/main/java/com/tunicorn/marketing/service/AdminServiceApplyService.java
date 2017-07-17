@@ -10,13 +10,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tunicorn.common.entity.UploadFile;
 import com.tunicorn.marketing.bo.AdminServiceApplyBO;
+import com.tunicorn.marketing.mapper.AdminMajorTypeServiceApplyMappingMapper;
 import com.tunicorn.marketing.mapper.AdminServiceApplyAssetMapper;
 import com.tunicorn.marketing.mapper.AdminServiceApplyMapper;
 import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.utils.MarketingStorageUtils;
+import com.tunicorn.marketing.vo.AdminMajorTypeServiceApplyMappingVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyAssetVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyVO;
 import com.tunicorn.marketing.vo.MajorTypeApplicationMappingVO;
+import com.tunicorn.marketing.vo.MajorTypeVO;
 
 @Service
 public class AdminServiceApplyService {
@@ -26,11 +29,15 @@ public class AdminServiceApplyService {
 
 	@Autowired
 	private AdminServiceApplyAssetMapper adminServiceApplyAssetMapper;
+	
+	@Autowired
+	private AdminMajorTypeServiceApplyMappingMapper adminMajorTypeServiceApplyMappingMapper;
 
 	@Transactional
 	public int createAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO, List<MultipartFile> images) {
 		int result = adminServiceApplyMapper.createAdminServiceApply(adminServiceApplyVO);
 		addApplyAsset(adminServiceApplyVO.getId(), images);
+		this.createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);
 		return result;
 	}
 
@@ -97,5 +104,20 @@ public class AdminServiceApplyService {
 			}
 			adminServiceApplyAssetMapper.batchInsertServiceApplyAsset(assets);
 		}
+	}
+	
+	private void createAdminMajorTypeServiceApplyMapping(AdminServiceApplyVO adminServiceApplyVO) {
+		List<AdminMajorTypeServiceApplyMappingVO> applyMappings = new ArrayList<AdminMajorTypeServiceApplyMappingVO>();
+		long serviceApplyId = adminServiceApplyVO.getId();
+		List<MajorTypeVO> majorTypeVOs = adminServiceApplyVO.getMajorTypes();
+		if (majorTypeVOs != null && majorTypeVOs.size() > 0) {
+			for (MajorTypeVO majorTypeVO : majorTypeVOs) {
+				AdminMajorTypeServiceApplyMappingVO applyMappingVO = new AdminMajorTypeServiceApplyMappingVO();
+				applyMappingVO.setServiceApplyId(serviceApplyId);
+				applyMappingVO.setMajorTypeId(majorTypeVO.getId());
+				applyMappings.add(applyMappingVO);
+			}
+		}
+		adminMajorTypeServiceApplyMappingMapper.batchInsertMajorTypeApplicationMapping(applyMappings);
 	}
 }

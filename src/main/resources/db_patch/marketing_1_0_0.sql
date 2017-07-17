@@ -339,7 +339,9 @@ BEGIN
 	
 	CREATE TABLE IF NOT EXISTS `admin_service_apply` (
 		`id` INT(11) NOT NULL AUTO_INCREMENT,
-		`user_id` INT(11) NOT NULL,
+		`user_id` INT(11),
+		`username` varchar(128) NOT NULL,
+		`email` varchar(256) NOT NULL,
 		`app_business_name` varchar(128) NOT NULL,
 		`app_business_address` varchar(256) NOT NULL,
 		`app_business_mobile` varchar(20) NOT NULL,

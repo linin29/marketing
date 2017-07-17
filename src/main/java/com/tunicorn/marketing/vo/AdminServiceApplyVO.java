@@ -23,6 +23,25 @@ public class AdminServiceApplyVO {
 	private List<MajorTypeVO> majorTypes;
 	private UserVO creator;
 	private String statusStr;
+	private String username;
+	private String email;
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public List<MajorTypeVO> getMajorTypes() {
 		return majorTypes;
 	}
@@ -134,11 +153,12 @@ public class AdminServiceApplyVO {
 	public void setCreator(UserVO creator) {
 		this.creator = creator;
 	}
+
 	public String getStatusStr() {
-		if(StringUtils.isNotBlank(applyStatus)) {
+		if (StringUtils.isNotBlank(applyStatus)) {
 			statusStr = MarketingConstants.SERVICE_STATUS_NAME_MAPPING.get(applyStatus);
 		}
-		
+
 		return statusStr;
 	}
 }

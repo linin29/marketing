@@ -4,6 +4,8 @@
 	<resultMap id="AdminServiceApplyResultMap" type="com.tunicorn.marketing.vo.AdminServiceApplyVO">
 		<result column="id" property="id" jdbcType="INTEGER" />
 		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
 		<result column="app_business_name" property="appBusinessName" jdbcType="VARCHAR" />
 		<result column="app_business_address" property="appBusinessAddress" jdbcType="VARCHAR" />
 		<result column="app_business_mobile" property="appBusinessMobile" jdbcType="VARCHAR" />
@@ -24,7 +26,7 @@
         </collection>
 	</resultMap>
 
-   <insert id="createAdminServiceApply" parameterType="com.tunicorn.marketing.vo.AdminServiceApplyVO">
+   <insert id="createAdminServiceApply" parameterType="com.tunicorn.marketing.vo.AdminServiceApplyVO" useGeneratedKeys="true"  keyProperty="id">
     insert into admin_service_apply
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -32,6 +34,12 @@
       </if>
       <if test="userId != null" >
         user_id,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+       <if test="email != null" >
+        email,
       </if>
       <if test="appBusinessName != null" >
         app_business_name,
@@ -55,7 +63,7 @@
         apply_status,
       </if>
         create_time,
-      <if test="lastUpdateTime != null" >
+      <if test="lastUpdate != null" >
         last_update,
       </if>
 
@@ -66,6 +74,12 @@
       </if>
       <if test="userId != null" >
         #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username, jdbcType=INTEGER},
+      </if>
+     <if test="email != null" >
+        #{email, jdbcType=INTEGER},
       </if>
       <if test="appBusinessName != null" >
         #{appBusinessName,jdbcType=VARCHAR},
@@ -89,15 +103,15 @@
         #{applyStatus,jdbcType=VARCHAR},
       </if>
         now(),
-      <if test="lastUpdateTime != null" >
-        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      <if test="lastUpdate!= null" >
+        #{lastUpdate,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
 	<select id="getAdminServiceApplyList" resultMap="AdminServiceApplyResultMap" parameterType="com.tunicorn.marketing.bo.AdminServiceApplyBO">
 		select asa.id,  asa.user_id, asa.app_business_name, asa.app_business_address, asa.app_business_mobile, asa.app_business_contacts,
 		asa.max_call_number, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
-		au.name as creatorName
+		au.name as creatorName, asa.username, asa.email
 		from admin_service_apply asa 
 		left join admin_major_type_service_apply_mapping amt on asa.id = amt.service_apply_id
 		left join major_type mt  on mt.id = amt.major_type_id
@@ -154,7 +168,8 @@
 	</update>
 	<select id="getAdminServiceApplyById" resultMap="AdminServiceApplyResultMap" parameterType="int">
 		select asa.id,  asa.user_id, asa.app_business_name, asa.app_business_address, asa.app_business_mobile, asa.app_business_contacts,
-		asa.max_call_number, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id
+		asa.max_call_number, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
+		asa.username, asa.email
 		from admin_service_apply asa 
 		left join admin_major_type_service_apply_mapping amt on asa.id = amt.service_apply_id
 		left join major_type mt  on mt.id = amt.major_type_id

@@ -100,6 +100,11 @@ public class SkuController extends BaseController {
 			Message message = MessageUtils.getInstance().getMessage("marketing_goods_sku_not_existed");
 			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
+		if (!StringUtils.equals(goodsSku.getName(), GoodsSkuVO.getName()) && goodsSkuService
+				.getGoodsSkuCountByNameAndMajorType(goodsSku.getName(), goodsSku.getMajorType()) > 0) {
+			Message message = MessageUtils.getInstance().getMessage("marketing_goods_sku_existed");
+			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
 		goodsSkuService.updateGoodsSku(goodsSku);
 		return AjaxResponse.toSuccess(null);
 	}

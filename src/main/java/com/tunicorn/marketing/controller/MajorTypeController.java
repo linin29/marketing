@@ -75,6 +75,11 @@ public class MajorTypeController extends BaseController {
 			Message message = MessageUtils.getInstance().getMessage("marketing_major_type_not_existed");
 			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
+		if (!StringUtils.equals(majorType.getName(), majorTypeVO.getName())
+				&& majorTypeService.getMajorTypeCountByName(majorType.getName()) > 0) {
+			Message message = MessageUtils.getInstance().getMessage("marketing_major_type_existed");
+			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
 		majorTypeService.updateMajorType(majorType);
 		return AjaxResponse.toSuccess(null);
 	}

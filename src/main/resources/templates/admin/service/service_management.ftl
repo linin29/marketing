@@ -47,7 +47,7 @@
 								</p></td>
 					    		<td>${adminServiceApply.maxCallNumber}</td>
 					    		<td><a href="javascript:void(0)" applyid="${adminServiceApply.id}" class="showAgreementModel">查看</a></td>
-					    		<td>${adminServiceApply.statusStr}</td>
+					    		<td id="service_${adminServiceApply.id}">${adminServiceApply.statusStr}</td>
 					    		<td>${adminServiceApply.createTime}</td>
 					    		<td>
 					    			<button class="info btn btn-success" applyid="${adminServiceApply.id}">详情</button>
@@ -69,6 +69,7 @@
 		  	<div class="modal-dialog" role="document">
 			    <div class="modal-content">
 			      	<div class="modal-header">
+			      	<input id="applyId" type="hidden" >
 			        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			        	<h4 class="modal-title" id="myModalLabel"></h4>
 			      	</div>
@@ -145,9 +146,9 @@
 			                			<td class="wid">邮箱：</td>
 			                			<td><input  class="application-name" type="text" id="ser-email"/></td>
 			                		</tr>
-			                		<tr>
+			                		<tr id="createuserTr">
 			                			<td class="wid"></td>
-			                			<td style="float:right"><button id="" type="button" class="btn btn-success" >创建用户</button></td>
+			                			<td style="float:right"><button type="button" class="btn btn-success createUserTd" >创建用户</button></td>
 			                		</tr>
 			                	</tbody>
 			                </table>
@@ -157,7 +158,7 @@
 			                	<tbody>
 			                		<tr>
 			                			<td class="wid">驳回原因：</td>
-			                			<td><textarea style="width:100%;height:100%" class="application-name" type="text" /></td>
+			                			<td><input id="rejectReason" style="width:100%;height:100%" class="application-name" type="text" /></td>
 			                		</tr>
 			                	</tbody>
 			                </table>
@@ -168,6 +169,9 @@
 			        	<button id="rejectService" type="button" class="btn btn-danger">驳回</button>
 			        	<button id="sure" type="button" style="display:none;" class="btn btn-success"  data-dismiss="modal">确定</button>
 			      	</div>
+			      	<div class="form-group has-feedback" style='margin-left: 170px; margin-top: -55px;position: absolute;'>
+	      	    		<font color="red" id="errorMsg"></font>
+	      			</div>
 			    </div>
 		  	</div>
 		</div>

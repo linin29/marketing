@@ -13,6 +13,7 @@ adminService = (function(){
 			$("#saveService").show();
 			$("#upload-book-tr").show();
 			$("#applyId").val("");
+			$("#rejectReasonDiv").hide();
 			$("#new-server-model").modal("show");
 			$("#new-server-model").find("input").removeAttr("disabled");
 		}); 
@@ -23,6 +24,7 @@ adminService = (function(){
 			$("#sure").hide();
 			$("#saveService").show();
 			$("#upload-book-tr").show();
+			$("#rejectReasonDiv").hide();
 			$("#applyId").val($(this).attr("applyid"));
 			detail($(this).attr("applyid"));
 			$("#myModalLabel").text("修改申请");	
@@ -34,6 +36,7 @@ adminService = (function(){
 			$("#myModalLabel").text("服务申请详情");	
 			$("#sure").show();
 			$("#saveService").hide();
+			$("#rejectReasonDiv").hide();
 			$("#new-server-model").modal("show");
 			detail($(this).attr("applyid"));
 			$("#new-server-model").find("input").attr("disabled","disabled"); 
@@ -64,8 +67,15 @@ adminService = (function(){
 		});
 		$(".approve").click(function(){
 			$("#myModalLabel").text("服务管理审批");
+			$("#sure").hide();
+			$("#openService").show();
+			$("#rejectService").show();
+			$("#createuserTr").show();
 			detail($(this).attr("applyid"));
+			$("#applyId").val($(this).attr("applyid"));
 			$("#server-management-model").modal("show");
+			$("#server-management-model").find("input").attr("disabled","disabled"); 
+			$("#rejectReason").removeAttr("disabled"); 
 		});
 		$('#server-type').selectpicker({
         	width:"100%"
@@ -82,6 +92,7 @@ adminService = (function(){
 			$("#sure").show();
 			$("#openService").hide();
 			$("#rejectService").hide();
+			$("#createuserTr").hide();
 			$("#server-management-model").modal("show");
 			detail($(this).attr("applyid"));
 			$("#server-management-model").find("input").attr("disabled","disabled"); 
@@ -94,10 +105,18 @@ adminService = (function(){
 			$("#deleteAreaModal").attr('applyid', $(this).attr("applyid"));
 			$("#deleteAreaModal").modal("show");
 		});
-		$(".openService").click(function(){
-			$("#deleteAreaModal").attr('applyid', $(this).attr("applyid"));
-			$("#deleteAreaModal").modal("show");
+		$("#openService").click(function(){
+			var applyId = $("#applyId").val();
+			openService(applyId);
 		});
+		$("#rejectService").click(function(){
+			var applyId = $("#applyId").val();
+			rejectService(applyId);
+		});
+		$(".createUserTd").click(function(){
+			createUser();
+		});
+		
 		$('#service_delete').on('click', function(e){
 			 var applyId = $("#deleteAreaModal").attr('applyid');
 			 $.ajax({
@@ -246,6 +265,10 @@ adminService = (function(){
 			 		$("#server-type").val(majorTypeArray);
 			 		$('#server-type').selectpicker('val', majorTypeArray);
 			 	    $('#server-type').selectpicker('refresh');
+			 	    if(data.data.rejectReason){
+			 	    	$("#rejectReasonDiv").show();
+			 	    	$("#rejectReason").val(data.data.rejectReason);
+			 	    }
 			 	}
 	    	},
 	    	error: function(data) {
@@ -314,6 +337,64 @@ adminService = (function(){
 	    		$("html").html(data.responseText);
 	    	}
 		});
+	};
+	function openService(applyId){
+		var applyStatus = 'opened';
+		var data = {applyStatus:applyStatus};
+		 $.ajax({
+				type: 'POST',
+				url:  marketing_url + '/admin/service/' + applyId + '/approve',
+				 contentType : 'application/json',
+				 data: JSON.stringify(data),
+				 dataType: 'json', 
+				success: function(data) {
+					if (!data.success) {
+						noty({text: data.errorMessage, layout: 'topCenter', type: 'error', timeout: 2000});
+						return;
+					}else{
+						noty({text: "开通成功", layout: 'topCenter', type: 'success', timeout: 2000});
+						$("#server-management-model").modal('hide');
+						$("#service_" + applyId).text("已开通");
+					} 
+	        	},
+	        	error: function(data) {
+	        		noty({text: '开通失败', layout: 'topCenter', type: 'error', timeout: 2000});
+	        	}
+			});
+	};
+	
+	function rejectService(applyId){
+		var rejectReason = $("#rejectReason").val();
+		if(!rejectReason){
+			$('#errorMsg').text("请填写驳回原因");
+			return;
+		}
+		var applyStatus = 'rejected';
+		var data = {applyStatus:applyStatus, rejectReason:rejectReason};
+		 $.ajax({
+				type: 'POST',
+				url: marketing_url + '/admin/service/' + applyId + '/approve',
+				 contentType : 'application/json',
+				 data: JSON.stringify(data),
+				 dataType: 'json', 
+				success: function(data) {
+					if (!data.success) {
+						noty({text: data.errorMessage, layout: 'topCenter', type: 'error', timeout: 2000});
+						return;
+					}else{
+						noty({text: "驳回成功", layout: 'topCenter', type: 'success', timeout: 2000});
+						$("#server-management-model").modal('hide');
+						$("#service_" + applyId).text("已驳回");
+					} 
+	        	},
+	        	error: function(data) {
+	        		noty({text: '驳回失败', layout: 'topCenter', type: 'error', timeout: 2000});
+	        	}
+			});
+	};
+	
+	function createUser(){
+		
 	};
 	function initPagination(currentPage, totalCount, url) {
 		var options = {

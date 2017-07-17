@@ -152,7 +152,17 @@
 			                		</tr>
 			                	</tbody>
 			                </table>
-			           	</div>	
+			           	</div>
+			           	<div id="rejectReasonDiv" class="form-group" style="display:none;">
+			                <table class="table table-bordered" style="width: 90%;">
+			                	<tbody>
+			                		<tr>
+			                			<td class="wid">驳回原因：</td>
+			                			<td><input id="rejectReason" style="width:100%;height:100%" class="application-name" type="text" /></td>
+			                		</tr>
+			                	</tbody>
+			                </table>
+			           	</div>
 			      	    <!-- <div class="form-group">
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>

@@ -24,4 +24,6 @@ public interface UserMapper {
 
 	@Update("update user set status='deleted' where id=#{userId}")
 	public Boolean deleteUser(@Param("userId") String userId);
+	
+	public void createUser(UserVO userVO);
 }

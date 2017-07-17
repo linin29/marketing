@@ -25,8 +25,9 @@ majorType=(function(){
         	creatType();
         });
         $("#new-type-model").on("hidden.bs.modal", function() {
-        	$('#deploy_name').val();
-        	$('#deploy_des').val();
+        	$("#deploy_name").removeAttr("disabled");
+        	$('#deploy_name').val("");
+        	$('#deploy_des').val("");
 			$(this).removeData("bs.modal");
         });
 		$('#majorType_delete').on('click', function(e){
@@ -57,6 +58,7 @@ majorType=(function(){
 		var name=$tr.find('.name').text();
 		var description=$tr.find('.description').text();
 		$('#deploy_name').val(name);
+		$('#deploy_name').attr("disabled","disabled"); 
 		$('#deploy_des').val(description);
 		$("#new-type-model").modal("show");	
 		$("#majorTypeId").val(majorTypeId);

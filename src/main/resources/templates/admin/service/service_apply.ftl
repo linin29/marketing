@@ -4,7 +4,7 @@
 	}
 </style>
 
-	<div class="panel panel-default clearBottom">
+	<div class="panel-default clearBottom">
   			<div class="panel-heading">服务申请</div>
   			<div class="panel-body">
     			<div id="request-header" class="row">

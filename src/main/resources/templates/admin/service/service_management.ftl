@@ -3,7 +3,7 @@
 		text-align:center;
 	}
 </style>
-<div class="panel panel-default clearBottom">
+<div class="panel-default clearBottom">
   			<div class="panel-heading">服务管理</div>
   			<div class="panel-body">
     			<div id="request-header" class="row">

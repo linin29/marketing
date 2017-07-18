@@ -27,7 +27,7 @@
 				<input type="button" class=" btn btn-success new-server" id="new-SKU" value="新建" />
 			</div>
 		</div>
-	    <div id="type-content">
+	    <div id="type-content" style='margin-top:0px;'>
 	    	<table class="table table-bordered">
 			    <tbody class="">
 			    	<tr class='th_center'>

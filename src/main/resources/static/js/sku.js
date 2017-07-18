@@ -109,6 +109,9 @@ sku=(function(){
 				        	}
 						});
 			 		},500)		 		
+			 	}else{
+			 		noty({text: data.errorMessage, layout: 'topCenter', type: 'error', timeout: 2000});
+					return;
 			 	} 
 			 },
 			 error: function(data) {

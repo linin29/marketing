@@ -7,9 +7,11 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tunicorn.marketing.bo.UserBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.mapper.PrivilegeMapper;
 import com.tunicorn.marketing.mapper.UserMapper;
+import com.tunicorn.marketing.vo.GoodsSkuVO;
 import com.tunicorn.marketing.vo.PrivilegeVO;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.SecurityUtils;
@@ -93,6 +95,14 @@ public class UserService {
 		userVO.setId((Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
 		userVO.setPassword(SecurityUtils.generateHashPassword(MarketingConstants.TIANNUO_PASSWORD));
 		return userMapper.createUser(userVO);
+	}
+	
+	public List<UserVO> getUserListByBO(UserBO userBO) {
+		return userMapper.getUserListByBO(userBO);
+	}
+
+	public int getUserCount(UserBO userBO) {
+		return userMapper.getUserCount(userBO);
 	}
 
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,17 @@ public class AdminHomeController extends BaseController {
 		UserVO user = getCurrentUser(request);
 		List<PrivilegeVO> privilegeList = adminUserService.getMenuPrivileges(user.getId());
 		List<Menu> menuList = generateMenuList(privilegeList);
-		
+		String indexUrl = "";
+		if (menuList != null && menuList.size() > 0) {
+			Menu menu = menuList.get(0);
+			List<Menu> subMenus = menu.getSubMenus();
+			if (StringUtils.isNotBlank(menu.getUrl())) {
+				indexUrl = menu.getUrl();
+			} else if (subMenus != null && subMenus.size() > 0) {
+				indexUrl = subMenus.get(0).getUrl();
+			}
+		}
+		model.addAttribute("indexUrl", indexUrl);
 		model.addAttribute("user", user);
 		model.addAttribute("menus", menuList);
 		return "admin/dashboard/main";

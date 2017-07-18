@@ -1,12 +1,15 @@
 package com.tunicorn.marketing.controller;
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,13 +18,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tunicorn.common.api.Message;
 import com.tunicorn.common.api.RestAPIResponse;
 import com.tunicorn.common.entity.AjaxResponse;
+import com.tunicorn.marketing.bo.GoodsSkuBO;
+import com.tunicorn.marketing.bo.UserBO;
 import com.tunicorn.marketing.service.UserService;
+import com.tunicorn.marketing.vo.GoodsSkuVO;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.MessageUtils;
 
 
 @Controller
-@RequestMapping(value = "/user")
 @EnableAutoConfiguration
 public class UserController extends BaseController {
 	private static Logger logger = Logger.getLogger(UserController.class);
@@ -34,7 +39,7 @@ public class UserController extends BaseController {
 	 * @param user
 	 * @return
 	 */
-	@RequestMapping(value = "/password", method = RequestMethod.POST)
+	@RequestMapping(value = "/user/password", method = RequestMethod.POST)
 	@ResponseBody
 	public RestAPIResponse updatePassword(@RequestBody UserVO user, HttpServletRequest request) {  
 		if (userService.updatePassword(user)) {
@@ -52,7 +57,7 @@ public class UserController extends BaseController {
 	 * @param 
 	 * @return
 	 */
-	@RequestMapping(value = "/personcenter", method = RequestMethod.GET)
+	@RequestMapping(value = "/user/personcenter", method = RequestMethod.GET)
 	public String personCenter() {
 		return "user/personcenter";
 	}
@@ -62,7 +67,7 @@ public class UserController extends BaseController {
 	 * @param 
 	 * @return
 	 */
-	@RequestMapping(value = "/personcenter/password", method = RequestMethod.POST)
+	@RequestMapping(value = "/user/personcenter/password", method = RequestMethod.POST)
 	@ResponseBody
 	public RestAPIResponse updateUserPassword(@RequestBody UserVO user, HttpServletRequest request) {
 		UserVO sessionUser = getCurrentUser(request);
@@ -80,7 +85,7 @@ public class UserController extends BaseController {
 		}
 	}
 	
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@RequestMapping(value = "/user/create", method = RequestMethod.POST)
 	@ResponseBody
 	public AjaxResponse createUser(@RequestBody UserVO user, HttpServletRequest request) {
 		UserVO userVO = userService.getUserByUserName(user.getUserName());
@@ -94,5 +99,17 @@ public class UserController extends BaseController {
 			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
 		return AjaxResponse.toSuccess(null);
+	}
+	
+	@RequestMapping(value = "/admin/user", method = RequestMethod.GET)
+	public String userList(HttpServletRequest request, Model model) {
+		UserBO userBO = new UserBO();
+		List<UserVO> userVOs = userService.getUserListByBO(userBO);
+		int totalCount = userService.getUserCount(userBO);
+
+		model.addAttribute("users", userVOs);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("currentPage", 1);
+		return "admin/user/user";
 	}
 }

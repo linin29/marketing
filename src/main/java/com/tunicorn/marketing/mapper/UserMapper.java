@@ -1,11 +1,14 @@
 package com.tunicorn.marketing.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import com.tunicorn.marketing.bo.UserBO;
 import com.tunicorn.marketing.vo.UserVO;
 
 public interface UserMapper {
@@ -26,4 +29,8 @@ public interface UserMapper {
 	public Boolean deleteUser(@Param("userId") String userId);
 	
 	public int createUser(UserVO userVO);
+	
+	public List<UserVO> getUserListByBO(UserBO userBO);
+
+	public int getUserCount(UserBO userBO);
 }

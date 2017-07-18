@@ -17,7 +17,7 @@ adminService = (function(){
 			$("#rejectReasonDiv").hide();
 			$("#new-server-model").modal("show");
 			$("#new-server-model").find("input").removeAttr("disabled");
-			$("#server-type").removeAttr("disabled");
+			//$("#server-type").removeAttr("disabled");
 			$('#server-type').selectpicker('val', "");
 		}); 
 		$("#saveService").click(function(){
@@ -34,7 +34,7 @@ adminService = (function(){
 			$("#myModalLabel").text("修改申请");	
 			$("#new-server-model").modal("show");
 			$("#new-server-model").find("input").removeAttr("disabled");
-			$("#server-type").removeAttr("disabled"); 
+			//$("#server-type").removeAttr("disabled"); 
 		});
 		$(".info").click(function(){
 			$("#upload-book-tr").hide();
@@ -46,7 +46,7 @@ adminService = (function(){
 			$("#new-server-model").modal("show");
 			detail($(this).attr("applyid"));
 			$("#new-server-model").find("input").attr("disabled","disabled"); 
-			$("#server-type").attr("disabled", "disabled"); 
+			//$("#server-type").attr("disabled", "disabled"); 
 		});
 		$(".showAgreementModel").click(function(){
 			$("#showagreementModel").modal("show");

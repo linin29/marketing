@@ -42,7 +42,7 @@
 			    	<tr style="text-align:center;" class="tableTr" skuid=${GoodsSku.id!} >
 			    		<td class='name'>${GoodsSku.name!}</td>
 			    		<td class='type' >${GoodsSku.majorType!}</td>
-			    		<td style="width: 150px;"><p class="newline description">${GoodsSku.description!}</p></td>
+			    		<td style="width: 150px;" title="${GoodsSku.description!}"><p class="newline description">${GoodsSku.description!}</p></td>
 			    		<td class='showOrNot' isshow="${GoodsSku.isShow?string('true','false')}">${GoodsSku.isShow?string("是","否")}</td>
 			    		<td >${GoodsSku.createTime!}</td>
 			    		<td>

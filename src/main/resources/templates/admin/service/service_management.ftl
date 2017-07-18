@@ -42,13 +42,13 @@
 					    	<tr class="tableTr tdCenter" applyid="${adminServiceApply.id}">
 					    		<!-- <td>${adminServiceApply.id}</td> -->
 					    		<td>${adminServiceApply.appBusinessName}</td>
-					    		<td><p class="newline">
+					    		<td>
 					    			<#if adminServiceApply.majorTypes?? && (adminServiceApply.majorTypes?size>0)>
 	   								   <#list adminServiceApply.majorTypes as majorType>
 	   		                              ${majorType.name} <#if majorType_has_next>,</#if>
 	   		                           </#list>
    								    </#if>
-								</p></td>
+								</td>
 					    		<td>${adminServiceApply.maxCallNumber}</td>
 					    		<td><a href="javascript:void(0)" applyid="${adminServiceApply.id}" class="showAgreementModel">查看</a></td>
 					    		<td>${adminServiceApply.creator.name}</td>
@@ -59,6 +59,9 @@
 					    			<#if adminServiceApply.applyStatus == 'created'>
 					    			<button id="approve_${adminServiceApply.id}" class="btn btn-success approve" applyid="${adminServiceApply.id}">审批</button>
 					    			<button id="delete_${adminServiceApply.id}" class="btn btn-danger deleteService" applyid="${adminServiceApply.id}">删除</button>
+					    			<#else>
+					    			<input type="button" class="btn" style="width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none">
+					    			<input type="button" class="btn" style="width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none">
 					    			</#if>
 					    		</td>
 					    	</tr>

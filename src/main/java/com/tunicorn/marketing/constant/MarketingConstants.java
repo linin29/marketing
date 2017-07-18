@@ -70,4 +70,5 @@ public class MarketingConstants {
 	public static final String MARKETING_IMAGE_BASE_PATH = com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath") 
 			+ ConfigUtils.getInstance().getConfigValue("marketing.image.root.path");
 	public static final String TIANNUO_PASSWORD = "tiannuo";
+	public static final String UTF8 = "UTF-8";
 }

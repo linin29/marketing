@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -104,12 +105,15 @@ public class UserController extends BaseController {
 	@RequestMapping(value = "/admin/user", method = RequestMethod.GET)
 	public String userList(HttpServletRequest request, Model model) {
 		UserBO userBO = new UserBO();
+		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
+			userBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
+		}
 		List<UserVO> userVOs = userService.getUserListByBO(userBO);
 		int totalCount = userService.getUserCount(userBO);
 
 		model.addAttribute("users", userVOs);
 		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("currentPage", 1);
+		model.addAttribute("currentPage", userBO.getPageNum() + 1);
 		return "admin/user/user";
 	}
 }

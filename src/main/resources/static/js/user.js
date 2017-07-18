@@ -1,6 +1,6 @@
 var marketing_url = '/marketing';
-var sku = sku || {};
-sku=(function(){
+var user = user || {};
+user = (function(){
 	function init(currentPage, totalCount){
 		
 		$('#search').click(function(){
@@ -80,7 +80,6 @@ sku=(function(){
 		});
 	};
 	return {
-		_init:init,
-		edit:edit
+		_init:init
 	}
 })()

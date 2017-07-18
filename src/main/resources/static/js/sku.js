@@ -42,7 +42,7 @@ sku=(function(){
 						}else{
 							noty({text: "删除成功", layout: 'topCenter', type: 'success', timeout: 2000});
 							$("#deleteSkuModal").modal('hide');
-							$('.tdstyle_'+ skuid).remove();
+							$('.tableTr[skuid=' + skuid + ']').remove();
 						} 
 		        	},
 		        	error: function(data) {
@@ -90,7 +90,7 @@ sku=(function(){
 			 dataType: 'json', 
 			 success: function(data) {
 			 	if (data.success) {
-			 		noty({text: '创建成功', layout: 'topCenter', type: 'warning', timeout: 2000});
+			 		noty({text: '保存成功', layout: 'topCenter', type: 'warning', timeout: 2000});
 			 		$('#new-SKU-model').modal('hide');
 			 		setTimeout(function(){
 			 			$.ajax({
@@ -108,22 +108,24 @@ sku=(function(){
 			 	} 
 			 },
 			 error: function(data) {
-				 noty({text: '创建失败', layout: 'topCenter', type: 'warning', timeout: 2000});
+				 noty({text: '保存失败', layout: 'topCenter', type: 'warning', timeout: 2000});
 			 }
 		})
 	};
 	function edit(_this,skuId){
 		$('#myModalLabel').text('修改信息');
-		var $tr = $(_this).parents('.tdstyle');
+		var $tr = $(_this).parents('.tableTr');
 		var name=$tr.find('.name').text();
 		var description=$tr.find('.description').text();
-		
+		var majorType = $tr.find('.type').text();
+		var skuOrNot = $tr.find('.showOrNot').attr("isshow");
 		
 		$('#sku_name').val(name);
 		$('#sku_description').val(description);
-		
+		$("#sku_select").val(majorType);
 		$("#new-SKU-model").modal("show");	
 		$("#skuId").val(skuId);
+		$("#sku_or_not").val(skuOrNot);
 	}
 	
 	function initPagination(currentPage, totalCount) {

@@ -24,7 +24,7 @@
 				<input type="button" class=" btn btn-success" id="search" value="搜索" style="width:100px;" />
 			</div>
 			<div class="new-type">
-				<input type="button" class=" btn btn-success new-server" id="new-SKU" value="新建类型" />
+				<input type="button" class=" btn btn-success new-server" id="new-SKU" value="新建" />
 			</div>
 		</div>
 	    <div id="type-content">
@@ -39,11 +39,11 @@
 			    		<th style="width:15%"">操作</th>
 			    	</tr>
 			    	<#list GoodsSkus as GoodsSku>
-			    	<tr style="text-align:center;" class="tdstyle ${GoodsSku.id!}" skuid=${GoodsSku.id!} >
+			    	<tr style="text-align:center;" class="tableTr" skuid=${GoodsSku.id!} >
 			    		<td class='name'>${GoodsSku.name!}</td>
 			    		<td class='type' >${GoodsSku.majorType!}</td>
 			    		<td style="width: 150px;"><p class="newline description">${GoodsSku.description!}</p></td>
-			    		<td class='showOrNot'>${GoodsSku.isShow?string("是","否")}</td>
+			    		<td class='showOrNot' isshow="${GoodsSku.isShow?string('true','false')}">${GoodsSku.isShow?string("是","否")}</td>
 			    		<td >${GoodsSku.createTime!}</td>
 			    		<td>
 			    			<button class="btn btn-success" id="modify_${GoodsSku.id!}" onclick="sku.edit(this, ${GoodsSku.id});">修改</button>
@@ -78,7 +78,12 @@
                     <span class="control-label col-sm-3 text-right" >类型：</span>
                     <div class="col-sm-9 " style="margin-bottom: 24px">
 	                    <select id="sku_select" style="width: 100%;height: 34px;">
-	                        <option value="alert">请选择类型</option>
+	                        <option value="">请选择类型</option>
+	                        <#if majorTypes?? && (majorTypes?size > 0)>
+			       				<#list majorTypes as majorType>
+			     				 <option value='${majorType.name}'>${majorType.description}</option>
+			    				</#list>
+		   					</#if>
 	                    </select>
                   		</div>
               	</div>

@@ -113,13 +113,13 @@ public class SkuController extends BaseController {
 	@RequestMapping(value = "/{goodsSkuId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public AjaxResponse deleteGoodsSku(HttpServletRequest request, @PathVariable("goodsSkuId") long goodsSkuId) {
-		GoodsSkuVO GoodsSkuVO = goodsSkuService.getGoodsSkuById(goodsSkuId);
-		if (GoodsSkuVO == null) {
+		GoodsSkuVO goodsSkuVO = goodsSkuService.getGoodsSkuById(goodsSkuId);
+		if (goodsSkuVO == null) {
 			Message message = MessageUtils.getInstance().getMessage("marketing_goods_sku_not_existed");
 			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
-		GoodsSkuVO.setStatus(MarketingConstants.STATUS_DELETED);
-		goodsSkuService.updateGoodsSku(GoodsSkuVO);
+		goodsSkuVO.setStatus(MarketingConstants.STATUS_DELETED);
+		goodsSkuService.updateGoodsSku(goodsSkuVO);
 		return AjaxResponse.toSuccess(null);
 	}
 }

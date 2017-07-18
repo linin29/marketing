@@ -26,9 +26,14 @@ public interface GoodsSkuMapper {
 	public List<GoodsSkuVO> getGoodsSkuListByBO(GoodsSkuBO goodsSkuBO);
 
 	public int getGoodsSkuCount(GoodsSkuBO goodsSkuBO);
-	
+
 	@Select("select count(*) from goods_sku where `name`=#{name} and major_type = #{majorType} and status='active'")
 	public int getGoodsSkuCountByNameAndMajorType(@Param("name") String name, @Param("majorType") String majorType);
-	
+
+	@Results({ @Result(property = "majorType", column = "major_type"),
+			@Result(property = "createTime", column = "create_time"),
+			@Result(property = "isShow", column = "is_show") })
+	@Select("select id, major_type, `name`, description, `order`, create_time, is_show from goods_sku"
+			+ " where id = #{goodsSkuId} and status='active'")
 	public GoodsSkuVO getGoodsSkuById(@Param("goodsSkuId") long goodsSkuId);
 }

@@ -65,16 +65,16 @@
 			<if test="name != null and name !=''">
 			    name=#{name},
 			</if>
-			<if test="majorType != null majorType !=''">
+			<if test="majorType != null and majorType !=''">
 			    major_type=#{majorType},
 			</if>
-			<if test="description != null description !=''">
+			<if test="description != null and description !=''">
 			    description=#{description},
 			</if>
-			<if test="order != null order !=''">
+			<if test="order != null and order !=''">
 			    `order`=#{order},
 			</if>
-			<if test="isShow != null isShow !=''">
+			<if test="isShow != null">
 			    is_show=#{isShow},
 			</if>
 			<if test="status != null and status !=''">
@@ -93,7 +93,7 @@
 		<if test="majorType != null and majorType != ''">
 			and major_type = #{majorType}
 		</if>
-		<if test="isShow != null and isShow != ''">
+		<if test="isShow != null">
 			and is_show = #{isShow}
 		</if>
 		<if test="name != null and name != ''">
@@ -112,7 +112,7 @@
 		<if test="majorType != null and majorType != ''">
 			and major_type = #{majorType}
 		</if>
-		<if test="isShow != null and isShow != ''">
+		<if test="isShow != null">
 			and is_show = #{isShow}
 		</if>
 		<if test="name != null and name != ''">

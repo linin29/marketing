@@ -17,6 +17,8 @@ adminService = (function(){
 			$("#rejectReasonDiv").hide();
 			$("#new-server-model").modal("show");
 			$("#new-server-model").find("input").removeAttr("disabled");
+			$("#server-type").removeAttr("disabled");
+			$('#server-type').selectpicker('val', "");
 		}); 
 		$("#saveService").click(function(){
 			saveService();
@@ -32,6 +34,7 @@ adminService = (function(){
 			$("#myModalLabel").text("修改申请");	
 			$("#new-server-model").modal("show");
 			$("#new-server-model").find("input").removeAttr("disabled");
+			$("#server-type").removeAttr("disabled"); 
 		});
 		$(".info").click(function(){
 			$("#upload-book-tr").hide();
@@ -43,6 +46,7 @@ adminService = (function(){
 			$("#new-server-model").modal("show");
 			detail($(this).attr("applyid"));
 			$("#new-server-model").find("input").attr("disabled","disabled"); 
+			$("#server-type").attr("disabled", "disabled"); 
 		});
 		$(".showAgreementModel").click(function(){
 			$("#showagreementModel").modal("show");
@@ -100,6 +104,7 @@ adminService = (function(){
 			$("#server-management-model").modal("show");
 			detail($(this).attr("applyid"));
 			$("#server-management-model").find("input").attr("disabled","disabled"); 
+			$("#server-type").attr("disabled","disabled"); 
 		});
 		$(".showAgreementModel").click(function(){
 			$("#showagreementModel").modal("show");
@@ -170,17 +175,13 @@ adminService = (function(){
 			$('#errorMsg').text("联系方式格式不对");
 			return;
 		}
-		if(appBusinessContacts == "") {
-			$('#errorMsg').text("请输入联系人");
-			return;
-		}
 		var formData = new FormData();
 		var files =  document.getElementById("upload-book").files;
 		if (files.length == 0 && !applyId) {
-			$('#errorMsg').text("请选择人员图片");
+			$('#errorMsg').text("请选择合同图片");
 			return;
 		}
-		if(majorTypes == "") {
+		if(!majorTypes) {
 			$('#errorMsg').text("请选择服务");
 			return;
 		}

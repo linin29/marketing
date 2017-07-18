@@ -41,16 +41,4 @@ public class SendMailUtils {
 		}
 		mailSender.send(message);
 	}
-
-	public static void main(String[] args) {
-		try {
-			StringBuffer sb = new StringBuffer();
-			sb.append("<h1>大标题-h1</h1>")
-					.append("<p style='color:#F00'>红色字</p>")
-					.append("<p style='text-align:right'>右对齐</p>");
-			sendTextWithHtml("lining@tunicorn.cn", new String[] { "948016508@qq.com" }, "服务申请", sb.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

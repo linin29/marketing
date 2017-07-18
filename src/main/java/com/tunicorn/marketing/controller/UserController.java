@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tunicorn.common.api.Message;
 import com.tunicorn.common.api.RestAPIResponse;
+import com.tunicorn.common.entity.AjaxResponse;
 import com.tunicorn.marketing.service.UserService;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.MessageUtils;
@@ -77,5 +78,21 @@ public class UserController extends BaseController {
 			logger.info(message.getMessage());
 			return new RestAPIResponse(message.getCode(), message.getMessage());
 		}
+	}
+	
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@ResponseBody
+	public AjaxResponse createUser(@RequestBody UserVO user, HttpServletRequest request) {
+		UserVO userVO = userService.getUserByUserName(user.getUserName());
+		if (userVO != null) {
+			Message message = MessageUtils.getInstance().getMessage("user_existed");
+			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
+		int result = userService.createUser(user);
+		if (result == 0) {
+			Message message = MessageUtils.getInstance().getMessage("marketing_user_create_failed");
+			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
+		return AjaxResponse.toSuccess(null);
 	}
 }

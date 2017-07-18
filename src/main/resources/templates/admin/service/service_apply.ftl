@@ -25,12 +25,12 @@
   			    	<table class="table table-bordered">
 					    <tbody class="">
 					    	<tr>
-					    		<th style="width:5%">申请Id</th>
-					    		<th style="width:10%">创建人</th>
+					    		<!-- <th style="width:5%">申请Id</th> -->
 					    		<th style="width:15%">应用商</th>
-					    		<th style="width:20%">申请服务</th>
+					    		<th style="width:15%">申请服务</th>
 					    		<th style="width:8%">调用总次数</th>
 					    		<th style="width:7%">合同图片</th>
+					    		<th style="width:10%">创建人</th>
 					    		<th style="width:10%">状态</th>
 					    		<th style="width:10%">创建时间</th>
 					    		<th style="width:15%">操作</th>
@@ -38,8 +38,7 @@
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
 				         		<#list adminServiceApplys as adminServiceApply>
 					    	<tr>
-					    		<td>${adminServiceApply.id}</td>
-					    		<td>${adminServiceApply.creator.name}</td>
+					    		<!-- <td>${adminServiceApply.id}</td> -->
 					    		<td>${adminServiceApply.appBusinessName}</td>
 					    		<td><p class="newline">
 					    		   <#if adminServiceApply.majorTypes?? && (adminServiceApply.majorTypes?size>0)>
@@ -49,7 +48,8 @@
    								    </#if>
 									</p></td>
 					    		<td>${adminServiceApply.maxCallNumber}</td>
-					    		<td><a href="javascript:void(0)"  applyid="${adminServiceApply.id}" class="showAgreementModel">查看</a></td>
+					    		<td><a href="javascript:void(0)"  applyid="${adminServiceApply.id}" class="showAgreementModel">图片管理</a></td>
+					    		<td>${adminServiceApply.creator.name}</td>
 					    		<td>${adminServiceApply.statusStr}</td>
 					    		<td>${adminServiceApply.createTime}</td>
 					    		<td>
@@ -100,7 +100,7 @@
 			                	</tbody>
 			                </table>
 			           	</div>
-			           	<div class="form-group">
+			           	<div class="form-group" id="upload-book-div">
 			                <h5><strong>合同信息</strong></h5>
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
@@ -201,6 +201,12 @@
 						<h4  class="modal-title pull-left">合同预览</h4>
 					</div>
 					<div class="modal-body">
+						<div class="form-group" style='margin-bottom: 36px;margin-left: 20%;'>
+				            <span class="control-label col-sm-3 .col-md-offset-3 text-right" style="line-height: 25px;">上传图片</span>
+				            <div class="col-sm-9" style="boder:1px solid #ddd">
+				                <input id="addAgreementPic" style="margin-bottom: 24px;" multiple type="file" accept="image/jpg, image/jpeg, image/png, image/bmp" onchange="adminService.addAsset();">
+				            </div>
+				        </div>
 				        <div class="form-group" >
 				             <div style="border:1px solid #000"></div>
 				        </div>

@@ -17,17 +17,17 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="username != null" >
+      <if test="userName != null" >
         username,
       </if>
       <if test="name != null" >
         name,
       </if>
-      <if test="password != null" >
-        password,
-      </if>
       <if test="email != null" >
         email,
+      </if>
+      <if test="password != null" >
+        password,
       </if>
         create_time,
       <if test="lastUpdate != null" >
@@ -38,8 +38,8 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="username != null" >
-        #{username, jdbcType=VARCHAR},
+      <if test="userName != null" >
+        #{userName, jdbcType=VARCHAR},
       </if>
       <if test="name != null" >
         #{name, jdbcType=VARCHAR},

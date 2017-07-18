@@ -12,6 +12,7 @@ adminService = (function(){
 			$("#sure").hide();
 			$("#saveService").show();
 			$("#upload-book-tr").show();
+			$("#upload-book-div").show();
 			$("#applyId").val("");
 			$("#rejectReasonDiv").hide();
 			$("#new-server-model").modal("show");
@@ -23,7 +24,8 @@ adminService = (function(){
 		$(".modify").click(function(){
 			$("#sure").hide();
 			$("#saveService").show();
-			$("#upload-book-tr").show();
+			$("#upload-book-tr").hide();
+			$("#upload-book-div").hide();
 			$("#rejectReasonDiv").hide();
 			$("#applyId").val($(this).attr("applyid"));
 			detail($(this).attr("applyid"));
@@ -33,6 +35,7 @@ adminService = (function(){
 		});
 		$(".info").click(function(){
 			$("#upload-book-tr").hide();
+			$("#upload-book-div").hide();
 			$("#myModalLabel").text("服务申请详情");	
 			$("#sure").show();
 			$("#saveService").hide();
@@ -43,7 +46,7 @@ adminService = (function(){
 		});
 		$(".showAgreementModel").click(function(){
 			$("#showagreementModel").modal("show");
-			view($(this).attr("applyid"));
+			view($(this).attr("applyid"), true);
 		});
 		
 		$('#server-type').selectpicker({
@@ -71,7 +74,8 @@ adminService = (function(){
 			$("#openService").show();
 			$("#rejectService").show();
 			$("#createuserTr").show();
-			detail($(this).attr("applyid"));
+			detail($(this).attr("applyid"), true);
+			$("#rejectReasonDiv").show();
 			$("#applyId").val($(this).attr("applyid"));
 			$("#server-management-model").modal("show");
 			$("#server-management-model").find("input").attr("disabled","disabled"); 
@@ -172,7 +176,7 @@ adminService = (function(){
 		}
 		var formData = new FormData();
 		var files =  document.getElementById("upload-book").files;
-		if (files.length == 0) {
+		if (files.length == 0 && !applyId) {
 			$('#errorMsg').text("请选择人员图片");
 			return;
 		}
@@ -193,19 +197,19 @@ adminService = (function(){
 			noty({text: "Email格式不正确!", layout: "topCenter", type: "warning", timeout: 2000});
 			return false;
 		}
-		for (var i = 0; i < files.length; i++) {
-  			var file = files[i];
-  			if (!checkFile(file)) {
-  			//$('#errorMsg').text("您选择的图片大于5M, 请重新选择小于5M的图片上传");
-  				return;
-  			}
-  			formData.append('images', file, file.name);
-		}
 		var url ='';
 		if(applyId){
 			url = marketing_url + '/admin/service/' + applyId + '/update';
 		}else{
 			url = marketing_url + '/admin/service/create';
+			for (var i = 0; i < files.length; i++) {
+	  			var file = files[i];
+	  			if (!checkFile(file)) {
+	  			//$('#errorMsg').text("您选择的图片大于5M, 请重新选择小于5M的图片上传");
+	  				return;
+	  			}
+	  			formData.append('images', file, file.name);
+			}
 		}
 		formData.append('appBusinessName', appBusinessName);
 		formData.append('appBusinessAddress', appBusinessAddress);
@@ -242,7 +246,7 @@ adminService = (function(){
 			}
 		});
 	}
-	function detail(applyId){
+	function detail(applyId, isRejectReasonShow){
 		$.ajax({
 			 type: 'GET',
 			 url: marketing_url + '/admin/service/detail/' + applyId,
@@ -265,9 +269,12 @@ adminService = (function(){
 			 		$("#server-type").val(majorTypeArray);
 			 		$('#server-type').selectpicker('val', majorTypeArray);
 			 	    $('#server-type').selectpicker('refresh');
-			 	    if(data.data.rejectReason){
+			 	    if(data.data.rejectReason || isRejectReasonShow){
 			 	    	$("#rejectReasonDiv").show();
 			 	    	$("#rejectReason").val(data.data.rejectReason);
+			 	    }else{
+			 	    	$("#rejectReasonDiv").hide();
+			 	    	$("#rejectReason").val("");
 			 	    }
 			 	}
 	    	},
@@ -277,7 +284,7 @@ adminService = (function(){
 	    	}
 		});
 	};
-	function view(applyId){
+	function view(applyId, isDelete){
 		$.ajax({
 			 type: 'GET',
 			 url: marketing_url + '/admin/service/applyAsset',
@@ -286,13 +293,17 @@ adminService = (function(){
 			 },
 			 success: function(data) {
 			 	if(data && data.success && data.data){
+			 		$("#applyId").val(applyId);
 			 		var html = '';
 			 		for(var i = 0; i<data.data.length; i++){
 			 			var applyAsset = data.data[i];
-			 			html += '<div class="col-sm-3">' +
+			 			html += '<div id="applyAsset_' + applyAsset.id + '" class="col-sm-3">' +
 								'<div class="thumbnail" style="">' + 
-								'<div class="pull-right">' +
-								'</div>' + 
+								'<div class="pull-right">';
+			 			if(isDelete){
+			 				html += '<a href="javascript:void(0)" onclick="adminService.deleteApplyAsset(' + applyAsset.id + ');" class=" glyphicon glyphicon-remove" style="color:red"></a>';
+			 			}
+			 			html += '</div>' + 
 								'<img style="width: 200px;height: 200px" src="' + applyAsset.realPath + '" alt="">' +
 								'</div>' + 										   
 								'</div>';
@@ -355,6 +366,8 @@ adminService = (function(){
 						noty({text: "开通成功", layout: 'topCenter', type: 'success', timeout: 2000});
 						$("#server-management-model").modal('hide');
 						$("#service_" + applyId).text("已开通");
+						$("#approve_" + applyId).hide();
+						$("#delete_" + applyId).hide();
 					} 
 	        	},
 	        	error: function(data) {
@@ -385,6 +398,8 @@ adminService = (function(){
 						noty({text: "驳回成功", layout: 'topCenter', type: 'success', timeout: 2000});
 						$("#server-management-model").modal('hide');
 						$("#service_" + applyId).text("已驳回");
+						$("#approve_" + applyId).hide();
+						$("#delete_" + applyId).hide();
 					} 
 	        	},
 	        	error: function(data) {
@@ -393,8 +408,74 @@ adminService = (function(){
 			});
 	};
 	
+	function addAsset(){
+		var formData = new FormData();
+		var files =  document.getElementById("addAgreementPic").files;
+		for (var i = 0; i < files.length; i++) {
+  			var file = files[i];
+  			if (!checkFile(file)) {
+  			//$('#errorMsg').text("您选择的图片大于5M, 请重新选择小于5M的图片上传");
+  				return;
+  			}
+  			formData.append('images', file, file.name);
+		}
+		var applyId = $("#applyId").val();
+		formData.append('applyId', applyId);
+		tunicorn.utils.postFormData(marketing_url + '/admin/service/applyAsset/create', formData, function(err, result){
+			if(err){
+				noty({text: "服务器异常!", layout: "topCenter", type: "error", timeout: 2000});
+				return;
+			}
+			if(result.success){
+				noty({text: '保存成功', layout: 'topCenter', type: 'warning', timeout: 2000});
+		 		$('#new-server-model').modal('hide');
+		 		view(applyId, true);
+			}else{
+				noty({text: result.errorMessage, layout: "topCenter", type: "error", timeout: 2000});
+				return;
+			}
+		});
+	};
+    function deleteApplyAsset(assetId){
+    	$.ajax({
+			 type: 'PUT',
+			 url: marketing_url + '/admin/service/applyAsset/' + assetId,
+			 contentType : 'application/json',
+			 dataType: 'json', 
+			 success: function(data) {
+			 	if (data.success) {
+			 		$("#applyAsset_" + assetId).remove();
+			 	}
+        	},
+        	error: function(data) {
+        		//返回500错误页面
+        		$("html").html(data.responseText);
+        	}
+		});
+    };
 	function createUser(){
-		
+		var username = $("#ser-user-name").val();
+		var email = $("#ser-email").val();
+		var data = {'userName':username, 'email':email};
+		$.ajax({
+			type: 'POST',
+			url: marketing_url + '/user/create',
+			contentType : 'application/json',
+			dataType: 'json', 
+			data: JSON.stringify(data),
+			success: function(data) {
+				if (!data.success) {
+					noty({text: data.errorMessage, layout: 'topCenter', type: 'warning', timeout: 2000});
+					return;
+				}else{
+					noty({text: "创建用户成功", layout: 'topCenter', type: 'success', timeout: 2000});
+					return;
+				} 
+        	},
+        	error: function(data) {
+        		noty({text: '创建用户失败', layout: 'topCenter', type: 'error', timeout: 2000});
+        	}
+		});
 	};
 	function initPagination(currentPage, totalCount, url) {
 		var options = {
@@ -416,6 +497,8 @@ adminService = (function(){
 	};
 	return {
 		serviceApplyInit:serviceApplyInit,
-		serviceManageInit:serviceManageInit
+		serviceManageInit:serviceManageInit,
+		deleteApplyAsset:deleteApplyAsset,
+		addAsset:addAsset
 	}
 })()

@@ -22,21 +22,20 @@
   			    	<table class="table table-bordered">
 					    <tbody class="">
 					    	<tr>
-					    		<th>申请Id</th>
-					    		<th>创建人</th>
-					    		<th>应用商</th>
-					    		<th>申请服务</th>
-					    		<th>调用总次数</th>
-					    		<th>合同图片</th>
-					    		<th>状态</th>
-					    		<th>创建时间</th>
-					    		<th>操作</th>
+					    		<!-- <th>申请Id</th> -->
+					    		<th style="width:15%">应用商</th>
+					    		<th style="width:15%">申请服务</th>
+					    		<th style="width:8%">调用总次数</th>
+					    		<th style="width:7%">合同图片</th>
+					    		<th style="width:10%">创建人</th>
+					    		<th style="width:8%">状态</th>
+					    		<th style="width:10%">创建时间</th>
+					    		<th style="width:15%">操作</th>
 					    	</tr>
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
 				         		<#list adminServiceApplys as adminServiceApply>
 					    	<tr class="tableTr" applyid="${adminServiceApply.id}">
-					    		<td>${adminServiceApply.id}</td>
-					    		<td>${adminServiceApply.creator.name}</td>
+					    		<!-- <td>${adminServiceApply.id}</td> -->
 					    		<td>${adminServiceApply.appBusinessName}</td>
 					    		<td><p class="newline">
 					    			<#if adminServiceApply.majorTypes?? && (adminServiceApply.majorTypes?size>0)>
@@ -47,12 +46,15 @@
 								</p></td>
 					    		<td>${adminServiceApply.maxCallNumber}</td>
 					    		<td><a href="javascript:void(0)" applyid="${adminServiceApply.id}" class="showAgreementModel">查看</a></td>
+					    		<td>${adminServiceApply.creator.name}</td>
 					    		<td id="service_${adminServiceApply.id}">${adminServiceApply.statusStr}</td>
 					    		<td>${adminServiceApply.createTime}</td>
 					    		<td>
 					    			<button class="info btn btn-success" applyid="${adminServiceApply.id}">详情</button>
-					    			<button class="btn btn-success approve" applyid="${adminServiceApply.id}">审批</button>
-					    			<button class="btn btn-success deleteService" applyid="${adminServiceApply.id}">删除</button>
+					    			<#if adminServiceApply.applyStatus == 'created'>
+					    			<button id="approve_${adminServiceApply.id}" class="btn btn-success approve" applyid="${adminServiceApply.id}">审批</button>
+					    			<button id="delete_${adminServiceApply.id}" class="btn btn-success deleteService" applyid="${adminServiceApply.id}">删除</button>
+					    			</#if>
 					    		</td>
 					    	</tr>
 					    	     </#list>
@@ -153,7 +155,7 @@
 			                	</tbody>
 			                </table>
 			           	</div>	
-			      	    <div class="form-group">
+			      	    <div id="rejectReasonDiv" class="form-group">
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
 			                		<tr>

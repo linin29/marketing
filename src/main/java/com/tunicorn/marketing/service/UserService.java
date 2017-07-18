@@ -1,10 +1,13 @@
 package com.tunicorn.marketing.service;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.mapper.PrivilegeMapper;
 import com.tunicorn.marketing.mapper.UserMapper;
 import com.tunicorn.marketing.vo.PrivilegeVO;
@@ -84,6 +87,12 @@ public class UserService {
 
 	public Boolean deleteUser(String userId) {
 		return userMapper.deleteUser(userId);
+	}
+	
+	public int createUser(UserVO userVO){
+		userVO.setId((Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
+		userVO.setPassword(SecurityUtils.generateHashPassword(MarketingConstants.TIANNUO_PASSWORD));
+		return userMapper.createUser(userVO);
 	}
 
 }

@@ -1,7 +1,6 @@
 package com.tunicorn.marketing.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -149,16 +148,46 @@ public class AdminServiceController extends BaseController {
 	
 	@RequestMapping(value = "/{applyId}/update", method = RequestMethod.POST)
 	@ResponseBody
-	public AjaxResponse updateService(HttpServletRequest request, @PathVariable("applyId") long applyId,
-			@RequestBody AdminServiceApplyVO adminServiceApplyVO,
-			@RequestParam(value = "images", required = false) List<MultipartFile> images) {
+	public AjaxResponse updateService(HttpServletRequest request, @PathVariable("applyId") long applyId) {
+		AdminServiceApplyVO adminServiceApplyVO = new AdminServiceApplyVO();
+		if(StringUtils.isNotBlank(request.getParameter("appBusinessName"))){
+			adminServiceApplyVO.setAppBusinessName(request.getParameter("appBusinessName"));
+		}
+		if(StringUtils.isNotBlank(request.getParameter("appBusinessAddress"))){
+			adminServiceApplyVO.setAppBusinessAddress(request.getParameter("appBusinessAddress"));
+		}
+		if(StringUtils.isNotBlank(request.getParameter("appBusinessContacts"))){
+			adminServiceApplyVO.setAppBusinessContacts(request.getParameter("appBusinessContacts"));
+		}
+		if(StringUtils.isNotBlank(request.getParameter("appBusinessMobile"))){
+			adminServiceApplyVO.setAppBusinessMobile(request.getParameter("appBusinessMobile"));
+		}
+		if(StringUtils.isNotBlank(request.getParameter("maxCallNumber"))){
+			adminServiceApplyVO.setMaxCallNumber(Long.valueOf(request.getParameter("maxCallNumber")));
+		}
+		if(StringUtils.isNotBlank(request.getParameter("majorTypes"))){
+			List<MajorTypeVO> majorTypes = new ArrayList<MajorTypeVO>();
+			String[] majortypeArray = request.getParameter("majorTypes").split(",");
+			for (String majorTypeId : majortypeArray) {
+				MajorTypeVO majorTypeVO = new MajorTypeVO();
+				majorTypeVO.setId(Long.valueOf(majorTypeId));
+				majorTypes.add(majorTypeVO);
+			}
+			adminServiceApplyVO.setMajorTypes(majorTypes);
+		}
+		if(StringUtils.isNotBlank(request.getParameter("username"))){
+			adminServiceApplyVO.setUsername(request.getParameter("username"));
+		}
+		if(StringUtils.isNotBlank(request.getParameter("email"))){
+			adminServiceApplyVO.setEmail(request.getParameter("email"));
+		}
 		adminServiceApplyVO.setId(applyId);
 		AdminServiceApplyVO applyVO = adminServiceApplyService.getAdminServiceApplyById(applyId);
 		if (applyVO == null) {
 			Message message = MessageUtils.getInstance().getMessage("marketing_service_apply_not_existed");
 			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
-		adminServiceApplyService.updateAdminServiceApply(adminServiceApplyVO, images);
+		adminServiceApplyService.updateAdminServiceApply(adminServiceApplyVO);
 		return AjaxResponse.toSuccess(null);
 	}
 	
@@ -246,5 +275,22 @@ public class AdminServiceController extends BaseController {
 		}
 		List<AdminServiceApplyAssetVO> applyAssetVOs = adminServiceApplyService.getAdminServiceApplyAssetList(applyAssetVO);
 		return CommonAjaxResponse.toSuccess(applyAssetVOs);
+	}
+	
+	@RequestMapping(value = "/applyAsset/create", method = RequestMethod.POST)
+	@ResponseBody
+	public CommonAjaxResponse createApplyAsset(HttpServletRequest request,
+			@RequestParam(value = "images", required = false) List<MultipartFile> images) {
+		if (StringUtils.isNotBlank(request.getParameter("applyId"))) {
+			adminServiceApplyService.addApplyAsset(Long.valueOf(request.getParameter("applyId")), images);
+		}
+		return CommonAjaxResponse.toSuccess(null);
+	}
+	
+	@RequestMapping(value = "/applyAsset/{assetId}", method = RequestMethod.PUT)
+	@ResponseBody
+	public CommonAjaxResponse deleteApplyAsset(HttpServletRequest request, @PathVariable("assetId") long assetId) {
+		adminServiceApplyService.deleteAdminServiceApplyAsset(assetId);
+		return CommonAjaxResponse.toSuccess(null);
 	}
 }

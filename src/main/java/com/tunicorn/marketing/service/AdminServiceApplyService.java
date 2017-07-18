@@ -43,9 +43,10 @@ public class AdminServiceApplyService {
 	}
 
 	@Transactional
-	public int updateAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO, List<MultipartFile> images) {
+	public int updateAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO) {
 		int result = adminServiceApplyMapper.updateAdminServiceApply(adminServiceApplyVO);
-		updateApplyAsset(adminServiceApplyVO.getId(), images);
+		adminMajorTypeServiceApplyMappingMapper.deleteMajorTypeApplicationMappingByApplyId(adminServiceApplyVO.getId());
+		this.createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);
 		return result;
 	}
 	
@@ -84,8 +85,12 @@ public class AdminServiceApplyService {
 		adminServiceApplyAssetMapper.deleteAdminServiceApplyAssetByApplyId(adminServiceApplyVO.getId());
 		return result;
 	}
+	
+	public void deleteAdminServiceApplyAsset(long applyAssetId){
+		adminServiceApplyAssetMapper.deleteAdminServiceApplyAsset(applyAssetId);
+	}
 
-	private void addApplyAsset(long applyId, List<MultipartFile> images) {
+	public void addApplyAsset(long applyId, List<MultipartFile> images) {
 		List<AdminServiceApplyAssetVO> assets = new ArrayList<AdminServiceApplyAssetVO>();
 		if (images != null && images.size() > 0) {
 			for (MultipartFile image : images) {

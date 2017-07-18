@@ -1,3 +1,9 @@
+<style type='text/css'>
+	.tdCenter td,.thCenter th{
+		text-align:center;
+	}
+</style>
+
 	<div class="panel panel-default clearBottom">
   			<div class="panel-heading">服务申请</div>
   			<div class="panel-body">
@@ -24,12 +30,12 @@
   			    <div id="request-content">
   			    	<table class="table table-bordered">
 					    <tbody class="">
-					    	<tr>
+					    	<tr class='thCenter'>
 					    		<!-- <th style="width:5%">申请Id</th> -->
 					    		<th style="width:15%">应用商</th>
 					    		<th style="width:15%">申请服务</th>
-					    		<th style="width:8%">调用总次数</th>
-					    		<th style="width:7%">合同图片</th>
+					    		<th style="width:13%">调用总次数</th>
+					    		<th style="width:12%">合同图片</th>
 					    		<th style="width:10%">创建人</th>
 					    		<th style="width:10%">状态</th>
 					    		<th style="width:10%">创建时间</th>
@@ -37,7 +43,7 @@
 					    	</tr>
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
 				         		<#list adminServiceApplys as adminServiceApply>
-					    	<tr>
+					    	<tr class='tdCenter'>
 					    		<!-- <td>${adminServiceApply.id}</td> -->
 					    		<td>${adminServiceApply.appBusinessName}</td>
 					    		<td><p class="newline">

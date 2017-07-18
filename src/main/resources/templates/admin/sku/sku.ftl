@@ -31,12 +31,12 @@
 	    	<table class="table table-bordered">
 			    <tbody class="">
 			    	<tr class='th_center'>
-			    		<th style="text-align:center;">名称</th> 
-			    		<th style="text-align:center;">类型</th>
-			    		<th style="text-align:center;">描述</th>
-			    		<th style="text-align:center;">是否显示</th>
-			    		<th style="text-align:center;">创建时间</th>
-			    		<th style="text-align:center;">操作</th>
+			    		<th style="width:20%">名称</th> 
+			    		<th style="width:20%"">类型</th>
+			    		<th style="width:15%"">描述</th>
+			    		<th style="width:15%"">是否显示</th>
+			    		<th style="width:15%"">创建时间</th>
+			    		<th style="width:15%"">操作</th>
 			    	</tr>
 			    	<#list GoodsSkus as GoodsSku>
 			    	<tr style="text-align:center;" class="tdstyle ${GoodsSku.id!}" skuid=${GoodsSku.id!} >

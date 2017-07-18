@@ -10,10 +10,10 @@
 	    	<table class="table table-bordered">
 		    	<tbody class="">
 		    		<tr style="background-color:#ddd;">
-			    		<th style="text-align:center;width:30%">名称</th>
-			    		<th style="text-align:center;width:30%">描述</th>
-			    		<th style="text-align:center;width:20%">创建时间</th>
-			    		<th style="text-align:center;width:30%">操作</th>
+			    		<th style="text-align:center;width:25%">名称</th>
+			    		<th style="text-align:center;width:25%">描述</th>
+			    		<th style="text-align:center;width:25%">创建时间</th>
+			    		<th style="text-align:center;width:25%">操作</th>
 		    		</tr>
 		    		<#list majorTypes as majorType>
 		    		<tr class="tableTr" majortypeid=${majorType.id} style="text-align:center">

@@ -10,20 +10,12 @@ user = (function(){
 			initPagination(currentPage, totalCount);
 		};
 	};
-	function edit(_this,skuId){
+	function edit(_this, userId){
 		$('#myModalLabel').text('修改信息');
 		var $tr = $(_this).parents('.tableTr');
-		var name=$tr.find('.name').text();
-		var description=$tr.find('.description').text();
-		var majorType = $tr.find('.type').text();
-		var skuOrNot = $tr.find('.showOrNot').attr("isshow");
-		
-		$('#sku_name').val(name);
-		$('#sku_description').val(description);
-		$("#sku_select").val(majorType);
-		$("#new-SKU-model").modal("show");	
-		$("#skuId").val(skuId);
-		$("#sku_or_not").val(skuOrNot);
+		var email = $tr.find('.email').text();
+		$("#email").val(email);
+		$("#new-user-model").modal("show");
 	}
 	
 	function initPagination(currentPage, totalCount) {
@@ -57,6 +49,9 @@ user = (function(){
 	function doPaginationClicked(pageNum) {
 		queryUser(pageNum);
 	};
+	function resetPwd(){
+		
+	};
 	function queryUser(pageNum){
 		var skuType = $("#skuType").val();
 		var page = 0;
@@ -65,7 +60,7 @@ user = (function(){
 		}
 		$.ajax({
 			 type: 'GET',
-			 url: marketing_url + '/admin/sku/search',
+			 url: marketing_url + '/admin/user/user',
 			 data:{
 				 pageNum:page,
 				 majorType:skuType
@@ -80,6 +75,8 @@ user = (function(){
 		});
 	};
 	return {
-		_init:init
+		_init:init,
+		edit:edit,
+		resetPwd:resetPwd
 	}
 })()

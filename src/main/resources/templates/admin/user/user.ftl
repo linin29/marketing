@@ -37,13 +37,13 @@
 			    		<th style="width:15%"">操作</th>
 			    	</tr>
 			    	<#list users as user>
-			    	<tr style="text-align:center;" class="tableTr" skuid=${user.id!} >
-			    		<td class='name'>${user.id!""}</td>
+			    	<tr style="text-align:center;" class="tableTr" userid=${user.id!} >
+			    		<td class='userid'>${user.id!""}</td>
 			    		<td class='name'>${user.userName!""}</td>
-			    		<td class='type' >${user.email!""}</td>
+			    		<td class='email' >${user.email!""}</td>
 			    		<td>
 			    			<button class="btn btn-success" >重置密码</button>
-			    			<button class="btn btn-danger deleteSkuModel">修改</button>
+			    			<button class="btn btn-success updateUserModel" onclick="user.edit(this, '${user.id}');">修改</button>
 			    		</td>
 			    	</tr>
 			    	</#list>
@@ -67,7 +67,7 @@
 	        	<div class="form-group">
                     <span class="control-label col-sm-3 text-right" >邮箱：</span>
                     <div class="col-sm-9 ">
-                        <input id="sku_name" style="margin-bottom: 24px" type="text" class="form-control" placeholder="请输入邮箱">
+                        <input id="email" style="margin-bottom: 24px" type="text" class="form-control" placeholder="请输入邮箱">
                     </div>
               	</div>
 	      	</div>

@@ -1,7 +1,7 @@
 <div class="panel panel-default clearBottom">
 	<div class="panel-heading">主类型配置</div>
 	<div class="panel-body">
-		<div id="request-header" class="row">
+		<div id="request-header" class="row" style='margin-left:-14px;'>
 			<div class="new-type">
 				 <input type="button" class=" btn btn-success new-server" id="new-type" value="新建类型" />
 			</div>

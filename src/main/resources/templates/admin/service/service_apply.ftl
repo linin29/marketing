@@ -7,7 +7,7 @@
 	<div class="panel-default clearBottom">
   			<div class="panel-heading">服务申请</div>
   			<div class="panel-body">
-    			<div id="request-header" class="row">
+    			<div id="request-header" class="row" style='margin-left:-14px;'>
 					<div class="col-sm-3">
   						<input id="appBusinessName" <#if appBusinessName??> value="${appBusinessName}"</#if> type="text" class="form-control" placeholder="请输入应用商名称">
 					</div>

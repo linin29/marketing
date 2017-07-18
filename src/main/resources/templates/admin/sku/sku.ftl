@@ -9,7 +9,7 @@
 <div class="panel panel-default clearBottom">
 	<div class="panel-heading">SKU配置</div>
 	<div class="panel-body">
-		<div id="request-header" class="row">
+		<div id="request-header" class="row" style='margin-left:-14px;'>
 			<div class="col-sm-3">
 				<select id="skuType" style="width:70%;height: 34px;">
 					<option value="">请选择类型</option>

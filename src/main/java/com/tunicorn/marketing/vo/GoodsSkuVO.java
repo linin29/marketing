@@ -12,6 +12,15 @@ public class GoodsSkuVO {
 	private String status;
 	private Boolean isShow;
 	private String majorType;
+	private MajorTypeVO majorTypeVO;
+
+	public MajorTypeVO getMajorTypeVO() {
+		return majorTypeVO;
+	}
+
+	public void setMajorTypeVO(MajorTypeVO majorTypeVO) {
+		this.majorTypeVO = majorTypeVO;
+	}
 
 	public String getMajorType() {
 		return majorType;

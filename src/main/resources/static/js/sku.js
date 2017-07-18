@@ -168,7 +168,7 @@ sku=(function(){
 			 url: marketing_url + '/admin/sku/search',
 			 data:{
 				 pageNum:page,
-				 skuType:skuType
+				 majorType:skuType
 			 },
 			 success: function(data) {
 			 	$("#content").html(data);

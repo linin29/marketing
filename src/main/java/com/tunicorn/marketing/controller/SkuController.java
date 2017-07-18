@@ -63,7 +63,8 @@ public class SkuController extends BaseController {
 			goodsSkuBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
 		}
 		if (StringUtils.isNotBlank(request.getParameter("majorType"))) {
-			goodsSkuBO.setMajorTypeId(Integer.parseInt(request.getParameter("majorType")));
+			goodsSkuBO.setMajorType(request.getParameter("majorType"));
+			model.addAttribute("initMajorType", request.getParameter("majorType"));
 		}
 		List<GoodsSkuVO> goodsSkuVOs = goodsSkuService.getGoodsSkuListByBO(goodsSkuBO);
 		int totalCount = goodsSkuService.getGoodsSkuCount(goodsSkuBO);

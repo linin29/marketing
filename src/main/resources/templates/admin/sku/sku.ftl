@@ -97,6 +97,7 @@
                     <span class="control-label col-sm-3 text-right" >是否显示：</span>
                     <div class="col-sm-9 " style="margin-bottom: 24px">
 	                   <select id="sku_or_not" style="width: 100%;height: 34px;">
+	                   	   <option value="">请选择</option>
 	                       <option value="true">是</option>
 	                       <option value="false">否</option>
 	                   </select>

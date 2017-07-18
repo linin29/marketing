@@ -4,13 +4,17 @@ sku=(function(){
 	function init(currentPage, totalCount){
 		$("#new-SKU").click(function(){
 			$("#skuId").val("");
-			var name=$('#sku_name').val("");
-			var skuSelect=$('#sku_select').attr("selected", "");
-			var skuDescription=$('#sku_description').val("");
-			var skuOrNot=$('#sku_or_not').attr("selected", "");
 			$('#myModalLabel').text('新建信息');
 			$("#new-SKU-model").modal("show");
 		});
+		
+		$("#new-SKU-model").on("hidden.bs.modal", function() {
+        	$('#sku_select').val("");
+        	$('#sku_name').val("");
+        	$('#sku_description').val("");
+        	$('#sku_or_not').val("");
+			$(this).removeData("bs.modal");
+        });
 		
 		$('#save').click(function(){
 			createType();

@@ -25,8 +25,8 @@ public class SendMailUtils {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setJavaMailProperties(properties);
 		mailSender.setHost("smtp.exmail.qq.com");
-		mailSender.setUsername("lining@tunicorn.cn");
-		mailSender.setPassword("Lining22");
+		mailSender.setUsername(from);
+		//mailSender.setPassword("");
 		mailSender.setPort(465);
 		mailSender.setDefaultEncoding(MarketingConstants.UTF8);
 		try {

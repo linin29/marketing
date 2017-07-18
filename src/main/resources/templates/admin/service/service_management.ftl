@@ -58,7 +58,7 @@
 					    			<button class="info btn btn-success" applyid="${adminServiceApply.id}">详情</button>
 					    			<#if adminServiceApply.applyStatus == 'created'>
 					    			<button id="approve_${adminServiceApply.id}" class="btn btn-success approve" applyid="${adminServiceApply.id}">审批</button>
-					    			<button id="delete_${adminServiceApply.id}" class="btn btn-success deleteService" applyid="${adminServiceApply.id}">删除</button>
+					    			<button id="delete_${adminServiceApply.id}" class="btn btn-danger deleteService" applyid="${adminServiceApply.id}">删除</button>
 					    			</#if>
 					    		</td>
 					    	</tr>

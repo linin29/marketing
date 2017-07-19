@@ -30,7 +30,7 @@
   			    <div id="request-content">
   			    	<table class="table table-bordered">
 					    <tbody class="">
-					    	<tr class='thCenter'>
+					    	<tr class='thCenter' style="background-color:#ddd;">
 					    		<!-- <th style="width:5%">申请Id</th> -->
 					    		<th style="width:15%">应用商</th>
 					    		<th style="width:15%">申请服务</th>
@@ -62,6 +62,8 @@
 					    			<button class="info btn btn-success" applyid="${adminServiceApply.id}">详情</button>
 					    			<#if adminServiceApply.applyStatus == 'created' || adminServiceApply.applyStatus == 'rejected'>
 					    			<button class="btn btn-success modify" applyid="${adminServiceApply.id}"><#if adminServiceApply.applyStatus == 'created'>变更<#else>更正</#if></button>
+					    			<#else>
+					    			<input type="button" class="btn" style="width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none">
 					    			</#if>
 					    		</td>
 					    	</tr>

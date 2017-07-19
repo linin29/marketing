@@ -37,7 +37,7 @@ import com.tunicorn.util.MessageUtils;
 @EnableAutoConfiguration
 public class AdminServiceController extends BaseController {
 
-	@Autowired
+	@Autowired 
 	private AdminServiceApplyService adminServiceApplyService;
 	@Autowired
 	private MajorTypeService majorTypeService;

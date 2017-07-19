@@ -7,7 +7,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+ 
 import com.tunicorn.marketing.bo.UserBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.mapper.PrivilegeMapper;

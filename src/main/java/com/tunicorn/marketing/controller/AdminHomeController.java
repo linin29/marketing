@@ -43,7 +43,7 @@ public class AdminHomeController extends BaseController {
 			} else if (subMenus != null && subMenus.size() > 0) {
 				indexUrl = subMenus.get(0).getUrl();
 			}
-		}
+		} 
 		model.addAttribute("indexUrl", indexUrl);
 		model.addAttribute("user", user);
 		model.addAttribute("menus", menuList);

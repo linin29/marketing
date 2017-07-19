@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 import com.tunicorn.marketing.utils.ConfigUtils;
 
-public class MarketingConstants {
+public class MarketingConstants { 
 
 	public static final String APP_KEY_HEADER_NAME = "App-Key";
 	public static final String APP_SECRET_HEADER_NAME = "App-Secret";

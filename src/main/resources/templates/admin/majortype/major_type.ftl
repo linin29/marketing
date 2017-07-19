@@ -5,7 +5,7 @@
 			<div class="new-type">
 				 <input type="button" class=" btn btn-success new-server" id="new-type" value="新建类型" />
 			</div>
-		</div>
+		</div> 
 	    <div id="type-content">
 	    	<table class="table table-bordered">
 		    	<tbody class="">

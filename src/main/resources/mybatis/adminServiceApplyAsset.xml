@@ -29,5 +29,5 @@
 	</select>  
 	<delete id="deleteAdminServiceApplyAssetByApplyId">
         delete from admin_service_apply_asset where service_apply_id = #{applyId}
-    </delete>
+    </delete> 
 </mapper>

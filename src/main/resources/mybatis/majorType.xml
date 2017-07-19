@@ -23,7 +23,7 @@
       <if test="lastUpdateTime != null" >
         last_update,
       </if>
-    </trim>
+    </trim> 
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},

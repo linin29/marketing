@@ -12,7 +12,7 @@ import com.tunicorn.marketing.vo.GoodsSkuVO;
 
 @Service
 public class GoodsSkuService {
-
+ 
 	@Autowired
 	private GoodsSkuMapper goodsSkuMapper;
 

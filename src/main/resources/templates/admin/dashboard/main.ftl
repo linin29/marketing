@@ -105,7 +105,7 @@
 				  <p style=""></p> -->
 			  </div>
 		  </span>
-		</a>
+		</a> 
 		<!- - Header Navbar - ->
 		<nav class="navbar navbar-static-top" role="navigation" style="background-color: #000; height: 50px;">
 			<a href="#" class="glyphicon glyphicon-align-justify" data-toggle="offcanvas" role="button" style="padding:0px 15px;color:#fff;line-height: 50px;margin-top: -1px;">

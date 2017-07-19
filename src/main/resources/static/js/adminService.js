@@ -4,7 +4,7 @@ adminService = (function(){
 	function serviceApplyInit(currentPage, totalCount){
 		if(totalCount != "0"){
 			initPagination(currentPage, totalCount, '/admin/service/apply/search');
-		}
+		} 
 		$("#query").click(function(){
 			queryService('/admin/service/apply/search');
 		});

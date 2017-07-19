@@ -5,7 +5,7 @@ import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 
 import com.tunicorn.marketing.constant.MarketingConstants;
-
+ 
 public class AdminServiceApplyAssetVO {
 	private long id;
 	private long serviceApplyId;

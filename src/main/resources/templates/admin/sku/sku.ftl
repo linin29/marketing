@@ -18,7 +18,7 @@
 			     		 <option value='${majorType.name}' <#if initMajorType??&&  majorType.name=='${initMajorType}'> selected </#if>>${majorType.description}</option>
 			    		</#list>
 		   			</#if>
-				</select>
+				</select> 
 			</div>
 			<div class="col-sm-3">
 				<input type="button" class=" btn btn-success" id="search" value="搜索" style="width:100px;" />

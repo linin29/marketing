@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tunicorn.marketing.constant.MarketingConstants;
-
+ 
 public class AdminServiceApplyVO {
 	private long id;
 	private int userId;

@@ -30,7 +30,7 @@
         last_update,
       </if>
       <if test="order != null" >
-        `order`,
+        `order`, 
       </if>
       <if test="isShow != null" >
         is_show,

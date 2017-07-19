@@ -9,6 +9,6 @@ public interface AdminMajorTypeServiceApplyMappingMapper {
 	public void batchInsertMajorTypeApplicationMapping(List<AdminMajorTypeServiceApplyMappingVO> applyMappingVOs);
 
 	public void batchDeleteMajorTypeApplicationMapping(List<AdminMajorTypeServiceApplyMappingVO> applyMappingVOs);
-	
+	 
 	public void deleteMajorTypeApplicationMappingByApplyId(long applyId);
 }

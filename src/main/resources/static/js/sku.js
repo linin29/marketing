@@ -6,7 +6,7 @@ sku=(function(){
 			$("#skuId").val("");
 			$('#myModalLabel').text('新建信息');
 			$("#new-SKU-model").modal("show");
-		});
+		}); 
 		
 		$("#new-SKU-model").on("hidden.bs.modal", function() {
         	$('#sku_select').val("");

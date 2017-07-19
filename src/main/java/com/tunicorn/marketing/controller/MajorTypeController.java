@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tunicorn.common.api.Message;
+import com.tunicorn.common.api.Message; 
 import com.tunicorn.common.entity.AjaxResponse;
 import com.tunicorn.marketing.bo.MajorTypeBO;
 import com.tunicorn.marketing.constant.MarketingConstants;

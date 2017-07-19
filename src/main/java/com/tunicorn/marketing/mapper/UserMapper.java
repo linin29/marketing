@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Update;
 
 import com.tunicorn.marketing.bo.UserBO;
 import com.tunicorn.marketing.vo.UserVO;
-
+  
 public interface UserMapper {
 
 	@Results({ @Result(property = "userName", column = "username"),

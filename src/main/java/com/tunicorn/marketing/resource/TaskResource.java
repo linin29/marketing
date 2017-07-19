@@ -44,7 +44,7 @@ import com.tunicorn.util.MessageUtils;
 @Validated
 public class TaskResource extends BaseResource {
 	private static Logger logger = Logger.getLogger(TaskResource.class);
-
+ 
 	@Autowired
 	private TaskService taskService;
 	@Autowired

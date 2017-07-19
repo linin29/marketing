@@ -25,5 +25,5 @@
     <delete id="deleteMajorTypeApplicationMappingByApplyId">
         delete from admin_major_type_service_apply_mapping where service_apply_id = #{applyId}
     </delete>
-</mapper>
+</mapper> 
 

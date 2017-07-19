@@ -11,5 +11,4 @@ public class UserBO extends PaginationBO {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
 }

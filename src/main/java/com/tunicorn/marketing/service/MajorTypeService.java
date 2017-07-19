@@ -13,7 +13,7 @@ import com.tunicorn.marketing.vo.MajorTypeVO;
 
 @Service
 public class MajorTypeService {
-
+ 
 	@Autowired
 	private MajorTypeMapper majorTypeMapper;
 

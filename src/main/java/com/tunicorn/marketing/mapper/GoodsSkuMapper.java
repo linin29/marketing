@@ -29,7 +29,7 @@ public interface GoodsSkuMapper {
 
 	@Select("select count(*) from goods_sku where `name`=#{name} and major_type = #{majorType} and status='active'")
 	public int getGoodsSkuCountByNameAndMajorType(@Param("name") String name, @Param("majorType") String majorType);
-
+ 
 	@Results({ @Result(property = "majorType", column = "major_type"),
 			@Result(property = "createTime", column = "create_time"),
 			@Result(property = "isShow", column = "is_show") })

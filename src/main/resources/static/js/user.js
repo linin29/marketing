@@ -5,7 +5,7 @@ user = (function(){
 		
 		$('#search').click(function(){
 			querySku(0);
-		});
+		}); 
 		if(totalCount != "0"){
 			initPagination(currentPage, totalCount);
 		};

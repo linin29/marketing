@@ -26,7 +26,7 @@
         	<result column="creatorName" property="name" jdbcType="VARCHAR"/>
         </collection>
 	</resultMap>
-
+ 
    <insert id="createAdminServiceApply" parameterType="com.tunicorn.marketing.vo.AdminServiceApplyVO" useGeneratedKeys="true"  keyProperty="id">
     insert into admin_service_apply
     <trim prefix="(" suffix=")" suffixOverrides="," >

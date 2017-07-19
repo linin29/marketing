@@ -4,7 +4,7 @@ majorType=(function(){
 	function init(currentPage, totalCount){
 		if(totalCount != "0"){
 			initPagination(currentPage, totalCount);
-		}
+		} 
 		$("#new-type").click(function(){
 			$("#majorTypeId").val("");
 			$("#new-type-model").modal("show");

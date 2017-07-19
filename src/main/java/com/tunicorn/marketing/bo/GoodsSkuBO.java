@@ -1,7 +1,7 @@
 package com.tunicorn.marketing.bo;
 
 public class GoodsSkuBO extends PaginationBO {
-	private String name;
+	private String name; 
 	private long majorTypeId;
 	private int order;
 	private Boolean isShow;

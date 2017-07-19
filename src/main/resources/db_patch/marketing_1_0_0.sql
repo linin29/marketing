@@ -277,7 +277,7 @@ BEGIN
 		PRIMARY KEY (`id`),
 		KEY `idx_major_type` (`major_type`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-	
+	 
 	CREATE TABLE IF NOT EXISTS `admin_user` (
 		`id` INT(11) NOT NULL AUTO_INCREMENT,
 		`username` varchar(128) NOT NULL unique,

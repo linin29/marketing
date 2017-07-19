@@ -9,7 +9,7 @@ public class AdminMajorTypeServiceApplyMappingVO {
 	private Date createTime;
 	private Date lastUpdate;
 	private String status;
-
+ 
 	public long getId() {
 		return id;
 	}

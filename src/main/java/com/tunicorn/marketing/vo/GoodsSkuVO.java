@@ -13,7 +13,7 @@ public class GoodsSkuVO {
 	private Boolean isShow;
 	private String majorType;
 	private MajorTypeVO majorTypeVO;
-
+ 
 	public MajorTypeVO getMajorTypeVO() {
 		return majorTypeVO;
 	}

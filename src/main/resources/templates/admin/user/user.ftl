@@ -19,7 +19,7 @@
 			    		</#list>
 		   			</#if>
 				</select>
-			</div>
+			</div> 
 			<div class="col-sm-3">
 				<input type="button" class=" btn btn-success" id="search" value="搜索" style="width:100px;" />
 			</div>

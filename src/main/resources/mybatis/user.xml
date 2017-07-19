@@ -19,7 +19,7 @@
       </if>
       <if test="userName != null" >
         username,
-      </if>
+      </if> 
       <if test="name != null" >
         name,
       </if>

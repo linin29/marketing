@@ -25,7 +25,7 @@ import com.tunicorn.marketing.service.UserService;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.MessageUtils;
 
-@Controller
+@Controller 
 @EnableAutoConfiguration
 public class UserController extends BaseController {
 	private static Logger logger = Logger.getLogger(UserController.class);

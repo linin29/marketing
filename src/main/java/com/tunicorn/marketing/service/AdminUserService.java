@@ -82,7 +82,7 @@ public class AdminUserService {
 	public Boolean deleteUser(String userId) {
 		return adminUserMapper.deleteUser(userId);
 	}
-	
+	 
 	public List<UserVO> getAdminUserList(){
 		return adminUserMapper.getAdminUserList();
 	}

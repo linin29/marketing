@@ -18,7 +18,7 @@
   							<option value="opened" <#if applyStatus?? && applyStatus=='opened'>selected</#if>>已开通</option>
   							<option value="rejected" <#if applyStatus?? && applyStatus=='rejected'>selected</#if>>已驳回</option>
   						</select>
-					</div>
+					</div> 
 					<div class="col-sm-3">
   						<input id="query" type="button" class=" btn btn-success" value="搜索" style="width:100px;" />
 					</div>

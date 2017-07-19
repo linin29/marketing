@@ -30,7 +30,7 @@
   			    <div id="request-content">
   			    	<table class="table table-bordered">
 					    <tbody class="">
-					    	<tr class='thCenter'>
+					    	<tr class='thCenter' style="background-color:#ddd;">
 					    		<!-- <th style="width:5%">申请Id</th> -->
 					    		<th style="width:15%">应用商</th>
 					    		<th style="width:15%">申请服务</th>

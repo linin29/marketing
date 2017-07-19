@@ -6,7 +6,7 @@
 		background-color:#ddd;
 	}
 </style>
-<div class="panel panel-default clearBottom">
+<div class="panel-default clearBottom">
 	<div class="panel-heading">用户管理</div>
 	<div class="panel-body">
 	<!-- 	<div id="request-header" class="row">

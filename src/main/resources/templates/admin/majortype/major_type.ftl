@@ -1,4 +1,4 @@
-<div class="panel panel-default clearBottom">
+<div class="panel-default clearBottom">
 	<div class="panel-heading">主类型配置</div>
 	<div class="panel-body">
 		<div id="request-header" class="row" style='margin-left:-14px;'>

@@ -76,7 +76,7 @@
     	</if>
     </select>
     <select id="getApiCallingSum" resultType="int" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
-    	select sum(calling_times)
+    	select IFNULL(sum(calling_times), 0)
     	from api_calling_count 
     	where `status` = 'active'
     	<if test="apiMethod != null and apiMethod != ''">

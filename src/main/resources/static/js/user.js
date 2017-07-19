@@ -83,11 +83,11 @@ user = (function(){
 	function updateUser(){
 		var userId=$('#userId').val();
 		var email=$('#email').val();
-		if (email == "") {
-			$('#errorMsg').text("请输入邮箱");
-			return;
-		};
-
+		var regex = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
+		if(!email || !regex.test(email)){
+			noty({text: "Email格式不正确!", layout: "topCenter", type: "warning", timeout: 2000});
+			return false;
+		}
 		var url = marketing_url + '/admin/user/' + userId + '/update';
 		var data={'email':email};		
 		$.ajax({

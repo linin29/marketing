@@ -33,4 +33,6 @@ public interface UserMapper {
 	public List<UserVO> getUserListByBO(UserBO userBO);
 
 	public int getUserCount(UserBO userBO);
+	
+	public int updateUser(UserVO userVO);
 }

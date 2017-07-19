@@ -9,12 +9,40 @@ user = (function(){
 		if(totalCount != "0"){
 			initPagination(currentPage, totalCount);
 		};
+		$(".resetPwdModel").click(function(){
+			$("#resetPwdModal").attr('userid', $(this).attr("userid"));
+			$("#resetPwdModal").modal("show");
+		});
+		$("#user_resetPwd").click(function(){
+			var userId = $("#resetPwdModal").attr('userid');
+			 $.ajax({
+					type: 'POST',
+					url: marketing_url + '/admin/user/' + userId + '/resetPwd',
+					dataType: 'json', 
+					success: function(data) {
+						if (!data.success) {
+							noty({text: data.errorMessage, layout: 'topCenter', type: 'error', timeout: 2000});
+							return;
+						}else{
+							noty({text: "重置密码成功", layout: 'topCenter', type: 'success', timeout: 2000});
+							$("#resetPwdModal").modal('hide');
+						} 
+		        	},
+		        	error: function(data) {
+		        		noty({text: '重置密码失败', layout: 'topCenter', type: 'error', timeout: 2000});
+		        	}
+				});
+		});
+        $("#save").click(function(){
+        	updateUser();
+        });
 	};
 	function edit(_this, userId){
 		$('#myModalLabel').text('修改信息');
 		var $tr = $(_this).parents('.tableTr');
 		var email = $tr.find('.email').text();
 		$("#email").val(email);
+		$("#userId").val(userId);
 		$("#new-user-model").modal("show");
 	}
 	
@@ -52,6 +80,48 @@ user = (function(){
 	function resetPwd(){
 		
 	};
+	function updateUser(){
+		var userId=$('#userId').val();
+		var email=$('#email').val();
+		if (email == "") {
+			$('#errorMsg').text("请输入邮箱");
+			return;
+		};
+
+		var url = marketing_url + '/admin/user/' + userId + '/update';
+		var data={'email':email};		
+		$.ajax({
+			 type: 'POST',
+			 url:url,
+			 contentType : 'application/json',
+			 data: JSON.stringify(data),
+			 dataType: 'json', 
+			 success: function(data) {
+			 	if (data.success) {
+			 		noty({text: '保存成功', layout: 'topCenter', type: 'warning', timeout: 2000});
+			 		$('#new-user-model').modal('hide');
+			 		setTimeout(function(){
+			 			$.ajax({
+							 type: 'GET',
+							 url:'/marketing/admin/user',
+							 success: function(data) {
+							 	$("#content").html(data);
+				        	},
+				        	error: function(data) {
+				        		//返回500错误页面
+				        		$("html").html(data.responseText);
+				        	}
+						});
+			 		},500)		 		
+			 	}else{
+			 		noty({text: data.errorMessage, layout: 'topCenter', type: 'warning', timeout: 2000});
+			 	} 
+			 },
+			 error: function(data) {
+				 noty({text: '保存失败', layout: 'topCenter', type: 'warning', timeout: 2000});
+			 }
+		});
+	};
 	function queryUser(pageNum){
 		var skuType = $("#skuType").val();
 		var page = 0;
@@ -60,10 +130,9 @@ user = (function(){
 		}
 		$.ajax({
 			 type: 'GET',
-			 url: marketing_url + '/admin/user/user',
+			 url: marketing_url + '/admin/user',
 			 data:{
-				 pageNum:page,
-				 majorType:skuType
+				 pageNum:page
 			 },
 			 success: function(data) {
 			 	$("#content").html(data);

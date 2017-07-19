@@ -56,6 +56,21 @@
       </if>
     </trim>
   </insert>
+  <update id="updateUser"  parameterType="com.tunicorn.marketing.vo.UserVO">
+	  UPDATE user
+	  <trim prefix="set" suffixOverrides=",">
+			<if test="name != null and name !=''">
+			    name=#{name},
+			</if>
+			<if test="email != null and email !=''">
+			    email=#{email},
+			</if>
+			<if test="status != null and status !=''">
+			    status=#{status},
+			</if>
+	 </trim>
+		 WHERE id=#{id}
+   </update>
   <select id="getUserListByBO" resultMap="UserMap" parameterType="com.tunicorn.marketing.bo.UserBO">
 		select id, `name`, username, email, `status`, create_time
 		from user

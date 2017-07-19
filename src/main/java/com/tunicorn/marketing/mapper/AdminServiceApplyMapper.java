@@ -20,5 +20,5 @@ public interface AdminServiceApplyMapper {
 
 	public int updateMajorTypeApplicationMapping(MajorTypeApplicationMappingVO applicationMappingVO);
 
-	public AdminServiceApplyVO getAdminServiceApplyById(@Param("id") int id);
+	public AdminServiceApplyVO getAdminServiceApplyById(@Param("id") long id);
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tunicorn.marketing.bo.MajorTypeBO;
 import com.tunicorn.marketing.mapper.MajorTypeMapper;
@@ -16,10 +17,12 @@ public class MajorTypeService {
 	@Autowired
 	private MajorTypeMapper majorTypeMapper;
 
+	@Transactional
 	public int createMajorType(MajorTypeVO majorTypeVO) {
 		return majorTypeMapper.createMajorType(majorTypeVO);
 	}
 
+	@Transactional
 	public int updateMajorType(MajorTypeVO majorTypeVO) {
 		return majorTypeMapper.updateMajorType(majorTypeVO);
 	}
@@ -36,7 +39,15 @@ public class MajorTypeService {
 		return majorTypeMapper.getMajorTypeListForApi();
 	}
 	
-	public int getMajorTypeByName(String name){
-		return majorTypeMapper.getMajorTypeByName(name);
+	public int getMajorTypeCountByName(String name){
+		return majorTypeMapper.getMajorTypeCountByName(name);
+	}
+	
+	public MajorTypeVO getMajorTypeById(long majorTypeId){
+		return majorTypeMapper.getMajorTypeById(majorTypeId);
+	}
+	
+	public List<MajorTypeVO> getMajorTypeList(){
+		return majorTypeMapper.getMajorTypeList();
 	}
 }

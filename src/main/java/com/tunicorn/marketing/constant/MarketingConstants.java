@@ -1,5 +1,7 @@
 package com.tunicorn.marketing.constant;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.tunicorn.marketing.utils.ConfigUtils;
@@ -58,5 +60,15 @@ public class MarketingConstants {
 
 	public static final String TASK_ID = "taskId";
 	public static final String MAJOR_TYPE = "major_type";
+	public static Map<String, String> SERVICE_STATUS_NAME_MAPPING = new HashMap<String, String>();
+	static {
+		SERVICE_STATUS_NAME_MAPPING.put("created", "已创建");
+		SERVICE_STATUS_NAME_MAPPING.put("opened", "已开通");
+		SERVICE_STATUS_NAME_MAPPING.put("rejected", "已驳回");
+	}
 	
+	public static final String MARKETING_IMAGE_BASE_PATH = com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath") 
+			+ ConfigUtils.getInstance().getConfigValue("marketing.image.root.path");
+	public static final String TIANNUO_PASSWORD = "tiannuo";
+	public static final String UTF8 = "UTF-8";
 }

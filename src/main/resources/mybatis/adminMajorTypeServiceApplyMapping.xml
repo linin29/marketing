@@ -6,7 +6,7 @@
 		<result column="major_type_id" property="majorTypeId" jdbcType="INTEGER" />
 		<result column="service_apply_id" property="serviceApplyId" jdbcType="INTEGER" />
 		<result column="create_time" property="createTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
-		<result column="last_update" property="lastUpdateTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="last_update" property="lastUpdate" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
 	</resultMap>
     <insert id="batchInsertMajorTypeApplicationMapping" useGeneratedKeys="true" parameterType="java.util.List">  
@@ -21,6 +21,9 @@
         <foreach item="item" collection="list" open="(" separator="," close=")">
             #{item.id}
         </foreach>
+    </delete>
+    <delete id="deleteMajorTypeApplicationMappingByApplyId">
+        delete from admin_major_type_service_apply_mapping where service_apply_id = #{applyId}
     </delete>
 </mapper>
 

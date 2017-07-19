@@ -34,7 +34,17 @@ public class AdminHomeController extends BaseController {
 		UserVO user = getCurrentUser(request);
 		List<PrivilegeVO> privilegeList = adminUserService.getMenuPrivileges(user.getId());
 		List<Menu> menuList = generateMenuList(privilegeList);
-		
+		String indexUrl = "";
+		if (menuList != null && menuList.size() > 0) {
+			Menu menu = menuList.get(0);
+			List<Menu> subMenus = menu.getSubMenus();
+			if (StringUtils.isNotBlank(menu.getUrl())) {
+				indexUrl = menu.getUrl();
+			} else if (subMenus != null && subMenus.size() > 0) {
+				indexUrl = subMenus.get(0).getUrl();
+			}
+		}
+		model.addAttribute("indexUrl", indexUrl);
 		model.addAttribute("user", user);
 		model.addAttribute("menus", menuList);
 		return "admin/dashboard/main";
@@ -72,22 +82,5 @@ public class AdminHomeController extends BaseController {
 		}
 
 		return result;
-	}
-	
-	private String getIndexUrl(List<Menu> menus){
-		String indexUrl = "";
-		if (menus != null && menus.size() > 0) {
-			Menu menu = menus.get(0);
-			List<Menu> subMenus = menu.getSubMenus();
-			if (StringUtils.isNotBlank(menu.getUrl())) {
-				indexUrl = menu.getUrl();
-			} else if (subMenus != null && subMenus.size() > 0) {
-				indexUrl = subMenus.get(0).getUrl();
-			}
-		}
-		if(StringUtils.isBlank(indexUrl)){
-			indexUrl = "/dashboard/init";
-		}
-		return indexUrl;
 	}
 }

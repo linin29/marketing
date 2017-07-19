@@ -8,7 +8,7 @@
 		<result column="description" property="description" jdbcType="VARCHAR" />
 		<result column="order" property="order" jdbcType="INTEGER" />
 		<result column="is_show" property="isShow" jdbcType="INTEGER" />
-		<result column="create_time" property="createTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
 		<result column="last_update" property="lastUpdateTime"  javaType="java.sql.Date" jdbcType="TIMESTAMP" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
 	 </resultMap>
@@ -30,7 +30,7 @@
         last_update,
       </if>
       <if test="order != null" >
-        order,
+        `order`,
       </if>
       <if test="isShow != null" >
         is_show,
@@ -65,16 +65,16 @@
 			<if test="name != null and name !=''">
 			    name=#{name},
 			</if>
-			<if test="majorType != null majorType !=''">
+			<if test="majorType != null and majorType !=''">
 			    major_type=#{majorType},
 			</if>
-			<if test="description != null description !=''">
+			<if test="description != null and description !=''">
 			    description=#{description},
 			</if>
-			<if test="order != null order !=''">
-			    order=#{order},
+			<if test="order != null and order !=''">
+			    `order`=#{order},
 			</if>
-			<if test="isShow != null isShow !=''">
+			<if test="isShow != null">
 			    is_show=#{isShow},
 			</if>
 			<if test="status != null and status !=''">
@@ -84,16 +84,16 @@
 		 WHERE id=#{id}
    </update>
    	<select id="getGoodsSkuListByBO" resultMap="GoodsSkuMap" parameterType="com.tunicorn.marketing.bo.GoodsSkuBO">
-		select id, `name`, description, major_type, order, is_show, create_time, last_update, status
+		select id, `name`, description, major_type, `order`, is_show, create_time, last_update, status
 		from goods_sku
 		where `status` = 'active'
 		<if test="order != null and order != ''">
-			and order = #{order}
+			and `order` = #{order}
 		</if>
 		<if test="majorType != null and majorType != ''">
 			and major_type = #{majorType}
 		</if>
-		<if test="isShow != null and isShow != ''">
+		<if test="isShow != null">
 			and is_show = #{isShow}
 		</if>
 		<if test="name != null and name != ''">
@@ -107,12 +107,12 @@
 		from goods_sku
 		where `status` = 'active'
 		<if test="order != null and order != ''">
-			and order = #{order}
+			and `order` = #{order}
 		</if>
 		<if test="majorType != null and majorType != ''">
 			and major_type = #{majorType}
 		</if>
-		<if test="isShow != null and isShow != ''">
+		<if test="isShow != null">
 			and is_show = #{isShow}
 		</if>
 		<if test="name != null and name != ''">

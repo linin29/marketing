@@ -86,7 +86,7 @@
 			if(firstMenu){
 				$(firstMenu).css("color","white");
 			}
-		     var listurl = "${springMacroRequestContext.contextPath}/admin/service/apply";
+		     var listurl = "${springMacroRequestContext.contextPath}/${indexUrl}";
 	         tunicorn.utils.get(listurl,function(data){
 	        	 $("#content").html(data);
 	         });
@@ -182,7 +182,7 @@
 		</section>
 	  </aside>
 	  <section class="content-wrapper" >
-	   	<div id="content" style="margin-left: -11px;padding-top: 1px;margin-bottom: -20px;">
+	   	<div id="content" style="margin-left: -11px;padding-top: 1px;">
 	   	</div>		
 	</section>
 	</div>

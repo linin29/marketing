@@ -6,13 +6,21 @@ public class GoodsSkuVO {
 	private long id;
 	private String name;
 	private String description;
-	private long majorTypeId;
 	private int order;
 	private Date createTime;
 	private Date lastUpdateTime;
 	private String status;
 	private Boolean isShow;
 	private String majorType;
+	private MajorTypeVO majorTypeVO;
+
+	public MajorTypeVO getMajorTypeVO() {
+		return majorTypeVO;
+	}
+
+	public void setMajorTypeVO(MajorTypeVO majorTypeVO) {
+		this.majorTypeVO = majorTypeVO;
+	}
 
 	public String getMajorType() {
 		return majorType;
@@ -52,14 +60,6 @@ public class GoodsSkuVO {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public long getMajorTypeId() {
-		return majorTypeId;
-	}
-
-	public void setMajorTypeId(long majorTypeId) {
-		this.majorTypeId = majorTypeId;
 	}
 
 	public int getOrder() {

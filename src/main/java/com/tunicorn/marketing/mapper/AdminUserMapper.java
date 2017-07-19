@@ -1,5 +1,7 @@
 package com.tunicorn.marketing.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -24,4 +26,6 @@ public interface AdminUserMapper {
 
 	@Update("update admin_user set status='deleted' where id=#{userId}")
 	public Boolean deleteUser(@Param("userId") String userId);
+	
+	public List<UserVO> getAdminUserList();
 }

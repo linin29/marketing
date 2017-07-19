@@ -5,7 +5,7 @@ import java.util.Date;
 public class AdminMajorTypeServiceApplyMappingVO {
 	private long id;
 	private long serviceApplyId;
-	private int appId;
+	private long majorTypeId;
 	private Date createTime;
 	private Date lastUpdate;
 	private String status;
@@ -26,12 +26,12 @@ public class AdminMajorTypeServiceApplyMappingVO {
 		this.serviceApplyId = serviceApplyId;
 	}
 
-	public int getAppId() {
-		return appId;
+	public long getMajorTypeId() {
+		return majorTypeId;
 	}
 
-	public void setAppId(int appId) {
-		this.appId = appId;
+	public void setMajorTypeId(long majorTypeId) {
+		this.majorTypeId = majorTypeId;
 	}
 
 	public Date getCreateTime() {

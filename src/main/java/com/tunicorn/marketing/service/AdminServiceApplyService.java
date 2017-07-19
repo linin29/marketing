@@ -32,10 +32,10 @@ public class AdminServiceApplyService {
 
 	@Autowired
 	private AdminServiceApplyAssetMapper adminServiceApplyAssetMapper;
-	
+
 	@Autowired
 	private AdminMajorTypeServiceApplyMappingMapper adminMajorTypeServiceApplyMappingMapper;
-	
+
 	@Autowired
 	MajorTypeMapper majorTypeMapper;
 
@@ -45,14 +45,13 @@ public class AdminServiceApplyService {
 		addApplyAsset(adminServiceApplyVO.getId(), images);
 		this.createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);
 		StringBuffer text = new StringBuffer();
-		text.append("<h3>应用商：").append(adminServiceApplyVO.getAppBusinessName()).append("</h3>")
-		.append("<p>申请服务：");
+		text.append("<h3>应用商：").append(adminServiceApplyVO.getAppBusinessName()).append("</h3>").append("<p>申请服务：");
 		List<MajorTypeVO> majorTypeVOs = adminServiceApplyVO.getMajorTypes();
 		if (majorTypeVOs != null && majorTypeVOs.size() > 0) {
 			for (MajorTypeVO majorTypeVO : majorTypeVOs) {
 				MajorTypeVO tempMajorTypeVO = majorTypeMapper.getMajorTypeById(majorTypeVO.getId());
-				if(tempMajorTypeVO!=null){
-					text.append(tempMajorTypeVO.getName()).append(",");	
+				if (tempMajorTypeVO != null) {
+					text.append(tempMajorTypeVO.getName()).append(",");
 				}
 			}
 			text.deleteCharAt(text.length() - 1);
@@ -69,7 +68,7 @@ public class AdminServiceApplyService {
 		this.createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);
 		return result;
 	}
-	
+
 	@Transactional
 	public int approveAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO) {
 		int result = adminServiceApplyMapper.updateAdminServiceApply(adminServiceApplyVO);
@@ -91,12 +90,12 @@ public class AdminServiceApplyService {
 	public AdminServiceApplyVO getAdminServiceApplyById(long id) {
 		return adminServiceApplyMapper.getAdminServiceApplyById(id);
 	}
-	
+
 	public List<AdminServiceApplyAssetVO> getAdminServiceApplyAssetList(
-			AdminServiceApplyAssetVO adminServiceApplyAssetVO){
+			AdminServiceApplyAssetVO adminServiceApplyAssetVO) {
 		return adminServiceApplyAssetMapper.getAdminServiceApplyAssetList(adminServiceApplyAssetVO);
 	}
-	
+
 	@Transactional
 	public int deleteAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO) {
 		adminServiceApplyVO.setStatus(MarketingConstants.STATUS_DELETED);
@@ -105,8 +104,8 @@ public class AdminServiceApplyService {
 		adminServiceApplyAssetMapper.deleteAdminServiceApplyAssetByApplyId(adminServiceApplyVO.getId());
 		return result;
 	}
-	
-	public void deleteAdminServiceApplyAsset(long applyAssetId){
+
+	public void deleteAdminServiceApplyAsset(long applyAssetId) {
 		adminServiceApplyAssetMapper.deleteAdminServiceApplyAsset(applyAssetId);
 	}
 
@@ -128,25 +127,6 @@ public class AdminServiceApplyService {
 		}
 	}
 
-	private void updateApplyAsset(long applyId, List<MultipartFile> images) {
-		List<AdminServiceApplyAssetVO> assets = new ArrayList<AdminServiceApplyAssetVO>();
-		adminServiceApplyAssetMapper.deleteAdminServiceApplyAssetByApplyId(applyId);
-		if (images != null && images.size() > 0) {
-			for (MultipartFile image : images) {
-				AdminServiceApplyAssetVO asset = new AdminServiceApplyAssetVO();
-				UploadFile file = MarketingStorageUtils.getUploadFile(image, String.valueOf(applyId),
-						ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
-				asset.setServiceApplyId(applyId);
-				asset.setFilePath(file.getPath());
-				asset.setFileExt(file.getExtension());
-				asset.setDisplayName(file.getName());
-				asset.setFileSize(file.getSize());
-				assets.add(asset);
-			}
-			adminServiceApplyAssetMapper.batchInsertServiceApplyAsset(assets);
-		}
-	}
-	
 	private void createAdminMajorTypeServiceApplyMapping(AdminServiceApplyVO adminServiceApplyVO) {
 		List<AdminMajorTypeServiceApplyMappingVO> applyMappings = new ArrayList<AdminMajorTypeServiceApplyMappingVO>();
 		long serviceApplyId = adminServiceApplyVO.getId();

@@ -6,7 +6,7 @@
 		background-color:#ddd;
 	}
 </style>
-<div class="panel panel-default clearBottom">
+<div class="panel-default clearBottom">
 	<div class="panel-heading">用户管理</div>
 	<div class="panel-body">
 	<!-- 	<div id="request-header" class="row">
@@ -42,7 +42,7 @@
 			    		<td class='name'>${user.userName!""}</td>
 			    		<td class='email' >${user.email!""}</td>
 			    		<td>
-			    			<button class="btn btn-success" >重置密码</button>
+			    			<button class="btn btn-success resetPwdModel" userid=${user.id}>重置密码</button>
 			    			<button class="btn btn-success updateUserModel" onclick="user.edit(this, '${user.id}');">修改</button>
 			    		</td>
 			    	</tr>
@@ -58,6 +58,7 @@
 <div class="modal fade" id="new-user-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   	<div class="modal-dialog" role="document">
 	    <div class="modal-content">
+	    <input id="userId" type="hidden" >
 	      	<div class="modal-header">
 	        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        	<h4 class="modal-title" id="myModalLabel"></h4>
@@ -81,6 +82,23 @@
 	      	</div>
 	    </div>
   	</div>
+</div>
+<div class="modal fade" id="resetPwdModal" tabindex="-1" role="dialog" aria-labelledby="resetPwdModalLabel">
+	<div class="modal-dialog" role="document">
+	     <div class="modal-content">
+	         <div class="modal-header">
+	             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	             <h4 class="modal-title" id="deleteAreaModalLabel">重置密码</h4>
+	         </div>
+	         <div class="modal-body">
+	            <p>确认重置密码吗？<b>(密码将被重置为tiannuo！)</b></p>  
+	        </div>
+	        <div class="modal-footer" style="border-top-color: #ffffff">
+	             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+	             <button type="button" class="btn btn-success" id="user_resetPwd">确定</button>
+	        </div>
+	   </div>
+	</div>
 </div>
 <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/user.js"></script>
 <script type="text/javascript">

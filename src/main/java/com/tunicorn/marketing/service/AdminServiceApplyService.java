@@ -14,8 +14,10 @@ import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.mapper.AdminMajorTypeServiceApplyMappingMapper;
 import com.tunicorn.marketing.mapper.AdminServiceApplyAssetMapper;
 import com.tunicorn.marketing.mapper.AdminServiceApplyMapper;
+import com.tunicorn.marketing.mapper.MajorTypeMapper;
 import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.utils.MarketingStorageUtils;
+import com.tunicorn.marketing.utils.SendMailUtils;
 import com.tunicorn.marketing.vo.AdminMajorTypeServiceApplyMappingVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyAssetVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyVO;
@@ -33,12 +35,30 @@ public class AdminServiceApplyService {
 	
 	@Autowired
 	private AdminMajorTypeServiceApplyMappingMapper adminMajorTypeServiceApplyMappingMapper;
+	
+	@Autowired
+	MajorTypeMapper majorTypeMapper;
 
 	@Transactional
 	public int createAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO, List<MultipartFile> images) {
 		int result = adminServiceApplyMapper.createAdminServiceApply(adminServiceApplyVO);
 		addApplyAsset(adminServiceApplyVO.getId(), images);
 		this.createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);
+		StringBuffer text = new StringBuffer();
+		text.append("<h3>应用商：").append(adminServiceApplyVO.getAppBusinessName()).append("</h3>")
+		.append("<p>申请服务：");
+		List<MajorTypeVO> majorTypeVOs = adminServiceApplyVO.getMajorTypes();
+		if (majorTypeVOs != null && majorTypeVOs.size() > 0) {
+			for (MajorTypeVO majorTypeVO : majorTypeVOs) {
+				MajorTypeVO tempMajorTypeVO = majorTypeMapper.getMajorTypeById(majorTypeVO.getId());
+				if(tempMajorTypeVO!=null){
+					text.append(tempMajorTypeVO.getName()).append(",");	
+				}
+			}
+			text.deleteCharAt(text.length() - 1);
+		}
+		text.append("</p>").append("<p>调用次数：").append(adminServiceApplyVO.getMaxCallNumber()).append("</p>");
+		SendMailUtils.sendTextWithHtml("服务申请", text.toString());
 		return result;
 	}
 

@@ -113,19 +113,25 @@
 		select asa.id,  asa.user_id, asa.app_business_name, asa.app_business_address, asa.app_business_mobile, asa.app_business_contacts,
 		asa.max_call_number, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
 		au.name as creatorName, asa.username, asa.email, asa.reject_reason
-		from admin_service_apply asa 
-		left join admin_major_type_service_apply_mapping amt on asa.id = amt.service_apply_id
-		left join major_type mt  on mt.id = amt.major_type_id
-		left join admin_user au on au.id=asa.creator_id
+		from 
+		(select aa.id,  aa.user_id, aa.app_business_name, aa.app_business_address, aa.app_business_mobile, aa.app_business_contacts,
+		aa.max_call_number, aa.creator_id, aa.apply_status, aa.create_time, aa.last_update, aa.username, aa.email, aa.reject_reason,
+		aa.`status`
+        from admin_service_apply aa
+        where aa.`status` = 'active'
+        order by aa.create_time desc
+		limit #{startNum}, #{perPage}
+        )asa,admin_major_type_service_apply_mapping am,major_type mt,admin_user au
 		where asa.`status` = 'active'
+		and asa.id=am.service_apply_id and am.`status`='active'
+        and mt.id=am.major_type_id and mt.`status`='active'
+        and au.id=asa.creator_id and au.`status`='active'
 		<if test="applyStatus != null and applyStatus != ''">
 			and asa.apply_status = #{applyStatus}
 		</if>
 		<if test="appBusinessName != null and appBusinessName != ''">
 			and asa.app_business_name like concat(concat('%',#{appBusinessName}),'%')
 		</if>
-		order by create_time desc
-		limit #{startNum}, #{perPage}
 	</select>
 	<select id="getAdminServiceApplyCount" resultType="int" parameterType="com.tunicorn.marketing.bo.AdminServiceApplyBO">
 		select count(*)

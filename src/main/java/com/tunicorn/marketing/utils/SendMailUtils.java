@@ -11,7 +11,7 @@ import com.tunicorn.marketing.constant.MarketingConstants;
 
 public class SendMailUtils {
 
-	public static void sendTextWithHtml(String subject, String text){
+	public static void sendTextWithHtml(String from, String[] to, String password, String subject, String text){
 		MimeMessage message = null;
 
 		Properties properties = new Properties();
@@ -25,15 +25,15 @@ public class SendMailUtils {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setJavaMailProperties(properties);
 		mailSender.setHost("smtp.exmail.qq.com");
-		mailSender.setUsername(ConfigUtils.getInstance().getConfigValue("spring.mail.from"));
-		mailSender.setPassword(ConfigUtils.getInstance().getConfigValue("spring.mail.from.password"));
+		mailSender.setUsername(from);
+		mailSender.setPassword(password);
 		mailSender.setPort(465);
 		mailSender.setDefaultEncoding(MarketingConstants.UTF8);
 		try {
 			message = mailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(message, true);
-			helper.setFrom(ConfigUtils.getInstance().getConfigValue("spring.mail.from"));
-			helper.setTo(ConfigUtils.getInstance().getConfigValue("spring.mail.to"));
+			helper.setFrom(from);
+			helper.setTo(to);
 			helper.setSubject(subject);
 			helper.setText(text, true);
 		} catch (Exception e) {

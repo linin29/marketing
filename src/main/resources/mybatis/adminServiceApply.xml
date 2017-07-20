@@ -129,15 +129,13 @@
 	</select>
 	<select id="getAdminServiceApplyCount" resultType="int" parameterType="com.tunicorn.marketing.bo.AdminServiceApplyBO">
 		select count(*)
-		from admin_service_apply asa 
-		left join admin_major_type_service_apply_mapping amt on asa.id = amt.service_apply_id
-		left join major_type mt  on mt.id = amt.major_type_id
-		where asa.`status` = 'active'
+		from admin_service_apply
+		where `status` = 'active'
 	    <if test="applyStatus != null and applyStatus != ''">
-			and asa.apply_status = #{applyStatus}
+			and apply_status = #{applyStatus}
 		</if>
 		<if test="appBusinessName != null and appBusinessName != ''">
-			and asa.app_business_name like concat(concat('%',#{appBusinessName}),'%')
+			and app_business_name like concat(concat('%',#{appBusinessName}),'%')
 		</if>
 	</select>
 	<update id="updateAdminServiceApply" parameterType="com.tunicorn.marketing.vo.AdminServiceApplyVO">

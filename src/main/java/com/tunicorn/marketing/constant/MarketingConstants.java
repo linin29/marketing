@@ -71,4 +71,8 @@ public class MarketingConstants {
 			+ ConfigUtils.getInstance().getConfigValue("marketing.image.root.path");
 	public static final String TIANNUO_PASSWORD = "tiannuo";
 	public static final String UTF8 = "UTF-8";
+	
+	public static final String APPLY_CREATED_STATUS = "created";
+	public static final String APPLY_OPENED_STATUS = "opened";
+	public static final String APPLY_REJECTED_STATUS = "rejected";
 }

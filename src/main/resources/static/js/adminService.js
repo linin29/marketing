@@ -34,6 +34,7 @@ adminService = (function(){
 			$("#myModalLabel").text("修改申请");	
 			$("#new-server-model").modal("show");
 			$("#new-server-model").find("input").removeAttr("disabled");
+			$("#rejectReason").attr("disabled","disabled");
 			//$("#server-type").removeAttr("disabled"); 
 		});
 		$(".info").click(function(){
@@ -77,7 +78,6 @@ adminService = (function(){
 			$("#sure").hide();
 			$("#openService").show();
 			$("#rejectService").show();
-			$("#createuserTr").show();
 			detail($(this).attr("applyid"), true);
 			$("#rejectReasonDiv").show();
 			$("#applyId").val($(this).attr("applyid"));
@@ -100,7 +100,6 @@ adminService = (function(){
 			$("#sure").show();
 			$("#openService").hide();
 			$("#rejectService").hide();
-			$("#createuserTr").hide();
 			$("#server-management-model").modal("show");
 			detail($(this).attr("applyid"));
 			$("#server-management-model").find("input").attr("disabled","disabled"); 
@@ -121,9 +120,6 @@ adminService = (function(){
 		$("#rejectService").click(function(){
 			var applyId = $("#applyId").val();
 			rejectService(applyId);
-		});
-		$(".createUserTd").click(function(){
-			createUser();
 		});
 		
 		$('#service_delete').on('click', function(e){
@@ -240,7 +236,11 @@ adminService = (function(){
 			        		$("html").html(data.responseText);
 			        	}
 					});
-		 		},500)
+		 		},500);
+		 		if(!applyId){
+		 			formData.append('applyStatus', 'created');
+		 			sendEmail(formData);
+		 		}
 			}else{
 				noty({text: result.errorMessage, layout: "topCenter", type: "error", timeout: 2000});
 				return;
@@ -385,13 +385,14 @@ adminService = (function(){
 		});
 	};
 	function openService(applyId){
+		createUser();
 		var applyStatus = 'opened';
-		var data = {applyStatus:applyStatus};
+		var tempData = {applyStatus:applyStatus};
 		 $.ajax({
 				type: 'POST',
 				url:  marketing_url + '/admin/service/' + applyId + '/approve',
 				 contentType : 'application/json',
-				 data: JSON.stringify(data),
+				 data: JSON.stringify(tempData),
 				 dataType: 'json', 
 				success: function(data) {
 					if (!data.success) {
@@ -403,6 +404,8 @@ adminService = (function(){
 						$("#service_" + applyId).text("已开通");
 						$("#approve_" + applyId).hide();
 						$("#delete_" + applyId).hide();
+						tempData.username = data.data.username;
+			 			sendEmail(tempData);
 					} 
 	        	},
 	        	error: function(data) {
@@ -418,12 +421,12 @@ adminService = (function(){
 			return;
 		}
 		var applyStatus = 'rejected';
-		var data = {applyStatus:applyStatus, rejectReason:rejectReason};
+		var tempData = {applyStatus:applyStatus, rejectReason:rejectReason};
 		 $.ajax({
 				type: 'POST',
 				url: marketing_url + '/admin/service/' + applyId + '/approve',
 				 contentType : 'application/json',
-				 data: JSON.stringify(data),
+				 data: JSON.stringify(tempData),
 				 dataType: 'json', 
 				success: function(data) {
 					if (!data.success) {
@@ -435,6 +438,7 @@ adminService = (function(){
 						$("#service_" + applyId).text("已驳回");
 						$("#approve_" + applyId).hide();
 						$("#delete_" + applyId).hide();
+			 			sendEmail(tempData);
 					} 
 	        	},
 	        	error: function(data) {
@@ -502,16 +506,25 @@ adminService = (function(){
 				if (!data.success) {
 					noty({text: data.errorMessage, layout: 'topCenter', type: 'warning', timeout: 2000});
 					return;
-				}else{
-					noty({text: "创建用户成功", layout: 'topCenter', type: 'success', timeout: 2000});
-					return;
-				} 
+				}
         	},
         	error: function(data) {
         		noty({text: '创建用户失败', layout: 'topCenter', type: 'error', timeout: 2000});
         	}
 		});
 	};
+	function sendEmail(data){
+		var formData = new FormData();
+		formData.append('applyStatus', data.applyStatus);
+		formData.append('username', data.username);
+		formData.append('rejectReason', data.rejectReason);
+		tunicorn.utils.postFormData(marketing_url + '/admin/service/sendEmail', formData, function(err, result){
+			if(err){
+				noty({text: "服务器异常!", layout: "topCenter", type: "error", timeout: 2000});
+				return;
+			}
+		});
+	}
 	function initPagination(currentPage, totalCount, url) {
 		var options = {
 			alignment: 'center',

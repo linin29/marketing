@@ -156,10 +156,6 @@
 			                			<td class="wid">邮箱：</td>
 			                			<td><input  class="application-name" type="text" id="ser-email"/></td>
 			                		</tr>
-			                		<tr id="createuserTr">
-			                			<td class="wid"></td>
-			                			<td style="float:right"><button type="button" class="btn btn-success createUserTd" >创建用户</button></td>
-			                		</tr>
 			                	</tbody>
 			                </table>
 			           	</div>	

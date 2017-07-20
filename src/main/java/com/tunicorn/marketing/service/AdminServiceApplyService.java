@@ -3,11 +3,12 @@ package com.tunicorn.marketing.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
- 
+
 import com.tunicorn.common.entity.UploadFile;
 import com.tunicorn.marketing.bo.AdminServiceApplyBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
@@ -21,6 +22,7 @@ import com.tunicorn.marketing.utils.SendMailUtils;
 import com.tunicorn.marketing.vo.AdminMajorTypeServiceApplyMappingVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyAssetVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyVO;
+import com.tunicorn.marketing.vo.ApproveEmailVO;
 import com.tunicorn.marketing.vo.MajorTypeApplicationMappingVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
 
@@ -44,6 +46,10 @@ public class AdminServiceApplyService {
 		int result = adminServiceApplyMapper.createAdminServiceApply(adminServiceApplyVO);
 		addApplyAsset(adminServiceApplyVO.getId(), images);
 		this.createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);
+		return result;
+	}
+
+	public void sendApplyEmail(AdminServiceApplyVO adminServiceApplyVO) {
 		StringBuffer text = new StringBuffer();
 		text.append("<h3>应用商：").append(adminServiceApplyVO.getAppBusinessName()).append("</h3>").append("<p>申请服务：");
 		List<MajorTypeVO> majorTypeVOs = adminServiceApplyVO.getMajorTypes();
@@ -57,12 +63,33 @@ public class AdminServiceApplyService {
 			text.deleteCharAt(text.length() - 1);
 		}
 		text.append("</p>").append("<p>调用次数：").append(adminServiceApplyVO.getMaxCallNumber()).append("</p>");
-		SendMailUtils.sendTextWithHtml("服务申请", text.toString());
-		return result;
+		String from = ConfigUtils.getInstance().getConfigValue("spring.mail.from");
+		String to = ConfigUtils.getInstance().getConfigValue("spring.mail.to");
+		String password = ConfigUtils.getInstance().getConfigValue("spring.mail.from.password");
+		SendMailUtils.sendTextWithHtml(from, new String[] { to }, password, "服务申请", text.toString());
+	}
+	
+	public void sendApproveEmail(ApproveEmailVO approveEmailVO) {
+		StringBuffer text = new StringBuffer();
+		String subject = "";
+		if (StringUtils.equals(MarketingConstants.APPLY_OPENED_STATUS, approveEmailVO.getApplyStatus())) {
+			subject = "服务已开通";
+			text.append("<p>登录地址：").append(ConfigUtils.getInstance().getConfigValue("marketing.login.url")).append("</p>");
+			text.append("<p>用户名：").append(approveEmailVO.getUsername()).append("</p>").append("</p>");
+			text.append("<p>密码：").append(MarketingConstants.TIANNUO_PASSWORD).append("</p>");
+		}else if(StringUtils.equals(MarketingConstants.APPLY_REJECTED_STATUS, approveEmailVO.getApplyStatus())){
+			subject = "服务已驳回";
+			text.append("</p>").append("<p>驳回原因：").append(approveEmailVO.getRejectReason()).append("</p>");
+		}
+		String from = ConfigUtils.getInstance().getConfigValue("spring.mail.to");
+		String to = ConfigUtils.getInstance().getConfigValue("spring.mail.from");
+		String password = ConfigUtils.getInstance().getConfigValue("spring.mail.to.password");
+		SendMailUtils.sendTextWithHtml(from, new String[] { to }, password, subject, text.toString());
 	}
 
 	@Transactional
 	public int updateAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO) {
+		adminServiceApplyVO.setApplyStatus(MarketingConstants.APPLY_CREATED_STATUS);
 		int result = adminServiceApplyMapper.updateAdminServiceApply(adminServiceApplyVO);
 		adminMajorTypeServiceApplyMappingMapper.deleteMajorTypeApplicationMappingByApplyId(adminServiceApplyVO.getId());
 		this.createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);

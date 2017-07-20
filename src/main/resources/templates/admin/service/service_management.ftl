@@ -164,7 +164,13 @@
 			                	<tbody>
 			                		<tr>
 			                			<td class="wid">驳回原因：</td>
-			                			<td><input id="rejectReason" style="width:100%;height:100%" class="application-name" type="text" /></td>
+			                			<td><!-- <input id="rejectReason" style="width:100%;height:100%" class="application-name" type="text" /> -->
+			                			  <select id="rejectReason" style="width:70%;height: 34px;">
+  											<option value="">请选择驳回原因</option>
+  											<option value="用户已存在">用户已存在</option>
+  											<option value="合同不完整">合同不完整</option>
+  										</select>
+			                			</td>
 			                		</tr>
 			                	</tbody>
 			                </table>

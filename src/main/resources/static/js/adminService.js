@@ -103,7 +103,8 @@ adminService = (function(){
 			$("#server-management-model").modal("show");
 			detail($(this).attr("applyid"));
 			$("#server-management-model").find("input").attr("disabled","disabled"); 
-			$("#server-type").attr("disabled","disabled"); 
+			$("#server-type").attr("disabled","disabled");
+			$("#rejectReason").attr("disabled","disabled"); 
 		});
 		$(".showAgreementModel").click(function(){
 			$("#showagreementModel").modal("show");
@@ -417,7 +418,7 @@ adminService = (function(){
 	function rejectService(applyId){
 		var rejectReason = $("#rejectReason").val();
 		if(!rejectReason){
-			$('#errorMsg').text("请填写驳回原因");
+			$('#errorMsg').text("请选择驳回原因");
 			return;
 		}
 		var applyStatus = 'rejected';

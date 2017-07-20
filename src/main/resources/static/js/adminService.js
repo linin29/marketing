@@ -270,7 +270,7 @@ adminService = (function(){
 			 		$("#server-type").val(majorTypeArray);
 			 		$('#server-type').selectpicker('val', majorTypeArray);
 			 	    $('#server-type').selectpicker('refresh');
-			 	    if(data.data.rejectReason || isRejectReasonShow){
+			 	    if((data.data.rejectReason || isRejectReasonShow) && data.data.applyStatus == 'rejected'){
 			 	    	$("#rejectReasonDiv").show();
 			 	    	$("#rejectReason").val(data.data.rejectReason);
 			 	    }else{
@@ -495,7 +495,7 @@ adminService = (function(){
 	function createUser(){
 		var username = $("#ser-user-name").val();
 		var email = $("#ser-email").val();
-		var data = {'userName':username, 'email':email};
+		var data = {'userName':username, 'email':email,'name':username};
 		$.ajax({
 			type: 'POST',
 			url: marketing_url + '/user/create',

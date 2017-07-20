@@ -23,7 +23,7 @@
                 <input type="password" id="password" name="password" onkeydown="checkPassword()"  class="form-control"  value="" placeholder="请输入密码" />
             </div>
             <div><font color="red" id="errorMsg"></font></div>
-			<button class="btn btn-success pull-right" onclick="checkLogin()"> 登录</button>
+			<button id="button" class="btn btn-success pull-right" onclick="checkLogin()"> 登录</button>
 		</div>	
 	</body>
   <script type="text/javascript">

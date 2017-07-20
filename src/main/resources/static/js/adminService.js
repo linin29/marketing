@@ -319,7 +319,7 @@ adminService = (function(){
 		});
 	};
 	
-	function viewManage(applyId, isDelete){
+	function viewManage(applyId){
 		$.ajax({
 			 type: 'GET',
 			 url: marketing_url + '/admin/service/applyAsset',

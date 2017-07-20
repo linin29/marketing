@@ -411,6 +411,8 @@ adminService = (function(){
 						$("#service_" + applyId).text("已开通");
 						$("#approve_" + applyId).hide();
 						$("#delete_" + applyId).hide();
+						$("#approve_hide_" + applyId).css('display','');
+						$("#delete_hide_" + applyId).css('display','');
 						tempData.username = data.data.username;
 			 			sendEmail(tempData);
 					} 
@@ -445,6 +447,8 @@ adminService = (function(){
 						$("#service_" + applyId).text("已驳回");
 						$("#approve_" + applyId).hide();
 						$("#delete_" + applyId).hide();
+						$("#approve_hide_" + applyId).css('display','');
+						$("#delete_hide_" + applyId).css('display','')
 			 			sendEmail(tempData);
 					} 
 	        	},

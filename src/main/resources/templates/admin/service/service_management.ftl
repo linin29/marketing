@@ -63,6 +63,8 @@
 					    			<input type="button" class="btn" style="width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none">
 					    			<input type="button" class="btn" style="width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none">
 					    			</#if>
+					    			<input id="approve_hide_${adminServiceApply.id}" class="btn btn-success" style='display:none;width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none'>
+					    			<input id="delete_hide_${adminServiceApply.id}" class="btn btn-success" style='display:none;width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none'>
 					    		</td>
 					    	</tr>
 					    	     </#list>

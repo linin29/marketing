@@ -231,6 +231,11 @@ adminService = (function(){
 			if(result.success){
 				noty({text: '保存成功', layout: 'topCenter', type: 'warning', timeout: 2000});
 		 		$('#new-server-model').modal('hide');
+		 		if(!applyId){
+		 			formData.append('applyStatus', 'created');
+		 			var data ={'applyStatus':'created', 'appBusinessName':appBusinessName,'username':username,'majorTypes':majorTypes,'maxCallNumber':maxCallNumber};
+		 			sendEmail(data);
+		 		}
 		 		setTimeout(function(){
 		 			$.ajax({
 						 type: 'GET',
@@ -244,10 +249,6 @@ adminService = (function(){
 			        	}
 					});
 		 		},500);
-		 		if(!applyId){
-		 			formData.append('applyStatus', 'created');
-		 			sendEmail(formData);
-		 		}
 			}else{
 				noty({text: result.errorMessage, layout: "topCenter", type: "error", timeout: 2000});
 				return;
@@ -527,6 +528,9 @@ adminService = (function(){
 	function sendEmail(data){
 		var formData = new FormData();
 		formData.append('applyStatus', data.applyStatus);
+		formData.append('appBusinessName', data.appBusinessName);
+		formData.append('majorTypes', data.majorTypes);
+		formData.append('maxCallNumber', data.maxCallNumber);
 		formData.append('username', data.username);
 		formData.append('rejectReason', data.rejectReason);
 		tunicorn.utils.postFormData(marketing_url + '/admin/service/sendEmail', formData, function(err, result){

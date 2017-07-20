@@ -7,12 +7,17 @@
 		<title>图麟云平台</title>
 	</head>
 	<body>
-		请求资源不存在，3秒后将自动返回<a href="${springMacroRequestContext.contextPath}/dashboard/index" class="text-center">主页</a>
+		请求资源不存在，3秒后将自动返回<a href="
+		<#if springMacroRequestContext.requestUri?index_of('/admin')==-1>
+			${springMacroRequestContext.contextPath}/dashboard/index
+		<#else>
+			${springMacroRequestContext.contextPath}/admin/dashboard/index
+		</#if>" class="text-center">主页</a>
 	</body>
 </html> 
 <script>  
 	function jump(){  
-	  location='${springMacroRequestContext.contextPath}/dashboard/index';  
+	  location= "<#if springMacroRequestContext.requestUri?index_of('/admin')==-1>${springMacroRequestContext.contextPath}/dashboard/index<#else>${springMacroRequestContext.contextPath}/admin/dashboard/index</#if>";  
 	}  
 	setTimeout('jump()',3000);  
 </script>    

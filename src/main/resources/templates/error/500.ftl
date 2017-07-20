@@ -7,12 +7,12 @@
 		<title>图麟云平台</title>
 	</head>
 	<body>
-		服务器内部异常，3秒后将自动返回<a href="${springMacroRequestContext.contextPath}/dashboard/index" class="text-center">主页</a>
+		服务器内部异常，3秒后将自动返回<a href="${springMacroRequestContext.contextPath}/${redirectUrl}" class="text-center">主页</a>
 	</body>
 </html>  
 <script>  
 	function jump(){  
-	  location='${springMacroRequestContext.contextPath}/dashboard/index';  
+	  location='${springMacroRequestContext.contextPath}/${redirectUrl}';  
 	}  
 	setTimeout('jump()',3000);  
 </script>    

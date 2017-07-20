@@ -193,11 +193,25 @@
 						<h4  class="modal-title pull-left">合同预览</h4>
 					</div>
 					<div class="modal-body">
-				        <div class="form-group" >
+				        <!-- <div class="form-group" >
 				             <div style="border:1px solid #000"></div>
-				        </div>
+				        </div> -->
 				        <div class='form-group'>
-				           <div class="row" id="agreement-show"></div>
+				           <!-- <div class="row" id="agreement-show"></div> -->				           
+				           <div id="carousel-example-generic" class="carousel slide" >
+							  <div class="carousel-inner" role="listbox" id='agreement-show'>
+							   				 
+							  </div>
+							  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+							    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+							    <span class="sr-only">Previous</span>
+							  </a>
+							  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+							    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+							    <span class="sr-only">Next</span>
+							  </a>
+							</div>
+				           
 				        </div>
 					</div>
 					<div class="modal-footer" style="border-top-color: #fff;padding: 0px 15px 15px 15px;">

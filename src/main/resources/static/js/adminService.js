@@ -108,7 +108,7 @@ adminService = (function(){
 		});
 		$(".showAgreementModel").click(function(){
 			$("#showagreementModel").modal("show");
-			view($(this).attr("applyid"));
+			viewManage($(this).attr("applyid"));
 		});
 		$(".deleteService").click(function(){
 			$("#deleteAreaModal").attr('applyid', $(this).attr("applyid"));
@@ -318,6 +318,40 @@ adminService = (function(){
 	    	}
 		});
 	};
+	
+	function viewManage(applyId, isDelete){
+		$.ajax({
+			 type: 'GET',
+			 url: marketing_url + '/admin/service/applyAsset',
+			 data:{
+				 applyId:applyId
+			 },
+			 success: function(data) {
+			 	if(data && data.success && data.data){
+			 		$("#applyId").val(applyId);
+			 		var html = '';
+			 		var	htmlmore='';
+			 		var  applyAsset_0 = data.data[0];
+		 			html='<div id="applyAsset_' + applyAsset_0.id +'" class="item active" style="text-align: center;">'+
+		 			'<img style="width: 100%;height: 300px" src="' + applyAsset_0.realPath + '" alt="">' +
+		 			'</div>'
+			 		for(var i = 1; i<data.data.length; i++){		 			
+			 			var applyAsset = data.data[i];
+			 			htmlmore +='<div id="applyAsset_' + applyAsset.id +'" class="item" style="text-align: center;">'+
+			 			'<img style="width:100%;height: 300px" src="' + applyAsset.realPath + '" alt="">' +
+			 			'</div>'
+			 		}
+		 			html+=htmlmore;
+			 		$("#agreement-show").html(html);
+			 	}
+	    	},
+	    	error: function(data) {
+	    		//返回500错误页面
+	    		$("html").html(data.responseText);
+	    	}
+		});
+	};
+	
     function checkFile(file) {
         if ((file.size/1024/1024) > 5) {
 			$('#errorMsg').text("您选择的图片大于5M, 请重新选择小于5M的图片上传");

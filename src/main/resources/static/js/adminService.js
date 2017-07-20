@@ -333,12 +333,12 @@ adminService = (function(){
 			 		var	htmlmore='';
 			 		var  applyAsset_0 = data.data[0];
 		 			html='<div id="applyAsset_' + applyAsset_0.id +'" class="item active" style="text-align: center;">'+
-		 			'<img style="width: 100%;height: 300px;border: 1px solid #ddd;" src="' + applyAsset_0.realPath + '" alt="">' +
+		 			'<img style="width: 100%;height: 450px;border: 1px solid #ddd;" src="' + applyAsset_0.realPath + '" alt="">' +
 		 			'</div>'
 			 		for(var i = 1; i<data.data.length; i++){		 			
 			 			var applyAsset = data.data[i];
 			 			htmlmore +='<div id="applyAsset_' + applyAsset.id +'" class="item" style="text-align: center;">'+
-			 			'<img style="width:100%;height: 300px;border: 1px solid #ddd;" src="' + applyAsset.realPath + '" alt="">' +
+			 			'<img style="width:100%;height: 450px;border: 1px solid #ddd;" src="' + applyAsset.realPath + '" alt="">' +
 			 			'</div>'
 			 		}
 		 			html+=htmlmore;

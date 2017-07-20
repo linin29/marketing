@@ -270,7 +270,7 @@ adminService = (function(){
 			 		$("#server-type").val(majorTypeArray);
 			 		$('#server-type').selectpicker('val', majorTypeArray);
 			 	    $('#server-type').selectpicker('refresh');
-			 	    if((data.data.rejectReason || isRejectReasonShow) && data.data.applyStatus == 'rejected'){
+			 	    if(data.data.rejectReason || isRejectReasonShow || data.data.applyStatus == 'rejected'){
 			 	    	$("#rejectReasonDiv").show();
 			 	    	$("#rejectReason").val(data.data.rejectReason);
 			 	    }else{

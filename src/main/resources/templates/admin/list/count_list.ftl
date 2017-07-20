@@ -8,8 +8,7 @@
 	  	<div class="panel-heading">调用统计</div>
 	  	<div class="panel-body">
 	    	<section class="task_list_header" style='margin-top:-8px;'>
-	       	   <h3>统计列表
-	           	 <small>本次查询共<span id="number">${totalCount}</span>条记录，<span id="number">${callingCount}</span>次调用</small>
+	       	   <h3><small>本次查询共<span id="number">${totalCount}</span>条记录，<span id="number">${callingCount}</span>次调用</small>
 	       	   </h3>
 	   		</section>
 	        <section>

@@ -84,6 +84,7 @@ adminService = (function(){
 			$("#server-management-model").modal("show");
 			$("#server-management-model").find("input").attr("disabled","disabled"); 
 			$("#rejectReason").removeAttr("disabled"); 
+			$("#rejectReason").val("");
 		});
 		$('#server-type').selectpicker({
         	width:"100%"

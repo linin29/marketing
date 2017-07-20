@@ -168,9 +168,7 @@
 			<if test="email != null and email !=''">
 				`email` = #{email},
 			</if>
-			<if test="rejectReason != null and rejectReason !=''">
 				reject_reason = #{rejectReason},
-			</if>
 		</trim>
 		WHERE id=#{id}
 	</update>

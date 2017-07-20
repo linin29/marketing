@@ -759,7 +759,7 @@ public class TaskService {
 						newRows = rows;
 					}
 					newRows = newRows.replaceAll(",", "，");
-					taskBodyBuffer.append(tempTask.getId()).append(getGoodSkuStr(resultStr,newRows));
+					taskBodyBuffer.append(tempTask.getId()).append(",").append(tempTask.getName()).append(getGoodSkuStr(resultStr,newRows));
 					result.add(taskBodyBuffer.toString());
 				}
 			}
@@ -1026,7 +1026,7 @@ public class TaskService {
 			rowsBuffer.append(",").append(goodsSku.getName()).append("货架位置");
 		}
 		
-		return result.append("图麟任务ID").append(ratioBuffer).append(numBuffer)
+		return result.append("任务ID").append(",任务名").append(ratioBuffer).append(numBuffer)
 				.append(oriAreaBuffer).append(rowsBuffer)
 				.append(",货架总面积").append(",货架总层数").toString();
 	}

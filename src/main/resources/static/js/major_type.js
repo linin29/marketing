@@ -8,6 +8,7 @@ majorType=(function(){
 		$("#new-type").click(function(){
 			$("#majorTypeId").val("");
 			$("#new-type-model").modal("show");
+			$("#errorMsg").html("");
 		});
 		
 		$(".deleteMajorType").click(function(){
@@ -62,6 +63,7 @@ majorType=(function(){
 		$('#deploy_des').val(description);
 		$("#new-type-model").modal("show");	
 		$("#majorTypeId").val(majorTypeId);
+		$("#errorMsg").html("");
 	}
 	function creatType(){
 		var deploy_name=$('#deploy_name').val();

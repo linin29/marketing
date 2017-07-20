@@ -19,6 +19,7 @@ adminService = (function(){
 			$("#new-server-model").find("input").removeAttr("disabled");
 			//$("#server-type").removeAttr("disabled");
 			$('#server-type').selectpicker('val', "");
+			$("#errorMsg").html("");
 		}); 
 		$("#saveService").click(function(){
 			saveService();
@@ -35,6 +36,7 @@ adminService = (function(){
 			$("#new-server-model").modal("show");
 			$("#new-server-model").find("input").removeAttr("disabled");
 			$("#rejectReason").attr("disabled","disabled");
+			$("#errorMsg").html("");
 			//$("#server-type").removeAttr("disabled"); 
 		});
 		$(".info").click(function(){
@@ -47,6 +49,7 @@ adminService = (function(){
 			$("#new-server-model").modal("show");
 			detail($(this).attr("applyid"));
 			$("#new-server-model").find("input").attr("disabled","disabled"); 
+			$("#errorMsg").html("");
 			//$("#server-type").attr("disabled", "disabled"); 
 		});
 		$(".showAgreementModel").click(function(){
@@ -85,6 +88,7 @@ adminService = (function(){
 			$("#server-management-model").find("input").attr("disabled","disabled"); 
 			$("#rejectReason").removeAttr("disabled"); 
 			$("#rejectReason").val("");
+			$("#errorMsg").html("");
 		});
 		$('#server-type').selectpicker({
         	width:"100%"
@@ -105,7 +109,8 @@ adminService = (function(){
 			detail($(this).attr("applyid"));
 			$("#server-management-model").find("input").attr("disabled","disabled"); 
 			$("#server-type").attr("disabled","disabled");
-			$("#rejectReason").attr("disabled","disabled"); 
+			$("#rejectReason").attr("disabled","disabled");
+			$("#errorMsg").html("");
 		});
 		$(".showAgreementModel").click(function(){
 			$("#showagreementModel").modal("show");

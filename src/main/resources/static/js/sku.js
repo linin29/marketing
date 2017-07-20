@@ -6,6 +6,7 @@ sku=(function(){
 			$("#skuId").val("");
 			$('#myModalLabel').text('新建信息');
 			$("#new-SKU-model").modal("show");
+			$("#errorMsg").html("");
 		}); 
 		
 		$("#new-SKU-model").on("hidden.bs.modal", function() {
@@ -133,6 +134,7 @@ sku=(function(){
 		$("#new-SKU-model").modal("show");	
 		$("#skuId").val(skuId);
 		$("#sku_or_not").val(skuOrNot);
+		$("#errorMsg").html("");
 	}
 	
 	function initPagination(currentPage, totalCount) {

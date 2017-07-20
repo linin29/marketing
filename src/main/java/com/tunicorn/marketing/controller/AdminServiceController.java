@@ -1,6 +1,8 @@
 package com.tunicorn.marketing.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,12 +25,15 @@ import com.tunicorn.common.api.Message;
 import com.tunicorn.common.entity.AjaxResponse;
 import com.tunicorn.marketing.api.CommonAjaxResponse;
 import com.tunicorn.marketing.bo.AdminServiceApplyBO;
+import com.tunicorn.marketing.bo.ApiCallingSummaryBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.AdminServiceApplyService;
 import com.tunicorn.marketing.service.AdminUserService;
 import com.tunicorn.marketing.service.MajorTypeService;
+import com.tunicorn.marketing.service.TaskService;
 import com.tunicorn.marketing.vo.AdminServiceApplyAssetVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyVO;
+import com.tunicorn.marketing.vo.ApiCallingSummaryVO;
 import com.tunicorn.marketing.vo.ApproveEmailVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
 import com.tunicorn.marketing.vo.UserVO;
@@ -45,6 +50,8 @@ public class AdminServiceController extends BaseController {
 	private MajorTypeService majorTypeService;
 	@Autowired
 	private AdminUserService adminUserService;
+	@Autowired
+	private TaskService taskService;
 
 	@RequestMapping(value = "/apply", method = RequestMethod.GET)
 	public String serviceApply(HttpServletRequest request, HttpServletResponse resp, Model model) {
@@ -305,6 +312,39 @@ public class AdminServiceController extends BaseController {
 			sendApproveEmail(request);
 		}
 		return CommonAjaxResponse.toSuccess(null);
+	}
+	
+	@RequestMapping(value = "/calling", method = RequestMethod.GET)
+	public String calling(HttpServletRequest request, ApiCallingSummaryBO apiCallingSummaryBO, Model model) {
+		UserVO user = getCurrentUser(request);
+		//apiCallingSummaryBO.setUserName(user.getUserName());
+		
+		if(StringUtils.isBlank(apiCallingSummaryBO.getStartDate())){
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			long startDate = new Date().getTime() - 5 * 24 * 60 * 60 * 1000;
+			apiCallingSummaryBO.setStartDate(formatter.format(new Date(startDate)));
+		}
+
+		List<ApiCallingSummaryVO> apiCallingCounts = taskService.getApiCallingSummaryList(apiCallingSummaryBO);
+		int totalCount = taskService.getApiCallingSummary(apiCallingSummaryBO);
+		int callingCount = taskService.getApiCallingSum(apiCallingSummaryBO);
+
+		if(StringUtils.isNotBlank(apiCallingSummaryBO.getApiMethod())){
+			model.addAttribute("apiMethod", apiCallingSummaryBO.getApiMethod());
+		}
+		if(StringUtils.isNotBlank(apiCallingSummaryBO.getApiName())){
+			model.addAttribute("apiName", apiCallingSummaryBO.getApiName());
+		}
+		if(StringUtils.isNotBlank(apiCallingSummaryBO.getUserName())){
+			model.addAttribute("userName", apiCallingSummaryBO.getUserName());
+		}
+		model.addAttribute("callingCount", callingCount);
+		model.addAttribute("callings", apiCallingCounts);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("startDate", apiCallingSummaryBO.getStartDate());
+		model.addAttribute("endDate", apiCallingSummaryBO.getEndDate());
+		model.addAttribute("currentPage", apiCallingSummaryBO.getPageNum() + 1);
+		return "admin/list/count_list";
 	}
 
 	private void sendApplyEmail(HttpServletRequest request) {

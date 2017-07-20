@@ -30,7 +30,7 @@
     		and calling_day <![CDATA[ <= #{endDate}]]>
     	</if>
     	<if test="userName != null and userName != ''">
-    		and user_name = #{userName}
+    		and `user_name` like concat(concat('%',#{userName}),'%')
     	</if>
     	order by calling_day DESC
     	limit #{startNum}, #{perPage}
@@ -49,7 +49,7 @@
     		and calling_day = #{callingDay}
     	</if>
     	<if test="userName != null and userName != ''">
-    		and user_name = #{userName}
+    		and `user_name` like concat(concat('%',#{userName}),'%')
     	</if>
     	<if test="callingTimes != null and callingTimes != ''">
     		and calling_times = #{callingTimes}
@@ -72,7 +72,7 @@
     		and calling_day <![CDATA[ <= #{endDate}]]>
     	</if>
     	<if test="userName != null and userName != ''">
-    		and user_name = #{userName}
+    		and `user_name` like concat(concat('%',#{userName}),'%')
     	</if>
     </select>
     <select id="getApiCallingSum" resultType="int" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
@@ -92,7 +92,7 @@
     		and calling_day <![CDATA[ <= #{endDate}]]>
     	</if>
     	<if test="userName != null and userName != ''">
-    		and user_name = #{userName}
+    		and `user_name` like concat(concat('%',#{userName}),'%')
     	</if>
     </select>
 </mapper>

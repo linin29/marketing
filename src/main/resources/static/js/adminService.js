@@ -17,7 +17,8 @@ adminService = (function(){
 			$("#rejectReasonDiv").hide();
 			$("#new-server-model").modal("show");
 			$("#new-server-model").find("input").removeAttr("disabled");
-			//$("#server-type").removeAttr("disabled");
+			$("#server-type").removeAttr("disabled");
+			$('#server-type').selectpicker('refresh');
 			$('#server-type').selectpicker('val', "");
 			$("#errorMsg").html("");
 		}); 
@@ -37,7 +38,7 @@ adminService = (function(){
 			$("#new-server-model").find("input").removeAttr("disabled");
 			$("#rejectReason").attr("disabled","disabled");
 			$("#errorMsg").html("");
-			//$("#server-type").removeAttr("disabled"); 
+			$("#server-type").removeAttr("disabled"); 
 		});
 		$(".info").click(function(){
 			$("#upload-book-tr").hide();
@@ -50,7 +51,7 @@ adminService = (function(){
 			detail($(this).attr("applyid"));
 			$("#new-server-model").find("input").attr("disabled","disabled"); 
 			$("#errorMsg").html("");
-			//$("#server-type").attr("disabled", "disabled"); 
+			$("#server-type").attr("disabled", "disabled"); 
 		});
 		$(".showAgreementModel").click(function(){
 			$("#showagreementModel").modal("show");

@@ -120,13 +120,8 @@
 					  </p>
 					  <ul class="center dropdown-menu dropdown-menu-left" role="menu" aria-labelledby="dropdownMenu1" style="margin-right: -72px;text-align: center;background-color:#222d32;border: 1px #222d32 solid;margin-top:-10px">
 						  <li role="presentation">
-						 	<a style="color:#b8c7ce" class="menu" role="menuitem" tabindex="-1" href="javascript:void(0)" url="${springMacroRequestContext.contextPath}/user/personcenter" onclick="changeMenu(this)">个人中心</a>
+						 	<a style="color:#b8c7ce" class="menu" role="menuitem" tabindex="-1" href="javascript:void(0)" url="${springMacroRequestContext.contextPath}/admin/user/personcenter" onclick="changeMenu(this)">个人中心</a>
 						 </li>
-						 <#-- 
-						  <li role="presentation">
-						  	<a style="color:#b8c7ce" class="menu" role="menuitem" tabindex="-1" href="javascript:void(0)" url="${springMacroRequestContext.contextPath}/user/developer" onclick="changeMenu(this)">开发者资料</a>
-						  </li>
-						  -->
 					  </ul>
 				  </li>
 				  <li style="margin-right: -8px;margin-left: 8px;color: #fff">|</li>

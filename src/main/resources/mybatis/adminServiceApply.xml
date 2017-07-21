@@ -117,6 +117,12 @@
 		(select id,  user_id, app_business_name, app_business_address, app_business_mobile, app_business_contacts,
 			max_call_number, creator_id, apply_status, create_time, last_update, username, email, reject_reason, `status`
         	from admin_service_apply where `status` = 'active'
+        	<if test="applyStatus != null and applyStatus != ''">
+				and apply_status = #{applyStatus}
+			</if>
+			<if test="appBusinessName != null and appBusinessName != ''">
+				and app_business_name like concat(concat('%',#{appBusinessName}),'%')
+			</if>
        	 	order by create_time desc
 			limit #{startNum}, #{perPage}
         )asa,admin_major_type_service_apply_mapping am,major_type mt,admin_user au
@@ -124,12 +130,6 @@
 		and asa.id=am.service_apply_id and am.`status`='active'
         and mt.id=am.major_type_id and mt.`status`='active'
         and au.id=asa.creator_id and au.`status`='active'
-		<if test="applyStatus != null and applyStatus != ''">
-			and asa.apply_status = #{applyStatus}
-		</if>
-		<if test="appBusinessName != null and appBusinessName != ''">
-			and asa.app_business_name like concat(concat('%',#{appBusinessName}),'%')
-		</if>
 	</select>
 	<select id="getAdminServiceApplyCount" resultType="int" parameterType="com.tunicorn.marketing.bo.AdminServiceApplyBO">
 		select count(*)

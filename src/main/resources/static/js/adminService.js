@@ -268,13 +268,13 @@ adminService = (function(){
 			 				majorTypeArray[i] = majorTypes[i].id;
 			 			}
 			 		}
-			 		$("#ser-name").val(data.data.appBusinessName);
-			 		$("#ser-address").val(data.data.appBusinessAddress);
-			 		$("#ser-phone-person").val(data.data.appBusinessContacts);
-			 		$("#ser-phone").val(data.data.appBusinessMobile);
-			 		$("#application-number").val(data.data.maxCallNumber);
-			 		$("#ser-user-name").val(data.data.username);
-			 		$("#ser-email").val(data.data.email);
+			 		$("#ser-name").val(data.data.appBusinessName).attr('title',data.data.appBusinessName);
+			 		$("#ser-address").val(data.data.appBusinessAddress).attr('title',data.data.appBusinessAddress);
+			 		$("#ser-phone-person").val(data.data.appBusinessContacts).attr('title',data.data.appBusinessContacts);
+			 		$("#ser-phone").val(data.data.appBusinessMobile).attr('title',data.data.appBusinessMobile);
+			 		$("#application-number").val(data.data.maxCallNumber).attr('title',data.data.maxCallNumber);
+			 		$("#ser-user-name").val(data.data.username).attr('title',data.data.username);
+			 		$("#ser-email").val(data.data.email).attr('title',data.data.email);
 			 		$("#server-type").val(majorTypeArray);
 			 		$('#server-type').selectpicker('val', majorTypeArray);
 			 	    $('#server-type').selectpicker('refresh');

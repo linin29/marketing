@@ -86,6 +86,7 @@ adminService = (function(){
 			$("#applyId").val($(this).attr("applyid"));
 			$("#server-management-model").modal("show");
 			$("#server-management-model").find("input").attr("disabled","disabled"); 
+			$("#server-type").attr("disabled","disabled");
 			$("#rejectReason").removeAttr("disabled"); 
 			$("#rejectReason").val("");
 			$("#errorMsg").html("");

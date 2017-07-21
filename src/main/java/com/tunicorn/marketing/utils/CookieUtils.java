@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tunicorn.common.Constant;
+import com.tunicorn.marketing.vo.AdminUserVO;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.SecurityUtils;
 
@@ -15,6 +16,16 @@ public class CookieUtils {
 	private static final String COOKIE_PATH = "/marketing";
 
 	public static void setTokenCookie(HttpServletResponse response, UserVO user) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode node = mapper.createObjectNode();
+		node.put("userID", user.getId());
+		String info = mapper.writeValueAsString(node);
+		String tokenCookie = SecurityUtils.generateAuthToken(info);
+
+		addCookie(response, Constant.COOKIE_TOKEN, tokenCookie, Constant.COOKIE_EXPIRATION * 60 * 60);
+	}
+	
+	public static void setTokenCookie(HttpServletResponse response, AdminUserVO user) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode node = mapper.createObjectNode();
 		node.put("userID", user.getId());

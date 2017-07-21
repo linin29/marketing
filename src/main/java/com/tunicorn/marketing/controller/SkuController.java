@@ -21,6 +21,7 @@ import com.tunicorn.marketing.bo.GoodsSkuBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.GoodsSkuService;
 import com.tunicorn.marketing.service.MajorTypeService;
+import com.tunicorn.marketing.vo.AdminUserVO;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
 import com.tunicorn.marketing.vo.UserVO; 
 import com.tunicorn.util.MessageUtils;
@@ -38,7 +39,7 @@ public class SkuController extends BaseController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String sku(HttpServletRequest request, Model model) {
-		UserVO user = getCurrentUser(request);
+		AdminUserVO user = getCurrentAdminUser(request);
 		model.addAttribute("user", user);
 
 		GoodsSkuBO goodsSkuBO = new GoodsSkuBO();
@@ -55,7 +56,7 @@ public class SkuController extends BaseController {
 
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String searchSku(HttpServletRequest request, Model model) {
-		UserVO user = getCurrentUser(request);
+		AdminUserVO user = getCurrentAdminUser(request);
 		model.addAttribute("user", user);
 
 		GoodsSkuBO goodsSkuBO = new GoodsSkuBO();

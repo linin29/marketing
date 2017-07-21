@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.tunicorn.marketing.mapper.AdminPrivilegeMapper;
 import com.tunicorn.marketing.mapper.AdminUserMapper;
+import com.tunicorn.marketing.vo.AdminUserVO;
 import com.tunicorn.marketing.vo.PrivilegeVO;
-import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.SecurityUtils;
 
 @Service
@@ -20,11 +20,11 @@ public class AdminUserService {
 
 	private final static int PAGE_SIZE = 10;
 
-	public UserVO getUserByUserName(String userName) {
+	public AdminUserVO getUserByUserName(String userName) {
 		return adminUserMapper.getUserByUserName(userName);
 	}
 
-	public UserVO getUserByID(String userId) {
+	public AdminUserVO getUserByID(String userId) {
 		return adminUserMapper.getUserByID(userId);
 	}
 
@@ -35,8 +35,8 @@ public class AdminUserService {
 	 * @param userName
 	 * @return
 	 */
-	public UserVO getLoginUser(String userName) {
-		UserVO user = getUserByUserName(userName);
+	public AdminUserVO getLoginUser(String userName) {
+		AdminUserVO user = getUserByUserName(userName);
 		return user;
 	}
 
@@ -51,7 +51,7 @@ public class AdminUserService {
 	 * @param password
 	 * @return
 	 */
-	public boolean isValidUser(UserVO dbUser, String password) {
+	public boolean isValidUser(AdminUserVO dbUser, String password) {
 		boolean isValid = false;
 		if (dbUser != null && SecurityUtils.verifyPassword(password, dbUser.getPassword())) {
 			isValid = true;
@@ -73,7 +73,7 @@ public class AdminUserService {
 	 * @param user
 	 * @return
 	 */
-	public boolean updatePassword(UserVO user) {
+	public boolean updatePassword(AdminUserVO user) {
 		String newPassword = SecurityUtils.generateHashPassword(user.getNewPassword());
 		user.setPassword(newPassword);
 		return adminUserMapper.updateUserPassword(user);
@@ -83,7 +83,7 @@ public class AdminUserService {
 		return adminUserMapper.deleteUser(userId);
 	}
 	 
-	public List<UserVO> getAdminUserList(){
+	public List<AdminUserVO> getAdminUserList(){
 		return adminUserMapper.getAdminUserList();
 	}
 

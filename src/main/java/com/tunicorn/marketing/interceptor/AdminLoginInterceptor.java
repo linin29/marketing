@@ -11,9 +11,10 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.tunicorn.common.Constant;
+import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.AdminUserService;
 import com.tunicorn.marketing.utils.CookieUtils;
-import com.tunicorn.marketing.vo.UserVO;
+import com.tunicorn.marketing.vo.AdminUserVO;
 import com.tunicorn.util.SecurityUtils;
 
 public class AdminLoginInterceptor extends HandlerInterceptorAdapter {
@@ -22,7 +23,7 @@ public class AdminLoginInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		UserVO user = (UserVO) request.getSession().getAttribute(Constant.SESSION_USER);
+		AdminUserVO user = (AdminUserVO) request.getSession().getAttribute(MarketingConstants.SESSION_ADMIN_USER);
 		String contextPath = request.getContextPath();
 		if (user == null) {
 			String tokenCookie = CookieUtils.getTokenCookie(request);
@@ -38,7 +39,7 @@ public class AdminLoginInterceptor extends HandlerInterceptorAdapter {
 					user = userService.getUserByID(userID);
 
 					if (user != null) {
-						request.getSession().setAttribute(Constant.SESSION_USER, user);
+						request.getSession().setAttribute(MarketingConstants.SESSION_ADMIN_USER, user);
 					}
 
 				}

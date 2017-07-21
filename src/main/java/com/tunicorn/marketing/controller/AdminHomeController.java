@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tunicorn.marketing.entity.Menu;
 import com.tunicorn.marketing.service.AdminUserService;
+import com.tunicorn.marketing.vo.AdminUserVO;
 import com.tunicorn.marketing.vo.PrivilegeVO;
-import com.tunicorn.marketing.vo.UserVO;
 
 @Controller
 @EnableAutoConfiguration
@@ -31,8 +31,8 @@ public class AdminHomeController extends BaseController {
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String homepage(HttpServletRequest request, HttpServletResponse resp, Model model) {
-		UserVO user = getCurrentUser(request);
-		List<PrivilegeVO> privilegeList = adminUserService.getMenuPrivileges(user.getId());
+		AdminUserVO user = getCurrentAdminUser(request);
+		List<PrivilegeVO> privilegeList = adminUserService.getMenuPrivileges(String.valueOf(user.getId()));
 		List<Menu> menuList = generateMenuList(privilegeList);
 		String indexUrl = "";
 		if (menuList != null && menuList.size() > 0) {

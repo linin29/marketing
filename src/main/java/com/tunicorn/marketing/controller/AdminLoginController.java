@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tunicorn.common.Constant;
 import com.tunicorn.common.api.Message;
 import com.tunicorn.common.api.RestAPIResponse;
+import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.AdminUserService;
 import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.utils.CookieUtils;
-import com.tunicorn.marketing.vo.UserVO;
+import com.tunicorn.marketing.vo.AdminUserVO;
 import com.tunicorn.util.MessageUtils;
 
 @Controller
@@ -42,7 +43,7 @@ public class AdminLoginController {
 	 */
 	@RequestMapping(value = { "/login", "/" }, method = RequestMethod.GET)
 	public String index(HttpServletRequest request, Model model) {
-		UserVO user = (UserVO) request.getSession().getAttribute(Constant.SESSION_USER);
+		AdminUserVO user = (AdminUserVO) request.getSession().getAttribute(MarketingConstants.SESSION_ADMIN_USER);
 		String isOpen = ConfigUtils.getInstance().getConfigValue("register.isOpen");
 		boolean regiserable = false;
 		if (StringUtils.isNotEmpty(isOpen) && isOpen.equals("true")) {
@@ -66,7 +67,7 @@ public class AdminLoginController {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	public RestAPIResponse auth(@RequestBody UserVO user, HttpServletRequest request, HttpServletResponse response)
+	public RestAPIResponse auth(@RequestBody AdminUserVO user, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		String userName = user.getUserName();
 		String password = user.getPassword();
@@ -75,14 +76,14 @@ public class AdminLoginController {
 			logger.info(message.getMessage());
 			return new RestAPIResponse(message.getCode(), message.getMessage());
 		}
-		UserVO dbUser = adminUserService.getLoginUser(userName);
+		AdminUserVO dbUser = adminUserService.getLoginUser(userName);
 		if (dbUser == null) {
 			Message message = MessageUtils.getInstance().getMessage("user_not_existed");
 			logger.info(message.getMessage());
 			return new RestAPIResponse(message.getCode(), message.getMessage());
 		}
 		if (adminUserService.isValidUser(dbUser, password)) {
-			request.getSession().setAttribute(Constant.SESSION_USER, dbUser);
+			request.getSession().setAttribute(MarketingConstants.SESSION_ADMIN_USER, dbUser);
 			CookieUtils.setTokenCookie(response, dbUser);
 			return new RestAPIResponse(null);
 		}
@@ -100,7 +101,7 @@ public class AdminLoginController {
 	 */
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request, HttpServletResponse response) {
-		request.getSession().removeAttribute(Constant.SESSION_USER);
+		request.getSession().removeAttribute(MarketingConstants.SESSION_ADMIN_USER);
 		CookieUtils.removeCookie(request, response, Constant.COOKIE_TOKEN);
 		return "redirect:login";
 	}

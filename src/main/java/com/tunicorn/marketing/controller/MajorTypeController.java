@@ -20,6 +20,7 @@ import com.tunicorn.common.entity.AjaxResponse;
 import com.tunicorn.marketing.bo.MajorTypeBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.MajorTypeService;
+import com.tunicorn.marketing.vo.AdminUserVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.MessageUtils;
@@ -34,7 +35,7 @@ public class MajorTypeController extends BaseController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String majorType(HttpServletRequest request, Model model) {
-		UserVO user = getCurrentUser(request);
+		AdminUserVO user = getCurrentAdminUser(request);
 		model.addAttribute("user", user);
 
 		MajorTypeBO majorTypeBO = new MajorTypeBO();

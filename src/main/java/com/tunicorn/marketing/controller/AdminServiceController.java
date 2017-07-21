@@ -29,6 +29,7 @@ import com.tunicorn.marketing.service.AdminUserService;
 import com.tunicorn.marketing.service.MajorTypeService;
 import com.tunicorn.marketing.vo.AdminServiceApplyAssetVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyVO;
+import com.tunicorn.marketing.vo.AdminUserVO;
 import com.tunicorn.marketing.vo.ApproveEmailVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
 import com.tunicorn.marketing.vo.UserVO;
@@ -48,10 +49,10 @@ public class AdminServiceController extends BaseController {
 
 	@RequestMapping(value = "/apply", method = RequestMethod.GET)
 	public String serviceApply(HttpServletRequest request, HttpServletResponse resp, Model model) {
-		UserVO user = getCurrentUser(request);
+		AdminUserVO user = getCurrentAdminUser(request);
 
 		AdminServiceApplyBO adminServiceApplyBO = new AdminServiceApplyBO();
-		adminServiceApplyBO.setCreatorId(Integer.valueOf(user.getId()));
+		adminServiceApplyBO.setCreatorId(user.getId());
 		List<AdminServiceApplyVO> adminServiceApplyVOs = adminServiceApplyService
 				.getAdminServiceApplyList(adminServiceApplyBO);
 		int totalCount = adminServiceApplyService.getAdminServiceApplyCount(adminServiceApplyBO);
@@ -65,10 +66,10 @@ public class AdminServiceController extends BaseController {
 
 	@RequestMapping(value = "/apply/search", method = RequestMethod.GET)
 	public String serviceApplySearch(HttpServletRequest request, HttpServletResponse resp, Model model) {
-		UserVO user = getCurrentUser(request);
+		AdminUserVO user = getCurrentAdminUser(request);
 
 		AdminServiceApplyBO adminServiceApplyBO = new AdminServiceApplyBO();
-		adminServiceApplyBO.setCreatorId(Integer.valueOf(user.getId()));
+		adminServiceApplyBO.setCreatorId(user.getId());
 		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
 			adminServiceApplyBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
 		}
@@ -102,7 +103,7 @@ public class AdminServiceController extends BaseController {
 	@ResponseBody
 	public AjaxResponse createService(HttpServletRequest request,
 			@RequestParam(value = "images", required = false) List<MultipartFile> images) {
-		UserVO user = getCurrentUser(request);
+		AdminUserVO user = getCurrentAdminUser(request);
 
 		AdminServiceApplyVO adminServiceApplyVO = new AdminServiceApplyVO();
 		if (StringUtils.isNotBlank(request.getParameter("appBusinessName"))) {
@@ -136,7 +137,7 @@ public class AdminServiceController extends BaseController {
 		if (StringUtils.isNotBlank(request.getParameter("email"))) {
 			adminServiceApplyVO.setEmail(request.getParameter("email"));
 		}
-		adminServiceApplyVO.setCreatorId(Integer.valueOf(user.getId()));
+		adminServiceApplyVO.setCreatorId(user.getId());
 		int result = adminServiceApplyService.createAdminServiceApply(adminServiceApplyVO, images);
 		if (result == 0) {
 			Message message = MessageUtils.getInstance().getMessage("marketing_major_type_create_failed");
@@ -220,10 +221,10 @@ public class AdminServiceController extends BaseController {
 
 	@RequestMapping(value = "/manage", method = RequestMethod.GET)
 	public String serviceManage(HttpServletRequest request, HttpServletResponse resp, Model model) {
-		UserVO user = getCurrentUser(request);
+		AdminUserVO user = getCurrentAdminUser(request);
 
 		AdminServiceApplyBO adminServiceApplyBO = new AdminServiceApplyBO();
-		adminServiceApplyBO.setCreatorId(Integer.valueOf(user.getId()));
+		adminServiceApplyBO.setCreatorId(user.getId());
 		List<AdminServiceApplyVO> adminServiceApplyVOs = adminServiceApplyService
 				.getAdminServiceApplyList(adminServiceApplyBO);
 		int totalCount = adminServiceApplyService.getAdminServiceApplyCount(adminServiceApplyBO);
@@ -238,10 +239,10 @@ public class AdminServiceController extends BaseController {
 
 	@RequestMapping(value = "/manage/search", method = RequestMethod.GET)
 	public String serviceManageSearch(HttpServletRequest request, HttpServletResponse resp, Model model) {
-		UserVO user = getCurrentUser(request);
+		AdminUserVO user = getCurrentAdminUser(request);
 
 		AdminServiceApplyBO adminServiceApplyBO = new AdminServiceApplyBO();
-		adminServiceApplyBO.setCreatorId(Integer.valueOf(user.getId()));
+		adminServiceApplyBO.setCreatorId(user.getId());
 		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
 			adminServiceApplyBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
 		}

@@ -75,4 +75,6 @@ public class MarketingConstants {
 	public static final String APPLY_CREATED_STATUS = "created";
 	public static final String APPLY_OPENED_STATUS = "opened";
 	public static final String APPLY_REJECTED_STATUS = "rejected";
+	
+	public static final String SESSION_ADMIN_USER = "admin_user";
 }

@@ -114,13 +114,11 @@
 		asa.max_call_number, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
 		au.name as creatorName, asa.username, asa.email, asa.reject_reason
 		from 
-		(select aa.id,  aa.user_id, aa.app_business_name, aa.app_business_address, aa.app_business_mobile, aa.app_business_contacts,
-		aa.max_call_number, aa.creator_id, aa.apply_status, aa.create_time, aa.last_update, aa.username, aa.email, aa.reject_reason,
-		aa.`status`
-        from admin_service_apply aa
-        where aa.`status` = 'active'
-        order by aa.create_time desc
-		limit #{startNum}, #{perPage}
+		(select id,  user_id, app_business_name, app_business_address, app_business_mobile, app_business_contacts,
+			max_call_number, creator_id, apply_status, create_time, last_update, username, email, reject_reason, `status`
+        	from admin_service_apply where `status` = 'active'
+       	 	order by create_time desc
+			limit #{startNum}, #{perPage}
         )asa,admin_major_type_service_apply_mapping am,major_type mt,admin_user au
 		where asa.`status` = 'active'
 		and asa.id=am.service_apply_id and am.`status`='active'

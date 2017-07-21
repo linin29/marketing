@@ -48,10 +48,7 @@ public class AdminServiceController extends BaseController {
 
 	@RequestMapping(value = "/apply", method = RequestMethod.GET)
 	public String serviceApply(HttpServletRequest request, HttpServletResponse resp, Model model) {
-		AdminUserVO user = getCurrentAdminUser(request);
-
 		AdminServiceApplyBO adminServiceApplyBO = new AdminServiceApplyBO();
-		adminServiceApplyBO.setCreatorId(user.getId());
 		List<AdminServiceApplyVO> adminServiceApplyVOs = adminServiceApplyService
 				.getAdminServiceApplyList(adminServiceApplyBO);
 		int totalCount = adminServiceApplyService.getAdminServiceApplyCount(adminServiceApplyBO);
@@ -65,10 +62,7 @@ public class AdminServiceController extends BaseController {
 
 	@RequestMapping(value = "/apply/search", method = RequestMethod.GET)
 	public String serviceApplySearch(HttpServletRequest request, HttpServletResponse resp, Model model) {
-		AdminUserVO user = getCurrentAdminUser(request);
-
 		AdminServiceApplyBO adminServiceApplyBO = new AdminServiceApplyBO();
-		adminServiceApplyBO.setCreatorId(user.getId());
 		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
 			adminServiceApplyBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
 		}
@@ -220,10 +214,7 @@ public class AdminServiceController extends BaseController {
 
 	@RequestMapping(value = "/manage", method = RequestMethod.GET)
 	public String serviceManage(HttpServletRequest request, HttpServletResponse resp, Model model) {
-		AdminUserVO user = getCurrentAdminUser(request);
-
 		AdminServiceApplyBO adminServiceApplyBO = new AdminServiceApplyBO();
-		adminServiceApplyBO.setCreatorId(user.getId());
 		List<AdminServiceApplyVO> adminServiceApplyVOs = adminServiceApplyService
 				.getAdminServiceApplyList(adminServiceApplyBO);
 		int totalCount = adminServiceApplyService.getAdminServiceApplyCount(adminServiceApplyBO);
@@ -238,10 +229,7 @@ public class AdminServiceController extends BaseController {
 
 	@RequestMapping(value = "/manage/search", method = RequestMethod.GET)
 	public String serviceManageSearch(HttpServletRequest request, HttpServletResponse resp, Model model) {
-		AdminUserVO user = getCurrentAdminUser(request);
-
 		AdminServiceApplyBO adminServiceApplyBO = new AdminServiceApplyBO();
-		adminServiceApplyBO.setCreatorId(user.getId());
 		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
 			adminServiceApplyBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
 		}

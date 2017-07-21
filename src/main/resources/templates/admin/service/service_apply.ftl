@@ -2,6 +2,9 @@
 	.tdCenter td,.thCenter th{
 		text-align:center;
 	}
+	.total{
+		width:100%;
+	}
 </style>
 
 	<div class="panel-default clearBottom">
@@ -92,18 +95,18 @@
 			                	<tbody>
 			                		<tr>
 			                			<td class="wid">名称：</td>
-			                			<td><input  class="application-name" type="text" id="ser-name" placeholder="输入名称"/></td>
+			                			<td><input  class="application-name total" type="text" id="ser-name" placeholder="输入名称"/></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">地址：</td>
-			                			<td><input  class="application-name" type="text" id="ser-address" placeholder="输入地址"/></td>
+			                			<td><input  class="application-name total" type="text" id="ser-address" placeholder="输入地址"/></td>
 			                		<tr>
 			                			<td class="wid">联系人：</td>
-			                			<td><input  class="application-name" type="text" id="ser-phone-person" placeholder="输入联系人"/></td>
+			                			<td><input  class="application-name total" type="text" id="ser-phone-person" placeholder="输入联系人"/></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">联系方式：</td>
-			                			<td><input  class="application-name" type="text" id="ser-phone" placeholder="输入联系方式"/></td>
+			                			<td><input  class="application-name total" type="text" id="ser-phone" placeholder="输入联系方式"/></td>
 			                		</tr>
 			                	</tbody>
 			                </table>
@@ -114,7 +117,7 @@
 			                	<tbody>
 			                		<tr id="upload-book-tr">
 			                			<td class="wid">上传合同：</td>
-			                			<td><input  class="application-name" multiple type="file" id="upload-book" /></td>
+			                			<td><input  class="application-name total" multiple type="file" id="upload-book" /></td>
 			                		</tr>
 			                		<!-- <tr>
 			                			<td class="wid">合同张数：</td>
@@ -141,7 +144,7 @@
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">申请次数：</td>
-			                			<td><input  class="application-name" type="text" id="application-number" placeholder="输入申请次数"/></td>
+			                			<td><input  class="application-name total" type="text" id="application-number" placeholder="输入申请次数"/></td>
 			                		</tr>
 			                	</tbody>
 			                </table>
@@ -152,11 +155,11 @@
 			                	<tbody>
 			                		<tr>
 			                			<td class="wid">申请用户名：</td>
-			                			<td><input  class="application-name" type="text" id="ser-user-name" placeholder="输入用户名"/></td>
+			                			<td><input  class="application-name total" type="text" id="ser-user-name" placeholder="输入用户名"/></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">邮箱：</td>
-			                			<td><input  class="application-name" type="text" id="ser-email" placeholder="输入邮箱"/></td>
+			                			<td><input  class="application-name total" type="text" id="ser-email" placeholder="输入邮箱"/></td>
 			                		</tr>
 			                	</tbody>
 			                </table>

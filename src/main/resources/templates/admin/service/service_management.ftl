@@ -2,6 +2,9 @@
 	.tdCenter td,.thCenter th{
 		text-align:center;
 	}
+	.total{
+		width:100%;
+	}
 </style>
 <div class="panel-default clearBottom">
   			<div class="panel-heading">服务管理</div>
@@ -92,18 +95,18 @@
 			                	<tbody>
 			                		<tr>
 			                			<td class="wid">名称：</td>
-			                			<td><input  class="application-name" type="text" id="ser-name" /></td>
+			                			<td><input  class="application-name total" type="text" id="ser-name" /></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">地址：</td>
-			                			<td><input  class="application-name" type="text" id="ser-address"/></td>
+			                			<td><input  class="application-name total" type="text" id="ser-address"/></td>
 			                		<tr>
 			                			<td class="wid">联系人：</td>
-			                			<td><input  class="application-name" type="text" id="ser-phone-person"/></td>
+			                			<td><input  class="application-name total" type="text" id="ser-phone-person"/></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">联系方式：</td>
-			                			<td><input  class="application-name" type="text" id="ser-phone"/></td>
+			                			<td><input  class="application-name total" type="text" id="ser-phone"/></td>
 			                		</tr>
 			                	</tbody>
 			                </table>
@@ -141,7 +144,7 @@
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">申请次数：</td>
-			                			<td><input  class="application-name" type="text" id="application-number"/></td>
+			                			<td><input  class="application-name total" type="text" id="application-number"/></td>
 			                		</tr>
 			                	</tbody>
 			                </table>
@@ -152,11 +155,11 @@
 			                	<tbody>
 			                		<tr>
 			                			<td class="wid">申请用户名：</td>
-			                			<td><input  class="application-name" type="text" id="ser-user-name"/></td>
+			                			<td><input  class="application-name total" type="text" id="ser-user-name"/></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">邮箱：</td>
-			                			<td><input  class="application-name" type="text" id="ser-email"/></td>
+			                			<td><input  class="application-name total" type="text" id="ser-email"/></td>
 			                		</tr>
 			                	</tbody>
 			                </table>

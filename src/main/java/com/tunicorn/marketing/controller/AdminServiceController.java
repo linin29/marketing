@@ -25,7 +25,6 @@ import com.tunicorn.marketing.api.CommonAjaxResponse;
 import com.tunicorn.marketing.bo.AdminServiceApplyBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.AdminServiceApplyService;
-import com.tunicorn.marketing.service.AdminUserService;
 import com.tunicorn.marketing.service.MajorTypeService;
 import com.tunicorn.marketing.vo.AdminServiceApplyAssetVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyVO;
@@ -43,8 +42,6 @@ public class AdminServiceController extends BaseController {
 	private AdminServiceApplyService adminServiceApplyService;
 	@Autowired
 	private MajorTypeService majorTypeService;
-	@Autowired
-	private AdminUserService adminUserService;
 
 	@RequestMapping(value = "/apply", method = RequestMethod.GET)
 	public String serviceApply(HttpServletRequest request, HttpServletResponse resp, Model model) {
@@ -220,7 +217,6 @@ public class AdminServiceController extends BaseController {
 		int totalCount = adminServiceApplyService.getAdminServiceApplyCount(adminServiceApplyBO);
 
 		model.addAttribute("majorTypes", majorTypeService.getMajorTypeList());
-		model.addAttribute("adminUsers", adminUserService.getAdminUserList());
 		model.addAttribute("adminServiceApplys", adminServiceApplyVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", 1);
@@ -245,7 +241,6 @@ public class AdminServiceController extends BaseController {
 				.getAdminServiceApplyList(adminServiceApplyBO);
 		int totalCount = adminServiceApplyService.getAdminServiceApplyCount(adminServiceApplyBO);
 
-		model.addAttribute("adminUsers", adminUserService.getAdminUserList());
 		model.addAttribute("majorTypes", majorTypeService.getMajorTypeList());
 		model.addAttribute("adminServiceApplys", adminServiceApplyVOs);
 		model.addAttribute("totalCount", totalCount);

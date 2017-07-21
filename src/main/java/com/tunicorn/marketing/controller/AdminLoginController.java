@@ -29,7 +29,7 @@ import com.tunicorn.util.MessageUtils;
 @EnableAutoConfiguration
 public class AdminLoginController {
 
-	private static Logger logger = Logger.getLogger(LoginController.class);
+	private static Logger logger = Logger.getLogger(AdminLoginController.class);
 
 	@Autowired
 	private AdminUserService adminUserService;

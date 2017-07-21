@@ -32,11 +32,11 @@
 			    <tbody class="">
 			    	<tr class='th_center'>
 			    		<th style="width:20%">名称</th> 
-			    		<th style="width:20%"">类型</th>
-			    		<th style="width:14%"">描述</th>
-			    		<th style="width:15%"">是否显示</th>
-			    		<th style="width:13%"">创建时间</th>
-			    		<th style="width:18%"">操作</th>
+			    		<th style="width:15%">类型</th>
+			    		<th style="width:14%">描述</th>
+			    		<th style="width:15%">是否显示</th>
+			    		<th style="width:13%">创建时间</th>
+			    		<th style="width:20%">操作</th>
 			    	</tr>
 			    	<#list GoodsSkus as GoodsSku>
 			    	<tr style="text-align:center;" class="tableTr" skuid=${GoodsSku.id!} >

@@ -32,7 +32,6 @@ import com.tunicorn.marketing.vo.AdminServiceApplyVO;
 import com.tunicorn.marketing.vo.AdminUserVO;
 import com.tunicorn.marketing.vo.ApproveEmailVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
-import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.MessageUtils;
 
 @Controller

@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+@SuppressWarnings("deprecation")
 public class DateUtils {
 	public static final int YEAR = 9;
 	public static final int HYEAR = 8;
@@ -345,7 +345,6 @@ public class DateUtils {
 	}
 	
 	public static void main(String[] args){
-		DateUtils du = new DateUtils(DateUtils.getCurrentTimeMillis());
-		
+		//DateUtils du = new DateUtils(DateUtils.getCurrentTimeMillis());
 	}
 }

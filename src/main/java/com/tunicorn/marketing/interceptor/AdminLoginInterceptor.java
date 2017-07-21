@@ -10,7 +10,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.tunicorn.common.Constant;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.AdminUserService;
 import com.tunicorn.marketing.utils.CookieUtils;

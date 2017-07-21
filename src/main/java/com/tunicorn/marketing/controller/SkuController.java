@@ -23,7 +23,6 @@ import com.tunicorn.marketing.service.GoodsSkuService;
 import com.tunicorn.marketing.service.MajorTypeService;
 import com.tunicorn.marketing.vo.AdminUserVO;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
-import com.tunicorn.marketing.vo.UserVO; 
 import com.tunicorn.util.MessageUtils;
 
 @Controller

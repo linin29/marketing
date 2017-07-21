@@ -15,14 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tunicorn.common.api.Message; 
+import com.tunicorn.common.api.Message;
 import com.tunicorn.common.entity.AjaxResponse;
 import com.tunicorn.marketing.bo.MajorTypeBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.MajorTypeService;
 import com.tunicorn.marketing.vo.AdminUserVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
-import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.MessageUtils;
 
 @Controller

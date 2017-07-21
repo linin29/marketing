@@ -165,7 +165,7 @@ function searchApiCalling(pageNum) {
 	$.ajax({
 		 type: 'GET',
 		 data: data,
-		 url: '${springMacroRequestContext.contextPath}/admin/service/calling',
+		 url: '${springMacroRequestContext.contextPath}/admin/calling',
 		 success: function(data) {
 		 	$("#content").html(data);
     	},

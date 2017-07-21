@@ -33,7 +33,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tunicorn.common.api.Message;
 import com.tunicorn.marketing.api.CommonAjaxResponse;
-import com.tunicorn.marketing.bo.ApiCallingSummaryBO;
 import com.tunicorn.marketing.bo.CropBO;
 import com.tunicorn.marketing.bo.OrderBO;
 import com.tunicorn.marketing.bo.ServiceResponseBO;
@@ -41,7 +40,6 @@ import com.tunicorn.marketing.bo.StitcherBO;
 import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.TaskService;
-import com.tunicorn.marketing.vo.ApiCallingSummaryVO;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
 import com.tunicorn.marketing.vo.TaskVO;
@@ -206,30 +204,6 @@ public class TaskController extends BaseController {
 		return null;
 	}
 	
-	@RequestMapping(value = "/calling", method = RequestMethod.GET)
-	public String calling(HttpServletRequest request, ApiCallingSummaryBO apiCallingSummaryBO, Model model) {
-		UserVO user = getCurrentUser(request);
-		apiCallingSummaryBO.setUserName(user.getUserName());
-		
-		if(StringUtils.isBlank(apiCallingSummaryBO.getStartDate())){
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-			long startDate = new Date().getTime() - 5 * 24 * 60 * 60 * 1000;
-			apiCallingSummaryBO.setStartDate(formatter.format(new Date(startDate)));
-		}
-
-		List<ApiCallingSummaryVO> apiCallingCounts = taskService.getApiCallingSummaryList(apiCallingSummaryBO);
-		int totalCount = taskService.getApiCallingSummary(apiCallingSummaryBO);
-		int callingCount = taskService.getApiCallingSum(apiCallingSummaryBO);
-
-		model.addAttribute("callingCount", callingCount);
-		model.addAttribute("callings", apiCallingCounts);
-		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("startDate", apiCallingSummaryBO.getStartDate());
-		model.addAttribute("endDate", apiCallingSummaryBO.getEndDate());
-		model.addAttribute("currentPage", apiCallingSummaryBO.getPageNum() + 1);
-		return "list/count_list";
-	}
-
 	@RequestMapping(value = "/task", method = RequestMethod.GET)
 	public String task(HttpServletRequest request, Model model) {
 		UserVO user = getCurrentUser(request);

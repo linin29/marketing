@@ -1,6 +1,6 @@
 var marketing_url = '/marketing';
 var majorType=majorType || {};
-majorType=(function(){
+majorType = (function(){
 	function init(currentPage, totalCount){
 		if(totalCount != "0"){
 			initPagination(currentPage, totalCount);

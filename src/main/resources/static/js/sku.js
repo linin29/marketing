@@ -1,6 +1,6 @@
 var marketing_url = '/marketing';
 var sku = sku || {};
-sku=(function(){
+sku = (function(){
 	function init(currentPage, totalCount){
 		$("#new-SKU").click(function(){
 			$("#skuId").val("");
@@ -137,20 +137,6 @@ sku=(function(){
 		$("#errorMsg").html("");
 	}
 	
-	function initPagination(currentPage, totalCount) {
-		var options = {
-			alignment: 'center',
-	        currentPage: currentPage,
-	        totalPages: Math.ceil(totalCount / dface.constants.PAGINATION_ITEMS_PER_PAGE),
-	        numberOfPages: dface.constants.PAGINATION_ITEMS_PER_PAGE,
-	        onPageClicked: function (event, originalEvent, type, page) {
-	        	doPaginationClicked(page);
-	        }
-		};
-		
-		$('#table_paginator').bootstrapPaginator(options);
-		$("#table_paginator").show();
-	};
 	function initPagination(currentPage, totalCount) {
 		var options = {
 			alignment: 'center',

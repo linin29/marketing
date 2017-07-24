@@ -11,6 +11,9 @@ DROP PROCEDURE IF EXISTS CheckConstraintExist;
 DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS AlterTable;
+DROP PROCEDURE IF EXISTS CreateAdminPrivileges;
+DROP PROCEDURE IF EXISTS AlterServiceTable;
+DROP PROCEDURE IF EXISTS AddData;
 
 DELIMITER //
 CREATE PROCEDURE CheckTableExist(IN p_tablename varchar(64), OUT ret int)
@@ -91,6 +94,19 @@ BEGIN
 	END IF;
 END//
 
+DELIMITER //
+CREATE PROCEDURE AlterServiceTable()
+BEGIN
+	SET @ret = 0;
+	CALL CheckTableExist("admin_service_apply", @ret);
+	IF @ret = 1 THEN 
+		ALTER TABLE admin_service_apply ADD COLUMN `username` VARCHAR(128) NOT NULL;
+		ALTER TABLE admin_service_apply ADD COLUMN `email` VARCHAR(128) NOT NULL;
+		ALTER TABLE admin_service_apply ADD COLUMN `reject_reason` VARCHAR(256) NOT NULL;
+	END IF;
+END//
+
+
 
 DELIMITER //
 CREATE PROCEDURE AddData()
@@ -104,9 +120,43 @@ BEGIN
 END//
 
 
+DELIMITER //
+CREATE PROCEDURE CreateAdminPrivileges()
+BEGIN
+	SET @ret = 0;
+	CALL CheckDataExist("admin_privilege", "id=1", @ret);
+	IF @ret = 0 THEN
+		INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (1, NULL, '服务申请', '/admin/service/apply', '服务申请一级菜单', 1, now());
+        INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (2, NULL, '服务管理', '/admin/service/manage', '服务管理一级菜单', 2, now());
+        INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (3, NULL, '主类型配置', '/admin/majortype', '主类型配置一级菜单', 3, now());
+        INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (4, NULL, 'SKU配置', '/admin/sku', 'SKU配置一级菜单', 4, now());
+        INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (5, NULL, '用户管理', '/admin/user', '用户管理一级菜单', 5, now());
+        INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (6, NULL, '调用统计', '/admin/calling', '调用统计一级菜单', 6, now());
+
+        INSERT INTO `admin_user`(`id`, `username`,`password`, `email`, `name`, `create_time`) VALUES (1, 'admin', '5e13b0e702535b199b9063e60eaf5a909514d9ee25c3242f7ae8d362c945d25b000000142e10f370266e33794eb4dca6bf067e6c13cdced803e54f2e78ca15e2e9492bfb', 'tiannuo@tunicorn.cn', '后台管理员', now());
+        INSERT INTO `admin_user`(`id`, `username`,`password`, `email`, `name`, `create_time`) VALUES (2, 'applyAdmin', '5e13b0e702535b199b9063e60eaf5a909514d9ee25c3242f7ae8d362c945d25b000000142e10f370266e33794eb4dca6bf067e6c13cdced803e54f2e78ca15e2e9492bfb', 'tiannuo@tunicorn.cn', '服务申请管理员', now());
+
+        INSERT INTO `admin_role`(`id`, `name`, `description`, `create_time`) VALUES (1, 'admin', '后台管理员', now());
+        INSERT INTO `admin_role`(`id`, `name`, `description`, `create_time`) VALUES (2, 'applyAdmin', '服务申请管理员', now());
+        INSERT INTO `admin_user_role_mapping`(`id`, `user_id`,`role_id`, `create_time`) VALUES (1, 1, 1, now());
+        INSERT INTO `admin_user_role_mapping`(`id`, `user_id`,`role_id`, `create_time`) VALUES (2, 2, 2, now());
+        
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (1, 2, 1, now());
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (2, 1, 2, now());
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (3, 1, 3, now());
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (4, 1, 4, now());
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (5, 1, 5, now());
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (6, 1, 6, now());
+	END IF;
+END//
+
+
 DELIMITER ;
 	
 CALL AlterTable();
+CALL CreateAdminPrivileges();
+CALL AlterServiceTable();
+CALL AddData();
 
 DROP PROCEDURE IF EXISTS CheckTableExist;
 DROP PROCEDURE IF EXISTS CheckColumnExist;
@@ -115,3 +165,6 @@ DROP PROCEDURE IF EXISTS CheckConstraintExist;
 DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS AlterTable;
+DROP PROCEDURE IF EXISTS CreateAdminPrivileges;
+DROP PROCEDURE IF EXISTS AlterServiceTable;
+DROP PROCEDURE IF EXISTS AddData;

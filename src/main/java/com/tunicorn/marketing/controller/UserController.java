@@ -85,22 +85,6 @@ public class UserController extends BaseController {
 		}
 	}
 
-	@RequestMapping(value = "/user/create", method = RequestMethod.POST)
-	@ResponseBody
-	public AjaxResponse createUser(@RequestBody UserVO user, HttpServletRequest request) {
-		UserVO userVO = userService.getUserByUserName(user.getUserName());
-		if (userVO != null) {
-			Message message = MessageUtils.getInstance().getMessage("user_existed");
-			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
-		}
-		int result = userService.createUserWithRoleMapping(user);
-		if (result == 0) {
-			Message message = MessageUtils.getInstance().getMessage("marketing_user_create_failed");
-			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
-		}
-		return AjaxResponse.toSuccess(null);
-	}
-
 	@RequestMapping(value = "/admin/user", method = RequestMethod.GET)
 	public String userList(HttpServletRequest request, Model model) {
 		UserBO userBO = new UserBO();

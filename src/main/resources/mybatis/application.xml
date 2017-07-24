@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tunicorn.marketing.mapper.ApplicationMapper">
+	<resultMap id="MajorTypeMap" type="com.tunicorn.marketing.vo.ApplicationVO">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="app_key" property="appKey" jdbcType="VARCHAR" />
+		<result column="app_secret" property="appSecret" jdbcType="VARCHAR" />
+		<result column="privacy" property="privacy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
+		<result column="last_update" property="lastUpdate"  javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+	 </resultMap>
+    
+   <insert id="createApplication" parameterType="com.tunicorn.marketing.vo.ApplicationVO" useGeneratedKeys="true"  keyProperty="id">
+    insert into application
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="appKey != null" >
+        app_key,
+      </if>
+      <if test="appSecret != null" >
+        app_secret,
+      </if>
+      <if test="privacy != null" >
+        privacy,
+      </if>
+        create_time,
+      <if test="lastUpdate != null" >
+        last_update,
+      </if>
+    </trim> 
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="appKey != null" >
+        #{appKey,jdbcType=VARCHAR},
+      </if>
+      <if test="appSecret != null" >
+        #{appSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="privacy != null" >
+        #{privacy,jdbcType=VARCHAR},
+      </if>
+        now(),
+      <if test="lastUpdate != null" >
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  </mapper>

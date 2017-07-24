@@ -17,4 +17,6 @@ public interface ApplicationMapper {
 	})
 	@Select("select * from application where app_key=#{key} and app_secret=#{secret} and status='active'") 
 	public ApplicationVO getApplicationByKeyAndSecret (@Param("key") String key, @Param("secret") String secret);
+	
+	public int createApplication(ApplicationVO applicationVO);
 }

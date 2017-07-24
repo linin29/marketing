@@ -395,9 +395,10 @@ adminService = (function(){
 		});
 	};
 	function openService(applyId){
-		createUser();
 		var applyStatus = 'opened';
-		var tempData = {applyStatus:applyStatus};
+		var username = $("#ser-user-name").val();
+		var email = $("#ser-email").val();
+		var tempData = {applyStatus:applyStatus, username:username, email:email};
 		 $.ajax({
 				type: 'POST',
 				url:  marketing_url + '/admin/service/' + applyId + '/approve',
@@ -417,6 +418,8 @@ adminService = (function(){
 						$("#approve_hide_" + applyId).css('display','');
 						$("#delete_hide_" + applyId).css('display','');
 						tempData.username = data.data.username;
+						tempData.appKey = data.data.appKey;
+						tempData.appSecret = data.data.appSecret;
 			 			sendEmail(tempData);
 					} 
 	        	},
@@ -506,27 +509,6 @@ adminService = (function(){
         	}
 		});
     };
-	function createUser(){
-		var username = $("#ser-user-name").val();
-		var email = $("#ser-email").val();
-		var data = {'userName':username, 'email':email,'name':username};
-		$.ajax({
-			type: 'POST',
-			url: marketing_url + '/user/create',
-			contentType : 'application/json',
-			dataType: 'json', 
-			data: JSON.stringify(data),
-			success: function(data) {
-				if (!data.success) {
-					noty({text: data.errorMessage, layout: 'topCenter', type: 'warning', timeout: 2000});
-					return;
-				}
-        	},
-        	error: function(data) {
-        		noty({text: '创建用户失败', layout: 'topCenter', type: 'error', timeout: 2000});
-        	}
-		});
-	};
 	function sendEmail(data){
 		var formData = new FormData();
 		formData.append('applyStatus', data.applyStatus);
@@ -535,6 +517,8 @@ adminService = (function(){
 		formData.append('maxCallNumber', data.maxCallNumber);
 		formData.append('username', data.username);
 		formData.append('rejectReason', data.rejectReason);
+		formData.append('appKey', data.appKey);
+		formData.append('appSecret', data.appSecret);
 		tunicorn.utils.postFormData(marketing_url + '/admin/service/sendEmail', formData, function(err, result){
 			if(err){
 				noty({text: "服务器异常!", layout: "topCenter", type: "error", timeout: 2000});

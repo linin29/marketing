@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tunicorn.marketing.constant.MarketingConstants;
- 
+
 public class AdminServiceApplyVO {
 	private long id;
 	private int userId;
@@ -26,6 +26,8 @@ public class AdminServiceApplyVO {
 	private String username;
 	private String email;
 	private String rejectReason;
+	private String appKey;
+	private String appSecret;
 
 	public String getUsername() {
 		return username;
@@ -161,6 +163,22 @@ public class AdminServiceApplyVO {
 
 	public void setRejectReason(String rejectReason) {
 		this.rejectReason = rejectReason;
+	}
+
+	public String getAppKey() {
+		return appKey;
+	}
+
+	public void setAppKey(String appKey) {
+		this.appKey = appKey;
+	}
+
+	public String getAppSecret() {
+		return appSecret;
+	}
+
+	public void setAppSecret(String appSecret) {
+		this.appSecret = appSecret;
 	}
 
 	public String getStatusStr() {

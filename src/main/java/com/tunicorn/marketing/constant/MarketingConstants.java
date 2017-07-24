@@ -77,4 +77,8 @@ public class MarketingConstants {
 	public static final String APPLY_REJECTED_STATUS = "rejected";
 	
 	public static final String SESSION_ADMIN_USER = "admin_user";
+	
+	public static final String APPLICATION_PRIVACY_PUBLIC = "public";
+	public static final String APPLICATION_PRIVACY_PRIVATE = "private";
+	public static final String APPLICATION_PRIVACY_PROTECTED = "protected";
 }

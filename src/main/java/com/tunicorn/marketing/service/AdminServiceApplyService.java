@@ -19,6 +19,7 @@ import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.mapper.AdminMajorTypeServiceApplyMappingMapper;
 import com.tunicorn.marketing.mapper.AdminServiceApplyAssetMapper;
 import com.tunicorn.marketing.mapper.AdminServiceApplyMapper;
+import com.tunicorn.marketing.mapper.AdminUserMapper;
 import com.tunicorn.marketing.mapper.ApplicationMapper;
 import com.tunicorn.marketing.mapper.MajorTypeMapper;
 import com.tunicorn.marketing.mapper.UserMapper;
@@ -28,6 +29,7 @@ import com.tunicorn.marketing.utils.SendMailUtils;
 import com.tunicorn.marketing.vo.AdminMajorTypeServiceApplyMappingVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyAssetVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyVO;
+import com.tunicorn.marketing.vo.AdminUserVO;
 import com.tunicorn.marketing.vo.ApplicationVO;
 import com.tunicorn.marketing.vo.ApproveEmailVO;
 import com.tunicorn.marketing.vo.MajorTypeApplicationMappingVO;
@@ -55,6 +57,9 @@ public class AdminServiceApplyService {
 
 	@Autowired
 	UserMapper userMapper;
+	
+	@Autowired
+	AdminUserMapper adminUserMapper;
 
 	@Transactional
 	public int createAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO, List<MultipartFile> images) {
@@ -79,9 +84,9 @@ public class AdminServiceApplyService {
 		}
 		text.append("</p>").append("<p>调用次数：").append(adminServiceApplyVO.getMaxCallNumber()).append("</p>");
 		String from = ConfigUtils.getInstance().getConfigValue("spring.mail.from");
-		String to = ConfigUtils.getInstance().getConfigValue("spring.mail.to");
+		AdminUserVO adminUserVO = adminUserMapper.getUserByUserName(MarketingConstants.ADMIN_USER_NAME);
 		String password = ConfigUtils.getInstance().getConfigValue("spring.mail.from.password");
-		SendMailUtils.sendTextWithHtml(from, new String[] { to }, password, "服务申请", text.toString());
+		SendMailUtils.sendTextWithHtml(from, new String[] {from, adminUserVO.getEmail(), adminServiceApplyVO.getEmail()}, password, "服务申请", text.toString());
 	}
 
 	public void sendApproveEmail(ApproveEmailVO approveEmailVO) {
@@ -99,10 +104,10 @@ public class AdminServiceApplyService {
 			subject = "服务已驳回";
 			text.append("</p>").append("<p>驳回原因：").append(approveEmailVO.getRejectReason()).append("</p>");
 		}
-		String from = ConfigUtils.getInstance().getConfigValue("spring.mail.to");
-		String to = ConfigUtils.getInstance().getConfigValue("spring.mail.from");
-		String password = ConfigUtils.getInstance().getConfigValue("spring.mail.to.password");
-		SendMailUtils.sendTextWithHtml(from, new String[] { to }, password, subject, text.toString());
+		String from = ConfigUtils.getInstance().getConfigValue("spring.mail.from");
+		AdminUserVO adminUserVO = adminUserMapper.getUserByUserName(MarketingConstants.ADMIN_USER_NAME);
+		String password = ConfigUtils.getInstance().getConfigValue("spring.mail.from.password");
+		SendMailUtils.sendTextWithHtml(from, new String[] { from, adminUserVO.getEmail(), approveEmailVO.getUserEmail() }, password, subject, text.toString());
 	}
 
 	@Transactional

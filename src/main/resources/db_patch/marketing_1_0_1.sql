@@ -133,8 +133,8 @@ BEGIN
         INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (5, NULL, '用户管理', '/admin/user', '用户管理一级菜单', 5, now());
         INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (6, NULL, '调用统计', '/admin/calling', '调用统计一级菜单', 6, now());
 
-        INSERT INTO `admin_user`(`id`, `username`,`password`, `email`, `name`, `create_time`) VALUES (1, 'admin', '5e13b0e702535b199b9063e60eaf5a909514d9ee25c3242f7ae8d362c945d25b000000142e10f370266e33794eb4dca6bf067e6c13cdced803e54f2e78ca15e2e9492bfb', 'tiannuo@tunicorn.cn', '后台管理员', now());
-        INSERT INTO `admin_user`(`id`, `username`,`password`, `email`, `name`, `create_time`) VALUES (2, 'applyAdmin', '5e13b0e702535b199b9063e60eaf5a909514d9ee25c3242f7ae8d362c945d25b000000142e10f370266e33794eb4dca6bf067e6c13cdced803e54f2e78ca15e2e9492bfb', 'tiannuo@tunicorn.cn', '服务申请管理员', now());
+        INSERT INTO `admin_user`(`id`, `username`,`password`, `email`, `name`, `create_time`) VALUES (1, 'admin', '5e13b0e702535b199b9063e60eaf5a909514d9ee25c3242f7ae8d362c945d25b000000142e10f370266e33794eb4dca6bf067e6c13cdced803e54f2e78ca15e2e9492bfb', 'jifeng@tunicorn.cn', '后台管理员', now());
+        INSERT INTO `admin_user`(`id`, `username`,`password`, `email`, `name`, `create_time`) VALUES (2, 'applyAdmin', '5e13b0e702535b199b9063e60eaf5a909514d9ee25c3242f7ae8d362c945d25b000000142e10f370266e33794eb4dca6bf067e6c13cdced803e54f2e78ca15e2e9492bfb', 'jifeng@tunicorn.cn', '服务申请管理员', now());
 
         INSERT INTO `admin_role`(`id`, `name`, `description`, `create_time`) VALUES (1, 'admin', '后台管理员', now());
         INSERT INTO `admin_role`(`id`, `name`, `description`, `create_time`) VALUES (2, 'applyAdmin', '服务申请管理员', now());

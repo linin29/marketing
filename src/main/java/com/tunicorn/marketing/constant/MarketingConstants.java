@@ -81,4 +81,6 @@ public class MarketingConstants {
 	public static final String APPLICATION_PRIVACY_PUBLIC = "public";
 	public static final String APPLICATION_PRIVACY_PRIVATE = "private";
 	public static final String APPLICATION_PRIVACY_PROTECTED = "protected";
+	
+	public static final String ADMIN_USER_NAME = "admin";
 }

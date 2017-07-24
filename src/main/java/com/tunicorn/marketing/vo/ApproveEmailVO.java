@@ -9,6 +9,7 @@ public class ApproveEmailVO {
 	private String applyStatus;
 	private String appKey;
 	private String appSecret;
+	private String userEmail;
 
 	public String getUsername() {
 		return username;
@@ -64,6 +65,14 @@ public class ApproveEmailVO {
 
 	public void setAppSecret(String appSecret) {
 		this.appSecret = appSecret;
+	}
+
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 
 }

@@ -316,6 +316,9 @@ public class AdminServiceController extends BaseController {
 		if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
 			adminServiceApplyVO.setMaxCallNumber(Long.valueOf(request.getParameter("maxCallNumber")));
 		}
+		if (StringUtils.isNotBlank(request.getParameter("email"))) {
+			adminServiceApplyVO.setEmail(request.getParameter("email"));
+		}
 		if (StringUtils.isNotBlank(request.getParameter("majorTypes"))) {
 			List<MajorTypeVO> majorTypes = new ArrayList<MajorTypeVO>();
 			String[] majortypeArray = request.getParameter("majorTypes").split(",");
@@ -345,6 +348,9 @@ public class AdminServiceController extends BaseController {
 		}
 		if (StringUtils.isNotBlank(request.getParameter("appSecret"))) {
 			approveEmailVO.setAppSecret(request.getParameter("appSecret"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("email"))) {
+			approveEmailVO.setUserEmail(request.getParameter("email"));
 		}
 		adminServiceApplyService.sendApproveEmail(approveEmailVO);
 	}

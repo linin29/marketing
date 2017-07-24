@@ -235,7 +235,8 @@ adminService = (function(){
 		 		$('#new-server-model').modal('hide');
 		 		if(!applyId){
 		 			formData.append('applyStatus', 'created');
-		 			var data ={'applyStatus':'created', 'appBusinessName':appBusinessName,'username':username,'majorTypes':majorTypes,'maxCallNumber':maxCallNumber};
+		 			var data ={'applyStatus':'created', 'appBusinessName':appBusinessName,
+		 					'username':username,'majorTypes':majorTypes,'maxCallNumber':maxCallNumber, 'email':email};
 		 			sendEmail(data);
 		 		}
 		 		setTimeout(function(){
@@ -420,6 +421,7 @@ adminService = (function(){
 						tempData.username = data.data.username;
 						tempData.appKey = data.data.appKey;
 						tempData.appSecret = data.data.appSecret;
+						tempData.email = data.data.email;
 			 			sendEmail(tempData);
 					} 
 	        	},
@@ -454,7 +456,8 @@ adminService = (function(){
 						$("#approve_" + applyId).hide();
 						$("#delete_" + applyId).hide();
 						$("#approve_hide_" + applyId).css('display','');
-						$("#delete_hide_" + applyId).css('display','')
+						$("#delete_hide_" + applyId).css('display','');
+						tempData.email = data.data.email;
 			 			sendEmail(tempData);
 					} 
 	        	},
@@ -519,6 +522,7 @@ adminService = (function(){
 		formData.append('rejectReason', data.rejectReason);
 		formData.append('appKey', data.appKey);
 		formData.append('appSecret', data.appSecret);
+		formData.append('email', data.email);
 		tunicorn.utils.postFormData(marketing_url + '/admin/service/sendEmail', formData, function(err, result){
 			if(err){
 				noty({text: "服务器异常!", layout: "topCenter", type: "error", timeout: 2000});

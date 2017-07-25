@@ -42,22 +42,16 @@ public class AdminServiceApplyService {
 
 	@Autowired
 	private AdminServiceApplyMapper adminServiceApplyMapper;
-
 	@Autowired
 	private AdminServiceApplyAssetMapper adminServiceApplyAssetMapper;
-
 	@Autowired
 	private AdminMajorTypeServiceApplyMappingMapper adminMajorTypeServiceApplyMappingMapper;
-
 	@Autowired
 	MajorTypeMapper majorTypeMapper;
-
 	@Autowired
 	ApplicationMapper applicationMapper;
-
 	@Autowired
 	UserMapper userMapper;
-	
 	@Autowired
 	AdminUserMapper adminUserMapper;
 

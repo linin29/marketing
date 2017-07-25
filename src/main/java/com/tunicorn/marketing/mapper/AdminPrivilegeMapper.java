@@ -16,10 +16,6 @@ public interface AdminPrivilegeMapper {
 			+ "order by c.display_order")
 	public List<PrivilegeVO> getMenuPrivileges(String userId);
 
-	/**
-	 * @param privilegeVO
-	 * @return
-	 */
 	@Insert("Insert into admin_privilege( item_name, item_value, description, create_time) values "
 			+ "( #{privilegeName}, #{privilegeValue}, #{description} ,now())")
 	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")

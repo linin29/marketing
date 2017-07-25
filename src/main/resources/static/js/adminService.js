@@ -155,11 +155,11 @@ adminService = (function(){
 		 });
 	}
 	function saveService(){
-		var appBusinessName=$('#ser-name').val();
-		var appBusinessAddress=$('#ser-address').val();
-		var appBusinessContacts=$('#ser-phone-person').val();
-		var appBusinessMobile=$('#ser-phone').val();
-		var maxCallNumber=$('#application-number').val();
+		var appBusinessName = $('#ser-name').val();
+		var appBusinessAddress = $('#ser-address').val();
+		var appBusinessContacts = $('#ser-phone-person').val();
+		var appBusinessMobile = $('#ser-phone').val();
+		var maxCallNumber = $('#application-number').val();
 		var majorTypes = $("#server-type").val();
 		var username = $("#ser-user-name").val();
 		var email = $("#ser-email").val();

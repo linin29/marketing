@@ -1,7 +1,7 @@
 <div class="personCenter">
 	<form role="form" id="profileForm" action="${springMacroRequestContext.contextPath}/admin/user/personcenter/password" method="post">
    <div class="panel panel-default">
-       <div class="panel-heading">个人中心 |</div>
+       <div class="panel-heading">个人中心</div>
        <div class="panel-body">
            <div class="form-group">
                <div class="input-group ">

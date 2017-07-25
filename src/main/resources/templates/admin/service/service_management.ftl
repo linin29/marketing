@@ -31,7 +31,6 @@
   			    	<table class="table table-bordered">
 					    <tbody class="">
 					    	<tr class='thCenter'  style="background-color:#ddd;">
-					    		<!-- <th>申请Id</th> -->
 					    		<th style="width:15%">应用商</th>
 					    		<th style="width:15%">申请服务</th>
 					    		<th style="width:8%">调用总次数</th>
@@ -42,9 +41,8 @@
 					    		<th style="width:18%">操作</th>
 					    	</tr>
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
-				         		<#list adminServiceApplys as adminServiceApply>
-					    	<tr class="tableTr tdCenter" applyid="${adminServiceApply.id}">
-					    		<!-- <td>${adminServiceApply.id}</td> -->
+				         	  <#list adminServiceApplys as adminServiceApply>
+					    		<tr class="tableTr tdCenter" applyid="${adminServiceApply.id}">
 					    		<td>${adminServiceApply.appBusinessName}</td>
 					    		<td>
 					    			<#if adminServiceApply.majorTypes?? && (adminServiceApply.majorTypes?size>0)>
@@ -70,8 +68,8 @@
 					    			<input id="approve_hide_${adminServiceApply.id}" class="btn btn-success" style='display:none;width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none'>
 					    			<input id="delete_hide_${adminServiceApply.id}" class="btn btn-success" style='display:none;width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none'>
 					    		</td>
-					    	</tr>
-					    	     </#list>
+					    		</tr>
+					    	   </#list>
 					    	</#if>
 					    </tbody>
 					</table>
@@ -111,22 +109,7 @@
 			                		</tr>
 			                	</tbody>
 			                </table>
-			           	</div>
-<!-- 			           	<div class="form-group">
-			                <h5><strong>合同信息</strong></h5>
-			                <table class="table table-bordered" style="width: 90%;">
-			                	<tbody>
-			                		<tr>
-			                			<td class="wid">上传合同：</td>
-			                			<td><input  class="application-name" type="file" /></td>
-			                		</tr>
-			                		<tr>
-			                			<td class="wid">合同张数：</td>
-			                			<td><input  class="application-name" type="text" /></td>
-			                		</tr>
-			                	</tbody>
-			                </table>
-			           	</div> -->	
+			           	</div>	
 			      	    <div class="form-group">
 			                <h5><strong>服务信息</strong></h5>
 			                <table class="table table-bordered" style="width: 90%;">
@@ -228,12 +211,12 @@
 				</div>
 			</div>
 		</div>
-<div class="modal fade" id="deleteAreaModal" tabindex="-1" role="dialog" aria-labelledby="deleteAreaModalLabel">
+<div class="modal fade" id="deleteServiceModal" tabindex="-1" role="dialog" aria-labelledby="deleteServiceModalLabel">
 	<div class="modal-dialog" role="document">
 	     <div class="modal-content">
 	         <div class="modal-header">
 	             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	             <h4 class="modal-title" id="deleteAreaModalLabel">确认删除</h4>
+	             <h4 class="modal-title" id="deleteServiceModalLabel">确认删除</h4>
 	         </div>
 	         <div class="modal-body">
 	            <p>确认删除吗？<b>(一旦删除将不可恢复，请谨慎操作！)</b></p>  

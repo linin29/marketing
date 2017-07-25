@@ -12,8 +12,8 @@ majorType = (function(){
 		});
 		
 		$(".deleteMajorType").click(function(){
-			$("#deleteAreaModal").attr('majorTypeid', $(this).attr("majortypeid"));
-			$("#deleteAreaModal").modal("show");
+			$("#deleteMajorTypeModal").attr('majorTypeid', $(this).attr("majortypeid"));
+			$("#deleteMajorTypeModal").modal("show");
 		});
 		
 		$('#server-type').selectpicker({
@@ -32,7 +32,7 @@ majorType = (function(){
 			$(this).removeData("bs.modal");
         });
 		$('#majorType_delete').on('click', function(e){
-			 var majorTypeId = $("#deleteAreaModal").attr('majorTypeid');
+			 var majorTypeId = $("#deleteMajorTypeModal").attr('majorTypeid');
 			 $.ajax({
 					type: 'DELETE',
 					url: marketing_url + '/admin/majortype/' + majorTypeId,
@@ -43,7 +43,7 @@ majorType = (function(){
 							return;
 						}else{
 							noty({text: "删除成功", layout: 'topCenter', type: 'success', timeout: 2000});
-							$("#deleteAreaModal").modal('hide');
+							$("#deleteMajorTypeModal").modal('hide');
 							$('.tableTr[majorTypeid=' + majorTypeId + ']').remove();
 						} 
 		        	},

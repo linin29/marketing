@@ -2,14 +2,14 @@ var marketing_url = '/marketing';
 var sku = sku || {};
 sku = (function(){
 	function init(currentPage, totalCount){
-		$("#new-SKU").click(function(){
+		$("#new-sku").click(function(){
 			$("#skuId").val("");
 			$('#myModalLabel').text('新建信息');
-			$("#new-SKU-model").modal("show");
+			$("#new-sku-model").modal("show");
 			$("#errorMsg").html("");
 		}); 
 		
-		$("#new-SKU-model").on("hidden.bs.modal", function() {
+		$("#new-sku-model").on("hidden.bs.modal", function() {
         	$('#sku_select').val("");
         	$('#sku_name').val("");
         	$('#sku_description').val("");
@@ -18,7 +18,7 @@ sku = (function(){
         });
 		
 		$('#save').click(function(){
-			createType();
+			createSku();
 		});
 		
 		$('#search').click(function(){
@@ -56,12 +56,12 @@ sku = (function(){
 				});
 		 });
 	};
-	function createType(){
-		var name=$('#sku_name').val();
-		var skuSelect=$('#sku_select').val();
-		var skuDescription=$('#sku_description').val();
-		var skuOrNot=$('#sku_or_not').val();
-		var skuId=$('#skuId').val();
+	function createSku(){
+		var name = $('#sku_name').val();
+		var skuSelect = $('#sku_select').val();
+		var skuDescription = $('#sku_description').val();
+		var skuOrNot = $('#sku_or_not').val();
+		var skuId = $('#skuId').val();
 		if (name == "") {
 			$('#errorMsg').text("请输入名称");
 			return;
@@ -86,7 +86,7 @@ sku = (function(){
 			url = marketing_url + '/admin/sku/create';
 		}
 		
-		var data={'name':name,'majorType':skuSelect,'description':skuDescription,'isShow':skuOrNot};		
+		var data={'name':name, 'majorType':skuSelect, 'description':skuDescription, 'isShow':skuOrNot};		
 		$.ajax({
 			 type: 'POST',
 			 url:url,
@@ -96,7 +96,7 @@ sku = (function(){
 			 success: function(data) {
 			 	if (data.success) {
 			 		noty({text: '保存成功', layout: 'topCenter', type: 'warning', timeout: 2000});
-			 		$('#new-SKU-model').modal('hide');
+			 		$('#new-sku-model').modal('hide');
 			 		setTimeout(function(){
 			 			$.ajax({
 							 type: 'GET',
@@ -131,7 +131,7 @@ sku = (function(){
 		$('#sku_name').val(name);
 		$('#sku_description').val(description);
 		$("#sku_select").val(majorType);
-		$("#new-SKU-model").modal("show");	
+		$("#new-sku-model").modal("show");	
 		$("#skuId").val(skuId);
 		$("#sku_or_not").val(skuOrNot);
 		$("#errorMsg").html("");

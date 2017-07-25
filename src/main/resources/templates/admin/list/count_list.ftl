@@ -61,6 +61,7 @@
 		                </tr>
 		            </thead>
 		            <tbody>
+		            <#if callings?? && (callings?size > 0)>
 		              <#list callings as calling>
 		                <tr class='tdCenter'>
 		                    <td>${calling.apiName!""}</td>
@@ -69,7 +70,8 @@
 		                    <td>${calling.callingDay!""}</td>
 		                    <td>${calling.callingTimes!""}</td>
 		                </tr>
-		                </#list>
+		               </#list>
+		             </#if>
 		            </tbody>
 		        </table>
 		        <div id="table_paginator" style="margin-top: -10px; margin-bottom: -10px; text-align:center; display:block;"></div>
@@ -78,8 +80,8 @@
 	</div>
 </div>
 <script>
-var PAGINATION_ITEMS_PER_PAGE = 20;
 $(function() {
+	var PAGINATION_ITEMS_PER_PAGE = 20;
 	function initPagination(currentPage, totalCount) {
 		var options = {
 			alignment: 'center',
@@ -105,74 +107,76 @@ $(function() {
 	$('#query').click(function(){
 		searchApiCalling(1);
 	});
-});
-function initDate() {
-	var current = moment();
-	var startTime = $("#startTime").val();
-	var endTime = $("#endTime").val();
-	$("#endDate").val(current.format('YYYY-MM-DD'));
-    $("#startDate").val(current.subtract(5, 'days').format('YYYY-MM-DD'));
-    if(startTime){
-    	$("#startDate").val(startTime);
-    }
-    if(endTime){
-    	$("#endDate").val(endTime);
-    }
-	//时间段显示
-	$('.form_datetime1').datetimepicker({
-	    language: 'zh-CN',
-	    autoclose:true,
-	    endDate : new Date(),
-	    minView : 2
-	}).on('changeDate',function(e){
-		var d=e.date;  
-		$('.form_datetime2').datetimepicker('setStartDate',d);
-	});
-	$('.form_datetime2').datetimepicker({
-	    language: 'zh-CN',
-	    autoclose:true, //选择日期后自动关闭
-	    startDate: $("#startDate").val(),
-	    endDate : new Date(),
-	    minView : 2
-	}).on('changeDate',function(e){
-	    var d=e.date;  
-	    $('.form_datetime1').datetimepicker('setEndDate',d);
-	    var end=d.setDate(d.getDate()-2);
-	    var newdata=moment(d);
-	});
 	
-};
-function searchApiCalling(pageNum) {
-	if (pageNum) {
-		pageNum = pageNum - 1;
-	}else{
-		pageNum = 0;
-	}
-	var startDate = $('#startDate').val();
-	var endDate = $('#endDate').val();
-	var userName = $('#userName').val();
-	var apiName = $('#apiName').val();
-	var apiMethod = $('#apiMethod').val();
-	var data = {
-		perPage: PAGINATION_ITEMS_PER_PAGE,
-		pageNum: pageNum,
-		startDate: startDate,
-		endDate: endDate,
-		userName:userName,
-		apiName:apiName,
-		apiMethod:apiMethod
-	}
-	$.ajax({
-		 type: 'GET',
-		 data: data,
-		 url: '${springMacroRequestContext.contextPath}/admin/calling',
-		 success: function(data) {
-		 	$("#content").html(data);
-    	},
-    	error: function(data) {
-    		//返回500错误页面
-    		$("html").html(data.responseText);
-    	}
-	});
-}
+	function searchApiCalling(pageNum) {
+		if (pageNum) {
+			pageNum = pageNum - 1;
+		}else{
+			pageNum = 0;
+		}
+		var startDate = $('#startDate').val();
+		var endDate = $('#endDate').val();
+		var userName = $('#userName').val();
+		var apiName = $('#apiName').val();
+		var apiMethod = $('#apiMethod').val();
+		var data = {
+			perPage: PAGINATION_ITEMS_PER_PAGE,
+			pageNum: pageNum,
+			startDate: startDate,
+			endDate: endDate,
+			userName:userName,
+			apiName:apiName,
+			apiMethod:apiMethod
+		}
+		$.ajax({
+			 type: 'GET',
+			 data: data,
+			 url: '${springMacroRequestContext.contextPath}/admin/calling',
+			 success: function(data) {
+			 	$("#content").html(data);
+	    	},
+	    	error: function(data) {
+	    		//返回500错误页面
+	    		$("html").html(data.responseText);
+	    	}
+		});
+	};
+	function initDate() {
+		var current = moment();
+		var startTime = $("#startTime").val();
+		var endTime = $("#endTime").val();
+		$("#endDate").val(current.format('YYYY-MM-DD'));
+	    $("#startDate").val(current.subtract(5, 'days').format('YYYY-MM-DD'));
+	    if(startTime){
+	    	$("#startDate").val(startTime);
+	    }
+	    if(endTime){
+	    	$("#endDate").val(endTime);
+	    }
+		//时间段显示
+		$('.form_datetime1').datetimepicker({
+		    language: 'zh-CN',
+		    autoclose:true,
+		    endDate : new Date(),
+		    minView : 2
+		}).on('changeDate',function(e){
+			var d=e.date;  
+			$('.form_datetime2').datetimepicker('setStartDate',d);
+		});
+		$('.form_datetime2').datetimepicker({
+		    language: 'zh-CN',
+		    autoclose:true, //选择日期后自动关闭
+		    startDate: $("#startDate").val(),
+		    endDate : new Date(),
+		    minView : 2
+		}).on('changeDate',function(e){
+		    var d = e.date;  
+		    $('.form_datetime1').datetimepicker('setEndDate',d);
+		    var end = d.setDate(d.getDate()-2);
+		    var newdata = moment(d);
+		});
+		
+	};
+});
+
 </script>

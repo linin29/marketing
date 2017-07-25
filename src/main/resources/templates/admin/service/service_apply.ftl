@@ -35,10 +35,9 @@
   			    	<table class="table table-bordered">
 					    <tbody class="">
 					    	<tr class='thCenter' style="background-color:#ddd;">
-					    		<!-- <th style="width:5%">申请Id</th> -->
 					    		<th style="width:15%">应用商</th>
 					    		<th style="width:15%">申请服务</th>
-					    		<th style="width:13%">调用总次数</th>
+					    		<th style="width:8%">调用总次数</th>
 					    		<th style="width:12%">合同图片</th>
 					    		<th style="width:10%">创建人</th>
 					    		<th style="width:10%">状态</th>
@@ -47,8 +46,7 @@
 					    	</tr>
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
 				         		<#list adminServiceApplys as adminServiceApply>
-					    	<tr class='tdCenter'>
-					    		<!-- <td>${adminServiceApply.id}</td> -->
+					    		<tr class='tdCenter'>
 					    		<td>${adminServiceApply.appBusinessName}</td>
 					    		<td>
 					    		   <#if adminServiceApply.majorTypes?? && (adminServiceApply.majorTypes?size>0)>
@@ -70,8 +68,8 @@
 					    			<input type="button" class="btn" style="width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none">
 					    			</#if>
 					    		</td>
-					    	</tr>
-					    	     </#list>
+					    		</tr>
+					    	   </#list>
 					    	</#if>
 					    </tbody>
 					</table>
@@ -120,10 +118,6 @@
 			                			<td class="wid">上传合同：</td>
 			                			<td><input  class="application-name total" multiple type="file" id="upload-book" /></td>
 			                		</tr>
-			                		<!-- <tr>
-			                			<td class="wid">合同张数：</td>
-			                			<td><input  class="application-name" type="text" id="agreement-number" placeholder="输入合同张数"/></td>
-			                		</tr> -->
 			                	</tbody>
 			                </table>
 			           	</div>	
@@ -175,24 +169,6 @@
 			                	</tbody>
 			                </table>
 			           	</div>
-			      	    <!-- <div class="form-group">
-			                <table class="table table-bordered" style="width: 90%;">
-			                	<tbody>
-			                		<tr>
-			                			<td class="wid">通知管理员：</td>
-			                			<td>
-			                				<select class="selectpicker" multiple id="admin-type" id="admin-number">
-											    <#if adminUsers?? && (adminUsers?size > 0)>
-				         						<#list adminUsers as adminUser>
-					      							 <option value='${adminUser.id}'>${adminUser.name}</option>
-					     						</#list>
-				     						</#if>
-											</select>
-			                			</td>
-			                		</tr>
-			                	</tbody>
-			                </table>
-			           	</div> -->
 			      	</div>
 			      	<div class="modal-footer">
 			        	<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

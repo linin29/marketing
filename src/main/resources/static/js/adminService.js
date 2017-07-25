@@ -2,11 +2,12 @@ var marketing_url = '/marketing';
 var adminService = adminService || {};
 adminService = (function(){
 	function serviceApplyInit(currentPage, totalCount){
+		var serviceApplyUrl =  '/admin/service/apply/search';
 		if(totalCount != "0"){
-			initPagination(currentPage, totalCount, '/admin/service/apply/search');
+			initPagination(currentPage, totalCount, serviceApplyUrl);
 		} 
 		$("#query").click(function(){
-			queryService('/admin/service/apply/search');
+			queryService(serviceApplyUrl);
 		});
 		$("#new-server").click(function(){
 			$("#sure").hide();
@@ -70,8 +71,9 @@ adminService = (function(){
         });
 	};
 	function serviceManageInit(currentPage, totalCount){
+		var serviceManageUrl = '/admin/service/manage/search';
 		if(totalCount != "0"){
-			initPagination(currentPage, totalCount, '/admin/service/manage/search');
+			initPagination(currentPage, totalCount, serviceManageUrl);
 		}
 		$("#server-info").click(function(){
 			$("#myModalLabel").text("服务管理详情");	
@@ -99,7 +101,7 @@ adminService = (function(){
         	width:"100%"
         });
 		$("#query").click(function(){
-			queryService('/admin/service/manage/search');
+			queryService(serviceManageUrl);
 		});
 		$(".info").click(function(){
 			$("#upload-book-tr").hide();
@@ -119,8 +121,8 @@ adminService = (function(){
 			viewManage($(this).attr("applyid"));
 		});
 		$(".deleteService").click(function(){
-			$("#deleteAreaModal").attr('applyid', $(this).attr("applyid"));
-			$("#deleteAreaModal").modal("show");
+			$("#deleteServiceModal").attr('applyid', $(this).attr("applyid"));
+			$("#deleteServiceModal").modal("show");
 		});
 		$("#openService").click(function(){
 			var applyId = $("#applyId").val();
@@ -130,9 +132,8 @@ adminService = (function(){
 			var applyId = $("#applyId").val();
 			rejectService(applyId);
 		});
-		
 		$('#service_delete').on('click', function(e){
-			 var applyId = $("#deleteAreaModal").attr('applyid');
+			 var applyId = $("#deleteServiceModal").attr('applyid');
 			 $.ajax({
 					type: 'DELETE',
 					url: marketing_url + '/admin/service/' + applyId,
@@ -143,7 +144,7 @@ adminService = (function(){
 							return;
 						}else{
 							noty({text: "删除成功", layout: 'topCenter', type: 'success', timeout: 2000});
-							$("#deleteAreaModal").modal('hide');
+							$("#deleteServiceModal").modal('hide');
 							$('.tableTr[applyid=' + applyId + ']').remove();
 						} 
 		        	},
@@ -211,7 +212,6 @@ adminService = (function(){
 			for (var i = 0; i < files.length; i++) {
 	  			var file = files[i];
 	  			if (!checkFile(file)) {
-	  			//$('#errorMsg').text("您选择的图片大于5M, 请重新选择小于5M的图片上传");
 	  				return;
 	  			}
 	  			formData.append('images', file, file.name);
@@ -236,7 +236,7 @@ adminService = (function(){
 		 		if(!applyId){
 		 			formData.append('applyStatus', 'created');
 		 			var data ={'applyStatus':'created', 'appBusinessName':appBusinessName,
-		 					'username':username,'majorTypes':majorTypes,'maxCallNumber':maxCallNumber, 'email':email};
+		 					   'username':username,'majorTypes':majorTypes,'maxCallNumber':maxCallNumber, 'email':email};
 		 			sendEmail(data);
 		 		}
 		 		setTimeout(function(){

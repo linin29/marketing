@@ -24,7 +24,7 @@
 				<input type="button" class=" btn btn-success" id="search" value="搜索" style="width:100px;" />
 			</div>
 			<div class="new-type">
-				<input type="button" class=" btn btn-success new-server" id="new-SKU" value="新建" />
+				<input type="button" class=" btn btn-success new-server" id="new-sku" value="新建" />
 			</div>
 		</div>
 	    <div id="type-content" style='margin-top:0px;'>
@@ -38,19 +38,21 @@
 			    		<th style="width:13%">创建时间</th>
 			    		<th style="width:20%">操作</th>
 			    	</tr>
-			    	<#list GoodsSkus as GoodsSku>
-			    	<tr style="text-align:center;" class="tableTr" skuid=${GoodsSku.id!} >
-			    		<td class='name'>${GoodsSku.name!}</td>
-			    		<td class='type' >${GoodsSku.majorType!}</td>
-			    		<td style="width: 150px;" title="${GoodsSku.description!}"><p class="newline description">${GoodsSku.description!}</p></td>
-			    		<td class='showOrNot' isshow="${GoodsSku.isShow?string('true','false')}">${GoodsSku.isShow?string("是","否")}</td>
-			    		<td >${GoodsSku.createTime!}</td>
-			    		<td>
-			    			<button class="btn btn-success" id="modify_${GoodsSku.id!}" onclick="sku.edit(this, ${GoodsSku.id});">修改</button>
-			    			<button class="btn btn-danger deleteSkuModel" skuid="${GoodsSku.id}">删除</button>
-			    		</td>
-			    	</tr>
-			    	</#list>
+			    	<#if goodsSkus?? && (goodsSkus?size > 0)>
+			    		<#list goodsSkus as goodsSku>
+			    			<tr style="text-align:center;" class="tableTr" skuid=${goodsSku.id!} >
+			    				<td class='name'>${goodsSku.name!}</td>
+			    				<td class='type' >${goodsSku.majorType!}</td>
+			    				<td style="width: 150px;" title="${goodsSku.description!}"><p class="newline description">${goodsSku.description!}</p></td>
+			    				<td class='showOrNot' isshow="${goodsSku.isShow?string('true','false')}">${goodsSku.isShow?string("是","否")}</td>
+			    				<td >${goodsSku.createTime!}</td>
+			    				<td>
+			    					<button class="btn btn-success" id="modify_${goodsSku.id!}" onclick="sku.edit(this, ${goodsSku.id});">修改</button>
+			    					<button class="btn btn-danger deleteSkuModel" skuid="${goodsSku.id}">删除</button>
+			    				</td>
+			    			</tr>
+			    		</#list>
+			    	</#if>
 			    </tbody>
 			</table>
 	    </div>
@@ -59,7 +61,7 @@
   	</div>
 </div>
 <!--弹框-->
-<div class="modal fade" id="new-SKU-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="new-sku-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   	<div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      	<div class="modal-header">
@@ -115,7 +117,7 @@
 	    </div>
   	</div>
 </div>
-<div class="modal fade" id="deleteSkuModal" tabindex="-1" role="dialog" aria-labelledby="deleteAreaModalLabel">
+<div class="modal fade" id="deleteSkuModal" tabindex="-1" role="dialog" aria-labelledby="deleteSkuModalLabel">
 	<div class="modal-dialog" role="document">
 	     <div class="modal-content">
 	         <div class="modal-header">

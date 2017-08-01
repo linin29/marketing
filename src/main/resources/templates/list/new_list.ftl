@@ -515,7 +515,7 @@
       			 if(data && data.length>0){
       				 for(var i=0; i<data.length;i++){
           				 html+=' <li id="li_'+data[i].id+'">'+
-               		           '<img src="' + picPath + data[i].imagePath+'" title="'+data[i].name+'" class="preview img-thumbnail">'+
+               		           '<img onclick="showCropPage(\''+taskId+'\', \''+data[i].id+'\')"  taskid="'+taskId+'" src="' + picPath + data[i].imagePath+'" title="'+data[i].name+'" class="preview img-thumbnail showCropPage">'+
                                '<div><p class="gallery-controls">'+
                                '<button rid="'+data[i].id+'" onclick="deleteImage(\''+data[i].id+'\')" style="font-size: 12px;" class="btn btn-sm btn-danger iconfont delete">删除</button>'+
                                '</p><label>No</label>'+
@@ -568,6 +568,13 @@
         return true;
     }
 	
+	function showCropPage(taskId, imageId){
+		var status = $('#status').attr('status');
+		if(status == 'image_uploaded'){
+			return;
+		}
+		window.open("${springMacroRequestContext.contextPath}/showCropPage/" + taskId + "?imageId=" + imageId);
+	}
 	
 	function getCrops(produce){
 		var taskId = $('#taskId').val();

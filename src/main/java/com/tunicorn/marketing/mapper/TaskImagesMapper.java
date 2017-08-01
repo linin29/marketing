@@ -22,4 +22,8 @@ public interface TaskImagesMapper {
 	public int updateTaskImage(TaskImagesVO imagesVO);
 
 	public int batchUpdateTaskImages(List<OrderBO> imagesVOs);
+	
+	public TaskImagesVO getPreOrderTaskImage(@Param("taskId") String taskId, @Param("order") int order);
+	
+	public TaskImagesVO getNextOrderTaskImage(@Param("taskId") String taskId, @Param("order") int order);
 }

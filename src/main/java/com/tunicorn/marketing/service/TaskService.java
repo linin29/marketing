@@ -16,6 +16,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -630,6 +631,14 @@ public class TaskService {
 		return cropBOs;
 	}
 
+	public TaskImagesVO getPreOrderTaskImage(String taskId, int order){
+		return taskImagesMapper.getPreOrderTaskImage(taskId, order);
+	}
+	
+	public TaskImagesVO getNextOrderTaskImage(String taskId, int order){
+		return taskImagesMapper.getNextOrderTaskImage(taskId, order);
+	}
+	
 	private int updateTaskStatusByStitcher(StitcherUpdateParamBO updateParam) {
 		TaskVO taskVO = new TaskVO();
 		taskVO.setId(updateParam.getTaskId());

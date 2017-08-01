@@ -57,7 +57,7 @@ public class TaskController extends BaseController {
 	public String export(HttpServletRequest request, Model model) {
 		UserVO user = getCurrentUser(request);
 		model.addAttribute("user", user);
-		
+
 		TaskBO taskBO = new TaskBO();
 		taskBO.setUserId(user.getId());
 		SimpleDateFormat sdFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
@@ -66,14 +66,14 @@ public class TaskController extends BaseController {
 		Date before2Day = getBefore2Day(date);
 		taskBO.setStartTime(sdFormat.format(before2Day));
 		taskBO.setTaskStatus(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
-		
+
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList());
 		model.addAttribute("taskStatus", MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
 		model.addAttribute("totalCount", 0);
 		model.addAttribute("currentPage", 1);
 		return "list/exportData";
 	}
-	
+
 	@RequestMapping(value = "/export/search", method = RequestMethod.GET)
 	public String searchExport(HttpServletRequest request, Model model) {
 		UserVO user = getCurrentUser(request);
@@ -106,14 +106,14 @@ public class TaskController extends BaseController {
 		}
 		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
 		int totalCount = taskService.getTaskCount(taskBO);
-		
+
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList());
 		model.addAttribute("tasks", taskVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", taskBO.getPageNum() + 1);
 		return "list/exportData";
 	}
-	
+
 	@RequestMapping(value = "/task/count", method = RequestMethod.GET)
 	@ResponseBody
 	public CommonAjaxResponse taskCount(HttpServletRequest request) {
@@ -136,10 +136,10 @@ public class TaskController extends BaseController {
 		taskBO.setTaskStatus(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
 
 		int totalCount = taskService.getTaskCount(taskBO);
-		
+
 		return CommonAjaxResponse.toSuccess(totalCount);
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/exportData")
 	public String exportIpMac(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -203,7 +203,7 @@ public class TaskController extends BaseController {
 		file.delete();
 		return null;
 	}
-	
+
 	@RequestMapping(value = "/task", method = RequestMethod.GET)
 	public String task(HttpServletRequest request, Model model) {
 		UserVO user = getCurrentUser(request);
@@ -271,7 +271,7 @@ public class TaskController extends BaseController {
 		model.addAttribute("images", imagesVOs);
 		return "list/new_list";
 	}
-	
+
 	@RequestMapping(value = "/showView/{taskId}", method = RequestMethod.GET)
 	public String viewTask(HttpServletRequest request, Model model, @PathVariable("taskId") String taskId) {
 		TaskVO taskVO = taskService.getTaskById(taskId);
@@ -314,8 +314,7 @@ public class TaskController extends BaseController {
 				model.addAttribute("stitchImagePath", taskVO.getStitchImagePath() + "?random=" + new Date().getTime());
 			}
 		}
-		
-		
+
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList());
 		model.addAttribute("task", taskVO);
 		model.addAttribute("images", imagesVOs);
@@ -424,25 +423,32 @@ public class TaskController extends BaseController {
 		}
 	}
 
-//	@RequestMapping(value = "/{taskId}/identify", method = RequestMethod.POST)
-//	@ResponseBody
-//	public IdentifyAjaxResponse taskIdentify(HttpServletRequest request, @PathVariable("taskId") String taskId,
-//			Model model) {
-//		UserVO user = getCurrentUser(request);
-//		model.addAttribute("user", user);
-//
-//		ServiceResponseBO response = taskService.taskIdentify(taskId, user.getId());
-//		if (response.isSuccess()) {
-//			return IdentifyAjaxResponse.toSuccess(((ObjectNode) response.getResult()).get("data"),
-//					((ObjectNode) response.getResult()).get("rows"), (ArrayNode)(((ObjectNode) response.getResult()).get("crops")),
-//					(ArrayNode)(((ObjectNode) response.getResult()).get("rows_length")),
-//					((ObjectNode) response.getResult()).get("results_border").asText(),
-//					((ObjectNode) response.getResult()).get("total_area").asLong());
-//		} else {
-//			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
-//			return IdentifyAjaxResponse.toFailure(message.getCode(), message.getMessage());
-//		}
-//	}
+	// @RequestMapping(value = "/{taskId}/identify", method =
+	// RequestMethod.POST)
+	// @ResponseBody
+	// public IdentifyAjaxResponse taskIdentify(HttpServletRequest request,
+	// @PathVariable("taskId") String taskId,
+	// Model model) {
+	// UserVO user = getCurrentUser(request);
+	// model.addAttribute("user", user);
+	//
+	// ServiceResponseBO response = taskService.taskIdentify(taskId,
+	// user.getId());
+	// if (response.isSuccess()) {
+	// return IdentifyAjaxResponse.toSuccess(((ObjectNode)
+	// response.getResult()).get("data"),
+	// ((ObjectNode) response.getResult()).get("rows"),
+	// (ArrayNode)(((ObjectNode) response.getResult()).get("crops")),
+	// (ArrayNode)(((ObjectNode) response.getResult()).get("rows_length")),
+	// ((ObjectNode) response.getResult()).get("results_border").asText(),
+	// ((ObjectNode) response.getResult()).get("total_area").asLong());
+	// } else {
+	// Message message =
+	// MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
+	// return IdentifyAjaxResponse.toFailure(message.getCode(),
+	// message.getMessage());
+	// }
+	// }
 
 	@RequestMapping(value = "/{taskId}/order", method = RequestMethod.POST)
 	@ResponseBody
@@ -490,12 +496,43 @@ public class TaskController extends BaseController {
 	public List<GoodsSkuVO> getGoodsSkuList(HttpServletRequest request) {
 		return taskService.getGoods(request.getParameter("majorType"));
 	}
+
+	@RequestMapping(value = "/preOrderTaskImage/{taskId}/{order}", method = RequestMethod.GET)
+	@ResponseBody
+	public TaskImagesVO getPreOrderTaskImage(@PathVariable("taskId") String taskId,
+			@PathVariable("order") Integer order) {
+		TaskImagesVO imagesVO = taskService.getPreOrderTaskImage(taskId, order);
+		return imagesVO;
+	}
 	
-	private Date getBefore2Day(Date date) {  
-        Calendar calendar = Calendar.getInstance();  
-        calendar.setTime(date);  
-        calendar.add(Calendar.DAY_OF_MONTH, -2);  
-        date = calendar.getTime();  
-        return date;  
-    } 
+	@RequestMapping(value = "/nextOrderTaskImage/{taskId}/{order}", method = RequestMethod.GET)
+	@ResponseBody
+	public TaskImagesVO getNextOrderTaskImage(@PathVariable("taskId") String taskId,
+			@PathVariable("order") Integer order) {
+		TaskImagesVO imagesVO = taskService.getNextOrderTaskImage(taskId, order);
+		return imagesVO;
+	}
+
+	@RequestMapping(value = "/showCropPage/{taskId}", method = RequestMethod.GET)
+	public String showCropPage(@PathVariable("taskId") String taskId, Model model, HttpServletRequest request) {
+		TaskVO taskVO = taskService.getTaskById(taskId);
+		List<TaskImagesVO> imagesVOs = taskService.getTaskImagesListByTaskId(taskId);
+		String imageId = request.getParameter("imageId");
+		if (StringUtils.isNotBlank(imageId)) {
+			TaskImagesVO image = taskService.getTaskImagesById(imageId);
+			model.addAttribute("image", image);
+		}
+		model.addAttribute("images", imagesVOs);
+		model.addAttribute("task", taskVO);
+		model.addAttribute("imageId", imageId);
+		return "list/task_crop";
+	}
+
+	private Date getBefore2Day(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DAY_OF_MONTH, -2);
+		date = calendar.getTime();
+		return date;
+	}
 }

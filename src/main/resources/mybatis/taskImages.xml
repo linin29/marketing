@@ -70,4 +70,31 @@
 			and id = #{taskImageId}
 		</if>
 	</select>
+	
+	<select id="getPreOrderTaskImage" resultMap="TaskImagesResultMap">
+		select id, name, task_id, user_id, order_no, image_path, full_path, create_time
+		from task_images
+		where `status` = 'active'
+		<if test="taskId != null and taskId != ''">
+			and task_id = #{taskId}
+		</if>
+		<if test="order != null and order != ''">
+			and order_no <![CDATA[ < #{order}]]>
+		</if>
+		order by order_no desc
+		limit 1
+	</select>
+	<select id="getNextOrderTaskImage" resultMap="TaskImagesResultMap">
+		select id, name, task_id, user_id, order_no, image_path, full_path, create_time
+		from task_images
+		where `status` = 'active'
+		<if test="taskId != null and taskId != ''">
+			and task_id = #{taskId}
+		</if>
+		<if test="order != null and order != ''">
+			and order_no <![CDATA[ > #{order}]]>
+		</if>
+		order by order_no
+		limit 1
+	</select>
 </mapper>

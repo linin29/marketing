@@ -74,10 +74,10 @@
 	                   <div style="clear:both"></div>
 	                   <div class="row" >
 		                   <div id="image_default"  align="center"  class="col-sm-8">
-			                  <img id="imageCrop"  src="${springMacroRequestContext.contextPath}/image/2.png"  class="img-thumbnail">
+			                  <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/2.png"  class="img-thumbnail">
 		                   </div>
 		               </div>
-	               </h4>				
+               		</h4>			
 				</div>
 				<div class='col-sm-4' style='margin-top:24px;'>
 					<div class='page'>

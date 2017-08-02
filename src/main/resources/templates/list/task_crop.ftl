@@ -94,7 +94,7 @@
 						</li>
 					</ul>						
 				</div>
-				<div class='col-sm-4' style='margin-top:72px;margin-left:2%;width:27%;'>
+				<div class='col-sm-4' style='margin-top:120px;margin-left:2%;width:27%;'>
 					<div class='page'>
 						<input type="button" class="btn btn-default" value="上一张" onclick="getPre()">
 						<input type="button" class="btn btn-default" value="下一张" onclick="getNext()">

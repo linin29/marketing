@@ -65,36 +65,40 @@
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
 	  <section class="content-wrapper" style="margin-left: 0px;">
-	   	<div id="content" style="padding-top: 1px;margin-bottom: -20px;">
+	   	<div id="content" style="padding-top: 1px;">
 			<div class="create_task max_width row">
-				<div class="col-sm-8" style='overflow: hidden;'>
-					<h4>
-	                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
-	                   <span>货架照片</span>
-	                   <div style="clear:both"></div>
-	                   <div class="row" >
-		                   <div id="image_default"  align="center"  class="col-sm-8">
-			                  <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/2.png"  class="img-thumbnail">
-		                   </div>
-		               </div>
-               		</h4>			
+				<div class="col-sm-8" style='overflow: hidden;width:70%;'>
+					<ul>						
+						<li>
+							<h4>
+			                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
+			                   <span>任务名</span>
+			                   <span id="status" status="<#if task??>${task.taskStatus}<#else>task_init</#if>" style="margin-left:30px;">(当前状态：<#if task??>${task.taskStatus}<#else>task_init</#if>)</span>
+			                   <input id="taskName" type="text" <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
+			                   <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>
+			                   <input id="taskId" type="hidden" value="<#if task??>${task.id}</#if>" />
+			                   <input id="order" type="hidden" value="<#if image??>${image.orderNo}</#if>" />
+		               		</h4>						
+					    </li>
+					    <li>
+							<h4>
+			                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
+			                   <span>货架照片</span>
+			                   <div style="clear:both"></div>
+			                   <div class="row" >
+				                   <div id="image_default"  align="center"  class="col-sm-8">
+					                  <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/2.png"  class="img-thumbnail">
+				                   </div>
+		               			</div>
+               				</h4>								
+						</li>
+					</ul>						
 				</div>
-				<div class='col-sm-4' style='margin-top:24px;'>
+				<div class='col-sm-4' style='margin-top:72px;margin-left:2%;width:26%;'>
 					<div class='page'>
 						<input type="button" class="btn btn-default" value="上一张" onclick="getPre()">
 						<input type="button" class="btn btn-default" value="下一张" onclick="getNext()">
 						<input type="button" class="btn btn-primary" value="保存" onclick="getNext()">			           
-					</div>
-					<div class='list_show'>
-						<h4>
-		                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
-		                   <span>任务名</span>
-		                   <span id="status" status="<#if task??>${task.taskStatus}<#else>task_init</#if>" style="margin-left:30px;">(当前状态：<#if task??>${task.taskStatus}<#else>task_init</#if>)</span>
-		                   <input id="taskName" type="text" <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
-		                   <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>
-		                   <input id="taskId" type="hidden" value="<#if task??>${task.id}</#if>" />
-		                   <input id="order" type="hidden" value="<#if image??>${image.orderNo}</#if>" />
-		               </h4>					
 					</div>
 					<div class='hidden_show'>
 					   <div id="labelPanel" class="panel panel-default" style="display:none;max-height: 460px;">

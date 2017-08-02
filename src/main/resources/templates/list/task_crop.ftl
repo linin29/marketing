@@ -27,7 +27,7 @@
     <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/masonry.pkgd.js" ></script>
     <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/bootstrap-select.js" ></script>
     <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/bootstrap-paginator.js" ></script>
-    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/cropper.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/cropper1.js" ></script>
     <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/tunicorn-cloud.js" ></script>
     <link href="${springMacroRequestContext.contextPath}/css/jquery-fileupload.css" rel="stylesheet">
     <link href="${springMacroRequestContext.contextPath}/css/jquery-fileupload-ui.css" rel="stylesheet">
@@ -93,9 +93,51 @@
                <div style="clear:both;"></div>
                <a href="javascript:void(0);" onclick="getPre()">上一张</a>
                <a href="javascript:void(0);" onclick="getNext()">下一张</a>
+               <a href="javascript:void(0);" onclick="getNext()">保存</a>
            </li>
        </ul>
    </div>
+           <div id="labelPanel" class="panel panel-default" style="display:none;max-height: 460px;">
+          <div class="panel-heading">标签选择</div>
+          <div class="panel-body">
+              <input id="currentAnnoId" type="hidden">
+              <input id="currentPid" type="hidden">
+              <input id="labelTxt" type="hidden" class="form-control" style="margin:0 0 5px 0;" placeholder="请输入标签">
+              <ul id="labelList" class="list-group" style="overflow-y: auto;max-height: 340px;">
+                  <li class="list-group-item" lid="2">logo
+                    <ul class="list-group" style="margin-top: 10px;">
+                        <li class="list-group-item">
+                            <div>
+                                <input type="checkbox" id="check_1" value="1">
+                                <span>red</span>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="check_2" value="2">
+                                <span>blue</span>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div>
+                                <input type="radio" id="radio_2" value="2">
+                                <span>red</span>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div>
+                                <span>info:</span>
+                                <input type="text" id="input_3" value="" style="max-width: 75%;">
+                            <div>
+                        </li>
+                    </ul>
+                  </li>
+                  <li class="list-group-item">
+                      plate
+                  </li>
+              </ul>
+              <input type="button" class="btn btn-success" id="labelBtn" value="确定">
+              <input type="button" class="btn btn-danger" id="cancelBtn" value="删除">
+          </div>
+        </div>
 <script type="text/javascript">
     var picPath = '/pic/marketing';
 	$(function() {
@@ -143,24 +185,24 @@
      		 type: 'GET',
      		 url: '${springMacroRequestContext.contextPath}/'+taskId+'/crops/2',
      		 success: function(data) {
-     			$('#imageCrop').cropper('destroy');
+     			//$('#imageCrop').cropper('destroy');
      			 if(data && data.length > 0){
       	   	      	$('#imageCrop').cropper({
-          				responsive : false,
-          				data : {x:300, y:400, width:100, height:100, rotate:0},
-          				modal : false,
-          				guides : false,
-          				center : false,
-          				highlight : false,
-          				background : false,
-          				autoCrop : false,
-          				autoCropArea : 0.3,
-          				movable : false,
-          				scalable :true,
-          				zoomable :true,
-          				zoomOnWheel :false,
-          				minContainerWidth : 730,
-          				minContainerHeight : 400,
+      	              responsive : false,
+      	            data : {x: 300, y:400, width:100, height:100, rotate:0},
+      	            modal : false,
+      	            guides : false,
+      	            center : false,
+      	            highlight : false,
+      	            background : false,
+      	            autoCrop : false,
+      	            autoCropArea : 0.3,
+      	            movable : true,
+      	            scalable :false,
+      	            zoomable :false,
+      	            zoomOnWheel :false,
+      	            minContainerWidth : 900,
+      	            minContainerHeight : 500,
           				ready: function () {
           					var initData = {"x":100,"y":40,"width":10,"height":25,"rotate":0,"scaleX":1,"scaleY":1,"label":"u1", "name" : "21"};
           					var allData = [];
@@ -170,9 +212,20 @@
           						allData.push(initData);
           					}
           					$(this).cropper('setAllData', allData);
-          					$(this).cropper('disable');
-          				}
-          			});
+          					//$(this).cropper('disable');
+          				},
+          				cropend: cropEnd
+          			}).on({
+          	            cropstart: function (e) {
+          	              console.log(e.type, e.action);
+          	            },
+          	            cropmove: function (e) {
+          	              console.log(e.type, e.action);
+          	            },
+          	            crop: function (e) {
+          	              console.log(e.type, e.x, e.y, e.width, e.height, e.rotate, e.scaleX, e.scaleY);
+          	            }
+          	        });;
      			 }
          	},
          	error: function(data) {
@@ -181,6 +234,21 @@
          	}
      	 }); 
 		}
+    function cropEnd(e) {
+        //clearLabel();
+        var data = $(this).cropper('getCropBoxData');
+        $('#currentAnnoId').val(data.annotationId);
+
+        if($(this).cropper('hasLabel')){
+            var label = data.label;
+            fillLabel(label);
+            $('#labelTxt').val(label.name);
+        }else{
+            $('#labelTxt').val('');
+            $('#imageCropper').cropper('disable');
+        }
+        $('#labelPanel').show();
+    }
 </script>
 	   	</div>		
 	</section>

@@ -892,6 +892,7 @@ public class TaskService {
 		return node;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void saveTaskImageCrop(String taskId, Integer imageOrder, ArrayNode goodsInfoArray) {
 		TaskVO taskVO = taskMapper.getTaskById(taskId);
 		if (taskVO != null) {

@@ -2055,7 +2055,8 @@ var methods = {
       self.$cropBox = $cropBox = $(CROP_BOX_TEMPLATE);
       $cropBox.find('.cropper-face').addClass('cropper-move').data('action', 'all');
       $cropBox.attr('name', item.id);
-      $cropBox.attr('label', item.label.name);
+      //$cropBox.attr('label', item.label.name);
+      $cropBox.attr('label', item.label);
       $cropper.append($cropBox);
 
       //self.setData(item);

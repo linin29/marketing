@@ -64,7 +64,6 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
-	<input id="currentAnnoId" type="hidden">
 	  <section class="content-wrapper" style="margin-left: 0px;">
 	   	<div id="content" style="padding-top: 1px;">
 			<div class="create_task max_width row">
@@ -88,7 +87,7 @@
 			                   <div style="clear:both"></div>
 			                   <div class="row" >
 				                   <div id="image_default"  align="center"  class="col-sm-8">
-					                  <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/2.png"  class="img-thumbnail">
+					                  <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/3.png"  class="img-thumbnail">
 				                   </div>
 		               			</div>
                				</h4>								
@@ -133,45 +132,40 @@
     var wholeCropData;
 	$(function() {
 		var order = $("#order").val();
-		getCrops(order);
+		var imagePath = $("#imageCrop").attr("src");
+		initCropper();
+		getPictureCrop(imagePath);
         $('#labelBtn').click(function(){
             var skuType = $('#skuType').val().trim();
             if (skuType){
-                saveCrop();
+            	saveLabelLocally();
             }else{
                 noty({text: "你还没有选择SKU类型!", layout: "topCenter", type: "warning", timeout: 3000});
             }
         });
-
         $('#cancelBtn').click(function(){
             var currentAnnoId = $('#currentAnnoId').val();
-            $('.cropper-crop-box[name='+currentAnnoId+']').remove();
+            $('.cropper-crop-box[name=' + currentAnnoId + ']').remove();
             $('#imageCrop').cropper('deleteData', currentAnnoId);
             $('#imageCrop').cropper('enable');
             $('#labelPanel').hide();
         });
-        $('#labelList').on('click', '.label-txt', function(){
-            var $this = $(this);
-            $('#labelTxt').val($this.text());
-
-            $('#labelList .label-item').addClass('closed');
-            $this.parent().toggleClass('closed');
-        });
         $('#save').on('click', function(){
-            var annotations = $('#imageCrop').cropper('getAllData');
+            var cropDatas = $('#imageCrop').cropper('getAllData');
             var taskId = $('#taskId').val();
             var order = $("#order").val();
-            if(annotations.length==0){
+            if(cropDatas.length == 0){
                 return;
             }
             var data = {
-                imageOrder : order,
-                cropData : annotations
+                order : order,
+                imageCrop : cropDatas
             }
+            console.log(JSON.stringify(data));
             $.ajax({
-                url: '/taskImageCrop/save/' + taskId,
+                url: '${springMacroRequestContext.contextPath}/taskImageCrop/save/' + taskId,
                 data: JSON.stringify(data),
-                type: 'GET',
+                type: 'POST',
                 dataType: 'json',
                 contentType: 'application/json',
                 success: function(json){
@@ -185,7 +179,39 @@
             });
         });
 	});
+	
+    function initCropper(){
+        $('#imageCrop').cropper({
+            responsive : false,
+            data : {x: 300, y:400, width:100, height:100, rotate:0},
+            modal : false,
+            guides : false,
+            center : false,
+            highlight : false,
+            background : false,
+            autoCrop : false,
+            autoCropArea : 0.3,
+            movable : true,
+            scalable :false,
+            zoomable :false,
+            zoomOnWheel :false,
+            minContainerWidth : 900,
+            minContainerHeight : 500,
+            cropend: cropEnd
+        }).on({
+            cropstart: function (e) {
+              console.log(e.type, e.action);
+            },
+            cropmove: function (e) {
+              console.log(e.type, e.action);
+            },
+            crop: function (e) {
+              console.log(e.type, e.x, e.y, e.width, e.height, e.rotate, e.scaleX, e.scaleY);
+            }
+        });
+    }
 	function getPre(){
+		$('#save').click();
 		var taskId = $('#taskId').val();
 		var order = $("#order").val();
 		$.ajax({
@@ -193,12 +219,8 @@
      		 url: '${springMacroRequestContext.contextPath}/preOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
-      		        $('#imageCrop').off("ready");
-     		       	$("#order").val(data.orderNo);
-     		        $('#imageCrop').cropper('replace', '${springMacroRequestContext.contextPath}/image/login_background.jpg').on("ready", function(){
-     		        	getPictureCrop();
-     		        });
-     				//$("#imageCrop").attr("src", picPath + data.imagePath);
+     				$("#order").val(data.orderNo);
+     				getPictureCrop(picPath + data.imagePath);
      			 }
          	},
          	error: function(data) {
@@ -208,6 +230,7 @@
      	 });
 	}
 	function getNext(){
+		$('#save').click();
 		var taskId = $('#taskId').val();
 		var order = $("#order").val();
 		$.ajax({
@@ -215,12 +238,8 @@
      		 url: '${springMacroRequestContext.contextPath}/nextOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
-     		        $('#imageCrop').off("ready");
-     		       	$("#order").val(data.orderNo);
-     		        $('#imageCrop').cropper('replace', picPath + data.imagePath).on("ready", function(){
-     		        	getPictureCrop();
-     		        });
-     				//$("#imageCrop").attr("src", picPath + data.imagePath);
+     				$("#order").val(data.orderNo);
+     				getPictureCrop(picPath + data.imagePath);
      			 }
          	},
          	error: function(data) {
@@ -229,16 +248,21 @@
          	}
      	 });
 	}
-	function getPictureCrop(){
+	function getPictureCrop(imagePath){
 		var taskId = $('#taskId').val();
 		var order = $("#order").val();
 		$.ajax({
     		 type: 'GET',
     		 url: '${springMacroRequestContext.contextPath}/taskImageCrops/' + taskId + '/' + order,
     		 success: function(data) {
-    			 debugger;
     			 if(data){
-    				 $('#imageCrop').cropper('setAllData', data);
+    	     	        $('#imageCrop').off("ready");
+    	     	        $('#imageCrop').cropper('replace', imagePath).on("ready", function(){
+    	     	            console.log('replace ready');
+    	     	            if(data && data.length > 0){
+    	     	                $('#imageCrop').cropper('setAllData', data);
+    	     	            }
+    	     	        });
     			 }
         	},
         	error: function(data) {
@@ -247,52 +271,6 @@
         	}
     	 });
 	}
-	function getCrops(order){
-		var taskId = $('#taskId').val();
-		$.ajax({
-     		 type: 'GET',
-     		 url: '${springMacroRequestContext.contextPath}/taskImageCrops/' + taskId+'/' + order,
-     		 success: function(data) {
-     			//$('#imageCrop').cropper('destroy');
-     			 //if(data && data.length > 0){
-      	   	      	$('#imageCrop').cropper({
-      	              responsive : false,
-      	           	  data : {x: 300, y:400, width:100, height:100, rotate:0},
-      	              modal : false,
-      	              guides : false,
-      	              center : false,
-      	              highlight : false,
-      	              background : false,
-      	              autoCrop : false,
-      	              autoCropArea : 0.3,
-      	              movable : true,
-      	              scalable :false,
-      	              zoomable :false,
-      	              zoomOnWheel :false,
-      	              minContainerWidth : 900,
-      	              minContainerHeight : 500,
-          			  ready: function () {
-          					var initData = {"x":100,"y":40,"width":10,"height":25,"rotate":0,"scaleX":1,"scaleY":1,"label":"3", "name" : "21"};
-          					var allData = [];
-          					for(var i = 0;i<data.length;i++){
-          						var resultData = data[i];
-          						var newData = $.extend({},initData,resultData);
-          						allData.push(initData);
-          					}
-          					allData.push(initData);
-          					$(this).cropper('setAllData', allData);
-          					//$(this).cropper('disable');
-          				},
-          				cropend: cropEnd
-          			});
-     			// }
-         	},
-         	error: function(data) {
-         		//返回500错误页面
-         		$("html").html(data.responseText);
-         	}
-     	 }); 
-		}
     function cropEnd(e) {
         clearLabel();
         var data = $(this).cropper('getCropBoxData');
@@ -302,7 +280,7 @@
         
         if($(this).cropper('hasLabel')){
             var label = data.label;
-            //fillLabel(label);
+            fillLabel(label);
             $('#labelTxt').val(label.name);
         }else{
             $('#labelTxt').val('');
@@ -310,61 +288,26 @@
         }
         $('#labelPanel').show();
     }
-    function saveCrop(){
-		var taskId = $('#taskId').val();
-		var order = $("#order").val();
-		var label = parseInt($('#skuType option:checked').attr("skuorder")) + 1;
-		var cropData = {label:label};
-		wholeCropData.label = label;
-		wholeCropData.imageOrder = order;
-		//cropData.add(wholeCropData);
-		var data = {'cropData':wholeCropData, 'imageOrder':order};
-		$.ajax({
-    		 type: 'POST',
-    		 url: '${springMacroRequestContext.contextPath}/taskSingleImageCrop/save/' + taskId,
-    		 data:JSON.stringify(wholeCropData),
-             dataType: 'json',
-             contentType: 'application/json',
-    		 success: function(data) {
-    			 if(data){
-    				 $('#imageCrop').cropper('setAllData', data);
-    			 }
-        	},
-        	error: function(data) {
-        		//返回500错误页面
-        		$("html").html(data.responseText);
-        	}
-    	 });
-    }
-    function deleteCrop(){
-		var taskId = $('#taskId').val();
-		var order = $("#order").val();
-		var label = parseInt($('#skuType').attr("skuorder")) + 1;
-		var cropData = {label:label};
-		var data = {cropData:cropData,imageOrder:order};
-		$.ajax({
-    		 type: 'POST',
-    		 url: '${springMacroRequestContext.contextPath}/taskSingleImageCrop/delete/' + taskId,
-    		 data:JSON.stringify(data),
-             dataType: 'json',
-             contentType: 'application/json',
-    		 success: function(data) {
-    			 if(data){
-    				 $('#imageCrop').cropper('setAllData', data);
-    			 }
-        	},
-        	error: function(data) {
-        		//返回500错误页面
-        		$("html").html(data.responseText);
-        	}
-    	 });
-    }
     function clearLabel(){
         $('#labelList input[type="checkbox"]').prop('checked', false);
         $('#labelList input[type="radio"]').prop('checked', false);
         $('#labelList input[type="text"]').val('');
         $('#labelList .label-item').addClass('closed');
     }
+    function fillLabel(label){
+        $('#label_'+label.id).removeClass('closed');
+    }
+    function saveLabelLocally(){
+        getOpenedLabelItem(function(){
+            var label = $('#skuType option:checked').attr("skuorder");
+            $('#imageCrop').cropper('setLabel', parseInt(label) + 1);
+            $('#labelPanel').hide();
+            $('#imageCrop').cropper('enable');
+        });
+    };
+    function getOpenedLabelItem(cb){
+    	cb();
+    };
 </script>
 </body>
 </html>

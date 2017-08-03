@@ -54,7 +54,7 @@ public class AdminServiceController extends BaseController {
 				.getAdminServiceApplyList(adminServiceApplyBO);
 		int totalCount = adminServiceApplyService.getAdminServiceApplyCount(adminServiceApplyBO);
 
-		model.addAttribute("majorTypes", majorTypeService.getMajorTypeList());
+		model.addAttribute("majorTypes", majorTypeService.getAllMajorTypeList());
 		model.addAttribute("adminServiceApplys", adminServiceApplyVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", 1);
@@ -79,7 +79,7 @@ public class AdminServiceController extends BaseController {
 				.getAdminServiceApplyList(adminServiceApplyBO);
 		int totalCount = adminServiceApplyService.getAdminServiceApplyCount(adminServiceApplyBO);
 
-		model.addAttribute("majorTypes", majorTypeService.getMajorTypeList());
+		model.addAttribute("majorTypes", majorTypeService.getAllMajorTypeList());
 		model.addAttribute("adminServiceApplys", adminServiceApplyVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", adminServiceApplyBO.getPageNum() + 1);
@@ -227,7 +227,7 @@ public class AdminServiceController extends BaseController {
 				.getAdminServiceApplyList(adminServiceApplyBO);
 		int totalCount = adminServiceApplyService.getAdminServiceApplyCount(adminServiceApplyBO);
 
-		model.addAttribute("majorTypes", majorTypeService.getMajorTypeList());
+		model.addAttribute("majorTypes", majorTypeService.getAllMajorTypeList());
 		model.addAttribute("adminServiceApplys", adminServiceApplyVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", 1);
@@ -252,7 +252,7 @@ public class AdminServiceController extends BaseController {
 				.getAdminServiceApplyList(adminServiceApplyBO);
 		int totalCount = adminServiceApplyService.getAdminServiceApplyCount(adminServiceApplyBO);
 
-		model.addAttribute("majorTypes", majorTypeService.getMajorTypeList());
+		model.addAttribute("majorTypes", majorTypeService.getAllMajorTypeList());
 		model.addAttribute("adminServiceApplys", adminServiceApplyVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", adminServiceApplyBO.getPageNum() + 1);

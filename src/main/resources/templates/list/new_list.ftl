@@ -40,10 +40,15 @@
                                 <button id="taskStatus" type="button" class="btn btn-success">获取状态</button>
                            </div>
                            <#if task??>
-	                           <div class="col-xs-1">
+	                           <div class="col-xs-1 choose_btn">
 	                                <a href="${springMacroRequestContext.contextPath}/showView/${task.id}" target="_blank"><button type="button" class="btn btn-success">查看信息</button></a>
 	                           </div>
-	                       </#if>    
+	                       </#if>
+	                       <#if task?? && task.taskStatus != 'image_uploaded'>
+	                        <div class="col-xs-1 choose_btn">
+                                <button id="taskRectify" type="button" class="btn btn-success">拉取数据</button>
+                           </div>
+                           </#if>    
                        </div>
                    </div>
                </h4>
@@ -515,7 +520,7 @@
       			 if(data && data.length>0){
       				 for(var i=0; i<data.length;i++){
           				 html+=' <li id="li_'+data[i].id+'">'+
-               		           '<img onclick="showCropPage(\''+taskId+'\', \''+data[i].id+'\')"  taskid="'+taskId+'" src="' + picPath + data[i].imagePath+'" title="'+data[i].name+'" class="preview img-thumbnail showCropPage">'+
+               		           '<img taskid="'+taskId+'" src="' + picPath + data[i].imagePath+'" title="'+data[i].name+'" class="preview img-thumbnail showCropPage">'+
                                '<div><p class="gallery-controls">'+
                                '<button rid="'+data[i].id+'" onclick="deleteImage(\''+data[i].id+'\')" style="font-size: 12px;" class="btn btn-sm btn-danger iconfont delete">删除</button>'+
                                '</p><label>No</label>'+
@@ -536,6 +541,24 @@
 	});
 	$('#merge-pre').click(function() {
 		$('#merge-pre_modal').modal('show');
+	});
+	$('#taskRectify').click(function() {
+		var taskId = $('#taskId').val();
+		$.ajax({
+     		 type: 'POST',
+     		 url: '${springMacroRequestContext.contextPath}/rectify/' + taskId,
+     		 success: function(data) {
+     			 if(data && data.success){
+     				noty({text: '拉取数据成功', layout: "topCenter", type: "success", timeout: 1000});
+     			 }else{
+     				noty({text: '拉取数据成功', layout: "topCenter", type: "warning", timeout: 1000});
+     			 }
+         	},
+         	error: function(data) {
+         		//返回500错误页面
+         		$("html").html(data.responseText);
+         	}
+     	 });
 	});
     function deleteImage(imageId){
         var answer = confirm("删除是不可恢复的，你确认要删除吗？");

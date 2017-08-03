@@ -34,6 +34,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tunicorn.common.api.Message;
 import com.tunicorn.marketing.api.CommonAjaxResponse;
 import com.tunicorn.marketing.bo.CropBO;
+import com.tunicorn.marketing.bo.ImageCropBO;
 import com.tunicorn.marketing.bo.OrderBO;
 import com.tunicorn.marketing.bo.ServiceResponseBO;
 import com.tunicorn.marketing.bo.StitcherBO;
@@ -67,7 +68,7 @@ public class TaskController extends BaseController {
 		taskBO.setStartTime(sdFormat.format(before2Day));
 		taskBO.setTaskStatus(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
 
-		model.addAttribute("majorTypes", taskService.getMajorTypeVOList());
+		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
 		model.addAttribute("taskStatus", MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
 		model.addAttribute("totalCount", 0);
 		model.addAttribute("currentPage", 1);
@@ -107,7 +108,7 @@ public class TaskController extends BaseController {
 		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
 		int totalCount = taskService.getTaskCount(taskBO);
 
-		model.addAttribute("majorTypes", taskService.getMajorTypeVOList());
+		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
 		model.addAttribute("tasks", taskVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", taskBO.getPageNum() + 1);
@@ -266,7 +267,7 @@ public class TaskController extends BaseController {
 				model.addAttribute("stitchImagePath", taskVO.getStitchImagePath() + "?random=" + new Date().getTime());
 			}
 		}
-		model.addAttribute("majorTypes", taskService.getMajorTypeVOList());
+		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
 		model.addAttribute("task", taskVO);
 		model.addAttribute("images", imagesVOs);
 		return "list/new_list";
@@ -274,6 +275,7 @@ public class TaskController extends BaseController {
 
 	@RequestMapping(value = "/showView/{taskId}", method = RequestMethod.GET)
 	public String viewTask(HttpServletRequest request, Model model, @PathVariable("taskId") String taskId) {
+		UserVO user = getCurrentUser(request);
 		TaskVO taskVO = taskService.getTaskById(taskId);
 		List<TaskImagesVO> imagesVOs = taskService.getTaskImagesListByTaskId(taskId);
 
@@ -315,7 +317,7 @@ public class TaskController extends BaseController {
 			}
 		}
 
-		model.addAttribute("majorTypes", taskService.getMajorTypeVOList());
+		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
 		model.addAttribute("task", taskVO);
 		model.addAttribute("images", imagesVOs);
 		return "list/task_view";
@@ -525,6 +527,7 @@ public class TaskController extends BaseController {
 	public String showCropPage(@PathVariable("taskId") String taskId, Model model, HttpServletRequest request) {
 		TaskVO taskVO = taskService.getTaskById(taskId);
 		List<TaskImagesVO> imagesVOs = taskService.getTaskImagesListByTaskId(taskId);
+		taskService.saveGoodsInfo(taskId);
 		String imageId = request.getParameter("imageId");
 		if (StringUtils.isNotBlank(imageId)) {
 			TaskImagesVO image = taskService.getTaskImagesById(imageId);
@@ -539,27 +542,18 @@ public class TaskController extends BaseController {
 		return "list/task_crop";
 	}
 	
-	@RequestMapping(value = "/taskImageCrop/save/{taskId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/taskImageCrop/save/{taskId}", method = RequestMethod.POST)
 	@ResponseBody
-	public CommonAjaxResponse saveTaskImageCrop(@PathVariable("taskId") String taskId, HttpServletRequest request) {
-		String cropData = request.getParameter("cropData");
-		String imageOrder = request.getParameter("imageOrder");
-		taskService.saveTaskImageCrop(taskId, cropData, Integer.valueOf(imageOrder));
+	public CommonAjaxResponse saveTaskImageCrop(@PathVariable("taskId") String taskId, @RequestBody ImageCropBO imageCropBO) {
+		taskService.saveTaskImageCrop(taskId, imageCropBO.getOrder(), imageCropBO.getImageCrop());
 		return CommonAjaxResponse.toSuccess(null);
 	}
 	
-	@RequestMapping(value = "/taskSingleImageCrop/save/{taskId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/rectify/{taskId}", method = RequestMethod.POST)
 	@ResponseBody
-	public CommonAjaxResponse saveTaskSingleImageCrop(@PathVariable("taskId") String taskId, @RequestBody CropBO cropBO) {
-		taskService.saveTaskSingleImageCrop(taskId, cropBO);
-		return CommonAjaxResponse.toSuccess(null);
-	}
-	
-	@RequestMapping(value = "/taskSingleImageCrop/delete/{taskId}", method = RequestMethod.POST)
-	@ResponseBody
-	public CommonAjaxResponse deleteTaskSingleImageCrop(@PathVariable("taskId") String taskId,  @RequestBody CropBO cropBO) {
-		taskService.deleteTaskSingleImageCrop(taskId, cropBO);
-		return CommonAjaxResponse.toSuccess(null);
+	public CommonAjaxResponse rectify(@PathVariable("taskId") String taskId) {
+		CommonAjaxResponse result = taskService.rectify(taskId);
+		return result;
 	}
 
 	private Date getBefore2Day(Date date) {

@@ -46,7 +46,7 @@ public class SkuController extends BaseController {
 		List<GoodsSkuVO> goodsSkuVOs = goodsSkuService.getGoodsSkuListByBO(goodsSkuBO);
 		int totalCount = goodsSkuService.getGoodsSkuCount(goodsSkuBO);
 
-		model.addAttribute("majorTypes", majorTypeService.getMajorTypeList());
+		model.addAttribute("majorTypes", majorTypeService.getAllMajorTypeList());
 		model.addAttribute("goodsSkus", goodsSkuVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", 1);
@@ -69,7 +69,7 @@ public class SkuController extends BaseController {
 		List<GoodsSkuVO> goodsSkuVOs = goodsSkuService.getGoodsSkuListByBO(goodsSkuBO);
 		int totalCount = goodsSkuService.getGoodsSkuCount(goodsSkuBO);
 
-		model.addAttribute("majorTypes", majorTypeService.getMajorTypeList());
+		model.addAttribute("majorTypes", majorTypeService.getAllMajorTypeList());
 		model.addAttribute("goodsSkus", goodsSkuVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", goodsSkuBO.getPageNum() + 1);

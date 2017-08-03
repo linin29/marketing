@@ -44,11 +44,6 @@
 	                                <a href="${springMacroRequestContext.contextPath}/showView/${task.id}" target="_blank"><button type="button" class="btn btn-success">查看信息</button></a>
 	                           </div>
 	                       </#if>
-	                       <#if task?? && task.taskStatus != 'image_uploaded'>
-	                        <div class="col-xs-1 choose_btn">
-                                <button id="taskRectify" type="button" class="btn btn-success">拉取数据</button>
-                           </div>
-                           </#if>    
                        </div>
                    </div>
                </h4>
@@ -520,7 +515,7 @@
       			 if(data && data.length>0){
       				 for(var i=0; i<data.length;i++){
           				 html+=' <li id="li_'+data[i].id+'">'+
-               		           '<img taskid="'+taskId+'" src="' + picPath + data[i].imagePath+'" title="'+data[i].name+'" class="preview img-thumbnail showCropPage">'+
+               		           '<img onclick="showCropPage(\''+taskId+'\', \''+data[i].id+'\')"  taskid="'+taskId+'" src="' + picPath + data[i].imagePath+'" title="'+data[i].name+'" class="preview img-thumbnail showCropPage">'+
                                '<div><p class="gallery-controls">'+
                                '<button rid="'+data[i].id+'" onclick="deleteImage(\''+data[i].id+'\')" style="font-size: 12px;" class="btn btn-sm btn-danger iconfont delete">删除</button>'+
                                '</p><label>No</label>'+

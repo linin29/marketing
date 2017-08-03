@@ -13,6 +13,7 @@
 		<result column="result" property="result" jdbcType="VARCHAR" />
 		<result column="rows" property="rows" jdbcType="VARCHAR" />
 		<result column="major_type" property="majorType" jdbcType="VARCHAR" />
+		<result column="goods_info" property="goodsInfo" jdbcType="VARCHAR" />
 	</resultMap>
 
    <insert id="createTask" parameterType="com.tunicorn.marketing.vo.TaskVO">
@@ -179,6 +180,9 @@
 			</if>
 			<if test="result != null and result !=''">
 				result=#{result},
+			</if>
+			<if test="goodsInfo != null and goodsInfo !=''">
+				goods_info=#{goodsInfo},
 			</if>
 		</trim>
 		WHERE id=#{id}

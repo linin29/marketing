@@ -64,6 +64,7 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
+	<input id="currentAnnoId" type="hidden">
 	  <section class="content-wrapper" style="margin-left: 0px;">
 	   	<div id="content" style="padding-top: 1px;">
 			<div class="create_task max_width row">
@@ -98,45 +99,24 @@
 					<div class='page'>
 						<input type="button" class="btn btn-default" value="上一张" onclick="getPre()">
 						<input type="button" class="btn btn-default" value="下一张" onclick="getNext()">
-						<input type="button" class="btn btn-primary" value="保存" onclick="getNext()">			           
+						<input id="save" type="button" class="btn btn-primary" value="保存">			           
 					</div>
 					<div class='hidden_show'>
 					   <div id="labelPanel" class="panel panel-default" style="display:none;max-height: 460px;">
-				          <div class="panel-heading">标签选择</div>
+				          <div class="panel-heading">SKU选择</div>
 				          <div class="panel-body">
 				              <input id="currentAnnoId" type="hidden">
 				              <input id="currentPid" type="hidden">
 				              <input id="labelTxt" type="hidden" class="form-control" style="margin:0 0 5px 0;" placeholder="请输入标签">
 				              <ul id="labelList" class="list-group" style="overflow-y: auto;max-height: 340px;">
-				                  <li class="list-group-item" lid="2">logo
-				                    <ul class="list-group" style="margin-top: 10px;">
-				                        <li class="list-group-item">
-				                            <div>
-				                                <input type="checkbox" id="check_1" value="1">
-				                                <span>red</span>
-				                            </div>
-				                            <div>
-				                                <input type="checkbox" id="check_2" value="2">
-				                                <span>blue</span>
-				                            </div>
-				                        </li>
-				                        <li class="list-group-item">
-				                            <div>
-				                                <input type="radio" id="radio_2" value="2">
-				                                <span>red</span>
-				                            </div>
-				                        </li>
-				                        <li class="list-group-item">
-				                            <div>
-				                                <span>info:</span>
-				                                <input type="text" id="input_3" value="" style="max-width: 75%;">
-				                            <div>
-				                        </li>
-				                    </ul>
-				                  </li>
-				                  <li class="list-group-item">
-				                      plate
-				                  </li>
+								<select id="skuType" style="width:100%;height: 34px;">
+									<option value="">请选择类型</option>
+										<#if goodsSkus?? && (goodsSkus?size > 0)>
+			       							<#list goodsSkus as goodsSku>
+			     		 					<option value='${goodsSku.name}' skuorder="${goodsSku.order}">${goodsSku.description}</option>
+			    							</#list>
+		   								</#if>
+								</select> 
 				              </ul>
 				              <input type="button" class="btn btn-success" id="labelBtn" value="确定">
 				              <input type="button" class="btn btn-danger" id="cancelBtn" value="删除">
@@ -150,8 +130,60 @@
 </div>
 <script type="text/javascript">
     var picPath = '/pic/marketing';
+    var wholeCropData;
 	$(function() {
-		getCrops();
+		var order = $("#order").val();
+		getCrops(order);
+        $('#labelBtn').click(function(){
+            var skuType = $('#skuType').val().trim();
+            if (skuType){
+                saveCrop();
+            }else{
+                noty({text: "你还没有选择SKU类型!", layout: "topCenter", type: "warning", timeout: 3000});
+            }
+        });
+
+        $('#cancelBtn').click(function(){
+            var currentAnnoId = $('#currentAnnoId').val();
+            $('.cropper-crop-box[name='+currentAnnoId+']').remove();
+            $('#imageCrop').cropper('deleteData', currentAnnoId);
+            $('#imageCrop').cropper('enable');
+            $('#labelPanel').hide();
+        });
+        $('#labelList').on('click', '.label-txt', function(){
+            var $this = $(this);
+            $('#labelTxt').val($this.text());
+
+            $('#labelList .label-item').addClass('closed');
+            $this.parent().toggleClass('closed');
+        });
+        $('#save').on('click', function(){
+            var annotations = $('#imageCrop').cropper('getAllData');
+            var taskId = $('#taskId').val();
+            var order = $("#order").val();
+            if(annotations.length==0){
+                return;
+            }
+            var data = {
+                imageOrder : order,
+                cropData : annotations
+            }
+            $.ajax({
+                url: '/taskImageCrop/save/' + taskId,
+                data: JSON.stringify(data),
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(json){
+                    if(json.success){
+                        noty({text: "保存标注数据成功!", layout: "topCenter", type: "success", timeout: 3000});
+                    }
+                },error: function(){
+                    noty({text: "请求后台错误!", layout: "topCenter", type: "warning", timeout: 3000});
+                    return;
+                }
+            });
+        });
 	});
 	function getPre(){
 		var taskId = $('#taskId').val();
@@ -161,8 +193,12 @@
      		 url: '${springMacroRequestContext.contextPath}/preOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
-     				$("#imageCrop").attr("src", picPath + data.imagePath);
-     				$("#order").val(data.orderNo);
+      		        $('#imageCrop').off("ready");
+     		       	$("#order").val(data.orderNo);
+     		        $('#imageCrop').cropper('replace', '${springMacroRequestContext.contextPath}/image/login_background.jpg').on("ready", function(){
+     		        	getPictureCrop();
+     		        });
+     				//$("#imageCrop").attr("src", picPath + data.imagePath);
      			 }
          	},
          	error: function(data) {
@@ -179,8 +215,12 @@
      		 url: '${springMacroRequestContext.contextPath}/nextOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
-     				$("#imageCrop").attr("src", picPath + data.imagePath);
-     				$("#order").val(data.orderNo);
+     		        $('#imageCrop').off("ready");
+     		       	$("#order").val(data.orderNo);
+     		        $('#imageCrop').cropper('replace', picPath + data.imagePath).on("ready", function(){
+     		        	getPictureCrop();
+     		        });
+     				//$("#imageCrop").attr("src", picPath + data.imagePath);
      			 }
          	},
          	error: function(data) {
@@ -189,54 +229,63 @@
          	}
      	 });
 	}
-	function getCrops(produce){
+	function getPictureCrop(){
+		var taskId = $('#taskId').val();
+		var order = $("#order").val();
+		$.ajax({
+    		 type: 'GET',
+    		 url: '${springMacroRequestContext.contextPath}/taskImageCrops/' + taskId + '/' + order,
+    		 success: function(data) {
+    			 debugger;
+    			 if(data){
+    				 $('#imageCrop').cropper('setAllData', data);
+    			 }
+        	},
+        	error: function(data) {
+        		//返回500错误页面
+        		$("html").html(data.responseText);
+        	}
+    	 });
+	}
+	function getCrops(order){
 		var taskId = $('#taskId').val();
 		$.ajax({
      		 type: 'GET',
-     		 url: '${springMacroRequestContext.contextPath}/'+taskId+'/crops/2',
+     		 url: '${springMacroRequestContext.contextPath}/taskImageCrops/' + taskId+'/' + order,
      		 success: function(data) {
      			//$('#imageCrop').cropper('destroy');
-     			 if(data && data.length > 0){
+     			 //if(data && data.length > 0){
       	   	      	$('#imageCrop').cropper({
       	              responsive : false,
-      	            data : {x: 300, y:400, width:100, height:100, rotate:0},
-      	            modal : false,
-      	            guides : false,
-      	            center : false,
-      	            highlight : false,
-      	            background : false,
-      	            autoCrop : false,
-      	            autoCropArea : 0.3,
-      	            movable : true,
-      	            scalable :false,
-      	            zoomable :false,
-      	            zoomOnWheel :false,
-      	            minContainerWidth : 900,
-      	            minContainerHeight : 500,
-          				ready: function () {
-          					var initData = {"x":100,"y":40,"width":10,"height":25,"rotate":0,"scaleX":1,"scaleY":1,"label":"u1", "name" : "21"};
+      	           	  data : {x: 300, y:400, width:100, height:100, rotate:0},
+      	              modal : false,
+      	              guides : false,
+      	              center : false,
+      	              highlight : false,
+      	              background : false,
+      	              autoCrop : false,
+      	              autoCropArea : 0.3,
+      	              movable : true,
+      	              scalable :false,
+      	              zoomable :false,
+      	              zoomOnWheel :false,
+      	              minContainerWidth : 900,
+      	              minContainerHeight : 500,
+          			  ready: function () {
+          					var initData = {"x":100,"y":40,"width":10,"height":25,"rotate":0,"scaleX":1,"scaleY":1,"label":"3", "name" : "21"};
           					var allData = [];
           					for(var i = 0;i<data.length;i++){
           						var resultData = data[i];
           						var newData = $.extend({},initData,resultData);
           						allData.push(initData);
           					}
+          					allData.push(initData);
           					$(this).cropper('setAllData', allData);
           					//$(this).cropper('disable');
           				},
           				cropend: cropEnd
-          			}).on({
-          	            cropstart: function (e) {
-          	              console.log(e.type, e.action);
-          	            },
-          	            cropmove: function (e) {
-          	              console.log(e.type, e.action);
-          	            },
-          	            crop: function (e) {
-          	              console.log(e.type, e.x, e.y, e.width, e.height, e.rotate, e.scaleX, e.scaleY);
-          	            }
-          	        });;
-     			 }
+          			});
+     			// }
          	},
          	error: function(data) {
          		//返回500错误页面
@@ -245,19 +294,76 @@
      	 }); 
 		}
     function cropEnd(e) {
-        //clearLabel();
+        clearLabel();
         var data = $(this).cropper('getCropBoxData');
+        wholeCropData = data;
         $('#currentAnnoId').val(data.annotationId);
-
+        $('#skuType').val($("#skuType option[skuorder=" + (parseInt(data.label) -1) + "]").val());
+        
         if($(this).cropper('hasLabel')){
             var label = data.label;
-            fillLabel(label);
+            //fillLabel(label);
             $('#labelTxt').val(label.name);
         }else{
             $('#labelTxt').val('');
-            $('#imageCropper').cropper('disable');
+            $('#imageCrop').cropper('disable');
         }
         $('#labelPanel').show();
+    }
+    function saveCrop(){
+		var taskId = $('#taskId').val();
+		var order = $("#order").val();
+		var label = parseInt($('#skuType option:checked').attr("skuorder")) + 1;
+		var cropData = {label:label};
+		wholeCropData.label = label;
+		wholeCropData.imageOrder = order;
+		//cropData.add(wholeCropData);
+		var data = {'cropData':wholeCropData, 'imageOrder':order};
+		$.ajax({
+    		 type: 'POST',
+    		 url: '${springMacroRequestContext.contextPath}/taskSingleImageCrop/save/' + taskId,
+    		 data:JSON.stringify(wholeCropData),
+             dataType: 'json',
+             contentType: 'application/json',
+    		 success: function(data) {
+    			 if(data){
+    				 $('#imageCrop').cropper('setAllData', data);
+    			 }
+        	},
+        	error: function(data) {
+        		//返回500错误页面
+        		$("html").html(data.responseText);
+        	}
+    	 });
+    }
+    function deleteCrop(){
+		var taskId = $('#taskId').val();
+		var order = $("#order").val();
+		var label = parseInt($('#skuType').attr("skuorder")) + 1;
+		var cropData = {label:label};
+		var data = {cropData:cropData,imageOrder:order};
+		$.ajax({
+    		 type: 'POST',
+    		 url: '${springMacroRequestContext.contextPath}/taskSingleImageCrop/delete/' + taskId,
+    		 data:JSON.stringify(data),
+             dataType: 'json',
+             contentType: 'application/json',
+    		 success: function(data) {
+    			 if(data){
+    				 $('#imageCrop').cropper('setAllData', data);
+    			 }
+        	},
+        	error: function(data) {
+        		//返回500错误页面
+        		$("html").html(data.responseText);
+        	}
+    	 });
+    }
+    function clearLabel(){
+        $('#labelList input[type="checkbox"]').prop('checked', false);
+        $('#labelList input[type="radio"]').prop('checked', false);
+        $('#labelList input[type="text"]').val('');
+        $('#labelList .label-item').addClass('closed');
     }
 </script>
 </body>

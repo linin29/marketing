@@ -16,11 +16,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -279,7 +279,7 @@ public class TaskService {
 		String apiName = MarketingConstants.API_MARKETING + taskId + "/stitcher";
 		String apiMethod = MarketingConstants.POST;
 		String status = MarketingConstants.TASK_STATUS_PENDING;
-		
+
 		StitcherUpdateParamBO updateParam = new StitcherUpdateParamBO();
 		updateParam.setApiMethod(apiMethod);
 		updateParam.setApiName(apiName);
@@ -288,7 +288,7 @@ public class TaskService {
 		updateParam.setTaskId(taskId);
 		updateParam.setUserId(userId);
 		this.updateTaskStatusByStitcher(updateParam);
-		
+
 		param.setNeed_stitch(needStitch);
 		param.setMajor_type(majorType);
 		param.setTask_id(taskId);
@@ -525,8 +525,9 @@ public class TaskService {
 								for (int j = 0; j < jsonNodesCrops.size(); j++) {
 									ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(j);
 									if (oNodeCrops != null && oNodeCrops.get("produce") != null
-											&& oNodeCrops.get("produce").asInt() == (i + 1) && oNodeCrops.get("ori_area")!=null) {
-										totalOriArea +=oNodeCrops.get("ori_area").asInt();
+											&& oNodeCrops.get("produce").asInt() == (i + 1)
+											&& oNodeCrops.get("ori_area") != null) {
+										totalOriArea += oNodeCrops.get("ori_area").asInt();
 									}
 								}
 								goods.setOri_area(String.valueOf(totalOriArea));
@@ -589,13 +590,49 @@ public class TaskService {
 	public int getApiCallingSummary(ApiCallingSummaryBO apiCallingSummaryBO) {
 		return apiCallingSummaryMapper.getApiCallingSummary(apiCallingSummaryBO);
 	}
-	
+
 	public int getApiCallingSum(ApiCallingSummaryBO apiCallingSummaryBO) {
 		return apiCallingSummaryMapper.getApiCallingSum(apiCallingSummaryBO);
 	}
 
 	public List<MajorTypeVO> getMajorTypeVOList() {
 		return majorTypeMapper.getMajorTypeList();
+	}
+
+	public List<CropBO> getTaskImageCrops(String taskId, Integer imageOrderNo) {
+		List<CropBO> cropBOs = new ArrayList<CropBO>();
+		TaskVO taskVO = taskMapper.getTaskById(taskId);
+		if (taskVO != null) {
+			String result = (String) taskVO.getResult();
+			if (StringUtils.isNotBlank(result)) {
+				ObjectMapper mapper = new ObjectMapper();
+				ObjectNode nodeResult;
+				try {
+					nodeResult = (ObjectNode) mapper.readTree(result);
+					ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodsInfo");
+					if (jsonNodes != null && jsonNodes.size() > 0) {
+						ArrayNode tempNode = (ArrayNode) jsonNodes.get(imageOrderNo - 1);
+						if (tempNode != null && tempNode.size() > 0) {
+							for (int i = 0; i < tempNode.size(); i++) {
+								ObjectNode oNode = (ObjectNode) tempNode.get(i);
+								CropBO cropBO = new CropBO();
+								cropBO.setId(i + 1);
+								cropBO.setX(oNode.get("x").asInt());
+								cropBO.setY(oNode.get("y").asInt());
+								cropBO.setHeight(oNode.get("height").asInt());
+								cropBO.setWidth(oNode.get("width").asInt());
+								cropBO.setLabel(oNode.get("label").asInt());
+								cropBOs.add(cropBO);
+							}
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return cropBOs;
 	}
 
 	public List<CropBO> getTaskIdentifyCrops(String taskId, Integer produceId) {
@@ -631,14 +668,14 @@ public class TaskService {
 		return cropBOs;
 	}
 
-	public TaskImagesVO getPreOrderTaskImage(String taskId, int order){
+	public TaskImagesVO getPreOrderTaskImage(String taskId, int order) {
 		return taskImagesMapper.getPreOrderTaskImage(taskId, order);
 	}
-	
-	public TaskImagesVO getNextOrderTaskImage(String taskId, int order){
+
+	public TaskImagesVO getNextOrderTaskImage(String taskId, int order) {
 		return taskImagesMapper.getNextOrderTaskImage(taskId, order);
 	}
-	
+
 	private int updateTaskStatusByStitcher(StitcherUpdateParamBO updateParam) {
 		TaskVO taskVO = new TaskVO();
 		taskVO.setId(updateParam.getTaskId());
@@ -688,11 +725,13 @@ public class TaskService {
 			callingStatus = "Success";
 		}
 		int callingTimes = taskImagesCount / MarketingConstants.FIVE_IMAGES;
-		int mod = taskImagesCount % MarketingConstants.FIVE_IMAGES; //one step per five images
+		int mod = taskImagesCount % MarketingConstants.FIVE_IMAGES; // one step
+																	// per five
+																	// images
 		if (mod > 0) {
 			callingTimes += 1;
 		}
-		callingTimes *= 2;  //stitch and identify 
+		callingTimes *= 2; // stitch and identify
 		ApiCallingSummaryVO apiCallingSummaryVO = new ApiCallingSummaryVO();
 		apiCallingSummaryVO.setApiMethod(updateParam.getApiMethod());
 		String newApiName = "";
@@ -739,16 +778,16 @@ public class TaskService {
 
 	}
 
-	public List<String> getTaskExportData(String majorType,String startTime, String endTime, String userId) {
+	public List<String> getTaskExportData(String majorType, String startTime, String endTime, String userId) {
 		List<String> result = new ArrayList<String>();
 		TaskVO taskVO = new TaskVO();
 		taskVO.setTaskStatus(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
 		taskVO.setMajorType(majorType);
 		taskVO.setUserId(userId);
-		if(StringUtils.isNotBlank(startTime)){
+		if (StringUtils.isNotBlank(startTime)) {
 			taskVO.setStartTime(startTime);
 		}
-		if(StringUtils.isNotBlank(endTime)){
+		if (StringUtils.isNotBlank(endTime)) {
 			taskVO.setEndTime(endTime);
 		}
 		List<TaskVO> tasks = taskMapper.getTaskListByVO(taskVO);
@@ -760,7 +799,7 @@ public class TaskService {
 				if (StringUtils.isNotBlank(resultStr)) {
 					StringBuffer taskBodyBuffer = new StringBuffer();
 					String rows = tempTask.getRows();
-					String newRows="";
+					String newRows = "";
 					if (StringUtils.isNotBlank(rows) && StringUtils.equals(String.valueOf(MarketingConstants.COMMA),
 							rows.substring(rows.length() - 1))) {
 						newRows = rows.substring(0, rows.length() - 1);
@@ -768,21 +807,22 @@ public class TaskService {
 						newRows = rows;
 					}
 					newRows = newRows.replaceAll(",", "，");
-					taskBodyBuffer.append(tempTask.getId()).append(",").append(tempTask.getName()).append(getGoodSkuStr(resultStr,newRows));
+					taskBodyBuffer.append(tempTask.getId()).append(",").append(tempTask.getName())
+							.append(getGoodSkuStr(resultStr, newRows));
 					result.add(taskBodyBuffer.toString());
 				}
 			}
 		}
 		return result;
 	}
-	
+
 	@SuppressWarnings("deprecation")
-	public ObjectNode getTaskResult(String taskId){
+	public ObjectNode getTaskResult(String taskId) {
 		TaskVO taskVO = this.getTaskById(taskId);
 		ObjectMapper tempMapper = new ObjectMapper();
 		ObjectNode node = tempMapper.createObjectNode();
 		ArrayNode jsonNodes = tempMapper.createArrayNode();
-		
+
 		if (taskVO != null) {
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
 					&& StringUtils.isNotBlank(taskVO.getRows())) {
@@ -814,6 +854,107 @@ public class TaskService {
 			}
 		}
 		return node;
+	}
+
+	public void saveTaskImageCrop(String taskId, String cropData, Integer imageOrder) {
+		TaskVO taskVO = taskMapper.getTaskById(taskId);
+		if (taskVO != null) {
+			String result = (String) taskVO.getResult();
+			if (StringUtils.isNotBlank(result)) {
+				ObjectMapper mapper = new ObjectMapper();
+				ObjectNode nodeResult;
+				ArrayNode cropResult;
+				try {
+					nodeResult = (ObjectNode) mapper.readTree(result);
+					cropResult = (ArrayNode) mapper.readTree(cropData);
+					ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodsInfo");
+					if (jsonNodes != null) {
+						jsonNodes.removeAll();
+						jsonNodes.addAll(cropResult);
+						nodeResult.put("goodsInfo", jsonNodes);
+						taskVO.setResult(nodeResult.textValue());
+					}
+					taskMapper.updateTask(taskVO);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void saveTaskSingleImageCrop(String taskId, CropBO cropBO) {
+		TaskVO taskVO = taskMapper.getTaskById(taskId);
+		if (taskVO != null) {
+			String result = (String) taskVO.getGoodsInfo();
+			if (StringUtils.isNotBlank(result)) {
+				ObjectMapper mapper = new ObjectMapper();
+				ArrayNode nodeResult;
+				try {
+					nodeResult = (ArrayNode) mapper.readTree(result);
+					if (cropBO.getId() != 0) {
+						if (nodeResult != null && nodeResult.size() > 0) {
+							ArrayNode tempNodeResult = (ArrayNode)nodeResult.get(cropBO.getImageOrder() - 1);
+							if (tempNodeResult != null && tempNodeResult.size() > 0) {
+								for (int i = 0; i < tempNodeResult.size(); i++) {
+									ObjectNode objectNode =	(ObjectNode)tempNodeResult.get(i);
+									if(cropBO.getId()==objectNode.get("id").asInt()){
+										objectNode.put("x", cropBO.getX());
+										objectNode.put("y", cropBO.getY());
+										objectNode.put("height", cropBO.getHeight());
+										objectNode.put("width", cropBO.getWidth());
+										objectNode.put("label", cropBO.getLabel());
+										break;
+									}
+								}
+								taskVO.setGoodsInfo(tempNodeResult.asText());
+							}
+						}
+					} else {
+						ArrayNode tempNodeResult = (ArrayNode)nodeResult.get(cropBO.getImageOrder() - 1);
+						if (tempNodeResult != null && tempNodeResult.size() > 0) {
+							//cropResult.put("id", ((ObjectNode)tempNodeResult.get(tempNodeResult.size()-1)).get("id").asInt() + 1);
+							//tempNodeResult.add(cropResult);
+							taskVO.setGoodsInfo(tempNodeResult.asText());
+						}
+					}
+					taskMapper.updateTask(taskVO);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void deleteTaskSingleImageCrop(String taskId,CropBO cropBO) {
+		TaskVO taskVO = taskMapper.getTaskById(taskId);
+		if (taskVO != null) {
+			String result = (String) taskVO.getGoodsInfo();
+			if (StringUtils.isNotBlank(result)) {
+				ObjectMapper mapper = new ObjectMapper();
+				ArrayNode nodeResult;
+				try {
+					nodeResult = (ArrayNode) mapper.readTree(result);
+					if (cropBO.getId() != 0) {
+						if (nodeResult != null && nodeResult.size() > 0) {
+							ArrayNode tempNodeResult = (ArrayNode)nodeResult.get(cropBO.getImageOrder() - 1);
+							if (tempNodeResult != null && tempNodeResult.size() > 0) {
+								for (int i = 0; i < tempNodeResult.size(); i++) {
+									ObjectNode objectNode =	(ObjectNode)tempNodeResult.get(i);
+									if(cropBO.getId()==objectNode.get("id").asInt()){
+										tempNodeResult.remove(i);
+										break;
+									}
+								}
+								taskVO.setGoodsInfo(tempNodeResult.asText());
+							}
+						}
+					}
+					taskMapper.updateTask(taskVO);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private int addImages(String taskId, String userId, List<MultipartFile> images) {
@@ -1018,28 +1159,27 @@ public class TaskService {
 			return images.get(0).getFullPath();
 		}
 	}
-	
-	private String getGoodSkuHead(String majorType){
+
+	private String getGoodSkuHead(String majorType) {
 		List<GoodsSkuVO> goodArr = getGoods(majorType);
-		
+
 		StringBuffer ratioBuffer = new StringBuffer();
 		StringBuffer numBuffer = new StringBuffer();
 		StringBuffer oriAreaBuffer = new StringBuffer();
 		StringBuffer rowsBuffer = new StringBuffer();
 		StringBuffer result = new StringBuffer();
-		
+
 		for (GoodsSkuVO goodsSku : goodArr) {
 			ratioBuffer.append(",").append(goodsSku.getName()).append("货架占比");
 			numBuffer.append(",").append(goodsSku.getName()).append("牌面数");
 			oriAreaBuffer.append(",").append(goodsSku.getName()).append("像素面积");
 			rowsBuffer.append(",").append(goodsSku.getName()).append("货架位置");
 		}
-		
-		return result.append("任务ID").append(",任务名").append(ratioBuffer).append(numBuffer)
-				.append(oriAreaBuffer).append(rowsBuffer)
-				.append(",货架总面积").append(",货架总层数").toString();
+
+		return result.append("任务ID").append(",任务名").append(ratioBuffer).append(numBuffer).append(oriAreaBuffer)
+				.append(rowsBuffer).append(",货架总面积").append(",货架总层数").toString();
 	}
-	
+
 	private String getGoodSkuStr(String resultStr, String rows) {
 		StringBuffer result = new StringBuffer();
 		StringBuffer ratioBuffer = new StringBuffer();
@@ -1049,7 +1189,7 @@ public class TaskService {
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode nodeResult;
 		String totalArea = "";
-		
+
 		try {
 			nodeResult = (ObjectNode) mapper.readTree(resultStr);
 			if (nodeResult != null) {
@@ -1076,12 +1216,13 @@ public class TaskService {
 							for (int j = 0; j < jsonNodesCrops.size(); j++) {
 								ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(j);
 								if (oNodeCrops != null && oNodeCrops.get("produce") != null
-										&& oNodeCrops.get("produce").asInt() == (i + 1) && oNodeCrops.get("ori_area")!=null) {
-									totalOriArea +=oNodeCrops.get("ori_area").asInt();
+										&& oNodeCrops.get("produce").asInt() == (i + 1)
+										&& oNodeCrops.get("ori_area") != null) {
+									totalOriArea += oNodeCrops.get("ori_area").asInt();
 								}
 							}
 							oriAreaBuffer.append(",").append(totalOriArea);
-						}else{
+						} else {
 							oriAreaBuffer.append(",").append(0);
 						}
 					}
@@ -1094,7 +1235,7 @@ public class TaskService {
 			e.printStackTrace();
 		}
 
-		return result.append(ratioBuffer).append(numBuffer).append(oriAreaBuffer)
-				.append(rowsBuffer).append(",").append(totalArea).append(",").append(rows).toString();
+		return result.append(ratioBuffer).append(numBuffer).append(oriAreaBuffer).append(rowsBuffer).append(",")
+				.append(totalArea).append(",").append(rows).toString();
 	}
 }

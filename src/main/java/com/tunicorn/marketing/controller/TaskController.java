@@ -512,6 +512,14 @@ public class TaskController extends BaseController {
 		TaskImagesVO imagesVO = taskService.getNextOrderTaskImage(taskId, order);
 		return imagesVO;
 	}
+	
+	@RequestMapping(value = "/taskImageCrops/{taskId}/{order}", method = RequestMethod.GET)
+	@ResponseBody
+	public List<CropBO> getTaskImageCrops(@PathVariable("taskId") String taskId,
+			@PathVariable("order") Integer order) {
+		List<CropBO> cropBOs = taskService.getTaskImageCrops(taskId, order);
+		return cropBOs;
+	}
 
 	@RequestMapping(value = "/showCropPage/{taskId}", method = RequestMethod.GET)
 	public String showCropPage(@PathVariable("taskId") String taskId, Model model, HttpServletRequest request) {
@@ -522,10 +530,36 @@ public class TaskController extends BaseController {
 			TaskImagesVO image = taskService.getTaskImagesById(imageId);
 			model.addAttribute("image", image);
 		}
+		List<GoodsSkuVO> goodsSkuVOs = taskService.getGoods(taskVO.getMajorType());
+		
+		model.addAttribute("goodsSkus", goodsSkuVOs);
 		model.addAttribute("images", imagesVOs);
 		model.addAttribute("task", taskVO);
 		model.addAttribute("imageId", imageId);
 		return "list/task_crop";
+	}
+	
+	@RequestMapping(value = "/taskImageCrop/save/{taskId}", method = RequestMethod.GET)
+	@ResponseBody
+	public CommonAjaxResponse saveTaskImageCrop(@PathVariable("taskId") String taskId, HttpServletRequest request) {
+		String cropData = request.getParameter("cropData");
+		String imageOrder = request.getParameter("imageOrder");
+		taskService.saveTaskImageCrop(taskId, cropData, Integer.valueOf(imageOrder));
+		return CommonAjaxResponse.toSuccess(null);
+	}
+	
+	@RequestMapping(value = "/taskSingleImageCrop/save/{taskId}", method = RequestMethod.POST)
+	@ResponseBody
+	public CommonAjaxResponse saveTaskSingleImageCrop(@PathVariable("taskId") String taskId, @RequestBody CropBO cropBO) {
+		taskService.saveTaskSingleImageCrop(taskId, cropBO);
+		return CommonAjaxResponse.toSuccess(null);
+	}
+	
+	@RequestMapping(value = "/taskSingleImageCrop/delete/{taskId}", method = RequestMethod.POST)
+	@ResponseBody
+	public CommonAjaxResponse deleteTaskSingleImageCrop(@PathVariable("taskId") String taskId,  @RequestBody CropBO cropBO) {
+		taskService.deleteTaskSingleImageCrop(taskId, cropBO);
+		return CommonAjaxResponse.toSuccess(null);
 	}
 
 	private Date getBefore2Day(Date date) {

@@ -872,6 +872,7 @@ public class TaskService {
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
 					&& taskVO.getResult() != null) {
 				node.put("goodResults", jsonNodes.addPOJO(this.getResultList(taskVO)).get(0));
+				
 				String resultStr = (String) taskVO.getResult();
 				if (StringUtils.isNotBlank(resultStr)) {
 					ObjectMapper mapper = new ObjectMapper();
@@ -879,6 +880,7 @@ public class TaskService {
 					try {
 						nodeResult = (ObjectNode) mapper.readTree(resultStr);
 						JsonNode jsonNode = nodeResult.findValue("total_area");
+						node.put("resultsBorder", nodeResult.findValue("results_border"));
 						if (jsonNode != null) {
 							node.put("totalArea", jsonNode.asText());
 						}

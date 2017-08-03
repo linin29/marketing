@@ -44,6 +44,11 @@
 	                                <a href="${springMacroRequestContext.contextPath}/showView/${task.id}" target="_blank"><button type="button" class="btn btn-success">查看信息</button></a>
 	                           </div>
 	                       </#if>
+<!-- 	                       <#if task?? && task.taskStatus != 'image_uploaded'>
+	                        <div class="col-xs-1 choose_btn">
+                                <button id="taskRectify" type="button" class="btn btn-success">拉取数据</button>
+                           </div>
+                           </#if>   -->  
                        </div>
                    </div>
                </h4>
@@ -355,8 +360,9 @@
                            	  majorType = $("#taskMajorType").val();
                              }
                              showCropList(results);
+                             debugger;
                              $('#stitched').attr('src', '/pic/marketing/'+ taskId +'/results.jpg?random='+ $.now()).css('height', '400px');
-                             $('#image_default a').attr('href', '/pic/marketing'+data.results_border);
+                             $('#image_default a').attr('href', '/pic/marketing'+data.data.resultsBorder);
            	          	},
            	          	error: function(data) {
            	          		//返回500错误页面

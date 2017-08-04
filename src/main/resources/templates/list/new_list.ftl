@@ -542,24 +542,7 @@
 	$('#merge-pre').click(function() {
 		$('#merge-pre_modal').modal('show');
 	});
-	$('#taskRectify').click(function() {
-		var taskId = $('#taskId').val();
-		$.ajax({
-     		 type: 'POST',
-     		 url: '${springMacroRequestContext.contextPath}/rectify/' + taskId,
-     		 success: function(data) {
-     			 if(data && data.success){
-     				noty({text: '拉取数据成功', layout: "topCenter", type: "success", timeout: 1000});
-     			 }else{
-     				noty({text: '拉取数据成功', layout: "topCenter", type: "warning", timeout: 1000});
-     			 }
-         	},
-         	error: function(data) {
-         		//返回500错误页面
-         		$("html").html(data.responseText);
-         	}
-     	 });
-	});
+
     function deleteImage(imageId){
         var answer = confirm("删除是不可恢复的，你确认要删除吗？");
         if (answer){

@@ -99,7 +99,8 @@
 					<div class='page'>
 						<input type="button" class="btn btn-default" value="上一张" onclick="getPre()">
 						<input type="button" class="btn btn-default" value="下一张" onclick="getNext()">
-						<input id="save" type="button" class="btn btn-primary" value="保存">			           
+						<input id="save" type="button" class="btn btn-primary" value="保存">	
+						<input id="taskRectify" type="button" class="btn btn-primary" value="坐标转换">			           
 					</div>
 					<div class='hidden_show'>
 					   <div id="labelPanel" class="panel panel-default" style="display:none;max-height: 460px;">
@@ -148,6 +149,24 @@
             $('#imageCrop').cropper('enable');
             $('#labelPanel').hide();
         });
+    	$('#taskRectify').click(function() {
+    		var taskId = $('#taskId').val();
+    		$.ajax({
+         		 type: 'POST',
+         		 url: '${springMacroRequestContext.contextPath}/rectify/' + taskId,
+         		 success: function(data) {
+         			 if(data && data.success){
+         				noty({text: '拉取数据成功', layout: "topCenter", type: "success", timeout: 1000});
+         			 }else{
+         				noty({text: '拉取数据成功', layout: "topCenter", type: "warning", timeout: 1000});
+         			 }
+             	},
+             	error: function(data) {
+             		//返回500错误页面
+             		$("html").html(data.responseText);
+             	}
+         	 });
+    	});
         $('#save').on('click', function(){
             var cropDatas = $('#imageCrop').cropper('getAllData');
             var taskId = $('#taskId').val();

@@ -274,11 +274,13 @@
               var json = []
               for(var i in dataArr){
             	  var kv = dataArr[i];
-            	  var kvArr = kv.split('=');
-            	  var j  = {};
-            	  j.resourceId = kvArr[0];
-            	  j.resourceOrder = kvArr[1];
-            	  json.push(j);
+             	  if(kv){
+                  	  var kvArr = kv.split('=');
+                  	  var j  = {};
+                  	  j.resourceId = kvArr[0];
+                  	  j.resourceOrder = kvArr[1];
+                  	  json.push(j);
+              	  }
               }
               $.post('${springMacroRequestContext.contextPath}/'+$('#taskId').val()+'/order', JSON.stringify(json)).done(function(data){
                  if(data.success){
@@ -567,23 +569,27 @@
                     var json = []
                     for(var i in dataArr){
                   	  var kv = dataArr[i];
-                  	  var kvArr = kv.split('=');
-                  	  var j  = {};
-                  	  j.resourceId = kvArr[0];
-                  	  j.resourceOrder = kvArr[1];
-                  	  json.push(j);
+                  	  if(kv){
+                      	  var kvArr = kv.split('=');
+                      	  var j  = {};
+                      	  j.resourceId = kvArr[0];
+                      	  j.resourceOrder = kvArr[1];
+                      	  json.push(j);
+                  	  }
                     }
-                    $.post('${springMacroRequestContext.contextPath}/'+$('#taskId').val()+'/order', JSON.stringify(json)).done(function(data){
-                       if(data.success){
-                           /* var defaultImage = '<a href="${springMacroRequestContext.contextPath}/image/2.png" target="_blank">'+
-                                              '<img id="stitched" src="${springMacroRequestContext.contextPath}/image/2.png"class="img-thumbnail static_img"></a>';
-                           $("#image_default").html(defaultImage);
-                           $("#brandListp").hide();
-                           $("#stitch_image .brand-list").remove(); */
-                       }else{
-                           noty({text: data.errmsg, layout: "topCenter", type: "warning", timeout: 2000});
-                       }
-                    });
+                    if(json.length > 0){
+                        $.post('${springMacroRequestContext.contextPath}/'+$('#taskId').val()+'/order', JSON.stringify(json)).done(function(data){
+                            if(data.success){
+                                /* var defaultImage = '<a href="${springMacroRequestContext.contextPath}/image/2.png" target="_blank">'+
+                                                   '<img id="stitched" src="${springMacroRequestContext.contextPath}/image/2.png"class="img-thumbnail static_img"></a>';
+                                $("#image_default").html(defaultImage);
+                                $("#brandListp").hide();
+                                $("#stitch_image .brand-list").remove(); */
+                            }else{
+                                noty({text: data.errmsg, layout: "topCenter", type: "warning", timeout: 2000});
+                            }
+                         });
+                    }
                     
                 }else{
                     noty({text: data.errmsg, layout: "topCenter", type: "warning", timeout: 2000});

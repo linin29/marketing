@@ -105,7 +105,6 @@
 					   <div id="labelPanel" class="panel panel-default" style="display:none;max-height: 460px;">
 				          <div class="panel-heading">SKU选择</div>
 				          <div class="panel-body">
-				              <input id="currentAnnoId" type="hidden">
 				              <input id="currentPid" type="hidden">
 				              <input id="labelTxt" type="hidden" class="form-control" style="margin:0 0 5px 0;" placeholder="请输入标签">
 				              <ul id="labelList" class="list-group" style="overflow-y: auto;max-height: 340px;">
@@ -145,9 +144,7 @@
             }
         });
         $('#cancelBtn').click(function(){
-            var currentAnnoId = $('#currentAnnoId').val();
-            $('.cropper-crop-box[name=' + currentAnnoId + ']').remove();
-            $('#imageCrop').cropper('deleteData', currentAnnoId);
+            $('#imageCrop').cropper('deleteCrop');
             $('#imageCrop').cropper('enable');
             $('#labelPanel').hide();
         });
@@ -276,7 +273,6 @@
         clearLabel();
         var data = $(this).cropper('getCropBoxData');
         wholeCropData = data;
-        $('#currentAnnoId').val(data.annotationId);
         $('#skuType').val($("#skuType option[skuorder=" + (parseInt(data.label) -1) + "]").val());
         
         if($(this).cropper('hasLabel')){
@@ -285,8 +281,8 @@
             $('#labelTxt').val(label.name);
         }else{
             $('#labelTxt').val('');
-            $('#imageCrop').cropper('disable');
         }
+        
         $('#labelPanel').show();
     }
     function clearLabel(){

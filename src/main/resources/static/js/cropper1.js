@@ -1201,7 +1201,8 @@ var handlers = {
     if (self.disabled) {
       return;
     }
-
+    
+    self.isCroped = false;
     var options = self.options;
     var pointers = self.pointers;
     var $cropper = self.$cropper;
@@ -1277,6 +1278,8 @@ var handlers = {
     if (self.disabled || !action) {
       return;
     }
+    
+    self.isCroped = true;
 
     var pointers = self.pointers;
     var originalEvent = e.originalEvent;
@@ -1306,6 +1309,12 @@ var handlers = {
     if (self.disabled) {
       return;
     }
+    
+    if (!self.isCroped && !self.hasLabel()){
+    	self.deleteCrop();
+    	return;
+    }
+    
     var action = self.action;
     var pointers = self.pointers;
     var oldPointers = self.oldPointers || {};
@@ -1380,6 +1389,10 @@ var handlers = {
     if (self.cropping) {
       self.cropping = false;
       self.$dragBox.toggleClass('cropper-modal', self.cropped && self.options.modal);
+    }
+    
+    if(!self.hasLabel()){
+    	self.disable();
     }
 
     self.trigger('cropend', {
@@ -2008,7 +2021,7 @@ var methods = {
       return;
     }
 
-    $cropBox.attr('label', label.name);
+    $cropBox.attr('label', label);
 
     var name = $cropBox.attr('name');
     var cropBox = cropBoxs[name];
@@ -2418,10 +2431,15 @@ var methods = {
     self.scale(isNumber(scaleX) ? scaleX : 1, _scaleY);
   },
 
-  deleteData : function deleteData(id){
+  deleteCrop : function deleteCrop(){
     var self = this;
+    
+    var $cropBox = self.$cropBox;
     var cropBoxs = self.cropBoxs;
+
+    var id = $cropBox.attr('name');
     delete cropBoxs[id];
+    $cropBox.remove();
   },
 
   getAllData : function getAllData(){

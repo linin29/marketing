@@ -44,7 +44,7 @@
 	                                <a href="${springMacroRequestContext.contextPath}/showView/${task.id}" target="_blank"><button type="button" class="btn btn-success">查看信息</button></a>
 	                           </div>
 	                       </#if>
-	                       <#if task?? && task.taskStatus != 'image_uploaded'>
+	                       <#if task?? && task.taskStatus=='identify_success'>
 	                        <div class="col-xs-1 choose_btn">
                                 <button id="taskPullData" type="button" class="btn btn-success">拉取数据</button>
                            </div>

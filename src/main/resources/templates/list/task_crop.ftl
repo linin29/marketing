@@ -156,9 +156,9 @@
          		 url: '${springMacroRequestContext.contextPath}/rectify/' + taskId,
          		 success: function(data) {
          			 if(data && data.success){
-         				noty({text: '拉取数据成功', layout: "topCenter", type: "success", timeout: 1000});
+         				noty({text: '坐标转换成功', layout: "topCenter", type: "success", timeout: 1000});
          			 }else{
-         				noty({text: '拉取数据成功', layout: "topCenter", type: "warning", timeout: 1000});
+         				noty({text: '坐标转换失败', layout: "topCenter", type: "warning", timeout: 1000});
          			 }
              	},
              	error: function(data) {

@@ -360,7 +360,6 @@
                            	  majorType = $("#taskMajorType").val();
                              }
                              showCropList(results);
-                             debugger;
                              $('#stitched').attr('src', '/pic/marketing/'+ taskId +'/results.jpg?random='+ $.now()).css('height', '400px');
                              $('#image_default a').attr('href', '/pic/marketing'+data.data.resultsBorder);
            	          	},

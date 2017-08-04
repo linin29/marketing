@@ -32,6 +32,7 @@ import com.tunicorn.marketing.api.CommonAjaxResponse;
 import com.tunicorn.marketing.api.MarketingAPI;
 import com.tunicorn.marketing.api.param.MarketingIdentifyMockRequestParam;
 import com.tunicorn.marketing.api.param.MarketingIdentifyRequestParam;
+import com.tunicorn.marketing.api.param.MarketingPullDataRequestParam;
 import com.tunicorn.marketing.api.param.MarketingRectifyRequestParam;
 import com.tunicorn.marketing.api.param.MarketingStitcherRequestParam;
 import com.tunicorn.marketing.bo.ApiCallingSummaryBO;
@@ -811,6 +812,13 @@ public class TaskService {
 		param.setTaskId(taskId);
 		param.setMajorType(taskVO.getMajorType());
 		CommonAjaxResponse result = MarketingAPI.rectify(param);
+		return result;
+	}
+	
+	public CommonAjaxResponse pullData(String taskId) {
+		MarketingPullDataRequestParam param = new MarketingPullDataRequestParam();
+		param.setTaskId(taskId);
+		CommonAjaxResponse result = MarketingAPI.pullData(param);
 		return result;
 	}
 

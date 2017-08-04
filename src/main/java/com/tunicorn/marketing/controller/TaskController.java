@@ -555,6 +555,13 @@ public class TaskController extends BaseController {
 		CommonAjaxResponse result = taskService.rectify(taskId);
 		return result;
 	}
+	
+	@RequestMapping(value = "/pullData/{taskId}", method = RequestMethod.POST)
+	@ResponseBody
+	public CommonAjaxResponse pullData(@PathVariable("taskId") String taskId) {
+		CommonAjaxResponse result = taskService.pullData(taskId);
+		return result;
+	}
 
 	private Date getBefore2Day(Date date) {
 		Calendar calendar = Calendar.getInstance();

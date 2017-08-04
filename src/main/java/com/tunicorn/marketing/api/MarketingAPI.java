@@ -12,6 +12,7 @@ import com.tunicorn.common.api.Message;
 import com.tunicorn.common.api.param.IRequestParam;
 import com.tunicorn.marketing.api.param.MarketingIdentifyMockRequestParam;
 import com.tunicorn.marketing.api.param.MarketingIdentifyRequestParam;
+import com.tunicorn.marketing.api.param.MarketingPullDataRequestParam;
 import com.tunicorn.marketing.api.param.MarketingRectifyRequestParam;
 import com.tunicorn.marketing.api.param.MarketingStitcherRequestParam;
 import com.tunicorn.marketing.constant.MarketingConstants;
@@ -32,17 +33,22 @@ public class MarketingAPI {
 		return callCoreService(MarketingConstants.CORE_SERVER_MARKETING_IDENTIFY_URL, params,
 				MarketingConstants.MARKETING_IDENTIFY_SERVICE);
 	}
-	
-	//Mock method
+
+	// Mock method
 	public static CommonAjaxResponse identifyMock(MarketingIdentifyMockRequestParam params) {
 		return callCoreService(MarketingConstants.CORE_SERVER_MARKETING_IDENTIFY_MOCK_URL, params,
 				MarketingConstants.MARKETING_IDENTIFY_MOCK_SERVICE);
 	}
-	
-	//rectify method
+
+	// rectify method
 	public static CommonAjaxResponse rectify(MarketingRectifyRequestParam params) {
 		return callCoreService(MarketingConstants.CORE_SERVER_MARKETING_RECTIFY_MOCK_URL, params,
 				MarketingConstants.MARKETING_RECTIFY_SERVICE);
+	}
+
+	// pullData method
+	public static CommonAjaxResponse pullData(MarketingPullDataRequestParam params) {
+		return callCoreService(null, params, MarketingConstants.MARKETING_PULL_DATA_SERVICE);
 	}
 
 	private static CommonAjaxResponse callCoreService(String uri, IRequestParam params, String apiErrMsgTag) {
@@ -54,20 +60,24 @@ public class MarketingAPI {
 			if (StringUtils.isNotBlank(requestParams.getMajor_type())) {
 				headers.put(MarketingConstants.MAJOR_TYPE, requestParams.getMajor_type());
 			}
-		}else if (StringUtils.endsWith(MarketingConstants.MARKETING_IDENTIFY_SERVICE, apiErrMsgTag)) {
+		} else if (StringUtils.endsWith(MarketingConstants.MARKETING_IDENTIFY_SERVICE, apiErrMsgTag)) {
 			MarketingIdentifyRequestParam requestParams = (MarketingIdentifyRequestParam) params;
 			if (StringUtils.isNotBlank(requestParams.getMajor_type())) {
 				headers.put(MarketingConstants.MAJOR_TYPE, requestParams.getMajor_type());
 			}
-		}else if (StringUtils.endsWith(MarketingConstants.MARKETING_IDENTIFY_MOCK_SERVICE, apiErrMsgTag)) {
-			//Mock setup
+		} else if (StringUtils.endsWith(MarketingConstants.MARKETING_IDENTIFY_MOCK_SERVICE, apiErrMsgTag)) {
+			// Mock setup
 			url = ConfigUtils.getInstance().getConfigValue("marketing.mock.service.url");
-		}else if (StringUtils.endsWith(MarketingConstants.MARKETING_RECTIFY_SERVICE, apiErrMsgTag)) {
+		} else if (StringUtils.endsWith(MarketingConstants.MARKETING_RECTIFY_SERVICE, apiErrMsgTag)) {
 			MarketingRectifyRequestParam requestParams = (MarketingRectifyRequestParam) params;
 			if (StringUtils.isNotBlank(requestParams.getMajorType())) {
 				headers.put(MarketingConstants.MAJOR_TYPE, requestParams.getMajorType());
 			}
+		}else if (StringUtils.endsWith(MarketingConstants.MARKETING_PULL_DATA_SERVICE, apiErrMsgTag)) {
+			// Mock setup
+			url = ConfigUtils.getInstance().getConfigValue("marketing.pulldata.service.url");
 		}
+		
 		headers.put("Content-Type", "application/json");
 		logger.info(url);
 		logger.info(params.convertToJSON());

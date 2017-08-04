@@ -46,7 +46,7 @@
 	                       </#if>
 	                       <#if task?? && task.taskStatus != 'image_uploaded'>
 	                        <div class="col-xs-1 choose_btn">
-                                <button id="taskRectify" type="button" class="btn btn-success">拉取数据</button>
+                                <button id="taskPullData" type="button" class="btn btn-success">拉取数据</button>
                            </div>
                            </#if>    
                        </div>
@@ -199,7 +199,24 @@
     var picPath = '/pic/marketing';
 	$(function() {
 		getTaskName();
-		
+    /* 	$('#taskPullData').click(function() {
+    		var taskId = $('#taskId').val();
+    		$.ajax({
+         		 type: 'POST',
+         		 url: '${springMacroRequestContext.contextPath}/pullData/' + taskId,
+         		 success: function(data) {
+         			 if(data && data.success){
+         				noty({text: '拉取数据成功', layout: "topCenter", type: "success", timeout: 1000});
+         			 }else{
+         				noty({text: '拉取数据成功', layout: "topCenter", type: "warning", timeout: 1000});
+         			 }
+             	},
+             	error: function(data) {
+             		//返回500错误页面
+             		$("html").html(data.responseText);
+             	}
+         	 });
+    	}); */
 		$('#image-upload').change(function(e){
 			var taskName = $("#taskName").val();
 			if (!/\S/.test(taskName)) {

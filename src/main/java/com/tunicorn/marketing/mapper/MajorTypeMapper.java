@@ -14,9 +14,17 @@ import com.tunicorn.marketing.vo.MajorTypeVO;
 public interface MajorTypeMapper {
 
 	@Results({ @Result(property = "createTime", column = "create_time") })
-	@Select("select id, `name`, description, create_time from major_type where status='active'")
-	public List<MajorTypeVO> getMajorTypeList();
+	@Select("select mt.* from admin_major_type_service_apply_mapping am "
+			+ "left join admin_service_apply asa on asa.id=am.service_apply_id"
+			+ " left join major_type mt on mt.id=am.major_type_id "
+			+ " left join `user` u on u.username=asa.username "
+			+ " where asa.username=#{username} and mt.`status`='active'")
+	public List<MajorTypeVO> getMajorTypeList(@Param("username") String username);
 
+	@Results({ @Result(property = "createTime", column = "create_time") })
+	@Select("select id, `name`, description, create_time from major_type where status='active'")
+	public List<MajorTypeVO> getAllMajorTypeList();
+	
 	public int createMajorType(MajorTypeVO majorTypeVO);
 
 	public int updateMajorType(MajorTypeVO majorTypeVO);

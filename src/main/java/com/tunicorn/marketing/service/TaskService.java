@@ -16,7 +16,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +32,7 @@ import com.tunicorn.marketing.api.CommonAjaxResponse;
 import com.tunicorn.marketing.api.MarketingAPI;
 import com.tunicorn.marketing.api.param.MarketingIdentifyMockRequestParam;
 import com.tunicorn.marketing.api.param.MarketingIdentifyRequestParam;
+import com.tunicorn.marketing.api.param.MarketingRectifyRequestParam;
 import com.tunicorn.marketing.api.param.MarketingStitcherRequestParam;
 import com.tunicorn.marketing.bo.ApiCallingSummaryBO;
 import com.tunicorn.marketing.bo.CropBO;
@@ -259,6 +259,7 @@ public class TaskService {
 
 	public ServiceResponseBO taskStitcher(String taskId, Boolean needStitch, String majorType, String userId) {
 		TaskVO taskVO = taskMapper.getTaskById(taskId);
+		UserVO userVO = userMapper.getUserByID(userId);
 		if (taskVO == null) {
 			return new ServiceResponseBO(false, "marketing_task_not_existed");
 		}
@@ -273,13 +274,13 @@ public class TaskService {
 		if (needStitch == null) {
 			needStitch = true;
 		}
-		if (!this.getMajorTypeList().contains(majorType)) {
+		if (!this.getMajorTypeList(userVO.getUserName()).contains(majorType)) {
 			return new ServiceResponseBO(false, "marketing_type_invalid");
 		}
 		String apiName = MarketingConstants.API_MARKETING + taskId + "/stitcher";
 		String apiMethod = MarketingConstants.POST;
 		String status = MarketingConstants.TASK_STATUS_PENDING;
-		
+
 		StitcherUpdateParamBO updateParam = new StitcherUpdateParamBO();
 		updateParam.setApiMethod(apiMethod);
 		updateParam.setApiName(apiName);
@@ -288,7 +289,7 @@ public class TaskService {
 		updateParam.setTaskId(taskId);
 		updateParam.setUserId(userId);
 		this.updateTaskStatusByStitcher(updateParam);
-		
+
 		param.setNeed_stitch(needStitch);
 		param.setMajor_type(majorType);
 		param.setTask_id(taskId);
@@ -525,8 +526,9 @@ public class TaskService {
 								for (int j = 0; j < jsonNodesCrops.size(); j++) {
 									ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(j);
 									if (oNodeCrops != null && oNodeCrops.get("produce") != null
-											&& oNodeCrops.get("produce").asInt() == (i + 1) && oNodeCrops.get("ori_area")!=null) {
-										totalOriArea +=oNodeCrops.get("ori_area").asInt();
+											&& oNodeCrops.get("produce").asInt() == (i + 1)
+											&& oNodeCrops.get("ori_area") != null) {
+										totalOriArea += oNodeCrops.get("ori_area").asInt();
 									}
 								}
 								goods.setOri_area(String.valueOf(totalOriArea));
@@ -589,13 +591,50 @@ public class TaskService {
 	public int getApiCallingSummary(ApiCallingSummaryBO apiCallingSummaryBO) {
 		return apiCallingSummaryMapper.getApiCallingSummary(apiCallingSummaryBO);
 	}
-	
+
 	public int getApiCallingSum(ApiCallingSummaryBO apiCallingSummaryBO) {
 		return apiCallingSummaryMapper.getApiCallingSum(apiCallingSummaryBO);
 	}
 
-	public List<MajorTypeVO> getMajorTypeVOList() {
-		return majorTypeMapper.getMajorTypeList();
+	public List<MajorTypeVO> getMajorTypeVOList(String username) {
+		return majorTypeMapper.getMajorTypeList(username);
+	}
+
+	public List<CropBO> getTaskImageCrops(String taskId, Integer imageOrderNo) {
+		List<CropBO> cropBOs = new ArrayList<CropBO>();
+		TaskVO taskVO = taskMapper.getTaskById(taskId);
+		if (taskVO != null) {
+			String result = (String) taskVO.getResult();
+			if (StringUtils.isNotBlank(result)) {
+				ObjectMapper mapper = new ObjectMapper();
+				ObjectNode nodeResult;
+				try {
+					nodeResult = (ObjectNode) mapper.readTree(result);
+					ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodInfo");
+					if (jsonNodes != null && jsonNodes.size() > 0) {
+						JsonNode tempNode = jsonNodes.get(imageOrderNo - 1);
+						if (tempNode != null && tempNode.get("rect") != null) {
+							ArrayNode tempArrayNode = (ArrayNode) tempNode.get("rect");
+							for (int i = 0; i < tempArrayNode.size(); i++) {
+								ObjectNode oNode = (ObjectNode) tempArrayNode.get(i);
+								CropBO cropBO = new CropBO();
+								cropBO.setId(i + 1);
+								cropBO.setX(oNode.get("x").asInt());
+								cropBO.setY(oNode.get("y").asInt());
+								cropBO.setHeight(oNode.get("height").asInt());
+								cropBO.setWidth(oNode.get("width").asInt());
+								cropBO.setLabel(oNode.get("label").asInt());
+								cropBOs.add(cropBO);
+							}
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return cropBOs;
 	}
 
 	public List<CropBO> getTaskIdentifyCrops(String taskId, Integer produceId) {
@@ -631,14 +670,14 @@ public class TaskService {
 		return cropBOs;
 	}
 
-	public TaskImagesVO getPreOrderTaskImage(String taskId, int order){
+	public TaskImagesVO getPreOrderTaskImage(String taskId, int order) {
 		return taskImagesMapper.getPreOrderTaskImage(taskId, order);
 	}
-	
-	public TaskImagesVO getNextOrderTaskImage(String taskId, int order){
+
+	public TaskImagesVO getNextOrderTaskImage(String taskId, int order) {
 		return taskImagesMapper.getNextOrderTaskImage(taskId, order);
 	}
-	
+
 	private int updateTaskStatusByStitcher(StitcherUpdateParamBO updateParam) {
 		TaskVO taskVO = new TaskVO();
 		taskVO.setId(updateParam.getTaskId());
@@ -688,11 +727,13 @@ public class TaskService {
 			callingStatus = "Success";
 		}
 		int callingTimes = taskImagesCount / MarketingConstants.FIVE_IMAGES;
-		int mod = taskImagesCount % MarketingConstants.FIVE_IMAGES; //one step per five images
+		int mod = taskImagesCount % MarketingConstants.FIVE_IMAGES; // one step
+																	// per five
+																	// images
 		if (mod > 0) {
 			callingTimes += 1;
 		}
-		callingTimes *= 2;  //stitch and identify 
+		callingTimes *= 2; // stitch and identify
 		ApiCallingSummaryVO apiCallingSummaryVO = new ApiCallingSummaryVO();
 		apiCallingSummaryVO.setApiMethod(updateParam.getApiMethod());
 		String newApiName = "";
@@ -739,16 +780,50 @@ public class TaskService {
 
 	}
 
-	public List<String> getTaskExportData(String majorType,String startTime, String endTime, String userId) {
+	@Transactional
+	public void saveGoodsInfo(String taskId) {
+		TaskVO taskVO = taskMapper.getTaskById(taskId);
+		if (taskVO != null) {
+			String result = (String) taskVO.getResult();
+			String goodInfo = taskVO.getGoodsInfo();
+			if (StringUtils.isNotBlank(result) && StringUtils.isBlank(goodInfo)) {
+				ObjectMapper mapper = new ObjectMapper();
+				ObjectNode nodeResult;
+				try {
+					nodeResult = (ObjectNode) mapper.readTree(result);
+					if (nodeResult.findValue("goodInfo") != null) {
+						ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodInfo");
+						taskVO.setGoodsInfo(jsonNodes.toString());
+						taskMapper.updateTask(taskVO);
+					}
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+	}
+
+	public CommonAjaxResponse rectify(String taskId) {
+		TaskVO taskVO = taskMapper.getTaskById(taskId);
+		MarketingRectifyRequestParam param = new MarketingRectifyRequestParam();
+		param.setTaskId(taskId);
+		param.setMajorType(taskVO.getMajorType());
+		CommonAjaxResponse result = MarketingAPI.rectify(param);
+		return result;
+	}
+
+	public List<String> getTaskExportData(String majorType, String startTime, String endTime, String userId) {
 		List<String> result = new ArrayList<String>();
 		TaskVO taskVO = new TaskVO();
 		taskVO.setTaskStatus(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
 		taskVO.setMajorType(majorType);
 		taskVO.setUserId(userId);
-		if(StringUtils.isNotBlank(startTime)){
+		if (StringUtils.isNotBlank(startTime)) {
 			taskVO.setStartTime(startTime);
 		}
-		if(StringUtils.isNotBlank(endTime)){
+		if (StringUtils.isNotBlank(endTime)) {
 			taskVO.setEndTime(endTime);
 		}
 		List<TaskVO> tasks = taskMapper.getTaskListByVO(taskVO);
@@ -760,7 +835,7 @@ public class TaskService {
 				if (StringUtils.isNotBlank(resultStr)) {
 					StringBuffer taskBodyBuffer = new StringBuffer();
 					String rows = tempTask.getRows();
-					String newRows="";
+					String newRows = "";
 					if (StringUtils.isNotBlank(rows) && StringUtils.equals(String.valueOf(MarketingConstants.COMMA),
 							rows.substring(rows.length() - 1))) {
 						newRows = rows.substring(0, rows.length() - 1);
@@ -768,21 +843,22 @@ public class TaskService {
 						newRows = rows;
 					}
 					newRows = newRows.replaceAll(",", "，");
-					taskBodyBuffer.append(tempTask.getId()).append(",").append(tempTask.getName()).append(getGoodSkuStr(resultStr,newRows));
+					taskBodyBuffer.append(tempTask.getId()).append(",").append(tempTask.getName())
+							.append(getGoodSkuStr(resultStr, newRows));
 					result.add(taskBodyBuffer.toString());
 				}
 			}
 		}
 		return result;
 	}
-	
+
 	@SuppressWarnings("deprecation")
-	public ObjectNode getTaskResult(String taskId){
+	public ObjectNode getTaskResult(String taskId) {
 		TaskVO taskVO = this.getTaskById(taskId);
 		ObjectMapper tempMapper = new ObjectMapper();
 		ObjectNode node = tempMapper.createObjectNode();
 		ArrayNode jsonNodes = tempMapper.createArrayNode();
-		
+
 		if (taskVO != null) {
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
 					&& StringUtils.isNotBlank(taskVO.getRows())) {
@@ -796,6 +872,7 @@ public class TaskService {
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
 					&& taskVO.getResult() != null) {
 				node.put("goodResults", jsonNodes.addPOJO(this.getResultList(taskVO)).get(0));
+				
 				String resultStr = (String) taskVO.getResult();
 				if (StringUtils.isNotBlank(resultStr)) {
 					ObjectMapper mapper = new ObjectMapper();
@@ -803,6 +880,7 @@ public class TaskService {
 					try {
 						nodeResult = (ObjectNode) mapper.readTree(resultStr);
 						JsonNode jsonNode = nodeResult.findValue("total_area");
+						node.put("resultsBorder", nodeResult.findValue("results_border"));
 						if (jsonNode != null) {
 							node.put("totalArea", jsonNode.asText());
 						}
@@ -814,6 +892,33 @@ public class TaskService {
 			}
 		}
 		return node;
+	}
+
+	@SuppressWarnings("deprecation")
+	public void saveTaskImageCrop(String taskId, Integer imageOrder, ArrayNode goodsInfoArray) {
+		TaskVO taskVO = taskMapper.getTaskById(taskId);
+		if (taskVO != null) {
+			String result = (String) taskVO.getResult();
+			if (StringUtils.isNotBlank(result)) {
+				ObjectMapper mapper = new ObjectMapper();
+				ObjectNode nodeResult;
+				try {
+					nodeResult = (ObjectNode) mapper.readTree(result);
+					ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodInfo");
+					if (jsonNodes != null && jsonNodes.size() > 0) {
+						ObjectNode objectNode = (ObjectNode) jsonNodes.get(imageOrder - 1);
+						objectNode.put("rect", goodsInfoArray);
+						// jsonNodes.removeAll();
+						// jsonNodes.addAll(cropResult);
+						// nodeResult.put("goodInfo", jsonNodes);
+						taskVO.setResult(nodeResult.toString());
+					}
+					taskMapper.updateTask(taskVO);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private int addImages(String taskId, String userId, List<MultipartFile> images) {
@@ -952,9 +1057,9 @@ public class TaskService {
 		return imageTypeList;
 	}
 
-	private List<String> getMajorTypeList() {
+	private List<String> getMajorTypeList(String username) {
 		List<String> majorTypeList = new ArrayList<String>();
-		List<MajorTypeVO> list = majorTypeMapper.getMajorTypeList();
+		List<MajorTypeVO> list = majorTypeMapper.getMajorTypeList(username);
 		if (list != null && list.size() > 0) {
 			for (MajorTypeVO majorTypeVO : list) {
 				majorTypeList.add(majorTypeVO.getName());
@@ -1018,28 +1123,27 @@ public class TaskService {
 			return images.get(0).getFullPath();
 		}
 	}
-	
-	private String getGoodSkuHead(String majorType){
+
+	private String getGoodSkuHead(String majorType) {
 		List<GoodsSkuVO> goodArr = getGoods(majorType);
-		
+
 		StringBuffer ratioBuffer = new StringBuffer();
 		StringBuffer numBuffer = new StringBuffer();
 		StringBuffer oriAreaBuffer = new StringBuffer();
 		StringBuffer rowsBuffer = new StringBuffer();
 		StringBuffer result = new StringBuffer();
-		
+
 		for (GoodsSkuVO goodsSku : goodArr) {
 			ratioBuffer.append(",").append(goodsSku.getName()).append("货架占比");
 			numBuffer.append(",").append(goodsSku.getName()).append("牌面数");
 			oriAreaBuffer.append(",").append(goodsSku.getName()).append("像素面积");
 			rowsBuffer.append(",").append(goodsSku.getName()).append("货架位置");
 		}
-		
-		return result.append("任务ID").append(",任务名").append(ratioBuffer).append(numBuffer)
-				.append(oriAreaBuffer).append(rowsBuffer)
-				.append(",货架总面积").append(",货架总层数").toString();
+
+		return result.append("任务ID").append(",任务名").append(ratioBuffer).append(numBuffer).append(oriAreaBuffer)
+				.append(rowsBuffer).append(",货架总面积").append(",货架总层数").toString();
 	}
-	
+
 	private String getGoodSkuStr(String resultStr, String rows) {
 		StringBuffer result = new StringBuffer();
 		StringBuffer ratioBuffer = new StringBuffer();
@@ -1049,7 +1153,7 @@ public class TaskService {
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode nodeResult;
 		String totalArea = "";
-		
+
 		try {
 			nodeResult = (ObjectNode) mapper.readTree(resultStr);
 			if (nodeResult != null) {
@@ -1076,12 +1180,13 @@ public class TaskService {
 							for (int j = 0; j < jsonNodesCrops.size(); j++) {
 								ObjectNode oNodeCrops = (ObjectNode) jsonNodesCrops.get(j);
 								if (oNodeCrops != null && oNodeCrops.get("produce") != null
-										&& oNodeCrops.get("produce").asInt() == (i + 1) && oNodeCrops.get("ori_area")!=null) {
-									totalOriArea +=oNodeCrops.get("ori_area").asInt();
+										&& oNodeCrops.get("produce").asInt() == (i + 1)
+										&& oNodeCrops.get("ori_area") != null) {
+									totalOriArea += oNodeCrops.get("ori_area").asInt();
 								}
 							}
 							oriAreaBuffer.append(",").append(totalOriArea);
-						}else{
+						} else {
 							oriAreaBuffer.append(",").append(0);
 						}
 					}
@@ -1094,7 +1199,7 @@ public class TaskService {
 			e.printStackTrace();
 		}
 
-		return result.append(ratioBuffer).append(numBuffer).append(oriAreaBuffer)
-				.append(rowsBuffer).append(",").append(totalArea).append(",").append(rows).toString();
+		return result.append(ratioBuffer).append(numBuffer).append(oriAreaBuffer).append(rowsBuffer).append(",")
+				.append(totalArea).append(",").append(rows).toString();
 	}
 }

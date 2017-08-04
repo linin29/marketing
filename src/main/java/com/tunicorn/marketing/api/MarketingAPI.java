@@ -12,6 +12,7 @@ import com.tunicorn.common.api.Message;
 import com.tunicorn.common.api.param.IRequestParam;
 import com.tunicorn.marketing.api.param.MarketingIdentifyMockRequestParam;
 import com.tunicorn.marketing.api.param.MarketingIdentifyRequestParam;
+import com.tunicorn.marketing.api.param.MarketingRectifyRequestParam;
 import com.tunicorn.marketing.api.param.MarketingStitcherRequestParam;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.utils.ConfigUtils;
@@ -37,6 +38,12 @@ public class MarketingAPI {
 		return callCoreService(MarketingConstants.CORE_SERVER_MARKETING_IDENTIFY_MOCK_URL, params,
 				MarketingConstants.MARKETING_IDENTIFY_MOCK_SERVICE);
 	}
+	
+	//rectify method
+	public static CommonAjaxResponse rectify(MarketingRectifyRequestParam params) {
+		return callCoreService(MarketingConstants.CORE_SERVER_MARKETING_RECTIFY_MOCK_URL, params,
+				MarketingConstants.MARKETING_RECTIFY_SERVICE);
+	}
 
 	private static CommonAjaxResponse callCoreService(String uri, IRequestParam params, String apiErrMsgTag) {
 		String url = ConfigUtils.getInstance().getConfigValue("marketing.service.url") + uri;
@@ -55,6 +62,11 @@ public class MarketingAPI {
 		}else if (StringUtils.endsWith(MarketingConstants.MARKETING_IDENTIFY_MOCK_SERVICE, apiErrMsgTag)) {
 			//Mock setup
 			url = ConfigUtils.getInstance().getConfigValue("marketing.mock.service.url");
+		}else if (StringUtils.endsWith(MarketingConstants.MARKETING_RECTIFY_SERVICE, apiErrMsgTag)) {
+			MarketingRectifyRequestParam requestParams = (MarketingRectifyRequestParam) params;
+			if (StringUtils.isNotBlank(requestParams.getMajorType())) {
+				headers.put(MarketingConstants.MAJOR_TYPE, requestParams.getMajorType());
+			}
 		}
 		headers.put("Content-Type", "application/json");
 		logger.info(url);

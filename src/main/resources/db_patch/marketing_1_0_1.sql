@@ -91,6 +91,7 @@ BEGIN
 	IF @ret = 1 THEN 
 		ALTER TABLE task ADD COLUMN `host` VARCHAR(50) DEFAULT NULL;
 		ALTER TABLE task ADD COLUMN `need_stitch` INT(11) DEFAULT '1' COMMENT '是否去重,默认为去重';
+		ALTER TABLE task ADD COLUMN `goods_info` text;
 	END IF;
 END//
 

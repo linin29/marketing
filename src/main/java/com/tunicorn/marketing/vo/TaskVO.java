@@ -22,6 +22,7 @@ public class TaskVO extends PaginationBO {
 	private Date updatedAt;
 	private String startTime;
 	private String endTime;
+	private String goodsInfo;
 
 	public String getAuthor() {
 		return author;
@@ -157,6 +158,14 @@ public class TaskVO extends PaginationBO {
 
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
+	}
+
+	public String getGoodsInfo() {
+		return goodsInfo;
+	}
+
+	public void setGoodsInfo(String goodsInfo) {
+		this.goodsInfo = goodsInfo;
 	}
 
 }

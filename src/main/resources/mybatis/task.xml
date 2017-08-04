@@ -13,6 +13,7 @@
 		<result column="result" property="result" jdbcType="VARCHAR" />
 		<result column="rows" property="rows" jdbcType="VARCHAR" />
 		<result column="major_type" property="majorType" jdbcType="VARCHAR" />
+		<result column="goods_info" property="goodsInfo" jdbcType="VARCHAR" />
 	</resultMap>
 
    <insert id="createTask" parameterType="com.tunicorn.marketing.vo.TaskVO">
@@ -110,7 +111,7 @@
 	</select>
 	<select id="getTaskListByVO" resultMap="TaskResultMap" parameterType="com.tunicorn.marketing.vo.TaskVO">
 		select id, `name`, task_status, user_id, create_time,
-		stitch_image_path, result, rows, major_type
+		stitch_image_path, result, rows, major_type, goods_info
 		from task
 		where `status` = 'active'
 		<if test="userId != null and userId != ''">
@@ -180,12 +181,15 @@
 			<if test="result != null and result !=''">
 				result=#{result},
 			</if>
+			<if test="goodsInfo != null and goodsInfo !=''">
+				goods_info=#{goodsInfo},
+			</if>
 		</trim>
 		WHERE id=#{id}
 	</update>
 	<select id="getTaskById" resultMap="TaskResultMap" parameterType="string">
 		select id, `name`, task_status, user_id, create_time,
-		stitch_image_path, result, rows, major_type
+		stitch_image_path, result, rows, major_type,goods_info
 		from task
 		where `status` = 'active'
 		and id = #{taskId}

@@ -40,10 +40,15 @@
                                 <button id="taskStatus" type="button" class="btn btn-success">获取状态</button>
                            </div>
                            <#if task??>
-	                           <div class="col-xs-1">
+	                           <div class="col-xs-1 choose_btn">
 	                                <a href="${springMacroRequestContext.contextPath}/showView/${task.id}" target="_blank"><button type="button" class="btn btn-success">查看信息</button></a>
 	                           </div>
-	                       </#if>    
+	                       </#if>
+	                       <#if task?? && task.taskStatus != 'image_uploaded'>
+	                        <div class="col-xs-1 choose_btn">
+                                <button id="taskRectify" type="button" class="btn btn-success">拉取数据</button>
+                           </div>
+                           </#if>    
                        </div>
                    </div>
                </h4>
@@ -356,7 +361,7 @@
                              }
                              showCropList(results);
                              $('#stitched').attr('src', '/pic/marketing/'+ taskId +'/results.jpg?random='+ $.now()).css('height', '400px');
-                             $('#image_default a').attr('href', '/pic/marketing'+data.results_border);
+                             $('#image_default a').attr('href', '/pic/marketing'+data.data.resultsBorder);
            	          	},
            	          	error: function(data) {
            	          		//返回500错误页面
@@ -537,6 +542,7 @@
 	$('#merge-pre').click(function() {
 		$('#merge-pre_modal').modal('show');
 	});
+
     function deleteImage(imageId){
         var answer = confirm("删除是不可恢复的，你确认要删除吗？");
         if (answer){

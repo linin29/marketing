@@ -86,8 +86,9 @@
 			                   <span>货架照片</span>
 			                   <div style="clear:both"></div>
 			                   <div class="row" >
-				                   <div id="image_default"  align="center"  class="col-sm-8">
-					                  <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/2.png"  class="img-thumbnail">
+				                   <div id="image_default" align="center" class="col-sm-10">
+				                   	  <img id="imageCrop" src="/pic/marketing${image.imagePath}"  class="img-thumbnail">
+					                  <!-- <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/3.png"  class="img-thumbnail"> -->
 				                   </div>
 		               			</div>
                				</h4>								
@@ -98,45 +99,24 @@
 					<div class='page'>
 						<input type="button" class="btn btn-default" value="上一张" onclick="getPre()">
 						<input type="button" class="btn btn-default" value="下一张" onclick="getNext()">
-						<input type="button" class="btn btn-primary" value="保存" onclick="getNext()">			           
+						<input id="save" type="button" class="btn btn-primary" value="保存">	
+						<input id="taskRectify" type="button" class="btn btn-primary" value="坐标转换">			           
 					</div>
 					<div class='hidden_show'>
 					   <div id="labelPanel" class="panel panel-default" style="display:none;max-height: 460px;">
-				          <div class="panel-heading">标签选择</div>
+				          <div class="panel-heading">SKU选择</div>
 				          <div class="panel-body">
-				              <input id="currentAnnoId" type="hidden">
 				              <input id="currentPid" type="hidden">
 				              <input id="labelTxt" type="hidden" class="form-control" style="margin:0 0 5px 0;" placeholder="请输入标签">
 				              <ul id="labelList" class="list-group" style="overflow-y: auto;max-height: 340px;">
-				                  <li class="list-group-item" lid="2">logo
-				                    <ul class="list-group" style="margin-top: 10px;">
-				                        <li class="list-group-item">
-				                            <div>
-				                                <input type="checkbox" id="check_1" value="1">
-				                                <span>red</span>
-				                            </div>
-				                            <div>
-				                                <input type="checkbox" id="check_2" value="2">
-				                                <span>blue</span>
-				                            </div>
-				                        </li>
-				                        <li class="list-group-item">
-				                            <div>
-				                                <input type="radio" id="radio_2" value="2">
-				                                <span>red</span>
-				                            </div>
-				                        </li>
-				                        <li class="list-group-item">
-				                            <div>
-				                                <span>info:</span>
-				                                <input type="text" id="input_3" value="" style="max-width: 75%;">
-				                            <div>
-				                        </li>
-				                    </ul>
-				                  </li>
-				                  <li class="list-group-item">
-				                      plate
-				                  </li>
+								<select id="skuType" style="width:100%;height: 34px;">
+									<option value="">请选择类型</option>
+										<#if goodsSkus?? && (goodsSkus?size > 0)>
+			       							<#list goodsSkus as goodsSku>
+			     		 					<option value='${goodsSku.name}' skuorder="${goodsSku.order}">${goodsSku.description}</option>
+			    							</#list>
+		   								</#if>
+								</select> 
 				              </ul>
 				              <input type="button" class="btn btn-success" id="labelBtn" value="确定">
 				              <input type="button" class="btn btn-danger" id="cancelBtn" value="删除">
@@ -150,10 +130,105 @@
 </div>
 <script type="text/javascript">
     var picPath = '/pic/marketing';
+    var wholeCropData;
 	$(function() {
-		getCrops();
+		var order = $("#order").val();
+		var imagePath = $("#imageCrop").attr("src");
+		initCropper();
+		getPictureCrop(imagePath);
+        $('#labelBtn').click(function(){
+            var skuType = $('#skuType').val().trim();
+            if (skuType){
+            	saveLabelLocally();
+            }else{
+                noty({text: "你还没有选择SKU类型!", layout: "topCenter", type: "warning", timeout: 3000});
+            }
+        });
+        $('#cancelBtn').click(function(){
+            $('#imageCrop').cropper('deleteCrop');
+            $('#imageCrop').cropper('enable');
+            $('#labelPanel').hide();
+        });
+    	$('#taskRectify').click(function() {
+    		var taskId = $('#taskId').val();
+    		$.ajax({
+         		 type: 'POST',
+         		 url: '${springMacroRequestContext.contextPath}/rectify/' + taskId,
+         		 success: function(data) {
+         			 if(data && data.success){
+         				noty({text: '拉取数据成功', layout: "topCenter", type: "success", timeout: 1000});
+         			 }else{
+         				noty({text: '拉取数据成功', layout: "topCenter", type: "warning", timeout: 1000});
+         			 }
+             	},
+             	error: function(data) {
+             		//返回500错误页面
+             		$("html").html(data.responseText);
+             	}
+         	 });
+    	});
+        $('#save').on('click', function(){
+            var cropDatas = $('#imageCrop').cropper('getAllData');
+            var taskId = $('#taskId').val();
+            var order = $("#order").val();
+            if(cropDatas.length == 0){
+                return;
+            }
+            var data = {
+                order : order,
+                imageCrop : cropDatas
+            }
+            console.log(JSON.stringify(data));
+            $.ajax({
+                url: '${springMacroRequestContext.contextPath}/taskImageCrop/save/' + taskId,
+                data: JSON.stringify(data),
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(json){
+                    if(json.success){
+                        noty({text: "保存标注数据成功!", layout: "topCenter", type: "success", timeout: 3000});
+                    }
+                },error: function(){
+                    noty({text: "请求后台错误!", layout: "topCenter", type: "warning", timeout: 3000});
+                    return;
+                }
+            });
+        });
 	});
+	
+    function initCropper(){
+        $('#imageCrop').cropper({
+            responsive : false,
+            data : {x: 300, y:400, width:100, height:100, rotate:0},
+            modal : false,
+            guides : false,
+            center : false,
+            highlight : false,
+            background : false,
+            autoCrop : false,
+            autoCropArea : 0.3,
+            movable : true,
+            scalable :false,
+            zoomable :false,
+            zoomOnWheel :false,
+            minContainerWidth : 300,
+            minContainerHeight : 300,
+            cropend: cropEnd
+        }).on({
+            cropstart: function (e) {
+              console.log(e.type, e.action);
+            },
+            cropmove: function (e) {
+              console.log(e.type, e.action);
+            },
+            crop: function (e) {
+              console.log(e.type, e.x, e.y, e.width, e.height, e.rotate, e.scaleX, e.scaleY);
+            }
+        });
+    }
 	function getPre(){
+		$('#save').click();
 		var taskId = $('#taskId').val();
 		var order = $("#order").val();
 		$.ajax({
@@ -161,8 +236,8 @@
      		 url: '${springMacroRequestContext.contextPath}/preOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
-     				$("#imageCrop").attr("src", picPath + data.imagePath);
      				$("#order").val(data.orderNo);
+     				getPictureCrop(picPath + data.imagePath);
      			 }
          	},
          	error: function(data) {
@@ -172,6 +247,7 @@
      	 });
 	}
 	function getNext(){
+		$('#save').click();
 		var taskId = $('#taskId').val();
 		var order = $("#order").val();
 		$.ajax({
@@ -179,8 +255,8 @@
      		 url: '${springMacroRequestContext.contextPath}/nextOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
-     				$("#imageCrop").attr("src", picPath + data.imagePath);
      				$("#order").val(data.orderNo);
+     				getPictureCrop(picPath + data.imagePath);
      			 }
          	},
          	error: function(data) {
@@ -189,76 +265,66 @@
          	}
      	 });
 	}
-	function getCrops(produce){
+	function getPictureCrop(imagePath){
 		var taskId = $('#taskId').val();
+		var order = $("#order").val();
 		$.ajax({
-     		 type: 'GET',
-     		 url: '${springMacroRequestContext.contextPath}/'+taskId+'/crops/2',
-     		 success: function(data) {
-     			//$('#imageCrop').cropper('destroy');
-     			 if(data && data.length > 0){
-      	   	      	$('#imageCrop').cropper({
-      	              responsive : false,
-      	            data : {x: 300, y:400, width:100, height:100, rotate:0},
-      	            modal : false,
-      	            guides : false,
-      	            center : false,
-      	            highlight : false,
-      	            background : false,
-      	            autoCrop : false,
-      	            autoCropArea : 0.3,
-      	            movable : true,
-      	            scalable :false,
-      	            zoomable :false,
-      	            zoomOnWheel :false,
-      	            minContainerWidth : 848,
-      	            minContainerHeight : 500,
-          				ready: function () {
-          					var initData = {"x":100,"y":40,"width":10,"height":25,"rotate":0,"scaleX":1,"scaleY":1,"label":"u1", "name" : "21"};
-          					var allData = [];
-          					for(var i = 0;i<data.length;i++){
-          						var resultData = data[i];
-          						var newData = $.extend({},initData,resultData);
-          						allData.push(initData);
-          					}
-          					$(this).cropper('setAllData', allData);
-          					//$(this).cropper('disable');
-          				},
-          				cropend: cropEnd
-          			}).on({
-          	            cropstart: function (e) {
-          	              console.log(e.type, e.action);
-          	            },
-          	            cropmove: function (e) {
-          	              console.log(e.type, e.action);
-          	            },
-          	            crop: function (e) {
-          	              console.log(e.type, e.x, e.y, e.width, e.height, e.rotate, e.scaleX, e.scaleY);
-          	            }
-          	        });;
-     			 }
-         	},
-         	error: function(data) {
-         		//返回500错误页面
-         		$("html").html(data.responseText);
-         	}
-     	 }); 
-		}
-    function cropEnd(e) {
-        //clearLabel();
-        var data = $(this).cropper('getCropBoxData');
-        $('#currentAnnoId').val(data.annotationId);
+    		 type: 'GET',
+    		 url: '${springMacroRequestContext.contextPath}/taskImageCrops/' + taskId + '/' + order,
+    		 success: function(data) {
+    			 if(data){
+    	     	        $('#imageCrop').off("ready");
+    	     	        $('#imageCrop').cropper('replace', imagePath).on("ready", function(){
+    	     	            console.log('replace ready');
+    	     	            if(data && data.length > 0){
+    	     	                $('#imageCrop').cropper('setAllData', data);
+    	     	            }
+    	     	        });
+    			 }
+        	},
+        	error: function(data) {
+        		//返回500错误页面
+        		$("html").html(data.responseText);
+        	}
+    	 });
+	}
 
+    function cropEnd(e) {
+        clearLabel();
+        var data = $(this).cropper('getCropBoxData');
+        wholeCropData = data;
+        $('#skuType').val($("#skuType option[skuorder=" + (parseInt(data.label) -1) + "]").val());
+        
         if($(this).cropper('hasLabel')){
             var label = data.label;
             fillLabel(label);
             $('#labelTxt').val(label.name);
         }else{
             $('#labelTxt').val('');
-            $('#imageCropper').cropper('disable');
         }
+        
         $('#labelPanel').show();
     }
+    function clearLabel(){
+        $('#labelList input[type="checkbox"]').prop('checked', false);
+        $('#labelList input[type="radio"]').prop('checked', false);
+        $('#labelList input[type="text"]').val('');
+        $('#labelList .label-item').addClass('closed');
+    }
+    function fillLabel(label){
+        $('#label_'+label.id).removeClass('closed');
+    }
+    function saveLabelLocally(){
+        getOpenedLabelItem(function(){
+            var label = $('#skuType option:checked').attr("skuorder");
+            $('#imageCrop').cropper('setLabel', parseInt(label) + 1);
+            $('#labelPanel').hide();
+            $('#imageCrop').cropper('enable');
+        });
+    };
+    function getOpenedLabelItem(cb){
+    	cb();
+    };
 </script>
 </body>
 </html>

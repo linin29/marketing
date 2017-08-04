@@ -47,7 +47,11 @@ public class MajorTypeService {
 		return majorTypeMapper.getMajorTypeById(majorTypeId);
 	}
 	
-	public List<MajorTypeVO> getMajorTypeList(){
-		return majorTypeMapper.getMajorTypeList();
+	public List<MajorTypeVO> getMajorTypeList(String username){
+		return majorTypeMapper.getMajorTypeList(username);
+	}
+	
+	public List<MajorTypeVO> getAllMajorTypeList(){
+		return majorTypeMapper.getAllMajorTypeList();
 	}
 }

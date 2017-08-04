@@ -550,7 +550,8 @@
             var taskId = $('#taskId').val();
             $.post('${springMacroRequestContext.contextPath}/'+taskId+'/images/'+rid).done(function (data) {
                 if(data.success){
-              	  $("#li_"+rid).hide();
+              	 	$("#li_"+rid).hide();
+              		$("#li_"+rid).remove();
                     noty({text: '删除成功', layout: "topCenter", type: "warning", timeout: 1000});
                     $('#status').attr('status', 'image_uploaded');
                     $('#status').text('(当前状态：image_uploaded)');
@@ -560,6 +561,30 @@
                     $("#brandListp").hide();
                     $("#stitch_image .brand-list").remove();
                     $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=2>0</td></tr>');
+                    
+                    var tempData = $('form.box-body').serialize();
+                    var dataArr = tempData.split('&');
+                    var json = []
+                    for(var i in dataArr){
+                  	  var kv = dataArr[i];
+                  	  var kvArr = kv.split('=');
+                  	  var j  = {};
+                  	  j.resourceId = kvArr[0];
+                  	  j.resourceOrder = kvArr[1];
+                  	  json.push(j);
+                    }
+                    $.post('${springMacroRequestContext.contextPath}/'+$('#taskId').val()+'/order', JSON.stringify(json)).done(function(data){
+                       if(data.success){
+                           /* var defaultImage = '<a href="${springMacroRequestContext.contextPath}/image/2.png" target="_blank">'+
+                                              '<img id="stitched" src="${springMacroRequestContext.contextPath}/image/2.png"class="img-thumbnail static_img"></a>';
+                           $("#image_default").html(defaultImage);
+                           $("#brandListp").hide();
+                           $("#stitch_image .brand-list").remove(); */
+                       }else{
+                           noty({text: data.errmsg, layout: "topCenter", type: "warning", timeout: 2000});
+                       }
+                    });
+                    
                 }else{
                     noty({text: data.errmsg, layout: "topCenter", type: "warning", timeout: 2000});
                 }

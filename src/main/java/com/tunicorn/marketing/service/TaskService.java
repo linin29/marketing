@@ -926,7 +926,7 @@ public class TaskService {
 		if (images != null && images.size() > 0) {
 			List<TaskImagesVO> taskImagesVOs = new ArrayList<TaskImagesVO>();
 			List<TaskImagesVO> imagesVOs = taskImagesMapper.getTaskImagesListByTaskId(taskId);
-			int orderNo = 1;
+			int orderNo = 0;
 			if (imagesVOs != null && imagesVOs.size() > 0) {
 				orderNo = imagesVOs.get(imagesVOs.size() - 1).getOrderNo();
 			}

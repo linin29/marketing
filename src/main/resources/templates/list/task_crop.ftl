@@ -67,7 +67,7 @@
 	  <section class="content-wrapper" style="margin-left: 0px;">
 	   	<div id="content" style="padding-top: 1px;">
 			<div class="create_task max_width row">
-				<div class="col-sm-7" style='overflow: hidden;width:70%;'>
+				<div class="col-sm-7" style='overflow: hidden;width:65%;'>
 					<ul>						
 						<li>
 							<h4>
@@ -95,7 +95,7 @@
 						</li>
 					</ul>						
 				</div>
-				<div class='col-sm-4' style='margin-top:120px;margin-left:-1%;width:29%;'>
+				<div class='col-sm-4' style='margin-top:120px;margin-left:0%;width:33%;'>
 					<div class='page'>
 						<input type="button" class="btn btn-default" value="上一张" onclick="getPre()">
 						<input type="button" class="btn btn-default" value="下一张" onclick="getNext()">

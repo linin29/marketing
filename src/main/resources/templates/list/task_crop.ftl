@@ -55,7 +55,7 @@
 			color:#8aa4af;
 		}
 		body {padding-right:0px !important;}
-   		img {max-width: 100%;}
+   		.img_icorn {max-width: 100%;}
    		.cl{clear:both;}
    		.page{
    			margin-bottom:25px;
@@ -67,7 +67,7 @@
 	  <section class="content-wrapper" style="margin-left: 0px;">
 	   	<div id="content" style="padding-top: 1px;">
 			<div class="create_task max_width row">
-				<div class="col-sm-8" style='overflow: hidden;width:70%;'>
+				<div class="col-sm-7" style='overflow: hidden;width:70%;'>
 					<ul>						
 						<li>
 							<h4>
@@ -94,7 +94,7 @@
 						</li>
 					</ul>						
 				</div>
-				<div class='col-sm-4' style='margin-top:120px;margin-left:2%;width:27%;'>
+				<div class='col-sm-4' style='margin-top:120px;margin-left:-1%;width:29%;'>
 					<div class='page'>
 						<input type="button" class="btn btn-default" value="上一张" onclick="getPre()">
 						<input type="button" class="btn btn-default" value="下一张" onclick="getNext()">
@@ -211,7 +211,7 @@
       	            scalable :false,
       	            zoomable :false,
       	            zoomOnWheel :false,
-      	            minContainerWidth : 900,
+      	            minContainerWidth : 848,
       	            minContainerHeight : 500,
           				ready: function () {
           					var initData = {"x":100,"y":40,"width":10,"height":25,"rotate":0,"scaleX":1,"scaleY":1,"label":"u1", "name" : "21"};

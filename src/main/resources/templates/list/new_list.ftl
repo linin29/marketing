@@ -142,9 +142,9 @@
                </div>
                <div class="modal-body preview_box">
                    <div class="box-header">
-                       <h3 class="box-title ">
-                           <#if images?? && (images?size > 0)><small>共<span>${images?size}</span>张图片</small></#if>  
-                       </h3>
+                       <h4 class="box-title ">
+                           <#if images?? && (images?size > 0)>共<span>${images?size}</span>张图片<span>（注：单击图片进入标注页面）</span></#if>  
+                       </h4>
                         <div class="pull-right" style="margin-top: 10px;">
                                <button id="saveOrder" type="button" class="btn btn-success">保存顺序</button>
                         </div>
@@ -624,9 +624,6 @@
 	
 	function showCropPage(taskId, imageId){
 		var status = $('#status').attr('status');
-		if(status == 'image_uploaded'){
-			return;
-		}
 		window.open("${springMacroRequestContext.contextPath}/showCropPage/" + taskId + "?imageId=" + imageId);
 	}
 	

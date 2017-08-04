@@ -85,7 +85,7 @@
 			                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
 			                   <span>货架照片</span>
 			                   <div style="clear:both"></div>
-			                   <div class="row" >
+			                   <div class="row" style="border:1px solid #ddd;">
 				                   <div id="image_default" align="center" class="col-sm-10">
 				                   	  <img id="imageCrop" src="/pic/marketing${image.imagePath}"  class="img-thumbnail">
 					                  <!-- <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/3.png"  class="img-thumbnail"> -->
@@ -95,7 +95,7 @@
 						</li>
 					</ul>						
 				</div>
-				<div class='col-sm-4' style='margin-top:120px;margin-left:0%;width:33%;'>
+				<div class='col-sm-4' style='margin-top:144px;margin-left:0%;width:33%;'>
 					<div class='page'>
 						<input type="button" class="btn btn-default" value="上一张" onclick="getPre()">
 						<input type="button" class="btn btn-default" value="下一张" onclick="getNext()">

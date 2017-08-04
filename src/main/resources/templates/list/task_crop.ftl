@@ -86,8 +86,9 @@
 			                   <span>货架照片</span>
 			                   <div style="clear:both"></div>
 			                   <div class="row" >
-				                   <div id="image_default"  align="center"  class="col-sm-8">
-					                  <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/3.png"  class="img-thumbnail">
+				                   <div id="image_default" align="center" class="col-sm-10">
+				                   	  <img id="imageCrop" src="/pic/marketing${image.imagePath}"  class="img-thumbnail">
+					                  <!-- <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/3.png"  class="img-thumbnail"> -->
 				                   </div>
 		               			</div>
                				</h4>								
@@ -195,8 +196,8 @@
             scalable :false,
             zoomable :false,
             zoomOnWheel :false,
-            minContainerWidth : 900,
-            minContainerHeight : 500,
+            minContainerWidth : 300,
+            minContainerHeight : 300,
             cropend: cropEnd
         }).on({
             cropstart: function (e) {

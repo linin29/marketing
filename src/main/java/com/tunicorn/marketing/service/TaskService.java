@@ -938,27 +938,20 @@ public class TaskService {
 	}
 
 	public void generateFile(ImageCropBO cropBO) {
-		 //String filenameTemp = "D:\\" + cropBO.getImageId() + ".txt";
+		// String filenameTemp = "D:\\" + cropBO.getImageId() + ".txt";
 		String filenameTemp = File.separator + "mnt" + File.separator + cropBO.getMajorType() + File.separator
 				+ cropBO.getImageId() + ".txt";
 		File file = new File(filenameTemp);
 		file.setWritable(true, false);
-/*		TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(cropBO.getImageId());
+		TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(cropBO.getImageId());
 		if (imagesVO != null && imagesVO.getFullPath() != null) {
-			
-			 * try { int bytesum = 0; int byteread = 0; File oldfile = new
-			 * File(imagesVO.getFullPath()); if (oldfile.exists()) { // 文件存在时
-			 * InputStream inStream = new
-			 * FileInputStream(imagesVO.getFullPath()); // 读入原文件
-			 * FileOutputStream fs = new FileOutputStream("/mnt/" +
-			 * cropBO.getMajorType()+"/" + cropBO.getImageId() + ".jpeg");
-			 * byte[] buffer = new byte[1444]; int length; while ((byteread =
-			 * inStream.read(buffer)) != -1) { bytesum += byteread; // 字节数 文件大小
-			 * System.out.println(bytesum); fs.write(buffer, 0, byteread); }
-			 * inStream.close(); } } catch (Exception e) { e.printStackTrace();
-			 * }
-			 
-		}*/
+			try {
+				FileUtils.copyFile(new File(imagesVO.getFullPath()), new File(File.separator + "mnt" + File.separator
+						+ cropBO.getMajorType() + File.separator + cropBO.getImageId() + ".jpeg"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		try {
 			StringBuffer buffer = new StringBuffer();
 			if (cropBO != null && cropBO.getImageCrop() != null && cropBO.getImageCrop().size() > 0) {

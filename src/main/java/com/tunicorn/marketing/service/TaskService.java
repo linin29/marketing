@@ -938,9 +938,11 @@ public class TaskService {
 
 	public void generateFile(ImageCropBO cropBO) {
 		// String filenameTemp = "D:\\" + cropBO.getImageId() + ".txt";
+		String filenameTempDir = File.separator + "mnt" + File.separator + cropBO.getMajorType();
 		String filenameTemp = File.separator + "mnt" + File.separator + cropBO.getMajorType() + File.separator
 				+ cropBO.getImageId() + ".txt";
 		File file = new File(filenameTemp);
+		File fileDir = new File(filenameTempDir);
 		file.setWritable(true, false);
 		TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(cropBO.getImageId());
 		if (imagesVO != null && imagesVO.getFullPath() != null) {
@@ -959,6 +961,9 @@ public class TaskService {
 			 */
 		}
 		try {
+			if (!fileDir.exists()) {
+				file.mkdir();
+			}
 			if (!file.exists()) {
 				file.createNewFile();
 				writeFileContent(filenameTemp, cropBO);

@@ -963,7 +963,7 @@ public class TaskService {
 		}
 		try {
 			if (!fileDir.isDirectory()) {
-				file.mkdir	();
+				fileDir.mkdir();
 			}
 			if (!file.exists()) {
 				file.createNewFile();

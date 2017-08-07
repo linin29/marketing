@@ -88,8 +88,8 @@
 			                   <div style="clear:both"></div>
 			                   <div class="row" style="border:1px solid #ddd;">
 				                   <div id="image_default" align="center" class="col-sm-10">
-				                   	   <img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail"> 
-					                   <!-- <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/3.jpeg"  class="img-thumbnail"> -->
+				                   	  <!-- <img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail"> -->
+					                   <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/3.jpeg"  class="img-thumbnail">
 				                   </div>
 		               			</div>
                				</h4>								

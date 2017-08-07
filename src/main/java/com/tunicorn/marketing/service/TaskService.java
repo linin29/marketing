@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -937,17 +938,14 @@ public class TaskService {
 	}
 
 	public void generateFile(ImageCropBO cropBO) {
-		// String filenameTemp = "D:\\" + cropBO.getImageId() + ".txt";
-		String filenameTempDir = File.separator + "mnt" + File.separator + cropBO.getMajorType();
+		 //String filenameTemp = "D:\\" + cropBO.getImageId() + ".txt";
 		String filenameTemp = File.separator + "mnt" + File.separator + cropBO.getMajorType() + File.separator
 				+ cropBO.getImageId() + ".txt";
 		File file = new File(filenameTemp);
-		File fileDir = new File(filenameTempDir);
 		file.setWritable(true, false);
-		fileDir.setWritable(true, false);
-		TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(cropBO.getImageId());
+/*		TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(cropBO.getImageId());
 		if (imagesVO != null && imagesVO.getFullPath() != null) {
-			/*
+			
 			 * try { int bytesum = 0; int byteread = 0; File oldfile = new
 			 * File(imagesVO.getFullPath()); if (oldfile.exists()) { // 文件存在时
 			 * InputStream inStream = new
@@ -959,40 +957,9 @@ public class TaskService {
 			 * System.out.println(bytesum); fs.write(buffer, 0, byteread); }
 			 * inStream.close(); } } catch (Exception e) { e.printStackTrace();
 			 * }
-			 */
-		}
+			 
+		}*/
 		try {
-			if (!fileDir.isDirectory()) {
-				fileDir.mkdir();
-			}
-			if (!file.exists()) {
-				file.createNewFile();
-				writeFileContent(filenameTemp, cropBO);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@SuppressWarnings("unused")
-	private boolean writeFileContent(String filepath, ImageCropBO cropBO) throws IOException {
-		Boolean bool = false;
-		String temp = "";
-
-		FileInputStream fis = null;
-		InputStreamReader isr = null;
-		BufferedReader br = null;
-		FileOutputStream fos = null;
-		PrintWriter pw = null;
-		try {
-			File file = new File(filepath);
-
-			fis = new FileInputStream(file);
-			isr = new InputStreamReader(fis);
-			br = new BufferedReader(isr);
-
-			fos = new FileOutputStream(file);
-			pw = new PrintWriter(fos, true);
 			StringBuffer buffer = new StringBuffer();
 			if (cropBO != null && cropBO.getImageCrop() != null && cropBO.getImageCrop().size() > 0) {
 				ArrayNode arrayNode = cropBO.getImageCrop();
@@ -1007,33 +974,14 @@ public class TaskService {
 						labelName = goodsSkuVOs.get(0).getName();
 					}
 					String fileIn = nodeResult.get("x") + "," + nodeResult.get("y") + "," + nodeResult.get("width")
-							+ "," + nodeResult.get("height") + "," + labelName;
-					pw.write(fileIn);
-					pw.write("\r\n");
+							+ "," + nodeResult.get("height") + "," + labelName + "\r\n";
+					buffer.append(fileIn);
 				}
 			}
-			pw.flush();
-			bool = true;
+			FileUtils.writeStringToFile(file, buffer.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pw != null) {
-				pw.close();
-			}
-			if (fos != null) {
-				fos.close();
-			}
-			if (br != null) {
-				br.close();
-			}
-			if (isr != null) {
-				isr.close();
-			}
-			if (fis != null) {
-				fis.close();
-			}
 		}
-		return bool;
 	}
 
 	private int addImages(String taskId, String userId, List<MultipartFile> images) {

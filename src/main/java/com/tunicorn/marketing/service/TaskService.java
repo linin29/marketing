@@ -962,8 +962,8 @@ public class TaskService {
 			 */
 		}
 		try {
-			if (!fileDir.exists()) {
-				file.mkdir();
+			if (!fileDir.isDirectory()) {
+				file.mkdir	();
 			}
 			if (!file.exists()) {
 				file.createNewFile();

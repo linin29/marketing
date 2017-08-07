@@ -942,7 +942,7 @@ public class TaskService {
 		File file = new File(filenameTemp);
 		TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(cropBO.getImageId());
 		if (imagesVO != null && imagesVO.getFullPath() != null) {
-			try {
+/*			try {
 				int bytesum = 0;
 				int byteread = 0;
 				File oldfile = new File(imagesVO.getFullPath());
@@ -960,7 +960,7 @@ public class TaskService {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
+			}*/
 		}
 		try {
 			if (!file.exists()) {

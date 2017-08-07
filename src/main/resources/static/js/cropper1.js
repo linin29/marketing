@@ -2065,17 +2065,15 @@ var methods = {
     //self.cropped = true;
     for(var i in data){
       var item = data[i];
+      self.$cropBox = $cropBox = $(CROP_BOX_TEMPLATE);
+      $cropBox.attr('name', item.id);
+      $cropBox.attr('label', item.label);
       if(item.label>0){
-	      self.$cropBox = $cropBox = $(CROP_BOX_TEMPLATE);
 	      $cropBox.find('.cropper-face').addClass('cropper-move').data('action', 'all');
-	      $cropBox.attr('name', item.id);
-	      //$cropBox.attr('label', item.label.name);
-	      $cropBox.attr('label', item.label);
 	      $cropper.append($cropBox);
-	      self.crop(item);
       }
       //self.setData(item);
-      
+      self.crop(item);
 
       var cropBox = {label : item.label};
       $.extend(cropBox, self.cropBox);

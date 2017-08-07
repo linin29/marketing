@@ -1,8 +1,12 @@
 package com.tunicorn.marketing.service;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,7 +42,9 @@ import com.tunicorn.marketing.api.param.MarketingStitcherRequestParam;
 import com.tunicorn.marketing.bo.ApiCallingSummaryBO;
 import com.tunicorn.marketing.bo.CropBO;
 import com.tunicorn.marketing.bo.GoodsBO;
+import com.tunicorn.marketing.bo.GoodsSkuBO;
 import com.tunicorn.marketing.bo.IdentifyUpdateParamBO;
+import com.tunicorn.marketing.bo.ImageCropBO;
 import com.tunicorn.marketing.bo.OrderBO;
 import com.tunicorn.marketing.bo.ServiceResponseBO;
 import com.tunicorn.marketing.bo.StitcherUpdateParamBO;
@@ -814,7 +820,7 @@ public class TaskService {
 		CommonAjaxResponse result = MarketingAPI.rectify(param);
 		return result;
 	}
-	
+
 	public CommonAjaxResponse pullData(String taskId) {
 		MarketingPullDataRequestParam param = new MarketingPullDataRequestParam();
 		param.setTaskId(taskId);
@@ -880,7 +886,7 @@ public class TaskService {
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
 					&& taskVO.getResult() != null) {
 				node.put("goodResults", jsonNodes.addPOJO(this.getResultList(taskVO)).get(0));
-				
+
 				String resultStr = (String) taskVO.getResult();
 				if (StringUtils.isNotBlank(resultStr)) {
 					ObjectMapper mapper = new ObjectMapper();
@@ -927,6 +933,81 @@ public class TaskService {
 				}
 			}
 		}
+	}
+
+	public void generateFile(ImageCropBO cropBO) {
+		String filenameTemp = "D:\\" + cropBO.getImageId() + ".txt";
+		File file = new File(filenameTemp);
+		try {
+			if (!file.exists()) {
+				file.createNewFile();
+				//writeFileContent(filenameTemp, cropBO);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@SuppressWarnings("unused")
+	private boolean writeFileContent(String filepath, ImageCropBO cropBO) throws IOException {
+		Boolean bool = false;
+		String temp = "";
+
+		FileInputStream fis = null;
+		InputStreamReader isr = null;
+		BufferedReader br = null;
+		FileOutputStream fos = null;
+		PrintWriter pw = null;
+		try {
+			File file = new File(filepath);
+
+			fis = new FileInputStream(file);
+			isr = new InputStreamReader(fis);
+			br = new BufferedReader(isr);
+
+			fos = new FileOutputStream(file);
+			pw = new PrintWriter(fos, true);
+			StringBuffer buffer = new StringBuffer();
+			if (cropBO != null && cropBO.getImageCrop() != null && cropBO.getImageCrop().size() > 0) {
+				ArrayNode arrayNode = cropBO.getImageCrop();
+				for (int j = 0; j < arrayNode.size(); j++) {
+					ObjectNode nodeResult = (ObjectNode) arrayNode.get(j);
+					String labelName = "Others";
+					GoodsSkuBO goodsSkuBO = new GoodsSkuBO();
+					goodsSkuBO.setOrder(nodeResult.get("label").asInt() - 1);
+					goodsSkuBO.setMajorType(cropBO.getMajorType());
+					List<GoodsSkuVO> goodsSkuVOs = goodsSkuMapper.getGoodsSkuListByBO(goodsSkuBO);
+					if (goodsSkuVOs != null && goodsSkuVOs.size() > 0) {
+						labelName = goodsSkuVOs.get(0).getName();
+					}
+					String fileIn = nodeResult.get("x") + "," + nodeResult.get("y") + "," + nodeResult.get("width")
+							+ "," + nodeResult.get("height") + "," + labelName;
+					pw.write(fileIn);
+					pw.write("\r\n");
+				}
+			}
+			pw.flush();
+			bool = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pw != null) {
+				pw.close();
+			}
+			if (fos != null) {
+				fos.close();
+			}
+			if (br != null) {
+				br.close();
+			}
+			if (isr != null) {
+				isr.close();
+			}
+			if (fis != null) {
+				fis.close();
+			}
+		}
+		return bool;
 	}
 
 	private int addImages(String taskId, String userId, List<MultipartFile> images) {

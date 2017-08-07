@@ -506,7 +506,7 @@ public class TaskController extends BaseController {
 		TaskImagesVO imagesVO = taskService.getPreOrderTaskImage(taskId, order);
 		return imagesVO;
 	}
-	
+
 	@RequestMapping(value = "/nextOrderTaskImage/{taskId}/{order}", method = RequestMethod.GET)
 	@ResponseBody
 	public TaskImagesVO getNextOrderTaskImage(@PathVariable("taskId") String taskId,
@@ -514,11 +514,10 @@ public class TaskController extends BaseController {
 		TaskImagesVO imagesVO = taskService.getNextOrderTaskImage(taskId, order);
 		return imagesVO;
 	}
-	
+
 	@RequestMapping(value = "/taskImageCrops/{taskId}/{order}", method = RequestMethod.GET)
 	@ResponseBody
-	public List<CropBO> getTaskImageCrops(@PathVariable("taskId") String taskId,
-			@PathVariable("order") Integer order) {
+	public List<CropBO> getTaskImageCrops(@PathVariable("taskId") String taskId, @PathVariable("order") Integer order) {
 		List<CropBO> cropBOs = taskService.getTaskImageCrops(taskId, order);
 		return cropBOs;
 	}
@@ -534,33 +533,41 @@ public class TaskController extends BaseController {
 			model.addAttribute("image", image);
 		}
 		List<GoodsSkuVO> goodsSkuVOs = taskService.getGoods(taskVO.getMajorType());
-		
+
 		model.addAttribute("goodsSkus", goodsSkuVOs);
 		model.addAttribute("images", imagesVOs);
 		model.addAttribute("task", taskVO);
 		model.addAttribute("imageId", imageId);
 		return "list/task_crop";
 	}
-	
+
 	@RequestMapping(value = "/taskImageCrop/save/{taskId}", method = RequestMethod.POST)
 	@ResponseBody
-	public CommonAjaxResponse saveTaskImageCrop(@PathVariable("taskId") String taskId, @RequestBody ImageCropBO imageCropBO) {
+	public CommonAjaxResponse saveTaskImageCrop(@PathVariable("taskId") String taskId,
+			@RequestBody ImageCropBO imageCropBO) {
 		taskService.saveTaskImageCrop(taskId, imageCropBO.getOrder(), imageCropBO.getImageCrop());
 		return CommonAjaxResponse.toSuccess(null);
 	}
-	
+
 	@RequestMapping(value = "/rectify/{taskId}", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse rectify(@PathVariable("taskId") String taskId) {
 		CommonAjaxResponse result = taskService.rectify(taskId);
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/pullData/{taskId}", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse pullData(@PathVariable("taskId") String taskId) {
 		CommonAjaxResponse result = taskService.pullData(taskId);
 		return result;
+	}
+
+	@RequestMapping(value = "/generateFile", method = RequestMethod.POST)
+	@ResponseBody
+	public CommonAjaxResponse generateFile(@RequestBody ImageCropBO imageCropBO) {
+		taskService.generateFile(imageCropBO);
+		return CommonAjaxResponse.toSuccess(null);
 	}
 
 	private Date getBefore2Day(Date date) {

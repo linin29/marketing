@@ -77,6 +77,7 @@
 			                   <input id="taskName" type="text" <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
 			                   <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>
 			                   <input id="taskId" type="hidden" value="<#if task??>${task.id}</#if>" />
+			                   <input id="majorType" type="hidden" value="<#if task??>${task.majorType}</#if>" />
 			                   <input id="order" type="hidden" value="<#if image??>${image.orderNo}</#if>" />
 		               		</h4>						
 					    </li>
@@ -87,8 +88,8 @@
 			                   <div style="clear:both"></div>
 			                   <div class="row" style="border:1px solid #ddd;">
 				                   <div id="image_default" align="center" class="col-sm-10">
-				                   	  <img id="imageCrop" src="/pic/marketing${image.imagePath}"  class="img-thumbnail">
-					                  <!-- <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/3.png"  class="img-thumbnail"> -->
+				                   	  <!-- <img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail"> -->
+					                   <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/3.jpeg"  class="img-thumbnail">
 				                   </div>
 		               			</div>
                				</h4>								
@@ -131,6 +132,7 @@
 <script type="text/javascript">
     var picPath = '/pic/marketing';
     var wholeCropData;
+    var imageIds = [];
 	$(function() {
 		var order = $("#order").val();
 		var imagePath = $("#imageCrop").attr("src");
@@ -139,6 +141,7 @@
         $('#labelBtn').click(function(){
             var skuType = $('#skuType').val().trim();
             if (skuType){
+            	imageIds.push($('#imageCrop').attr("imageid"));
             	saveLabelLocally();
             }else{
                 noty({text: "你还没有选择SKU类型!", layout: "topCenter", type: "warning", timeout: 3000});
@@ -150,6 +153,7 @@
             $('#labelPanel').hide();
         });
     	$('#taskRectify').click(function() {
+    		generateFile();
     		var taskId = $('#taskId').val();
     		$.ajax({
          		 type: 'POST',
@@ -236,6 +240,7 @@
      		 url: '${springMacroRequestContext.contextPath}/preOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
+     				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);
      			 }
@@ -255,9 +260,29 @@
      		 url: '${springMacroRequestContext.contextPath}/nextOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
+     				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);
      			 }
+         	},
+         	error: function(data) {
+         		//返回500错误页面
+         		$("html").html(data.responseText);
+         	}
+     	 });
+	}
+	function generateFile(){
+		var imageId = $('#imageCrop').attr("imageid");
+		var cropDatas = $('#imageCrop').cropper('getAllData');
+		var majorType = $("#majorType").val();
+		var data ={imageId:imageId, imageCrop : cropDatas, majorType:majorType};
+		$.ajax({
+     		 url: '${springMacroRequestContext.contextPath}/generateFile',
+             data: JSON.stringify(data),
+             type: 'POST',
+             dataType: 'json',
+             contentType: 'application/json',
+     		 success: function(data) {
          	},
          	error: function(data) {
          		//返回500错误页面
@@ -276,6 +301,7 @@
     	     	        $('#imageCrop').off("ready");
     	     	        $('#imageCrop').cropper('replace', imagePath).on("ready", function(){
     	     	            console.log('replace ready');
+    	     	            
     	     	            if(data && data.length > 0){
     	     	                $('#imageCrop').cropper('setAllData', data);
     	     	            }

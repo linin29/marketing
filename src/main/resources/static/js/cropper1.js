@@ -2072,9 +2072,10 @@ var methods = {
 	      //$cropBox.attr('label', item.label.name);
 	      $cropBox.attr('label', item.label);
 	      $cropper.append($cropBox);
+	      self.crop(item);
       }
       //self.setData(item);
-      self.crop(item);
+      
 
       var cropBox = {label : item.label};
       $.extend(cropBox, self.cropBox);

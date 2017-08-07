@@ -941,6 +941,7 @@ public class TaskService {
 		String filenameTemp = File.separator + "mnt" + File.separator + cropBO.getMajorType() + File.separator
 				+ cropBO.getImageId() + ".txt";
 		File file = new File(filenameTemp);
+		file.setWritable(true, false);
 		TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(cropBO.getImageId());
 		if (imagesVO != null && imagesVO.getFullPath() != null) {
 			/*

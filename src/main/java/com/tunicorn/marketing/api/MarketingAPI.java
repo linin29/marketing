@@ -74,9 +74,7 @@ public class MarketingAPI {
 			if (StringUtils.isNotBlank(requestParams.getMajorType())) {
 				headers.put(MarketingConstants.MAJOR_TYPE, requestParams.getMajorType());
 			}
-		} else if (StringUtils.endsWith(MarketingConstants.MARKETING_PULL_DATA_SERVICE, apiErrMsgTag)) {
-			url = ConfigUtils.getInstance().getConfigValue("marketing.pulldata.service.url");
-		} 
+		}
 
 		headers.put("Content-Type", "application/json");
 		logger.info(url);

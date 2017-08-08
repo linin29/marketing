@@ -425,32 +425,6 @@ public class TaskController extends BaseController {
 		}
 	}
 
-	// @RequestMapping(value = "/{taskId}/identify", method =
-	// RequestMethod.POST)
-	// @ResponseBody
-	// public IdentifyAjaxResponse taskIdentify(HttpServletRequest request,
-	// @PathVariable("taskId") String taskId,
-	// Model model) {
-	// UserVO user = getCurrentUser(request);
-	// model.addAttribute("user", user);
-	//
-	// ServiceResponseBO response = taskService.taskIdentify(taskId,
-	// user.getId());
-	// if (response.isSuccess()) {
-	// return IdentifyAjaxResponse.toSuccess(((ObjectNode)
-	// response.getResult()).get("data"),
-	// ((ObjectNode) response.getResult()).get("rows"),
-	// (ArrayNode)(((ObjectNode) response.getResult()).get("crops")),
-	// (ArrayNode)(((ObjectNode) response.getResult()).get("rows_length")),
-	// ((ObjectNode) response.getResult()).get("results_border").asText(),
-	// ((ObjectNode) response.getResult()).get("total_area").asLong());
-	// } else {
-	// Message message =
-	// MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
-	// return IdentifyAjaxResponse.toFailure(message.getCode(),
-	// message.getMessage());
-	// }
-	// }
 
 	@RequestMapping(value = "/{taskId}/order", method = RequestMethod.POST)
 	@ResponseBody

@@ -208,7 +208,7 @@
          			 if(data && data.success){
          				noty({text: '拉取数据成功', layout: "topCenter", type: "success", timeout: 1000});
          			 }else{
-         				noty({text: '拉取数据成功', layout: "topCenter", type: "warning", timeout: 1000});
+         				noty({text: '拉取数据失败', layout: "topCenter", type: "warning", timeout: 1000});
          			 }
              	},
              	error: function(data) {
@@ -325,7 +325,7 @@
               }
               $('#waiting').modal({keyboard: false, backdrop: 'static'});
               $('#waiting').modal('show');
-              $.post('${springMacroRequestContext.contextPath}/'+taskId+'/status').done(function (data) {
+              $.post('${springMacroRequestContext.contextPath}/' + taskId + '/status').done(function (data) {
                   $('#waiting').modal('hide');
                   if(data.success){
                       var task_status = data.data.task_status;
@@ -372,15 +372,15 @@
                                      '<td>' + (results[k].rows ==null?"":results[k].rows) + '</td><td>' + totalOriArea + '</td></tr>';
                            	  }
                              }
-                             $("#countInfo").html(html0+html1);
+                             $("#countInfo").html(html0 + html1);
                              $('#status').attr('status', 'identify_success').text('(当前状态：identify_success)');
                              var majorType = $("#majorType").val();
                              if(!majorType){
                            	  majorType = $("#taskMajorType").val();
                              }
                              showCropList(results);
-                             $('#stitched').attr('src', '/pic/marketing/'+ taskId +'/results.jpg?random='+ $.now()).css('height', '400px');
-                             $('#image_default a').attr('href', '/pic/marketing'+data.data.resultsBorder);
+                             $('#stitched').attr('src', '/pic/marketing/' + taskId + '/results.jpg?random='+ $.now()).css('height', '400px');
+                             $('#image_default a').attr('href', '/pic/marketing' + data.data.resultsBorder);
            	          	},
            	          	error: function(data) {
            	          		//返回500错误页面

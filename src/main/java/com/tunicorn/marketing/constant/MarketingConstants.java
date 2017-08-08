@@ -55,6 +55,7 @@ public class MarketingConstants {
 	public static final String MARKETING_IDENTIFY_MOCK_SERVICE = "marketing_identify_mock_service";
 	public static final String MARKETING_RECTIFY_SERVICE = "marketing_rectify_service";
 	public static final String MARKETING_PULL_DATA_SERVICE = "marketing_pull_data_service";
+	public static final String MARKETING_GET_STORE_SERVICE = "marketing_get_store_service";
 	
 	public static final String API_MARKETING = "/api/marketing/";
 	public static final String PIC_MARKETING = "/pic/marketing";

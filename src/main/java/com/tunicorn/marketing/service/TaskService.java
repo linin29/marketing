@@ -1,14 +1,12 @@
 package com.tunicorn.marketing.service;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,9 +34,9 @@ import com.tunicorn.common.api.Message;
 import com.tunicorn.common.entity.UploadFile;
 import com.tunicorn.marketing.api.CommonAjaxResponse;
 import com.tunicorn.marketing.api.MarketingAPI;
+import com.tunicorn.marketing.api.param.MarketingGetStoreRequestParam;
 import com.tunicorn.marketing.api.param.MarketingIdentifyMockRequestParam;
 import com.tunicorn.marketing.api.param.MarketingIdentifyRequestParam;
-import com.tunicorn.marketing.api.param.MarketingPullDataRequestParam;
 import com.tunicorn.marketing.api.param.MarketingRectifyRequestParam;
 import com.tunicorn.marketing.api.param.MarketingStitcherRequestParam;
 import com.tunicorn.marketing.bo.ApiCallingSummaryBO;
@@ -117,7 +115,6 @@ public class TaskService {
 				}
 			}
 		}
-		// create task
 		TaskVO createTaskVO = new TaskVO();
 		createTaskVO.setId(
 				(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
@@ -822,11 +819,19 @@ public class TaskService {
 		CommonAjaxResponse result = MarketingAPI.rectify(param);
 		return result;
 	}
-
-	public CommonAjaxResponse pullData(String taskId) {
-		MarketingPullDataRequestParam param = new MarketingPullDataRequestParam();
+	
+	public CommonAjaxResponse getStore(String taskId) {
+		MarketingGetStoreRequestParam param = new MarketingGetStoreRequestParam();
 		param.setTaskId(taskId);
-		CommonAjaxResponse result = MarketingAPI.pullData(param);
+		String tokenStr = taskId + "innovision";
+		try {  
+	        MessageDigest messageDigest =MessageDigest.getInstance("MD5");  
+	        messageDigest.update(tokenStr.getBytes());  
+            param.setToken(new BigInteger(1, messageDigest.digest()).toString(16));  
+	     } catch (NoSuchAlgorithmException e) {  
+	        return null;  
+	     }  
+		CommonAjaxResponse result = MarketingAPI.getStore(param);
 		return result;
 	}
 

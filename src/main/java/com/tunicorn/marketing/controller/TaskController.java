@@ -556,10 +556,10 @@ public class TaskController extends BaseController {
 		return result;
 	}
 
-	@RequestMapping(value = "/pullData/{taskId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/getStore/{taskId}", method = RequestMethod.POST)
 	@ResponseBody
-	public CommonAjaxResponse pullData(@PathVariable("taskId") String taskId) {
-		CommonAjaxResponse result = taskService.pullData(taskId);
+	public CommonAjaxResponse getStore(@PathVariable("taskId") String taskId) {
+		CommonAjaxResponse result = taskService.getStore(taskId);
 		return result;
 	}
 

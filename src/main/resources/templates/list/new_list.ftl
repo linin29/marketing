@@ -199,11 +199,11 @@
     var picPath = '/pic/marketing';
 	$(function() {
 		getTaskName();
-    /* 	$('#taskPullData').click(function() {
+     	$('#taskPullData').click(function() {
     		var taskId = $('#taskId').val();
     		$.ajax({
          		 type: 'POST',
-         		 url: '${springMacroRequestContext.contextPath}/pullData/' + taskId,
+         		 url: '${springMacroRequestContext.contextPath}/getStore/' + taskId,
          		 success: function(data) {
          			 if(data && data.success){
          				noty({text: '拉取数据成功', layout: "topCenter", type: "success", timeout: 1000});
@@ -216,7 +216,7 @@
              		$("html").html(data.responseText);
              	}
          	 });
-    	}); */
+    	});
 		$('#image-upload').change(function(e){
 			var taskName = $("#taskName").val();
 			if (!/\S/.test(taskName)) {

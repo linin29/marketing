@@ -1,6 +1,7 @@
 package com.tunicorn.marketing.api.param;
 
 import java.io.Serializable;
+import java.net.URLEncoder;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,15 +33,13 @@ public class MarketingGetStoreRequestParam implements IRequestParam, Serializabl
 
 	@Override
 	public String convertToJSON() {
-		ObjectNode node = mapper.createObjectNode();
-
-		if (StringUtils.isNotBlank(taskId)) {
-			node.put("TaskId", taskId);
-		}
-		if (StringUtils.isNotBlank(token)) {
-			node.put("token", token);
-		}
-		return node.toString();
+		/*
+		 * ObjectNode node = mapper.createObjectNode();
+		 * 
+		 * if (StringUtils.isNotBlank(taskId)) { node.put("TaskId", taskId); }
+		 * if (StringUtils.isNotBlank(token)) { node.put("token", token); }
+		 */
+		return "TaskId=" + URLEncoder.encode(taskId) + "&token=" + URLEncoder.encode(token);
 	}
 
 }

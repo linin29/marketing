@@ -17,6 +17,7 @@ import com.tunicorn.marketing.api.param.MarketingRectifyRequestParam;
 import com.tunicorn.marketing.api.param.MarketingStitcherRequestParam;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.utils.ConfigUtils;
+import com.tunicorn.marketing.utils.HttpClientUtil;
 import com.tunicorn.util.HttpClientUtils;
 import com.tunicorn.util.JsonUtil;
 import com.tunicorn.util.MessageUtils;
@@ -103,15 +104,17 @@ public class MarketingAPI {
 
 	private static CommonAjaxResponse callGetStoreService(String uri, IRequestParam params, String apiErrMsgTag) {
 		String url = "";
-		Map<String, String> headers = new HashMap<String, String>();
 		if (StringUtils.endsWith(MarketingConstants.MARKETING_GET_STORE_SERVICE, apiErrMsgTag)) {
 			url = ConfigUtils.getInstance().getConfigValue("marketing.getstore.url");
 		}
-
-		headers.put("Content-Type", "application/json");
 		logger.info(url);
 		logger.info(params.convertToJSON());
-		String retValue = HttpClientUtils.post(url, headers, params.convertToJSON());
+		
+		Map<String, String> map = new HashMap<>();
+		map.put("TaskId", ((MarketingGetStoreRequestParam)params).getTaskId());
+		map.put("token", ((MarketingGetStoreRequestParam)params).getToken());
+		
+		String retValue = HttpClientUtil.doPost(url, map, MarketingConstants.UTF8);
 
 		if (StringUtils.isBlank(retValue)) {
 			Message message = MessageUtils.getInstance().getMessage("marketing_call_service_failure");

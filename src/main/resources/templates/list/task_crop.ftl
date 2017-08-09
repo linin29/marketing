@@ -118,7 +118,7 @@
 			                   <div style="clear:both"></div>
                				</h4>              				                		
 	               			 <div class="col-sm-6">
-				 				<img src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail">
+				 				<img src="/pic/marketing${borderImagePath}" class="img-thumbnail">
 							 </div> 
 							 <div id="image_default" align="center" class="col-sm-6">
 			                   	   <img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail"> 

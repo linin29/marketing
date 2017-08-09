@@ -103,10 +103,8 @@ public class MarketingAPI {
 	}
 
 	private static CommonAjaxResponse callGetStoreService(String uri, IRequestParam params, String apiErrMsgTag) {
-		String url = "";
-		if (StringUtils.endsWith(MarketingConstants.MARKETING_GET_STORE_SERVICE, apiErrMsgTag)) {
-			url = ConfigUtils.getInstance().getConfigValue("marketing.getstore.url");
-		}
+		String url = ConfigUtils.getInstance().getConfigValue("marketing.getstore.url");
+
 		logger.info(url);
 		logger.info(params.convertToJSON());
 		

@@ -829,7 +829,7 @@ public class TaskService {
 	        messageDigest.update(tokenStr.getBytes());  
             param.setToken(new BigInteger(1, messageDigest.digest()).toString(16));  
 	     } catch (NoSuchAlgorithmException e) {  
-	        return null;  
+	        logger.info("MD5 fail" + e.getMessage());  
 	     }  
 		CommonAjaxResponse result = MarketingAPI.getStore(param);
 		return result;

@@ -1,7 +1,6 @@
 package com.tunicorn.marketing.utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +27,7 @@ public class HttpClientUtil {
 			httpPost = new HttpPost(url);
 			// 设置参数
 			List<NameValuePair> list = new ArrayList<NameValuePair>();
-			Iterator iterator = map.entrySet().iterator();
+			Iterator<Entry<String, String>> iterator = map.entrySet().iterator();
 			while (iterator.hasNext()) {
 				Entry<String, String> elem = (Entry<String, String>) iterator.next();
 				list.add(new BasicNameValuePair(elem.getKey(), elem.getValue()));

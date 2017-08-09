@@ -88,8 +88,8 @@
 			                   <div style="clear:both"></div>
 			                   <div class="row" style="border:1px solid #ddd;">
 				                   <div id="image_default" align="center" class="col-sm-10">
-				                   	   <img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail"> 
-					                   <!-- <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/3.jpeg"  class="img-thumbnail"> -->
+				                   	   <!--<img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail">--> 
+					                    <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/3.jpeg"  class="img-thumbnail"> 
 				                   </div>
 		               			</div>
                				</h4>								
@@ -131,7 +131,6 @@
 </div>
 <script type="text/javascript">
     var picPath = '/pic/marketing';
-    var wholeCropData;
     var imageIds = [];
 	$(function() {
 		var order = $("#order").val();
@@ -316,11 +315,12 @@
 	}
 
     function cropEnd(e) {
+    	$(".cropper-view-box").css("cssText", "outline: 3px solid #ea230a !important; outline-color: #ea230a !important;")
         clearLabel();
         var data = $(this).cropper('getCropBoxData');
-        wholeCropData = data;
         $('#skuType').val($("#skuType option[skuorder=" + (parseInt(data.label) -1) + "]").val());
-        
+        var cropBox = $('.cropper-crop-box[name=' + data.annotationId + ']');
+        cropBox.find(".cropper-view-box").css("cssText", "outline: 3px solid #0aeadd !important; outline-color: #0aeadd !important;");
         if($(this).cropper('hasLabel')){
             var label = data.label;
             fillLabel(label);
@@ -328,7 +328,6 @@
         }else{
             $('#labelTxt').val('');
         }
-        
         $('#labelPanel').show();
     }
     function clearLabel(){

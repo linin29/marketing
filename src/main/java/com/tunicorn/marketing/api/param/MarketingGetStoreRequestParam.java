@@ -3,9 +3,6 @@ package com.tunicorn.marketing.api.param;
 import java.io.Serializable;
 import java.net.URLEncoder;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tunicorn.common.api.param.IRequestParam;
 
 public class MarketingGetStoreRequestParam implements IRequestParam, Serializable {

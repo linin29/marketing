@@ -425,7 +425,6 @@ public class TaskController extends BaseController {
 		}
 	}
 
-
 	@RequestMapping(value = "/{taskId}/order", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse taskOrder(HttpServletRequest request, @PathVariable("taskId") String taskId, Model model,
@@ -507,7 +506,8 @@ public class TaskController extends BaseController {
 			model.addAttribute("image", image);
 		}
 		List<GoodsSkuVO> goodsSkuVOs = taskService.getGoods(taskVO.getMajorType());
-
+		
+		model.addAttribute("borderImagePath", taskService.getBorderImagePath(taskVO));
 		model.addAttribute("goodsSkus", goodsSkuVOs);
 		model.addAttribute("images", imagesVOs);
 		model.addAttribute("task", taskVO);

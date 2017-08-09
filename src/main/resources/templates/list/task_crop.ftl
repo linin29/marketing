@@ -96,7 +96,7 @@
 						</li>
 					</ul>						
 				</div>
-				<div class='col-sm-4' style='margin-top:144px;margin-left:0%;width:33%;'>
+				<div class='col-sm-4' style='margin-top:20px;margin-left:0%;width:33%;'>
 					<div class='page'>
 						<input type="button" class="btn btn-default" value="上一张" onclick="getPre()">
 						<input type="button" class="btn btn-default" value="下一张" onclick="getNext()">
@@ -124,6 +124,7 @@
 				          </div>
 				       </div>
 					</div>
+					 <img src="/pic/marketing${borderImagePath}" class="img-thumbnail">
 				</div>
 			</div>
 	   </div>		

@@ -67,64 +67,65 @@
 	  <section class="content-wrapper" style="margin-left: 0px;">
 	   	<div id="content" style="padding-top: 1px;">
 			<div class="create_task max_width row">
-				<div class="col-sm-7" style='overflow: hidden;width:65%;'>
-					<ul>						
-						<li>
-							<h4>
-			                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
-			                   <span>任务名</span>
-			                   <span id="status" status="<#if task??>${task.taskStatus}<#else>task_init</#if>" style="margin-left:30px;">(当前状态：<#if task??>${task.taskStatus}<#else>task_init</#if>)</span>
-			                   <input id="taskName" type="text" <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
-			                   <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>
-			                   <input id="taskId" type="hidden" value="<#if task??>${task.id}</#if>" />
-			                   <input id="majorType" type="hidden" value="<#if task??>${task.majorType}</#if>" />
-			                   <input id="order" type="hidden" value="<#if image??>${image.orderNo}</#if>" />
-		               		</h4>						
+				<div >
+					<ul style="margin-top:10px;margin-right:10px;">						
+						<li style="height:220px;">
+							<div class='page col-sm-4'>
+								<h4>
+				                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
+				                   <span>任务名</span>
+				                   <span id="status" status="<#if task??>${task.taskStatus}<#else>task_init</#if>" style="margin-left:30px;">(当前状态：<#if task??>${task.taskStatus}<#else>task_init</#if>)</span>
+				                   <input id="taskName" type="text" <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
+				                   <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>
+				                   <input id="taskId" type="hidden" value="<#if task??>${task.id}</#if>" />
+				                   <input id="majorType" type="hidden" value="<#if task??>${task.majorType}</#if>" />
+				                   <input id="order" type="hidden" value="<#if image??>${image.orderNo}</#if>" />
+			               		</h4>
+		               		</div>
+		               		<div class='page col-sm-4' style="margin-top: 52px;">
+								<input type="button" class="btn btn-default" value="上一张" onclick="getPre()">
+								<input type="button" class="btn btn-default" value="下一张" onclick="getNext()">
+								<input id="save" type="button" class="btn btn-primary" value="保存">	
+								<input id="taskRectify" type="button" class="btn btn-primary" value="坐标转换">			           
+							</div>
+							<div class='hidden_show col-sm-4' >
+							   <div id="labelPanel" class="panel panel-default" style="display:none;max-height: 460px;">
+						          <div class="panel-heading">SKU选择</div>
+						          <div class="panel-body">
+						              <input id="currentPid" type="hidden">
+						              <input id="labelTxt" type="hidden" class="form-control" style="margin:0 0 5px 0;" placeholder="请输入标签">
+						              <ul id="labelList" class="list-group" style="overflow-y: auto;max-height: 340px;">
+										<select id="skuType" style="width:100%;height: 34px;">
+											<option value="">请选择类型</option>
+												<#if goodsSkus?? && (goodsSkus?size > 0)>
+					       							<#list goodsSkus as goodsSku>
+					     		 					<option value='${goodsSku.name}' skuorder="${goodsSku.order}">${goodsSku.description}</option>
+					    							</#list>
+				   								</#if>
+										</select> 
+						              </ul>
+						              <input type="button" class="btn btn-success" id="labelBtn" value="确定">
+						              <input type="button" class="btn btn-danger" id="cancelBtn" value="删除">
+						          </div>
+						       </div>
+							</div>									
 					    </li>
-					    <li>
+					    <div class='cl'></div>
+					    <li >
 							<h4>
 			                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
 			                   <span>货架照片</span>
 			                   <div style="clear:both"></div>
-			                   <div class="row" style="border:1px solid #ddd;">
-				                   <div id="image_default" align="center" class="col-sm-10">
-				                   	   <img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail"> 
-					                    <!-- <img id="imageCrop" src="${springMacroRequestContext.contextPath}/image/3.jpeg"  class="img-thumbnail"> --> 
-				                   </div>
-		               			</div>
-               				</h4>								
+               				</h4>              				                		
+	               			 <div class="col-sm-6">
+				 				<img  src="${springMacroRequestContext.contextPath}/image/3.jpeg" class="img-thumbnail">
+							 </div> 
+							 <div id="image_default" align="center" class="col-sm-6">
+			                   	  <!-- <img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail">  -->
+				                  <img id="imageCrop"  src="${springMacroRequestContext.contextPath}/image/3.jpeg"  class="img-thumbnail">
+			                 </div>		        									
 						</li>
 					</ul>						
-				</div>
-				<div class='col-sm-4' style='margin-top:20px;margin-left:0%;width:33%;'>
-					<div class='page'>
-						<input type="button" class="btn btn-default" value="上一张" onclick="getPre()">
-						<input type="button" class="btn btn-default" value="下一张" onclick="getNext()">
-						<input id="save" type="button" class="btn btn-primary" value="保存">	
-						<input id="taskRectify" type="button" class="btn btn-primary" value="坐标转换">			           
-					</div>
-					<div class='hidden_show'>
-					   <div id="labelPanel" class="panel panel-default" style="display:none;max-height: 460px;">
-				          <div class="panel-heading">SKU选择</div>
-				          <div class="panel-body">
-				              <input id="currentPid" type="hidden">
-				              <input id="labelTxt" type="hidden" class="form-control" style="margin:0 0 5px 0;" placeholder="请输入标签">
-				              <ul id="labelList" class="list-group" style="overflow-y: auto;max-height: 340px;">
-								<select id="skuType" style="width:100%;height: 34px;">
-									<option value="">请选择类型</option>
-										<#if goodsSkus?? && (goodsSkus?size > 0)>
-			       							<#list goodsSkus as goodsSku>
-			     		 					<option value='${goodsSku.name}' skuorder="${goodsSku.order}">${goodsSku.description}</option>
-			    							</#list>
-		   								</#if>
-								</select> 
-				              </ul>
-				              <input type="button" class="btn btn-success" id="labelBtn" value="确定">
-				              <input type="button" class="btn btn-danger" id="cancelBtn" value="删除">
-				          </div>
-				       </div>
-					</div>
-					 <img src="/pic/marketing${borderImagePath}" class="img-thumbnail">
 				</div>
 			</div>
 	   </div>		

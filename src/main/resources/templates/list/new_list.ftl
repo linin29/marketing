@@ -11,6 +11,7 @@
                    <span id="status" status="<#if task??>${task.taskStatus}<#else>task_init</#if>" style="margin-left:30px;">(当前状态：<#if task??>${task.taskStatus}<#else>task_init</#if>)</span>
                    <input id="taskName" type="text" <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
                    <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>
+                   <button id="nextTask" type="button" class="btn btn-success">下一个任务</button>
                </h4>
            </li>
            <li>
@@ -217,6 +218,25 @@
              	}
          	 });
     	});
+     	$('#nextTask').click(function() {
+    		var taskId = $('#taskId').val();
+    		$.ajax({
+         		 type: 'GET',
+         		 url: '${springMacroRequestContext.contextPath}/nextTask/' + taskId,
+         		 success: function(data) {
+         			 if(data){
+         				getTaskDetail(data.id);
+         			 }else{
+         				return;
+         			 }
+             	},
+             	error: function(data) {
+             		//返回500错误页面
+             		$("html").html(data.responseText);
+             	}
+         	 });
+    	});
+     	
 		$('#image-upload').change(function(e){
 			var taskName = $("#taskName").val();
 			if (!/\S/.test(taskName)) {
@@ -621,7 +641,19 @@
 		}
         return true;
     }
-	
+	function getTaskDetail(taskId) {
+		$.ajax({
+			 type: 'GET',
+			 url: '${springMacroRequestContext.contextPath}/showTask/' + taskId,
+			 success: function(data) {
+			 	$("#content").html(data);
+	    	},
+	    	error: function(data) {
+	    		//返回500错误页面
+	    		$("html").html(data.responseText);
+	    	}
+		});
+	}
 	function showCropPage(taskId, imageId){
 		var status = $('#status').attr('status');
 		window.open("${springMacroRequestContext.contextPath}/showCropPage/" + taskId + "?imageId=" + imageId);

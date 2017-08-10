@@ -40,6 +40,7 @@ import com.tunicorn.marketing.bo.ServiceResponseBO;
 import com.tunicorn.marketing.bo.StitcherBO;
 import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
+import com.tunicorn.marketing.service.GoodsSkuService;
 import com.tunicorn.marketing.service.TaskService;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
@@ -53,6 +54,8 @@ public class TaskController extends BaseController {
 
 	@Autowired
 	private TaskService taskService;
+	@Autowired
+	private GoodsSkuService goodsSkuService;
 
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
 	public String export(HttpServletRequest request, Model model) {
@@ -471,6 +474,12 @@ public class TaskController extends BaseController {
 	public List<GoodsSkuVO> getGoodsSkuList(HttpServletRequest request) {
 		return taskService.getGoods(request.getParameter("majorType"));
 	}
+	
+	@RequestMapping(value = "/goodsSkus/list", method = RequestMethod.GET)
+	@ResponseBody
+	public List<GoodsSkuVO> goodsSkuList(HttpServletRequest request) {
+		return goodsSkuService.getGoodsSkuListByMajorTypeAndName(request.getParameter("majorType"), request.getParameter("name"));
+	}
 
 	@RequestMapping(value = "/preOrderTaskImage/{taskId}/{order}", method = RequestMethod.GET)
 	@ResponseBody
@@ -506,7 +515,7 @@ public class TaskController extends BaseController {
 			model.addAttribute("image", image);
 		}
 		List<GoodsSkuVO> goodsSkuVOs = taskService.getGoods(taskVO.getMajorType());
-		
+
 		model.addAttribute("borderImagePath", taskService.getBorderImagePath(taskVO));
 		model.addAttribute("goodsSkus", goodsSkuVOs);
 		model.addAttribute("images", imagesVOs);
@@ -542,6 +551,14 @@ public class TaskController extends BaseController {
 	public CommonAjaxResponse generateFile(@RequestBody ImageCropBO imageCropBO) {
 		taskService.generateFile(imageCropBO);
 		return CommonAjaxResponse.toSuccess(null);
+	}
+
+	@RequestMapping(value = "/nextTask/{taskId}", method = RequestMethod.GET)
+	@ResponseBody
+	public TaskVO nextTask(@PathVariable("taskId") String taskId, HttpServletRequest request) {
+		UserVO user = getCurrentUser(request);
+		TaskVO result = taskService.getNextTask(taskId,user.getId());
+		return result;
 	}
 
 	private Date getBefore2Day(Date date) {

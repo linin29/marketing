@@ -12,7 +12,7 @@ import com.tunicorn.marketing.vo.GoodsSkuVO;
 
 @Service
 public class GoodsSkuService {
- 
+
 	@Autowired
 	private GoodsSkuMapper goodsSkuMapper;
 
@@ -46,5 +46,9 @@ public class GoodsSkuService {
 
 	public GoodsSkuVO getGoodsSkuById(long goodsSkuId) {
 		return goodsSkuMapper.getGoodsSkuById(goodsSkuId);
+	}
+
+	public List<GoodsSkuVO> getGoodsSkuListByMajorTypeAndName(String majorType, String name) {
+		return goodsSkuMapper.getGoodsSkuListByMajorTypeAndName(majorType, name);
 	}
 }

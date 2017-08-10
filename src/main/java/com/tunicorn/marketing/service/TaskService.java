@@ -20,6 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -606,6 +607,10 @@ public class TaskService {
 		return majorTypeMapper.getMajorTypeList(username);
 	}
 
+	public TaskVO getNextTask(String taskId, String userId) {
+		return taskMapper.getNextTask(taskId, userId);
+	}
+
 	public List<CropBO> getTaskImageCrops(String taskId, Integer imageOrderNo) {
 		List<CropBO> cropBOs = new ArrayList<CropBO>();
 		TaskVO taskVO = taskMapper.getTaskById(taskId);
@@ -819,18 +824,18 @@ public class TaskService {
 		CommonAjaxResponse result = MarketingAPI.rectify(param);
 		return result;
 	}
-	
+
 	public CommonAjaxResponse getStore(String taskId) {
 		MarketingGetStoreRequestParam param = new MarketingGetStoreRequestParam();
 		param.setTaskId(taskId);
 		String tokenStr = taskId + "innovision";
-		try {  
-	        MessageDigest messageDigest =MessageDigest.getInstance("MD5");  
-	        messageDigest.update(tokenStr.getBytes());  
-            param.setToken(new BigInteger(1, messageDigest.digest()).toString(16));  
-	     } catch (NoSuchAlgorithmException e) {  
-	        logger.info("MD5 fail" + e.getMessage());  
-	     }  
+		try {
+			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+			messageDigest.update(tokenStr.getBytes());
+			param.setToken(new BigInteger(1, messageDigest.digest()).toString(16));
+		} catch (NoSuchAlgorithmException e) {
+			logger.info("MD5 fail" + e.getMessage());
+		}
 		CommonAjaxResponse result = MarketingAPI.getStore(param);
 		return result;
 	}

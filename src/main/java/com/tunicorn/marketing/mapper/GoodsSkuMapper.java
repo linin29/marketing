@@ -36,4 +36,6 @@ public interface GoodsSkuMapper {
 	@Select("select id, major_type, `name`, description, `order`, create_time, is_show from goods_sku"
 			+ " where id = #{goodsSkuId} and status='active'")
 	public GoodsSkuVO getGoodsSkuById(@Param("goodsSkuId") long goodsSkuId);
+	
+	public List<GoodsSkuVO> getGoodsSkuListByMajorTypeAndName(@Param("majorType") String majorType, @Param("name") String name);
 }

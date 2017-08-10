@@ -28,4 +28,6 @@ public interface TaskMapper {
 	public int getTaskCount(TaskBO taskBO);
 
 	public TaskVO getTaskById(@Param("taskId") String taskId);
+	
+	public TaskVO getNextTask(@Param("taskId") String taskId, @Param("userId") String userId);
 }

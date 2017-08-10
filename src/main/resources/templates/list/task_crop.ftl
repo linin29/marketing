@@ -99,7 +99,7 @@
 											<option value="">请选择类型</option>
 												<#if goodsSkus?? && (goodsSkus?size > 0)>
 					       							<#list goodsSkus as goodsSku>
-					     		 					<option value='${goodsSku.name}' skuorder="${goodsSku.order}">${goodsSku.description}</option>
+					     		 					<option value='${goodsSku.name}' skuorder="${goodsSku.order}">${goodsSku.order + 1} ${goodsSku.description}</option>
 					    							</#list>
 				   								</#if>
 										</select> 
@@ -111,7 +111,7 @@
 							</div>									
 					    </li>
 					    <div class='cl'></div>
-					    <li >
+					    <li>
 							<h4>
 			                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
 			                   <span>货架照片</span>
@@ -121,8 +121,8 @@
 				 				<img src="/pic/marketing${borderImagePath}" class="img-thumbnail">
 							 </div> 
 							 <div id="image_default" align="center" class="col-sm-6">
-			                   	   <img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail"> 
-				                  <!-- <img id="imageCrop"  src="${springMacroRequestContext.contextPath}/image/3.jpeg"  class="img-thumbnail"> -->
+			                   	   <!-- <img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail"> --> 
+				                  <img id="imageCrop"  src="${springMacroRequestContext.contextPath}/image/3.jpeg"  class="img-thumbnail">
 			                 </div>		        									
 						</li>
 					</ul>						
@@ -145,7 +145,7 @@
             	imageIds.push($('#imageCrop').attr("imageid"));
             	saveLabelLocally();
             }else{
-                noty({text: "你还没有选择SKU类型!", layout: "topCenter", type: "warning", timeout: 3000});
+                noty({text: "你还没有选择SKU类型", layout: "topCenter", type: "warning", timeout: 3000});
             }
         });
         $('#cancelBtn').click(function(){
@@ -192,10 +192,10 @@
                 contentType: 'application/json',
                 success: function(json){
                     if(json.success){
-                        noty({text: "保存标注数据成功!", layout: "topCenter", type: "success", timeout: 3000});
+                        noty({text: "保存标注数据成功", layout: "topCenter", type: "success", timeout: 3000});
                     }
                 },error: function(){
-                    noty({text: "请求后台错误!", layout: "topCenter", type: "warning", timeout: 3000});
+                    noty({text: "请求后台错误", layout: "topCenter", type: "warning", timeout: 3000});
                     return;
                 }
             });

@@ -34,7 +34,9 @@
     <link href="${springMacroRequestContext.contextPath}/css/jquery-editable-select.min.css" rel="stylesheet">
     <link href="${springMacroRequestContext.contextPath}/css/bootstrap-select.css" rel="stylesheet">
     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/style.css"  type="text/css">
-     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/cropper.css"  type="text/css">
+    <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/cropper.css"  type="text/css">
+	<link href="${springMacroRequestContext.contextPath}/css/jquery-ui.min.css" rel="stylesheet">
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery-ui.js" ></script>
 	<style type="text/css">
 		.skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu>li.active>a {
 			color: #fff;
@@ -67,63 +69,91 @@
 	  <section class="content-wrapper" style="margin-left: 0px;">
 	   	<div id="content" style="padding-top: 1px;">
 			<div class="create_task max_width row">
-				<div >
+				<div  style="width:100%;">
 					<ul style="margin-top:10px;margin-right:10px;">						
-						<li style="height:220px;">
-							<div class='page col-sm-4'>
-								<h4>
-				                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
-				                   <span>任务名</span>
-				                   <span id="status" status="<#if task??>${task.taskStatus}<#else>task_init</#if>" style="margin-left:30px;">(当前状态：<#if task??>${task.taskStatus}<#else>task_init</#if>)</span>
-				                   <input id="taskName" type="text" <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
-				                   <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>
-				                   <input id="taskId" type="hidden" value="<#if task??>${task.id}</#if>" />
-				                   <input id="majorType" type="hidden" value="<#if task??>${task.majorType}</#if>" />
-				                   <input id="order" type="hidden" value="<#if image??>${image.orderNo}</#if>" />
-			               		</h4>
-		               		</div>
-		               		<div class='page col-sm-4' style="margin-top: 52px;">
-								<input type="button" class="btn btn-default" value="上一张" onclick="getPre()">
-								<input type="button" class="btn btn-default" value="下一张" onclick="getNext()">
-								<input id="save" type="button" class="btn btn-primary" value="保存">	
-								<input id="taskRectify" type="button" class="btn btn-primary" value="坐标转换">			           
-							</div>
-							<div class='hidden_show col-sm-4' >
-							   <div id="labelPanel" class="panel panel-default" style="display:none;max-height: 460px;">
-						          <div class="panel-heading">SKU选择</div>
-						          <div class="panel-body">
-						              <input id="currentPid" type="hidden">
-						              <input id="labelTxt" type="hidden" class="form-control" style="margin:0 0 5px 0;" placeholder="请输入标签">
-						              <ul id="labelList" class="list-group" style="overflow-y: auto;max-height: 340px;">
-										<select id="skuType" style="width:100%;height: 34px;">
-											<option value="">请选择类型</option>
-												<#if goodsSkus?? && (goodsSkus?size > 0)>
-					       							<#list goodsSkus as goodsSku>
-					     		 					<option value='${goodsSku.name}' skuorder="${goodsSku.order}">${goodsSku.order + 1} ${goodsSku.description}</option>
-					    							</#list>
-				   								</#if>
-										</select> 
-						              </ul>
-						              <input type="button" class="btn btn-success" id="labelBtn" value="确定">
-						              <input type="button" class="btn btn-danger" id="cancelBtn" value="删除">
-						          </div>
-						       </div>
-							</div>									
+						<li>		
+							<h4>
+			                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
+			                   <span>任务名</span>
+			                   <span id="status" status="<#if task??>${task.taskStatus}<#else>task_init</#if>" style="margin-left:30px;">(当前状态：<#if task??>${task.taskStatus}<#else>task_init</#if>)</span>
+			                   <input id="taskName" type="text" <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
+			                   <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>
+			                   <input id="taskId" type="hidden" value="<#if task??>${task.id}</#if>" />
+			                   <input id="majorType" type="hidden" value="<#if task??>${task.majorType}</#if>" />
+			                   <input id="order" type="hidden" value="<#if image??>${image.orderNo}</#if>" />
+		               		</h4>								
 					    </li>
 					    <div class='cl'></div>
+					    <li>		
+							<h4>
+			                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
+			                   <span>识别照片</span>
+		               		</h4>
+		               		<div class="col-sm-6"  >
+				 				<!-- <img src="/pic/marketing${borderImagePath}" class="img-thumbnail"> -->
+				 				<img style="height:600px;" src="${springMacroRequestContext.contextPath}/image/3.jpeg" class="img-thumbnail">
+							</div>
+							<div class='col-sm-6'>
+								<p id="brandListp" style="font-size:14px;"><strong>品牌列表</strong></p>
+								<div class="brand-list " style="height:570px;" >
+			                     <#if goodsSkus?? && (goodsSkus?size > 0)>
+						       		<#list goodsSkus as goodsSku>
+			               	         <div class="form-group">
+				               		   <span class="icorn-brand"></span>
+				               		   <div class="changeline" skuorder="${goodsSku.order}"><a href="javascript:void(0);" >${goodsSku.order + 1} ${goodsSku.description}</a></div>  
+			           			     </div>
+			           				</#list>
+					   			 </#if>
+				               </div>
+							</div>								
+					    </li>
+					    <div class='cl'></div>					    
 					    <li>
 							<h4>
 			                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
 			                   <span>货架照片</span>
 			                   <div style="clear:both"></div>
-               				</h4>              				                		
-	               			 <div class="col-sm-6">
-				 				<img src="/pic/marketing${borderImagePath}" class="img-thumbnail">
-							 </div> 
+               				</h4>              				                			               			 
 							 <div id="image_default" align="center" class="col-sm-6">
 			                   	   <!-- <img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail"> --> 
 				                  <img id="imageCrop"  src="${springMacroRequestContext.contextPath}/image/3.jpeg"  class="img-thumbnail">
-			                 </div>		        									
+			                 </div>
+			                 <div class="col-sm-6">
+				                 <div class='page' >
+									<input type="button" class="btn btn-default" value="上一张" onclick="getPre()">
+									<input type="button" class="btn btn-default" value="下一张" onclick="getNext()">
+									<input id="save" type="button" class="btn btn-primary" value="保存">	
+									<input id="taskRectify" type="button" class="btn btn-primary" value="坐标转换">			           
+								 </div>
+								 <div class='hidden_show' >
+								   <div id="labelPanel" class="panel panel-default" style="display:none;max-height: 460px;">
+							          <div class="panel-heading">SKU选择</div>
+							          <div class="panel-body">
+							              <input id="currentPid" type="hidden">
+							              <input id="labelTxt" type="hidden" class="form-control" style="margin:0 0 5px 0;" placeholder="请输入标签">
+							              <ul id="labelList" class="list-group" style="overflow-y: auto;max-height: 340px;">
+											
+											<!--<select id="skuType" style="width:100%;height: 34px;">
+												<option value="">请选择类型</option>
+													 <#if goodsSkus?? && (goodsSkus?size > 0)>
+						       							<#list goodsSkus as goodsSku>
+						     		 					<option value='${goodsSku.name}' skuorder="${goodsSku.order}">${goodsSku.order + 1} ${goodsSku.description}</option>
+						    							</#list>
+					   								</#if> 
+					   								
+											</select>--> 
+											<div class="form-group">
+										   		<input type="text" class="form-control" id="sku-select" placeholder="请选择SKU">
+											</div>
+																				
+			
+							              </ul>
+							              <input type="button" class="btn btn-success" id="labelBtn" value="确定">
+							              <input type="button" class="btn btn-danger" id="cancelBtn" value="删除">
+							          </div>
+							       </div>
+								</div>
+							</div>			        									
 						</li>
 					</ul>						
 				</div>
@@ -135,6 +165,42 @@
     var picPath = '/pic/marketing';
     var imageIds = [];
 	$(function() {
+		
+		$('#sku-select').autocomplete({
+            minLength: 0,
+            source: function(request,response) {
+                  var name= $.trim($('#sku-select').val());
+                  var majorType = $("#majorType").val();
+                  $.ajax({
+                	  url: '${springMacroRequestContext.contextPath}/goodsSkus',
+                       type: "GET",
+                       contentType: 'application/x-www-form-urlencoded',
+                       data:{
+                    	   majorType:majorType,
+                    	   name:name
+                    	},     
+                       success:function(data) {
+	                       var items = [];   //放置处理后的json数据
+	                       for(var i=0;i<data.length;i++){
+	                    	   items.push({
+	                    		   label: data[i].name,
+	                    		   id: data[i].id,
+	                    	   })
+	                       }
+	                       
+                    	   /* $.each(result, function(index, item) {
+	                             items.push({
+	                                label: item.name,
+	                                id: item.id,	                        
+	                             });
+	                       }); 	 */                    
+	                      response(items); //response表示将数据提交给autocomplete去展示
+                      }
+                  });
+            },
+       });
+
+		
 		var order = $("#order").val();
 		var imagePath = $("#imageCrop").attr("src");
 		initCropper();

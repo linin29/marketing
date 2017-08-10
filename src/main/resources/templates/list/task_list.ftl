@@ -16,7 +16,7 @@
     <section class="content_list">
         <table class="table table-bordered table-hover table-condensed">
               <thead>
-                    <tr>
+                    <tr style="background-color:#ddd;">
                         <th>任务名</th>
                         <th>任务Id</th>
                         <th>类型</th>

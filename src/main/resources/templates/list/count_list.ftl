@@ -28,7 +28,7 @@
     <section class="content_list">
         <table class="table table-bordered table-hover table-condensed">
             <thead>
-                <tr>
+                <tr style='background-color:#ddd;'>
                     <th>调用API</th>
                     <th>调用方法</th>
                     <th>用户</th>

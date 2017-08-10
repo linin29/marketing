@@ -35,8 +35,10 @@
     <link href="${springMacroRequestContext.contextPath}/css/bootstrap-select.css" rel="stylesheet">
     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/style.css"  type="text/css">
     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/cropper.css"  type="text/css">
+    <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/select2.min.css"  type="text/css">
 	<link href="${springMacroRequestContext.contextPath}/css/jquery-ui.min.css" rel="stylesheet">
     <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery-ui.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/select2.full.js" ></script>
 	<style type="text/css">
 		.skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu>li.active>a {
 			color: #fff;
@@ -100,7 +102,7 @@
 						       		<#list goodsSkus as goodsSku>
 			               	         <div class="form-group">
 				               		   <span class="icorn-brand"></span>
-				               		   <div class="changeline" skuorder="${goodsSku.order}"><a href="javascript:void(0);" >${goodsSku.order + 1} ${goodsSku.description}</a></div>  
+				               		   <div class="changeline" skuorder="${goodsSku.order}"><a href="javascript:void(0);" >${goodsSku.description}</a></div>  
 			           			     </div>
 			           				</#list>
 					   			 </#if>
@@ -133,20 +135,14 @@
 							              <input id="labelTxt" type="hidden" class="form-control" style="margin:0 0 5px 0;" placeholder="请输入标签">
 							              <ul id="labelList" class="list-group" style="overflow-y: auto;max-height: 340px;">
 											
-											<!--<select id="skuType" style="width:100%;height: 34px;">
+											<select id="skuType" style="width:100%;height: 34px;">
 												<option value="">请选择类型</option>
 													 <#if goodsSkus?? && (goodsSkus?size > 0)>
 						       							<#list goodsSkus as goodsSku>
 						     		 					<option value='${goodsSku.name}' skuorder="${goodsSku.order}">${goodsSku.order + 1} ${goodsSku.description}</option>
 						    							</#list>
 					   								</#if> 
-					   								
-											</select>--> 
-											<div class="form-group">
-										   		<input type="text" class="form-control" id="sku-select" placeholder="请选择SKU">
-											</div>
-																				
-			
+											</select>
 							              </ul>
 							              <input type="button" class="btn btn-success" id="labelBtn" value="确定">
 							              <input type="button" class="btn btn-danger" id="cancelBtn" value="删除">
@@ -165,48 +161,13 @@
     var picPath = '/pic/marketing';
     var imageIds = [];
 	$(function() {
-		
-		$('#sku-select').autocomplete({
-            minLength: 0,
-            source: function(request,response) {
-                  var name= $.trim($('#sku-select').val());
-                  var majorType = $("#majorType").val();
-                  $.ajax({
-                	  url: '${springMacroRequestContext.contextPath}/goodsSkus',
-                       type: "GET",
-                       contentType: 'application/x-www-form-urlencoded',
-                       data:{
-                    	   majorType:majorType,
-                    	   name:name
-                    	},     
-                       success:function(data) {
-	                       var items = [];   //放置处理后的json数据
-	                       for(var i=0;i<data.length;i++){
-	                    	   items.push({
-	                    		   label: data[i].name,
-	                    		   id: data[i].id,
-	                    	   })
-	                       }
-	                       
-                    	   /* $.each(result, function(index, item) {
-	                             items.push({
-	                                label: item.name,
-	                                id: item.id,	                        
-	                             });
-	                       }); 	 */                    
-	                      response(items); //response表示将数据提交给autocomplete去展示
-                      }
-                  });
-            },
-       });
-
-		
+		$("#skuType").select2();
 		var order = $("#order").val();
 		var imagePath = $("#imageCrop").attr("src");
 		initCropper();
 		getPictureCrop(imagePath);
         $('#labelBtn').click(function(){
-            var skuType = $('#skuType').val().trim();
+            var skuType = $('#skuType').val();
             if (skuType){
             	imageIds.push($('#imageCrop').attr("imageid"));
             	saveLabelLocally();
@@ -220,7 +181,6 @@
             $('#labelPanel').hide();
         });
     	$('#taskRectify').click(function() {
-    		generateFile();
     		var taskId = $('#taskId').val();
     		$.ajax({
          		 type: 'POST',
@@ -228,6 +188,7 @@
          		 success: function(data) {
          			 if(data && data.success){
          				noty({text: '坐标转换成功', layout: "topCenter", type: "success", timeout: 1000});
+         				generateFile();
          			 }else{
          				noty({text: '坐标转换失败', layout: "topCenter", type: "warning", timeout: 1000});
          			 }
@@ -386,7 +347,7 @@
     	$(".cropper-view-box").css("cssText", "outline: 3px solid #ea230a !important; outline-color: #ea230a !important;")
         clearLabel();
         var data = $(this).cropper('getCropBoxData');
-        $('#skuType').val($("#skuType option[skuorder=" + (parseInt(data.label) -1) + "]").val());
+        $('#skuType').val($("#skuType option[skuorder=" + (parseInt(data.label) -1) + "]").val()).select2();
         var cropBox = $('.cropper-crop-box[name=' + data.annotationId + ']');
         cropBox.find(".cropper-view-box").css("cssText", "outline: 3px solid #0aeadd !important; outline-color: #0aeadd !important;");
         if($(this).cropper('hasLabel')){

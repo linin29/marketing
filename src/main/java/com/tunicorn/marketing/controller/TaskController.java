@@ -474,11 +474,12 @@ public class TaskController extends BaseController {
 	public List<GoodsSkuVO> getGoodsSkuList(HttpServletRequest request) {
 		return taskService.getGoods(request.getParameter("majorType"));
 	}
-	
+
 	@RequestMapping(value = "/goodsSkus/list", method = RequestMethod.GET)
 	@ResponseBody
 	public List<GoodsSkuVO> goodsSkuList(HttpServletRequest request) {
-		return goodsSkuService.getGoodsSkuListByMajorTypeAndName(request.getParameter("majorType"), request.getParameter("name"));
+		return goodsSkuService.getGoodsSkuListByMajorTypeAndName(request.getParameter("majorType"),
+				request.getParameter("name"));
 	}
 
 	@RequestMapping(value = "/preOrderTaskImage/{taskId}/{order}", method = RequestMethod.GET)
@@ -557,7 +558,7 @@ public class TaskController extends BaseController {
 	@ResponseBody
 	public TaskVO nextTask(@PathVariable("taskId") String taskId, HttpServletRequest request) {
 		UserVO user = getCurrentUser(request);
-		TaskVO result = taskService.getNextTask(taskId,user.getId());
+		TaskVO result = taskService.getNextTask(taskId, user.getId());
 		return result;
 	}
 

@@ -128,8 +128,8 @@
 	    </trim>
 		 WHERE major_type = #{majorType}
     </update>
-    <select id="getGoodsSkuListByMajorTypeAndName" resultMap="GoodsSkuMap">
-		select id, major_type, `name`, description, `order`, create_time, is_show from goods_sku"
+    <select id="getGoodsSkuListByMajorTypeAndName" resultMap="GoodsSkuMap" parameterType="com.tunicorn.marketing.vo.GoodsSkuVO">
+		select id, major_type, `name`, description, `order`, create_time, is_show from goods_sku
 		where status='active'
 		<if test="majorType != null and majorType != ''">
 			and major_type = #{majorType}

@@ -49,6 +49,9 @@ public class GoodsSkuService {
 	}
 
 	public List<GoodsSkuVO> getGoodsSkuListByMajorTypeAndName(String majorType, String name) {
-		return goodsSkuMapper.getGoodsSkuListByMajorTypeAndName(majorType, name);
+		GoodsSkuVO goodsSkuVO = new GoodsSkuVO();
+		goodsSkuVO.setName(name);
+		goodsSkuVO.setMajorType(majorType);
+		return goodsSkuMapper.getGoodsSkuListByMajorTypeAndName(goodsSkuVO);
 	}
 }

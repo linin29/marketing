@@ -37,5 +37,5 @@ public interface GoodsSkuMapper {
 			+ " where id = #{goodsSkuId} and status='active'")
 	public GoodsSkuVO getGoodsSkuById(@Param("goodsSkuId") long goodsSkuId);
 	
-	public List<GoodsSkuVO> getGoodsSkuListByMajorTypeAndName(@Param("majorType") String majorType, @Param("name") String name);
+	public List<GoodsSkuVO> getGoodsSkuListByMajorTypeAndName(GoodsSkuVO goodsSkuVO);
 }

@@ -64,6 +64,10 @@
    		.page{
    			margin-bottom:25px;
    		}
+   		.select2-container .select2-selection--single {  
+		  height: 36px;  
+		  line-height: 36px;  
+		}  
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -91,11 +95,11 @@
 			                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
 			                   <span>识别照片</span>
 		               		</h4>
-		               		<div class="col-sm-6"  >
+		               		<div class="col-sm-7"  >
 				 				<!-- <img src="/pic/marketing${borderImagePath}" class="img-thumbnail"> -->
 				 				<img style="height:600px;" src="${springMacroRequestContext.contextPath}/image/3.jpeg" class="img-thumbnail">
 							</div>
-							<div class='col-sm-6'>
+							<div class='col-sm-5' style="width:36%">
 								<p id="brandListp" style="font-size:14px;"><strong>品牌列表</strong></p>
 								<div class="brand-list " style="height:570px;" >
 			                     <#if goodsSkus?? && (goodsSkus?size > 0)>
@@ -116,11 +120,11 @@
 			                   <span>货架照片</span>
 			                   <div style="clear:both"></div>
                				</h4>              				                			               			 
-							 <div id="image_default" align="center" class="col-sm-6">
+							 <div id="image_default" align="center" class="col-sm-7">
 			                   	   <!-- <img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail"> --> 
 				                  <img id="imageCrop"  src="${springMacroRequestContext.contextPath}/image/3.jpeg"  class="img-thumbnail">
 			                 </div>
-			                 <div class="col-sm-6">
+			                 <div class="col-sm-5">
 				                 <div class='page' >
 									<input type="button" class="btn btn-default" value="上一张" onclick="getPre()">
 									<input type="button" class="btn btn-default" value="下一张" onclick="getNext()">
@@ -133,10 +137,10 @@
 							          <div class="panel-body">
 							              <input id="currentPid" type="hidden">
 							              <input id="labelTxt" type="hidden" class="form-control" style="margin:0 0 5px 0;" placeholder="请输入标签">
-							              <ul id="labelList" class="list-group" style="overflow-y: auto;max-height: 340px;">
+							              <ul id="labelList" class="list-group" style="max-height: 340px;">
 											
-											<select id="skuType" style="width:100%;height: 34px;">
-												<option value="">请选择类型</option>
+											<select id="skuType" style="width:100%;height: 45px;" class="js-example-basic-single">
+												<option value="" style="height:45px;">请选择类型</option>
 													 <#if goodsSkus?? && (goodsSkus?size > 0)>
 						       							<#list goodsSkus as goodsSku>
 						     		 					<option value='${goodsSku.name}' skuorder="${goodsSku.order}">${goodsSku.order + 1} ${goodsSku.description}</option>

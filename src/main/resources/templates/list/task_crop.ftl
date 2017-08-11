@@ -96,7 +96,7 @@
 			                   <span>识别照片</span>
 		               		</h4>
 		               		<div class="col-sm-7">
-		               			<img id="initCropImage" style="height:600px;" src="/pic/marketing/${task.id}/result_${image.orderNo - 1}.jpg"" class="img-thumbnail">
+		               			<img id="initCropImage" style="height:600px;" src="/pic/marketing/${task.id}/results_${image.orderNo - 1}.jpg"" class="img-thumbnail">
 				 				<!-- <img id="initCropImage" style="height:600px;" src="${springMacroRequestContext.contextPath}/image/3.jpeg" class="img-thumbnail"> -->
 							</div>
 							<div class='col-sm-5' style="width:36%">

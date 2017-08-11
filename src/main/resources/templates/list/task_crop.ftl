@@ -302,7 +302,7 @@
      		 url: '${springMacroRequestContext.contextPath}/nextOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
-     				$("#initCropImage").attr("src", picPath + "/" + taskId + "/results_" +order+ ".jpg?random=" + new Date().getTime()");
+     				$("#initCropImage").attr("src", picPath + "/" + taskId + "/results_" +order+ ".jpg?random=" + new Date().getTime());
      				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);

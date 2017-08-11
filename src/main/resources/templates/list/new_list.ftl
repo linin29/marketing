@@ -8,7 +8,7 @@
                <h4 style='width:385px;display:inline-block'>
                    <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
                    <span>任务名</span>
-                   <span id="status" status="<#if task??>${task.taskStatus}<#else>task_init</#if>" style="margin-left:30px;">(当前状态：<#if task??>${task.taskStatus}<#else>task_init</#if>)</span>
+                   <span id="status" status="<#if task??>${task.taskStatus}<#else>task_init</#if>" style="margin-left:14px;">(当前状态：<#if task??>${task.taskStatus}<#else>task_init</#if>)</span>
                    <input id="taskName" type="text" <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
                    <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>              
                </h4>
@@ -19,8 +19,8 @@
                    <img class="img_icorn" src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
                    <span>选择货架照片</span>
                    <div class="choose-box-body">
-                       <div class="row" style='padding-left:19px;'>
-                           <div class="col-xs-1 choose_btn" style="width: 125px;">
+                       <div class="row" style="padding-left: 15px;">
+                           <div class="col-xs-1 choose_btn" style="width: 125px;padding-right: 0px;">
                                <span class="btn btn-success btn-sm fileinput-button pull-right">
                                    <img src="${springMacroRequestContext.contextPath}/image/camera_icorn.png" class="st_camera">
                                    <span>上传图片</span>
@@ -31,22 +31,22 @@
                                    </form>
                                </span>
                            </div>
-                           <div class="col-xs-1 choose_btn">
+                           <div class="col-xs-1 choose_btn" style="width: 100px;">
                                 <button id="preview" type="button" class="btn btn-success">预览照片</button>
                            </div>
-                           <div  class="col-xs-1 choose_btn">
+                           <div  class="col-xs-1 choose_btn" style="width: 100px;">
                                <button id="merge-pre" type="button" class="btn btn-success">拼接图片</button>
                            </div>
-                           <div class="col-xs-1 choose_btn">
+                           <div class="col-xs-1 choose_btn" style="width: 100px;">
                                 <button id="taskStatus" type="button" class="btn btn-success">获取状态</button>
                            </div>
                            <#if task??>
-	                           <div class="col-xs-1 choose_btn">
+	                           <div class="col-xs-1 choose_btn" style="width: 100px;">
 	                                <a href="${springMacroRequestContext.contextPath}/showView/${task.id}" target="_blank"><button type="button" class="btn btn-success">查看信息</button></a>
 	                           </div>
 	                       </#if>
 	                       <#if task?? && task.taskStatus=='identify_success'>
-	                        <div class="col-xs-1 choose_btn">
+	                        <div class="col-xs-1 choose_btn" style="width: 100px;">
                                 <button id="taskPullData" type="button" class="btn btn-success">拉取数据</button>
                            </div>
                            </#if>    

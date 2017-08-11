@@ -85,7 +85,7 @@
 		                        </a>
 		                   </#if>
 	                   </div>
-	                   <div class='col-sm-3 '>
+	                   <div class='col-sm-4' style="width:32%;">
 	                   	<#if task?? && task.taskStatus?? && task.taskStatus=='identify_success'>
                      		<p id="brandListp" style="font-size:14px;"><strong>品牌列表</strong></p>
                    		</#if>

@@ -20,7 +20,7 @@
                    <span>选择货架照片</span>
                    <div class="choose-box-body">
                        <div class="row" style="padding-left: 15px;">
-                           <div class="col-xs-1 choose_btn" style="width: 125px;padding-right: 0px;">
+                           <div class="col-xs-1 choose_btn" style="width: 125px;padding-right: 4px;">
                                <span class="btn btn-success btn-sm fileinput-button pull-right">
                                    <img src="${springMacroRequestContext.contextPath}/image/camera_icorn.png" class="st_camera">
                                    <span>上传图片</span>

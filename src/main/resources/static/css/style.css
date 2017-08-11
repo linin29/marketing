@@ -16,7 +16,7 @@ ul li{list-style-type: none;}
 
 /*新建任务页面css*/
 .img_icorn{width: 30px;height: 30px;}
-.create_task_input{width:300px;margin: 16px 0px 20px 29px;}
+.create_task_input{width:300px;margin: 16px 0px 20px 26px;}
 .choose-box-body{margin: 20px 0px;}
 .paddingLeft{padding-left: 130px;}
 .choose_btn{margin-right: 25px;}

@@ -88,6 +88,9 @@ BEGIN
 	SET @ret = 0;
 	CALL CheckTableExist("goods_sku", @ret);
 	IF @ret = 1 THEN 
+	
+		INSERT INTO `major_type`(`name`, `description`, `create_time`) VALUES ('colgate', '高露洁', now());
+		
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('beer', 'bass1', 'bass1', 5, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('beer', 'budweiser1', 'budweiser1', 6, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('beer', 'budweiser2', 'budweiser2', 7, now());
@@ -207,6 +210,27 @@ BEGIN
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('beer', 'corona2', 'corona2', 121, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('beer', 'corona3', 'corona3', 12, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('beer', 'corona4', 'corona4', 123, now());
+		
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate1', 'colgate1', 0, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate2', 'colgate2', 1, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate3', 'colgate3', 2, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate4', 'colgate4', 3, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate5', 'colgate5', 4, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate6', 'colgate6', 5, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate7', 'colgate7', 6, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate8', 'colgate8', 7, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate9', 'colgate9', 8, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate10', 'colgate10', 9, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate11', 'colgate11', 10, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate12', 'colgate12', 11, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate13', 'colgate13', 12, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate14', 'colgate14', 13, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate15', 'colgate15', 14, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate16', 'colgate16', 15, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate17', 'colgate17', 16, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate18', 'colgate18', 17, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate19', 'colgate19', 18, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('colgate', 'colgate20', 'colgate20', 19, now());
 		
 	END IF;
 END//

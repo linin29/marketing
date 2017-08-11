@@ -514,6 +514,7 @@ public class TaskController extends BaseController {
 		if (StringUtils.isNotBlank(imageId)) {
 			TaskImagesVO image = taskService.getTaskImagesById(imageId);
 			model.addAttribute("image", image);
+			model.addAttribute("initCropImagePath", taskId + "/results_" + (image.getOrderNo() - 1) +".jpg?random=" + new Date().getTime());
 		}
 		List<GoodsSkuVO> goodsSkuVOs = taskService.getGoods(taskVO.getMajorType());
 

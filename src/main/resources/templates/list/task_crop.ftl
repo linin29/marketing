@@ -93,7 +93,7 @@
 			                   <input id="taskName" type="text" <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
 			                   <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>
 			                   <input id="taskId" type="hidden" value="<#if task??>${task.id}</#if>" />
-			                   <input id="majorType" type="hidden" value="<#if task??>${task.majorType}</#if>" />
+			                   <input id="majorType" type="hidden" value="<#if task?? && task.majorType??>${task.majorType}</#if>" />
 			                   <input id="order" type="hidden" value="<#if image??>${image.orderNo}</#if>" />
 		               		</h4>								
 					    </li>
@@ -104,7 +104,7 @@
 			                   <span>识别照片</span>
 		               		</h4>
 		               		<div class="col-sm-7">
-		               			<img id="initCropImage" style="height:600px;" src="/pic/marketing/${task.id}/results_${image.orderNo - 1}.jpg"" class="img-thumbnail">
+		               			<img id="initCropImage" style="height:600px;" src="/pic/marketing/${initCropImagePath}" class="img-thumbnail">
 				 				<!-- <img id="initCropImage" style="height:600px;" src="${springMacroRequestContext.contextPath}/image/3.jpeg" class="img-thumbnail"> -->
 							</div>
 							<div class='col-sm-5' style="width:36%">
@@ -281,7 +281,7 @@
      		 url: '${springMacroRequestContext.contextPath}/preOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
-     				 $("#initCropImage").attr("src", picPath + "/" + taskId + "/results_" +(order - 2)+ ".jpg");
+     				 $("#initCropImage").attr("src", picPath + "/" + taskId + "/results_" +(order - 2)+ ".jpg?random=" + new Date().getTime());
      				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);
@@ -302,7 +302,7 @@
      		 url: '${springMacroRequestContext.contextPath}/nextOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
-     				$("#initCropImage").attr("src", picPath + "/" + taskId + "/results_" +order+ ".jpg");
+     				$("#initCropImage").attr("src", picPath + "/" + taskId + "/results_" +order+ ".jpg?random=" + new Date().getTime()");
      				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);

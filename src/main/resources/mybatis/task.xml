@@ -83,7 +83,8 @@
 
 	<select id="getTaskList" resultMap="TaskResultMap" parameterType="com.tunicorn.marketing.bo.TaskBO">
 		select id, id as _id,  `name`, task_status, task_status as status, user_id, user_id as author,
-		 create_time,create_time as createdAt, stitch_image_path, result, rows, major_type,last_update as updatedAt, last_update as lastUpdateTime
+		 create_time,create_time as createdAt, stitch_image_path, result, rows, major_type,last_update as updatedAt,
+		 last_update as lastUpdateTime,identify_success_times
 		from task
 		where `status` = 'active'
 		<if test="userId != null and userId != ''">
@@ -112,7 +113,7 @@
 	</select>
 	<select id="getTaskListByVO" resultMap="TaskResultMap" parameterType="com.tunicorn.marketing.vo.TaskVO">
 		select id, `name`, task_status, user_id, create_time,
-		stitch_image_path, result, rows, major_type, goods_info
+		stitch_image_path, result, rows, major_type, goods_info,identify_success_times
 		from task
 		where `status` = 'active'
 		<if test="userId != null and userId != ''">

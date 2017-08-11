@@ -32,7 +32,15 @@
                        <td>${task.id!""}</td>
                        <td>${task.majorType!""}</td>
                        <td>${task.lastUpdateTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
-                       <td>${task.taskStatus!""}</td>
+                       <td>
+                       <#if task?? && task.taskStatus=='identify_success' && task.identifySuccessTimes gt 0>
+                   			${task.taskStatus}${task.identifySuccessTimes}
+                   	   <#elseif task?? && (task.taskStatus !='identify_success' || task.identifySuccessTimes == 0)>
+                   			${task.taskStatus}
+                   	   <#else>
+                   			task_init
+                   		</#if>
+                       </td>
                        <td><a href="javascript:void(0);" onclick="getTaskDetail('${task.id}')" class="ajax-link">查看</a></td>
                    </tr>
                    </#list>

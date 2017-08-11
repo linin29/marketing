@@ -18,8 +18,9 @@ public interface TaskMapper {
 	@Select("select id, name, task_status, user_id, create_time from task where name = #{taskName} and user_id = #{userId} and status = 'active'")
 	public TaskVO getTaskByNameAndUserId(@Param("taskName") String taskName, @Param("userId") String userId);
 
-	@Update("update task set task_status= #{taskStatus} where id = #{taskId} and status='active'")
-	public int updateTaskStatus(@Param("taskId") String taskId, @Param("taskStatus") String taskStatus);
+	@Update("update task set task_status= #{taskStatus},identify_success_times=#{identifySuccessTimes} where id = #{taskId} and status='active'")
+	public int updateTaskStatus(@Param("taskId") String taskId, @Param("taskStatus") String taskStatus,
+			@Param("identifySuccessTimes") Integer identifySuccessTimes);
 
 	public List<TaskVO> getTaskListByVO(TaskVO taskVO);
 
@@ -28,6 +29,6 @@ public interface TaskMapper {
 	public int getTaskCount(TaskBO taskBO);
 
 	public TaskVO getTaskById(@Param("taskId") String taskId);
-	
+
 	public TaskVO getNextTask(@Param("taskId") String taskId, @Param("userId") String userId);
 }

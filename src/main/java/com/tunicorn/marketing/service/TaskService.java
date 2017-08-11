@@ -145,7 +145,7 @@ public class TaskService {
 				taskImagesVOs.add(taskImagesVO);
 			}
 			taskImagesMapper.batchInsertTaskImages(taskImagesVOs);
-			taskMapper.updateTaskStatus(createTaskVO.getId(), MarketingConstants.TASK_STATUS_IMAGE_UPLOADED);
+			taskMapper.updateTaskStatus(createTaskVO.getId(), MarketingConstants.TASK_STATUS_IMAGE_UPLOADED, 0);
 		}
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -404,7 +404,7 @@ public class TaskService {
 				if (file.exists()) {
 					file.delete();
 				}
-				result = taskMapper.updateTaskStatus(taskId, MarketingConstants.TASK_STATUS_IMAGE_UPLOADED);
+				result = taskMapper.updateTaskStatus(taskId, MarketingConstants.TASK_STATUS_IMAGE_UPLOADED, 0);
 			}
 		} else {
 			return new ServiceResponseBO(false, "marketing_db_not_found");
@@ -444,7 +444,7 @@ public class TaskService {
 		imagesVO.setId(taskImageId);
 		taskImagesMapper.updateTaskImage(imagesVO);
 
-		result = taskMapper.updateTaskStatus(taskId, MarketingConstants.TASK_STATUS_IMAGE_UPLOADED);
+		result = taskMapper.updateTaskStatus(taskId, MarketingConstants.TASK_STATUS_IMAGE_UPLOADED, 0);
 		if (result > 0) {
 			ObjectMapper mapper = new ObjectMapper();
 			ObjectNode node = mapper.createObjectNode();
@@ -473,7 +473,7 @@ public class TaskService {
 			}
 			int updateResult = taskImagesMapper.batchUpdateTaskImages(imagesVOs);
 			if (updateResult > 0) {
-				taskMapper.updateTaskStatus(taskId, MarketingConstants.TASK_STATUS_IMAGE_UPLOADED);
+				taskMapper.updateTaskStatus(taskId, MarketingConstants.TASK_STATUS_IMAGE_UPLOADED, 0);
 				ObjectMapper mapper = new ObjectMapper();
 				ObjectNode node = mapper.createObjectNode();
 				node.put(MarketingConstants.TASK_ID, taskId);
@@ -1017,7 +1017,7 @@ public class TaskService {
 				taskImagesVOs.add(taskImagesVO);
 			}
 			taskImagesMapper.batchInsertTaskImages(taskImagesVOs);
-			result = taskMapper.updateTaskStatus(taskId, MarketingConstants.TASK_STATUS_IMAGE_UPLOADED);
+			result = taskMapper.updateTaskStatus(taskId, MarketingConstants.TASK_STATUS_IMAGE_UPLOADED, 0);
 		}
 		return result;
 	}

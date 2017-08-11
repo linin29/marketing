@@ -96,8 +96,8 @@
 			                   <span>识别照片</span>
 		               		</h4>
 		               		<div class="col-sm-7">
-		               			<!-- <img id="initCropImage" style="height:600px;" src="/pic/marketing/${task.id}/result_${image.orderNo - 1}.jpg"" class="img-thumbnail"> -->
-				 				<img id="initCropImage" style="height:600px;" src="${springMacroRequestContext.contextPath}/image/3.jpeg" class="img-thumbnail">
+		               			<img id="initCropImage" style="height:600px;" src="/pic/marketing/${task.id}/result_${image.orderNo - 1}.jpg"" class="img-thumbnail">
+				 				<!-- <img id="initCropImage" style="height:600px;" src="${springMacroRequestContext.contextPath}/image/3.jpeg" class="img-thumbnail"> -->
 							</div>
 							<div class='col-sm-5' style="width:36%">
 								<p id="brandListp" style="font-size:14px;"><strong>品牌列表</strong></p>
@@ -121,8 +121,8 @@
 			                   <div style="clear:both"></div>
                				</h4>              				                			               			 
 							 <div id="image_default" align="center" class="col-sm-7">
-			                   	   <!-- <img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail"> --> 
-				                  <img id="imageCrop"  src="${springMacroRequestContext.contextPath}/image/3.jpeg"  class="img-thumbnail">
+			                   	  <img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail"> 
+				                  <!-- <img id="imageCrop"  src="${springMacroRequestContext.contextPath}/image/3.jpeg"  class="img-thumbnail"> -->
 			                 </div>
 			                 <div class="col-sm-5">
 				                 <div class='page' >
@@ -309,7 +309,7 @@
 		var imageId = $('#imageCrop').attr("imageid");
 		var cropDatas = $('#imageCrop').cropper('getAllData');
 		var majorType = $("#majorType").val();
-		var data ={imageId:imageId, imageCrop : cropDatas, majorType:majorType};
+		var data ={imageId:imageId, imageCrop:cropDatas, majorType:majorType};
 		$.ajax({
      		 url: '${springMacroRequestContext.contextPath}/generateFile',
              data: JSON.stringify(data),
@@ -350,12 +350,12 @@
 	}
 
     function cropEnd(e) {
-    	$(".cropper-view-box").css("cssText", "outline: 3px solid #ea230a !important; outline-color: #ea230a !important;")
+    	$(".cropper-view-box").css("cssText", "outline: 2px solid #ea230a !important; outline-color: #ea230a !important;")
         clearLabel();
         var data = $(this).cropper('getCropBoxData');
         $('#skuType').val($("#skuType option[skuorder=" + (parseInt(data.label) -1) + "]").val()).select2();
         var cropBox = $('.cropper-crop-box[name=' + data.annotationId + ']');
-        cropBox.find(".cropper-view-box").css("cssText", "outline: 3px solid #0aeadd !important; outline-color: #0aeadd !important;");
+        cropBox.find(".cropper-view-box").css("cssText", "outline: 2px solid #0aeadd !important; outline-color: #0aeadd !important;");
         if($(this).cropper('hasLabel')){
             var label = data.label;
             fillLabel(label);

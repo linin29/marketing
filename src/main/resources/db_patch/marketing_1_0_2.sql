@@ -11,6 +11,7 @@ DROP PROCEDURE IF EXISTS CheckConstraintExist;
 DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS InsertGoodsSkuData;
+DROP PROCEDURE IF EXISTS AlterTaskTable;
 
 DELIMITER //
 CREATE PROCEDURE CheckTableExist(IN p_tablename varchar(64), OUT ret int)
@@ -209,9 +210,19 @@ BEGIN
 	END IF;
 END//
 
+DELIMITER //
+CREATE PROCEDURE AlterTaskTable()
+BEGIN
+	SET @ret = 0;
+	CALL CheckTableExist("task", @ret);
+	IF @ret = 1 THEN 
+		ALTER TABLE task ADD COLUMN `identify_success_times` INT(11) DEFAULT 0;
+	END IF;
+END//
 DELIMITER ;
 	
 CALL InsertGoodsSkuData();
+CALL AlterTaskTable();
 
 DROP PROCEDURE IF EXISTS CheckTableExist;
 DROP PROCEDURE IF EXISTS CheckColumnExist;
@@ -220,3 +231,4 @@ DROP PROCEDURE IF EXISTS CheckConstraintExist;
 DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS InsertGoodsSkuData;
+DROP PROCEDURE IF EXISTS AlterTaskTable;

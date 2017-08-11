@@ -95,9 +95,9 @@
 			                   <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
 			                   <span>识别照片</span>
 		               		</h4>
-		               		<div class="col-sm-7"  >
-				 				<!-- <img src="/pic/marketing${borderImagePath}" class="img-thumbnail"> -->
-				 				<img style="height:600px;" src="${springMacroRequestContext.contextPath}/image/3.jpeg" class="img-thumbnail">
+		               		<div class="col-sm-7">
+		               			<!-- <img id="initCropImage" style="height:600px;" src="/pic/marketing/${task.id}/result_${image.orderNo - 1}.jpg"" class="img-thumbnail"> -->
+				 				<img id="initCropImage" style="height:600px;" src="${springMacroRequestContext.contextPath}/image/3.jpeg" class="img-thumbnail">
 							</div>
 							<div class='col-sm-5' style="width:36%">
 								<p id="brandListp" style="font-size:14px;"><strong>品牌列表</strong></p>
@@ -272,6 +272,7 @@
      		 url: '${springMacroRequestContext.contextPath}/preOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
+     				 $("#initCropImage").attr("src", picPath + "/" + taskId + "results_" +(order - 2)+ ".jpg");
      				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);
@@ -292,6 +293,7 @@
      		 url: '${springMacroRequestContext.contextPath}/nextOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
+     				$("#initCropImage").attr("src", picPath + "/" + taskId + "results_" +order+ ".jpg");
      				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);

@@ -5,14 +5,14 @@
 <div class="create_task max_width">
        <ul>
            <li>
-               <h4 style='width:250px;display:inline-block'>
+               <h4 style='width:385px;display:inline-block'>
                    <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
                    <span>任务名</span>
                    <span id="status" status="<#if task??>${task.taskStatus}<#else>task_init</#if>" style="margin-left:30px;">(当前状态：<#if task??>${task.taskStatus}<#else>task_init</#if>)</span>
                    <input id="taskName" type="text" <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
                    <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>              
                </h4>
-               <button style='width:100px;display:inline-block;margin-left:100px;' id="nextTask" type="button" class="btn btn-success">下一个任务</button>
+               <button style='width:100px;display:inline-block;' id="nextTask" type="button" class="btn btn-success">下一个任务</button>
            </li>
            <li>
                <h4>
@@ -227,6 +227,7 @@
          			 if(data){
          				getTaskDetail(data.id);
          			 }else{
+         				noty({text: '已是最后一个任务', layout: "topCenter", type: "warning", timeout: 1000});
          				return;
          			 }
              	},

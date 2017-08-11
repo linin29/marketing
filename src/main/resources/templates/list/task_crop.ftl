@@ -272,7 +272,7 @@
      		 url: '${springMacroRequestContext.contextPath}/preOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
-     				 $("#initCropImage").attr("src", picPath + "/" + taskId + "results_" +(order - 2)+ ".jpg");
+     				 $("#initCropImage").attr("src", picPath + "/" + taskId + "/results_" +(order - 2)+ ".jpg");
      				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);
@@ -293,7 +293,7 @@
      		 url: '${springMacroRequestContext.contextPath}/nextOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
-     				$("#initCropImage").attr("src", picPath + "/" + taskId + "results_" +order+ ".jpg");
+     				$("#initCropImage").attr("src", picPath + "/" + taskId + "/results_" +order+ ".jpg");
      				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);

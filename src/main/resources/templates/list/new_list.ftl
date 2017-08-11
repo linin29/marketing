@@ -5,7 +5,7 @@
 <div class="create_task max_width">
        <ul>
            <li>
-               <h4 style='width:385px;display:inline-block'>
+               <h4>
                    <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
                    <span>任务名</span>
                    <span id="status" status="<#if task??>${task.taskStatus}<#else>task_init</#if>" style="margin-left:30px;">(当前状态：
@@ -17,10 +17,12 @@
                    		task_init
                    	</#if>)
                    </span>
-                   <input id="taskName" type="text" <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
-                   <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>              
-               </h4>
-               <button style='width:100px;display:inline-block;' id="nextTask" type="button" class="btn btn-success">下一个任务</button>
+                   <div>
+                 	  <input id="taskName" type="text" style='display:inline-block;margin-right: 38px;' <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
+                 	  <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>              
+             	   	  <button style='width:100px;display:inline-block;' id="nextTask" type="button" class="btn btn-success">下一个任务</button>                   		
+                   </div>
+               </h4>               
            </li>
            <li>
                <h4>
@@ -66,10 +68,7 @@
                <h4>
                    <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
                    <span>货架拼接照片</span>
-                   <div style="clear:both"></div>
-                   <#if task?? && task.taskStatus?? && task.taskStatus=='identify_success'>
-                     <p id="brandListp" style="font-size:14px;margin-left: 82%;"><strong>品牌列表</strong></p>
-                   </#if>
+                   <div style="clear:both"></div>                   
                    <div class="row" id="stitch_image">
 	                   <div id="image_default"  align="center"  class="col-sm-8">
 		                   <#if task?? && task.taskStatus?? && (task.taskStatus!='stitching' && task.taskStatus!='image_uploaded') && task.stitchImagePath??>
@@ -86,20 +85,27 @@
 		                        </a>
 		                   </#if>
 	                   </div>
-	                   <#if task?? && task.taskStatus?? && task.taskStatus=='identify_success'>
-	                   <div class="brand-list col-sm-3 " >
-	                     <#if goodResults?? && (goodResults?size > 0)>
-	                       <#list goodResults as goodResult>
-	                        <#if goodResult.isShow && (goodResult.num?eval >0)>
-	               	         <div class="form-group">
-		               		   <span class="icorn-brand"></span>
-		               		   <div class="changeline" produce="${goodResult_index}"><a href="javascript:void(0);" onclick="getCrops(${goodResult_index})">${goodResult.goods_desc}(${goodResult.num})</a></div>  
-	           			     </div>
-	           			    </#if>
-	           			   </#list>
-	           			 </#if>
-		               </div>
-		               </#if>
+	                   <div class='col-sm-3 '>
+	                   	<#if task?? && task.taskStatus?? && task.taskStatus=='identify_success'>
+                     		<p id="brandListp" style="font-size:14px;"><strong>品牌列表</strong></p>
+                   		</#if>
+                   			                   
+	                   	<#if task?? && task.taskStatus?? && task.taskStatus=='identify_success'>
+		                   <div class="brand-list" >
+		                     <#if goodResults?? && (goodResults?size > 0)>
+		                       <#list goodResults as goodResult>
+		                        <#if goodResult.isShow && (goodResult.num?eval >0)>
+		               	         <div class="form-group">
+			               		   <span class="icorn-brand"></span>
+			               		   <div class="changeline" produce="${goodResult_index}"><a href="javascript:void(0);" onclick="getCrops(${goodResult_index})">${goodResult.goods_desc}(${goodResult.num})</a></div>  
+		           			     </div>
+		           			    </#if>
+		           			   </#list>
+		           			 </#if>
+			               </div>
+		               </#if>                 
+	                   </div>
+	                   
 	               </div>
                </h4>
                <div style="clear:both;"></div>

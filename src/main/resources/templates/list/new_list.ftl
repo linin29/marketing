@@ -8,7 +8,15 @@
                <h4 style='width:385px;display:inline-block'>
                    <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
                    <span>任务名</span>
-                   <span id="status" status="<#if task??>${task.taskStatus}<#else>task_init</#if>" style="margin-left:14px;">(当前状态：<#if task??>${task.taskStatus}<#else>task_init</#if>)</span>
+                   <span id="status" status="<#if task??>${task.taskStatus}<#else>task_init</#if>" style="margin-left:30px;">(当前状态：
+                   	<#if task?? && task.taskStatus=='identify_success' && task.identifySuccessTimes gt 0>
+                   		${task.taskStatus}${task.identifySuccessTimes}
+                   	<#elseif task?? && (task.taskStatus !='identify_success' || task.identifySuccessTimes == 0)>
+                   		${task.taskStatus}
+                   	<#else>
+                   		task_init
+                   	</#if>)
+                   </span>
                    <input id="taskName" type="text" <#if task??> value="${task.name}"  readonly= "true" </#if> placeholder="请输入任务名" class="form-control create_task_input">
                    <input id="taskMajorType" type="hidden" <#if task?? && task.majorType??> value="${task.majorType}" </#if>>              
                </h4>

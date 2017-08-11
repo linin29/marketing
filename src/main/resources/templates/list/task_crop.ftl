@@ -110,15 +110,16 @@
 							<div class='col-sm-5' style="width:36%">
 								<p id="brandListp" style="font-size:14px;"><strong>品牌列表</strong></p>
 								<div class="brand-list " style="height:570px;" >
-			                     <#if goodsSkus?? && (goodsSkus?size > 0)>
-						       		<#list goodsSkus as goodsSku>
-			               	         <div class="form-group">
-				               		   <span class="icorn-brand"></span>
-				               		   <div class="changeline" skuorder="${goodsSku.order}"><a href="javascript:void(0);" >${goodsSku.description}</a></div>  
-			           			     </div>
-			           				</#list>
-					   			 </#if>
-				               </div>
+				              <#if goodResults?? && (goodResults?size > 0)>
+		                       <#list goodResults as goodResult>
+		                        <#if goodResult.isShow && (goodResult.num?eval >0)>
+		               	         <div class="form-group">
+			               		   <span class="icorn-brand"></span>
+			               		   <div class="changeline" produce="${goodResult_index}"><a href="javascript:void(0);" onclick="getCrops(${goodResult_index})">${goodResult.goods_desc}(${goodResult.num})</a></div>  
+		           			     </div>
+		           			    </#if>
+		           			   </#list>
+		           			 </#if>
 							</div>								
 					    </li>
 					    <div class='cl'></div>					    

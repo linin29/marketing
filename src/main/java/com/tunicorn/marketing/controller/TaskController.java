@@ -522,6 +522,7 @@ public class TaskController extends BaseController {
 		model.addAttribute("images", imagesVOs);
 		model.addAttribute("task", taskVO);
 		model.addAttribute("imageId", imageId);
+		model.addAttribute("goodResults", taskService.getResultList(taskVO));
 		return "list/task_crop";
 	}
 

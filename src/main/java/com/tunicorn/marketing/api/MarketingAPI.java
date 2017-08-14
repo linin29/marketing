@@ -108,7 +108,7 @@ public class MarketingAPI {
 		logger.info(url);
 		logger.info(params.convertToJSON());
 		
-		Map<String, String> map = new HashMap<>();
+		Map<String, String> map = new HashMap<String, String>();
 		map.put("TaskId", ((MarketingGetStoreRequestParam)params).getTaskId());
 		map.put("token", ((MarketingGetStoreRequestParam)params).getToken());
 		

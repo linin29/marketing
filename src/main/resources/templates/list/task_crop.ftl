@@ -110,16 +110,17 @@
 							<div class='col-sm-5' style="width:36%">
 								<p id="brandListp" style="font-size:14px;"><strong>品牌列表</strong></p>
 								<div class="brand-list " style="height:570px;" >
-				              <#if goodResults?? && (goodResults?size > 0)>
-		                       <#list goodResults as goodResult>
-		                        <#if goodResult.isShow && (goodResult.num?eval >0)>
-		               	         <div class="form-group">
-			               		   <span class="icorn-brand"></span>
-			               		   <div class="changeline" produce="${goodResult_index}"><a href="javascript:void(0);" onclick="getCrops(${goodResult_index})">${goodResult.goods_desc}(${goodResult.num})</a></div>  
-		           			     </div>
-		           			    </#if>
-		           			   </#list>
-		           			 </#if>
+				              	<#if goodResults?? && (goodResults?size > 0)>
+		                       		<#list goodResults as goodResult>
+		                       		 <#if goodResult.isShow && (goodResult.num?eval >0)>
+		               	         		<div class="form-group">
+			               		  		 <span class="icorn-brand"></span>
+			               		   		 <div class="changeline" produce="${goodResult_index}"><a href="javascript:void(0);">${goodResult.goods_desc}(${goodResult.num})</a></div>  
+		           			     		</div>
+		           			    	</#if>
+		           			   		</#list>
+		           			 	</#if>
+								</div>
 							</div>								
 					    </li>
 					    <div class='cl'></div>					    
@@ -147,7 +148,6 @@
 							              <input id="currentPid" type="hidden">
 							              <input id="labelTxt" type="hidden" class="form-control" style="margin:0 0 5px 0;" placeholder="请输入标签">
 							              <ul id="labelList" class="list-group" style="max-height: 340px;">
-											
 											<select id="skuType" style="width:100%;height: 45px;" class="js-example-basic-single">
 												<option value="" style="height:45px;">请选择类型</option>
 													 <#if goodsSkus?? && (goodsSkus?size > 0)>
@@ -233,6 +233,8 @@
                 success: function(json){
                     if(json.success){
                         noty({text: "保存标注数据成功", layout: "topCenter", type: "success", timeout: 3000});
+                    }else{
+                    	noty({text: "保存标注数据失败", layout: "topCenter", type: "warning", timeout: 3000});
                     }
                 },error: function(){
                     noty({text: "请求后台错误", layout: "topCenter", type: "warning", timeout: 3000});
@@ -281,7 +283,7 @@
      		 url: '${springMacroRequestContext.contextPath}/preOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
-     				 $("#initCropImage").attr("src", picPath + "/" + taskId + "/results_" +(order - 2)+ ".jpg?random=" + new Date().getTime());
+     				$("#initCropImage").attr("src", picPath + "/" + taskId + "/results_" + (order - 2) + ".jpg?random=" + new Date().getTime());
      				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);
@@ -302,7 +304,7 @@
      		 url: '${springMacroRequestContext.contextPath}/nextOrderTaskImage/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
-     				$("#initCropImage").attr("src", picPath + "/" + taskId + "/results_" +order+ ".jpg?random=" + new Date().getTime());
+     				$("#initCropImage").attr("src", picPath + "/" + taskId + "/results_" + order + ".jpg?random=" + new Date().getTime());
      				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);
@@ -341,14 +343,13 @@
     		 url: '${springMacroRequestContext.contextPath}/taskImageCrops/' + taskId + '/' + order,
     		 success: function(data) {
     			 if(data){
-    	     	        $('#imageCrop').off("ready");
-    	     	        $('#imageCrop').cropper('replace', imagePath).on("ready", function(){
-    	     	            console.log('replace ready');
-    	     	            
-    	     	            if(data && data.length > 0){
-    	     	                $('#imageCrop').cropper('setAllData', data);
-    	     	            }
-    	     	        });
+    	     	      $('#imageCrop').off("ready");
+    	     	      $('#imageCrop').cropper('replace', imagePath).on("ready", function(){
+    	     	        console.log('replace ready');
+    	     	        if(data && data.length > 0){
+    	     	           $('#imageCrop').cropper('setAllData', data);
+    	     	        }
+    	     	      });
     			 }
         	},
         	error: function(data) {
@@ -362,7 +363,7 @@
     	$(".cropper-view-box").css("cssText", "outline: 2px solid #ea230a !important; outline-color: #ea230a !important;")
         clearLabel();
         var data = $(this).cropper('getCropBoxData');
-        $('#skuType').val($("#skuType option[skuorder=" + (parseInt(data.label) -1) + "]").val()).select2();
+        $('#skuType').val($("#skuType option[skuorder=" + (parseInt(data.label) - 1) + "]").val()).select2();
         var cropBox = $('.cropper-crop-box[name=' + data.annotationId + ']');
         cropBox.find(".cropper-view-box").css("cssText", "outline: 2px solid #0aeadd !important; outline-color: #0aeadd !important;");
         if($(this).cropper('hasLabel')){

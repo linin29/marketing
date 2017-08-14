@@ -833,7 +833,7 @@ public class TaskService {
 			messageDigest.update(tokenStr.getBytes());
 			param.setToken(new BigInteger(1, messageDigest.digest()).toString(16));
 		} catch (NoSuchAlgorithmException e) {
-			logger.info("MD5 fail" + e.getMessage());
+			logger.info("MD5 fail " + e.getMessage());
 		}
 		CommonAjaxResponse result = MarketingAPI.getStore(param);
 		return result;
@@ -947,7 +947,6 @@ public class TaskService {
 	}
 
 	public void generateFile(ImageCropBO cropBO) {
-		// String filenameTemp = "D:\\" + cropBO.getImageId() + ".txt";
 		String filenameTemp = File.separator + "mnt" + File.separator + cropBO.getMajorType() + File.separator
 				+ cropBO.getImageId() + ".txt";
 		File file = new File(filenameTemp);

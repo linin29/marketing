@@ -201,14 +201,14 @@
 	</select>
 	<select id="getNextTask" resultMap="TaskResultMap">
 		select id, `name`, task_status, user_id, create_time,
-		stitch_image_path, result, rows, major_type,goods_info,last_update,identify_success_times
+		stitch_image_path, result, rows, major_type, goods_info, last_update, identify_success_times
 		from task
 		where `status` = 'active'
 		<if test="userId != null and userId != ''">
 			and user_id = #{userId}
 		</if>
 		and last_update <![CDATA[ < (select last_update from task where id=#{taskId})]]> 
-		and id!=#{taskId}
+		and id != #{taskId}
 		order by last_update desc
 		limit 1
 	</select>

@@ -89,7 +89,6 @@
 	                   	<#if task?? && task.taskStatus?? && task.taskStatus=='identify_success'>
                      		<p id="brandListp" style="font-size:14px;"><strong>品牌列表</strong></p>
                    		</#if>
-                   			                   
 	                   	<#if task?? && task.taskStatus?? && task.taskStatus=='identify_success'>
 		                   <div class="brand-list" >
 		                     <#if goodResults?? && (goodResults?size > 0)>
@@ -105,7 +104,6 @@
 			               </div>
 		               </#if>                 
 	                   </div>
-	                   
 	               </div>
                </h4>
                <div style="clear:both;"></div>

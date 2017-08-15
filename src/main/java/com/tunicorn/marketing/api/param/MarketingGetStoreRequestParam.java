@@ -28,6 +28,7 @@ public class MarketingGetStoreRequestParam implements IRequestParam, Serializabl
 		this.token = token;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public String convertToJSON() {
 		/*

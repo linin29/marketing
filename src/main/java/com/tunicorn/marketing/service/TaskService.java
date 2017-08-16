@@ -820,7 +820,10 @@ public class TaskService {
 
 	public List<GoodsSkuVO> getGoods(String majorType) {
 		return goodsSkuMapper.getGoodsSkuListByMajorType(majorType);
-
+	}
+	
+	public List<GoodsSkuVO> getGoodsSkuListByMajorTypeWithShow(String majorType) {
+		return goodsSkuMapper.getGoodsSkuListByMajorTypeWithShow(majorType);
 	}
 
 	@Transactional

@@ -785,8 +785,8 @@ public class TaskService {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
-		String Datestr = sdf.format(date);
-		apiCallingSummaryVO.setCallingDay(Datestr);
+		String DateStr = sdf.format(date);
+		apiCallingSummaryVO.setCallingDay(DateStr);
 		apiCallingSummaryVO.setUserName(userName);
 
 		List<ApiCallingSummaryVO> tempApiCallingSummaryVO = apiCallingSummaryMapper

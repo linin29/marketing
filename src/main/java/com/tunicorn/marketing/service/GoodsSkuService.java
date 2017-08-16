@@ -2,6 +2,7 @@ package com.tunicorn.marketing.service;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,7 @@ import com.tunicorn.marketing.vo.GoodsSkuVO;
 
 @Service
 public class GoodsSkuService {
-
+	private static Logger logger = Logger.getLogger(GoodsSkuService.class);
 	@Autowired
 	private GoodsSkuMapper goodsSkuMapper;
 
@@ -24,6 +25,7 @@ public class GoodsSkuService {
 			goodsSkuVO.setOrder(goodsSku.getOrder() + 1);
 		}
 		int result = goodsSkuMapper.createGoodsSku(goodsSkuVO);
+		logger.info("result of createGoodsSku method: " + result);
 		return result;
 	}
 

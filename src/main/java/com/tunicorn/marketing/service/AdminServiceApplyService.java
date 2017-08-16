@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +40,7 @@ import com.tunicorn.util.SecurityUtils;
 
 @Service
 public class AdminServiceApplyService {
-
+	private static Logger logger = Logger.getLogger(AdminServiceApplyService.class);
 	@Autowired
 	private AdminServiceApplyMapper adminServiceApplyMapper;
 	@Autowired
@@ -60,6 +61,7 @@ public class AdminServiceApplyService {
 		int result = adminServiceApplyMapper.createAdminServiceApply(adminServiceApplyVO);
 		addApplyAsset(adminServiceApplyVO.getId(), images);
 		this.createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);
+		logger.info("result of createAdminServiceApply method: " + result);
 		return result;
 	}
 
@@ -110,6 +112,7 @@ public class AdminServiceApplyService {
 		int result = adminServiceApplyMapper.updateAdminServiceApply(adminServiceApplyVO);
 		adminMajorTypeServiceApplyMappingMapper.deleteMajorTypeApplicationMappingByApplyId(adminServiceApplyVO.getId());
 		this.createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);
+		logger.info("serviceApplyId:" + adminServiceApplyVO.getId() + ", result of updateAdminServiceApply: " + result);
 		return result;
 	}
 
@@ -141,6 +144,7 @@ public class AdminServiceApplyService {
 			applicationVO.setPrivacy(MarketingConstants.APPLICATION_PRIVACY_PUBLIC);
 			applicationMapper.createApplication(applicationVO);
 		}
+		logger.info("serviceApplyId:" + adminServiceApplyVO.getId() + ", result of approveAdminServiceApply: " + result);
 		return result;
 	}
 
@@ -171,6 +175,7 @@ public class AdminServiceApplyService {
 		int result = adminServiceApplyMapper.updateAdminServiceApply(adminServiceApplyVO);
 		adminMajorTypeServiceApplyMappingMapper.deleteMajorTypeApplicationMappingByApplyId(adminServiceApplyVO.getId());
 		adminServiceApplyAssetMapper.deleteAdminServiceApplyAssetByApplyId(adminServiceApplyVO.getId());
+		logger.info("serviceApplyId:" + adminServiceApplyVO.getId() + ", result of deleteAdminServiceApply: " + result);
 		return result;
 	}
 

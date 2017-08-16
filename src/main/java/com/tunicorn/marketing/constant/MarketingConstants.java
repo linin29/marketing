@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 import com.tunicorn.marketing.utils.ConfigUtils;
 
-public class MarketingConstants { 
+public class MarketingConstants {
 
 	public static final String APP_KEY_HEADER_NAME = "App-Key";
 	public static final String APP_SECRET_HEADER_NAME = "App-Secret";
@@ -56,7 +56,7 @@ public class MarketingConstants {
 	public static final String MARKETING_RECTIFY_SERVICE = "marketing_rectify_service";
 	public static final String MARKETING_PULL_DATA_SERVICE = "marketing_pull_data_service";
 	public static final String MARKETING_GET_STORE_SERVICE = "marketing_get_store_service";
-	
+
 	public static final String API_MARKETING = "/api/marketing/";
 	public static final String PIC_MARKETING = "/pic/marketing";
 
@@ -70,21 +70,23 @@ public class MarketingConstants {
 		SERVICE_STATUS_NAME_MAPPING.put("opened", "已开通");
 		SERVICE_STATUS_NAME_MAPPING.put("rejected", "已驳回");
 	}
-	
-	public static final String MARKETING_IMAGE_BASE_PATH = com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath") 
-			+ ConfigUtils.getInstance().getConfigValue("marketing.image.root.path");
+
+	public static final String MARKETING_IMAGE_BASE_PATH = com.tunicorn.util.ConfigUtils.getInstance().getConfigValue(
+			"storage.private.basePath") + ConfigUtils.getInstance().getConfigValue("marketing.image.root.path");
 	public static final String TIANNUO_PASSWORD = "tiannuo";
 	public static final String UTF8 = "UTF-8";
-	
+
 	public static final String APPLY_CREATED_STATUS = "created";
 	public static final String APPLY_OPENED_STATUS = "opened";
 	public static final String APPLY_REJECTED_STATUS = "rejected";
-	
+
 	public static final String SESSION_ADMIN_USER = "admin_user";
-	
+
 	public static final String APPLICATION_PRIVACY_PUBLIC = "public";
 	public static final String APPLICATION_PRIVACY_PRIVATE = "private";
 	public static final String APPLICATION_PRIVACY_PROTECTED = "protected";
-	
+
 	public static final String ADMIN_USER_NAME = "admin";
+
+	public static final String INNOVISION = "innovision";
 }

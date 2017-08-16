@@ -92,6 +92,7 @@ public class TaskService {
 
 	@Transactional
 	public ServiceResponseBO createTask(String userId, String taskName, List<MultipartFile> images) {
+		logger.info("params of createTask: taskName: " + taskName + ", userId:" + userId);
 		TaskVO taskVO = taskMapper.getTaskByNameAndUserId(taskName, userId);
 		if (taskVO != null) {
 			return new ServiceResponseBO(false, "marketing_task_existed");
@@ -121,7 +122,8 @@ public class TaskService {
 		createTaskVO.setName(taskName);
 		createTaskVO.setUserId(userId);
 		createTaskVO.setTaskStatus(MarketingConstants.TASK_INIT_STATUS);
-		taskMapper.createTask(createTaskVO);
+		int createResult = taskMapper.createTask(createTaskVO);
+		logger.info("create task result: " + createResult);
 		if (images != null && images.size() > 0) {
 			List<TaskImagesVO> taskImagesVOs = new ArrayList<TaskImagesVO>();
 			for (int i = 0; i < images.size(); i++) {
@@ -153,11 +155,13 @@ public class TaskService {
 		if (images != null && images.size() > 0) {
 			node.put("length", images.size());
 		}
+		logger.info("result of createTask method: " + node.toString());
 		return new ServiceResponseBO(node);
 	}
 
 	@Transactional
 	public ServiceResponseBO taskImages(List<MultipartFile> images, String taskId, String userId) {
+		logger.info("params of taskImages: taskId:" + taskId + ", userId:" + userId);
 		if (images != null && images.size() > MarketingConstants.IMAGE_MAX_COUNT) {
 			return new ServiceResponseBO(false, "marketing_image_max_count");
 		}
@@ -178,12 +182,12 @@ public class TaskService {
 			}
 		}
 		int result = this.addImages(taskId, userId, images);
-
 		if (result > 0) {
 			ObjectMapper mapper = new ObjectMapper();
 			ObjectNode node = mapper.createObjectNode();
 			node.put(MarketingConstants.TASK_ID, taskId);
 			node.put("length", images.size());
+			logger.info("taskId:" + taskId + ", result of taskImages: " + node.toString());
 			return new ServiceResponseBO(node);
 		} else if (result == -1) {
 			return new ServiceResponseBO(false, "marketing_save_upload_file_error");
@@ -194,6 +198,7 @@ public class TaskService {
 
 	@SuppressWarnings("deprecation")
 	public ServiceResponseBO taskStatus(String taskId) {
+		logger.info("params of taskStatus: taskId:" + taskId);
 		TaskVO taskVO = taskMapper.getTaskById(taskId);
 		if (taskVO != null) {
 			ObjectMapper mapper = new ObjectMapper();
@@ -227,7 +232,7 @@ public class TaskService {
 						ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("errorIndices");
 						newNode.put("errorIndices", jsonNodes.toString());
 					} catch (IOException e) {
-						logger.info("获取任务返回goodResults结果失败");
+						logger.error("taskId:" + taskId + ", 获取任务返回goodResults结果失败:" + e.getMessage());
 					}
 				}
 				ObjectNode objectNode = mapper.createObjectNode();
@@ -253,10 +258,12 @@ public class TaskService {
 							newNode.put("totalArea", jsonNode.asText());
 						}
 					} catch (IOException e) {
+						logger.error("taskId:" + taskId + ", get task result fail, " + e.getMessage());
 						e.printStackTrace();
 					}
 				}
 			}
+			logger.info("taskId:" + taskId + ", result of taskStatus method:" + newNode.toString());
 			return new ServiceResponseBO(newNode);
 		} else {
 			return new ServiceResponseBO(false, "marketing_task_not_existed");
@@ -264,6 +271,8 @@ public class TaskService {
 	}
 
 	public ServiceResponseBO taskStitcher(String taskId, Boolean needStitch, String majorType, String userId) {
+		logger.info("params of taskStitcher: taskId:" + taskId + ", needStitch:" + needStitch + ", majorType:" + majorType
+				+ ", userId:" + userId);
 		TaskVO taskVO = taskMapper.getTaskById(taskId);
 		UserVO userVO = userMapper.getUserByID(userId);
 		if (taskVO == null) {
@@ -299,6 +308,7 @@ public class TaskService {
 		param.setNeed_stitch(needStitch);
 		param.setMajor_type(majorType);
 		param.setTask_id(taskId);
+		logger.info("taskId:" + taskId + ", params of stitcher server: " + param.convertToJSON());
 		CommonAjaxResponse result = MarketingAPI.stitcher(param);
 
 		if (!result.getSuccess()) {
@@ -315,6 +325,7 @@ public class TaskService {
 
 	@Transactional
 	public ServiceResponseBO taskIdentify(String taskId, String userId) {
+		logger.info("params of taskIdentify: taskId:" + taskId + ", userId:" + userId);
 		TaskVO taskVO = taskMapper.getTaskById(taskId);
 		if (taskVO != null && taskVO.getStitchImagePath() != null
 				&& (taskVO.getTaskStatus().equals(MarketingConstants.TASK_STATUS_STITCH_SUCCESS)
@@ -331,15 +342,16 @@ public class TaskService {
 				if (origin_file != null) {
 					// String[] fileNameInfo =
 					// getFileNameByStitcherImage(origin_file);
-					logger.info("origin_file: " + origin_file);
+					logger.info("taskId:" + taskId + ", taskIdentify method of origin_file: " + origin_file);
 					String[] fileNameInfo = getFileNameMD5(origin_file);
 					if (fileNameInfo != null) {
 						String fileName = fileNameInfo[0];
 						String score = fileNameInfo[1];
-						logger.info("score: " + score);
+						logger.info("taskId:" + taskId + ", taskIdentify method of score: " + score);
 						String data = getResultByFileName(fileName, Double.parseDouble(score));
 						if (!StringUtils.isBlank(data)) {
-							logger.info("use mock with file: " + fileNameInfo[0]);
+							logger.info("taskId:" + taskId + ", taskIdentify method of use mock with file: "
+									+ fileNameInfo[0]);
 							ObjectNode node = JsonUtil.toObjectNode(data);
 							result = CommonAjaxResponse.toSuccess(node);
 							isMock = true;
@@ -350,10 +362,11 @@ public class TaskService {
 			// *************mock end*************
 
 			if (!isMock) {
-				logger.info("call service");
+				logger.info("taskId:" + taskId + ", taskIdentify method call service");
 				MarketingIdentifyRequestParam param = new MarketingIdentifyRequestParam();
 				param.setMajor_type(taskVO.getMajorType());
 				param.setTask_id(taskId);
+				logger.info("taskId:" + taskId + ", params of identify server: " + param.convertToJSON());
 				result = MarketingAPI.identify(param);
 			}
 
@@ -385,7 +398,7 @@ public class TaskService {
 
 	@Transactional
 	public ServiceResponseBO deleteImage(String taskId, String taskImagesId) {
-
+		logger.info("params of deleteImage method: taskId:" + taskId + ", taskImagesId:" + taskImagesId);
 		if (StringUtils.isBlank(taskId) || StringUtils.isBlank(taskImagesId)) {
 			return new ServiceResponseBO(false, "marketing_parameter_invalid");
 		}
@@ -398,10 +411,12 @@ public class TaskService {
 		if (imagesVO != null) {
 			imagesVO.setStatus(MarketingConstants.STATUS_DELETED);
 			int updateResult = taskImagesMapper.updateTaskImage(imagesVO);
+			logger.info("taskId:" + taskId + ", result of deleteTaskImage: " + updateResult);
 			if (updateResult > 0) {
 				File file = new File(imagesVO.getFullPath());
 				if (file.exists()) {
-					file.delete();
+					boolean deleteFileResult = file.delete();
+					logger.info("taskId:" + taskId + ", physics delete image result: " + deleteFileResult);
 				}
 				result = taskMapper.updateTaskStatus(taskId, MarketingConstants.TASK_STATUS_IMAGE_UPLOADED, 0);
 			}
@@ -412,6 +427,7 @@ public class TaskService {
 			ObjectMapper mapper = new ObjectMapper();
 			ObjectNode node = mapper.createObjectNode();
 			node.put("resourceId", taskImagesId);
+			logger.info("taskId:" + taskId + ", result of deleteImage method: " + node.toString());
 			return new ServiceResponseBO(node);
 		} else {
 			return new ServiceResponseBO(false, "marketing_image_delete_failure");
@@ -419,7 +435,7 @@ public class TaskService {
 	}
 
 	public ServiceResponseBO replace(String taskId, String taskImageId, MultipartFile image, int appId) {
-
+		logger.info("params of replace method: taskId:" + taskId + ", taskImagesId:" + taskImageId + ",appId:" + appId);
 		if (StringUtils.isBlank(taskId) || StringUtils.isBlank(taskImageId) || image == null) {
 			return new ServiceResponseBO(false, "marketing_parameter_invalid");
 		}
@@ -441,13 +457,18 @@ public class TaskService {
 		imagesVO.setFullPath(file.getPath());
 		imagesVO.setName(file.getName());
 		imagesVO.setId(taskImageId);
-		taskImagesMapper.updateTaskImage(imagesVO);
+		int updateResult = taskImagesMapper.updateTaskImage(imagesVO);
+		logger.info("taskId:" + taskId + ", result of updateTaskImage for replace method: " + updateResult
+				+ ", taskId: " + taskId);
 
 		result = taskMapper.updateTaskStatus(taskId, MarketingConstants.TASK_STATUS_IMAGE_UPLOADED, 0);
+		logger.info("taskId:" + taskId + ", result of updateTaskStatus for repalce method: " + result + ", taskId: "
+				+ taskId);
 		if (result > 0) {
 			ObjectMapper mapper = new ObjectMapper();
 			ObjectNode node = mapper.createObjectNode();
 			node.put("resourceId", taskImageId);
+			logger.info("taskId:" + taskId + ", result of repalce method: " + node.toString() + ", taskId: " + taskId);
 			return new ServiceResponseBO(node);
 		} else {
 			return new ServiceResponseBO(false, "marketing_image_delete_failure");
@@ -456,7 +477,7 @@ public class TaskService {
 
 	@Transactional
 	public ServiceResponseBO taskOrder(List<OrderBO> imagesVOs, String taskId) {
-
+		logger.info("params of taskOrder method: taskId:" + taskId);
 		if (imagesVOs != null && imagesVOs.size() > 0) {
 			Collections.sort(imagesVOs, new Comparator<OrderBO>() {
 				@Override
@@ -471,11 +492,13 @@ public class TaskService {
 				imagesVO.setResourceOrder(i + 1);
 			}
 			int updateResult = taskImagesMapper.batchUpdateTaskImages(imagesVOs);
+			logger.info("taskId:" + taskId + ", result of batchUpdateTaskImages for taskOrder method: " + updateResult);
 			if (updateResult > 0) {
 				taskMapper.updateTaskStatus(taskId, MarketingConstants.TASK_STATUS_IMAGE_UPLOADED, 0);
 				ObjectMapper mapper = new ObjectMapper();
 				ObjectNode node = mapper.createObjectNode();
 				node.put(MarketingConstants.TASK_ID, taskId);
+				logger.info("taskId:" + taskId + ", result of taskOrder method: " + node.toString());
 				return new ServiceResponseBO(node);
 			} else {
 				return new ServiceResponseBO(false, "marketing_parameter_invalid");
@@ -486,6 +509,7 @@ public class TaskService {
 	}
 
 	public String getBorderImagePath(TaskVO taskVO) {
+		logger.info("params of getBorderImagePath method: taskId:" + taskVO.getId());
 		ObjectMapper mapper = new ObjectMapper();
 		if (taskVO.getResult() != null) {
 			String resultStr = (String) taskVO.getResult();
@@ -497,8 +521,9 @@ public class TaskService {
 					return "";
 				}
 			} catch (Exception e) {
-				logger.info("parse json fail, " + e);
+				logger.error("taskId:" + taskVO.getId() + ", parse json fail, " + e.getMessage());
 			}
+			logger.info("taskId:" + taskVO.getId() + ", result of getBorderImagePath: " + resultStr);
 		}
 		return "";
 	}
@@ -548,7 +573,7 @@ public class TaskService {
 					}
 				}
 			} catch (IOException e) {
-				logger.info("获取任务返回goodResults结果失败");
+				logger.error("taskId:" + taskVO.getId() + ", 获取任务返回goodResults结果失败, " + e.getMessage());
 			}
 		}
 		return goodsResult;
@@ -611,6 +636,7 @@ public class TaskService {
 	}
 
 	public List<CropBO> getTaskImageCrops(String taskId, Integer imageOrderNo) {
+		logger.info("params of getTaskImageCrops method: taskId:" + taskId + ",imageOrderNo:" + imageOrderNo);
 		List<CropBO> cropBOs = new ArrayList<CropBO>();
 		TaskVO taskVO = taskMapper.getTaskById(taskId);
 		if (taskVO != null) {
@@ -639,7 +665,8 @@ public class TaskService {
 						}
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error(
+							"taskId:" + taskId + ", getTaskImageCrops method 获取taskImageCrop失败, " + e.getMessage());
 				}
 			}
 		}
@@ -648,6 +675,7 @@ public class TaskService {
 	}
 
 	public List<CropBO> getTaskIdentifyCrops(String taskId, Integer produceId) {
+		logger.info("params of getTaskIdentifyCrops method: taskId:" + taskId + ",produceId:" + produceId);
 		List<CropBO> cropBOs = new ArrayList<CropBO>();
 		TaskVO taskVO = taskMapper.getTaskById(taskId);
 		if (taskVO != null) {
@@ -672,7 +700,8 @@ public class TaskService {
 						}
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("taskId:" + taskId + ", getTaskIdentifyCrops method 获取taskIdentifyCrop失败, "
+							+ e.getMessage());
 				}
 			}
 		}
@@ -765,11 +794,13 @@ public class TaskService {
 		if (tempApiCallingSummaryVO != null && tempApiCallingSummaryVO.size() > 0) {
 			apiCallingSummaryVO.setId(tempApiCallingSummaryVO.get(0).getId());
 			apiCallingSummaryVO.setCallingTimes(callingTimes + tempApiCallingSummaryVO.get(0).getCallingTimes());
-			apiCallingSummaryMapper.updateApiCallingSummary(apiCallingSummaryVO);
+			int updateSummaryResult = apiCallingSummaryMapper.updateApiCallingSummary(apiCallingSummaryVO);
+			logger.info("result of updateApiCallingSummary: " + updateSummaryResult);
 		} else {
 			apiCallingSummaryVO.setCallingTimes(callingTimes);
 			apiCallingSummaryVO.setUserName(userName);
-			apiCallingSummaryMapper.insertApiCallingSummary(apiCallingSummaryVO);
+			long insertSummaryResult = apiCallingSummaryMapper.insertApiCallingSummary(apiCallingSummaryVO);
+			logger.info("result of insertApiCallingSummary: " + insertSummaryResult);
 		}
 
 		ApiCallingDetailVO apiCallingDetailVO = new ApiCallingDetailVO();
@@ -778,10 +809,12 @@ public class TaskService {
 		apiCallingDetailVO.setCallingStatus(callingStatus);
 		apiCallingDetailVO.setPictures((int) taskImagesCount);
 		apiCallingDetailVO.setUserName(userName);
-		apiCallingDetailMapper.insertApiCallingDetail(apiCallingDetailVO);
+		int insertDetailResult = apiCallingDetailMapper.insertApiCallingDetail(apiCallingDetailVO);
+		logger.info("result of insertApiCallingDetail: " + insertDetailResult);
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode node = mapper.createObjectNode();
 		node.put(MarketingConstants.TASK_ID, updateParam.getTaskId());
+		logger.info("result of updateApiCalling method: " + node.toString());
 		return node;
 	}
 
@@ -804,11 +837,12 @@ public class TaskService {
 					if (nodeResult.findValue("goodInfo") != null) {
 						ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodInfo");
 						taskVO.setGoodsInfo(jsonNodes.toString());
-						taskMapper.updateTask(taskVO);
+						int updateResult = taskMapper.updateTask(taskVO);
+						logger.info("taskId:" + taskId + ", save task goodsInfo result: " + updateResult);
 					}
 
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("taskId:" + taskId + ", save task goodsInfo fail, " + e.getMessage());
 				}
 			}
 		}
@@ -827,13 +861,13 @@ public class TaskService {
 	public CommonAjaxResponse getStore(String taskId) {
 		MarketingGetStoreRequestParam param = new MarketingGetStoreRequestParam();
 		param.setTaskId(taskId);
-		String tokenStr = taskId + "innovision";
+		String tokenStr = taskId + MarketingConstants.INNOVISION;
 		try {
 			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
 			messageDigest.update(tokenStr.getBytes());
 			param.setToken(new BigInteger(1, messageDigest.digest()).toString(16));
 		} catch (NoSuchAlgorithmException e) {
-			logger.info("MD5 fail " + e.getMessage());
+			logger.info("taskId:" + taskId + ", getStore method token MD5 fail " + e.getMessage());
 		}
 		CommonAjaxResponse result = MarketingAPI.getStore(param);
 		return result;
@@ -910,12 +944,13 @@ public class TaskService {
 							node.put("totalArea", jsonNode.asText());
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
+						logger.error("get task result fail, " + e.getMessage());
 					}
 					node.put("crops", (ArrayNode) nodeResult.findValue("crops"));
 				}
 			}
 		}
+		logger.info("taskId:" + taskId + ", result of getTaskResult method: " + node.toString());
 		return node;
 	}
 
@@ -939,9 +974,10 @@ public class TaskService {
 						// nodeResult.put("goodInfo", jsonNodes);
 						taskVO.setResult(nodeResult.toString());
 					}
-					taskMapper.updateTask(taskVO);
+					int updateResult = taskMapper.updateTask(taskVO);
+					logger.info("taskId:" + taskId + ", save taskImageCrop result: " + updateResult);
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("taskId:" + taskId + ", save taskImageCrop fail, " + e.getMessage());
 				}
 			}
 		}
@@ -958,7 +994,7 @@ public class TaskService {
 				FileUtils.copyFile(new File(imagesVO.getFullPath()), new File(File.separator + "mnt" + File.separator
 						+ cropBO.getMajorType() + File.separator + cropBO.getImageId() + ".jpeg"));
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("imageId:" + cropBO.getImageId() + ", copy file fail, " + e.getMessage());
 			}
 		}
 		try {
@@ -982,7 +1018,7 @@ public class TaskService {
 			}
 			FileUtils.writeStringToFile(file, buffer.toString());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("imageId:" + cropBO.getImageId() + ", generate file fail, " + e.getMessage());
 		}
 	}
 
@@ -1000,7 +1036,7 @@ public class TaskService {
 				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), taskId,
 						ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
 				if (file == null) {
-					logger.error("Save form-data file failure");
+					logger.error("taskId:" + taskId + ", save form-data file failure");
 					return -1;
 				}
 				taskImagesVO.setId((Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13))
@@ -1018,6 +1054,7 @@ public class TaskService {
 			taskImagesMapper.batchInsertTaskImages(taskImagesVOs);
 			result = taskMapper.updateTaskStatus(taskId, MarketingConstants.TASK_STATUS_IMAGE_UPLOADED, 0);
 		}
+		logger.info("taskId:" + taskId + ", result of addImages method : " + result);
 		return result;
 	}
 
@@ -1045,11 +1082,13 @@ public class TaskService {
 					node.put("total_area", nodeResult.get("total_area").asLong());
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("taskId:" + tempTaskVO.getId() + ", get task result fail, " + e.getMessage());
 			}
 		} else {
 			node = null;
 		}
+		logger.info("taskId:" + tempTaskVO.getId() + ", result of get task result: " + node == null ? null
+				: node.toString());
 		return node;
 	}
 
@@ -1079,9 +1118,10 @@ public class TaskService {
 					node.put("total_area", nodeResult.findValue("total_area"));
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("taskId:" + tempTaskVO.getId() + ", get task result fail, " + e.getMessage());
 			}
 		}
+		logger.info("taskId:" + tempTaskVO.getId() + ", result of get task result: " + node.toString());
 		return node;
 	}
 
@@ -1161,7 +1201,7 @@ public class TaskService {
 			IOUtils.closeQuietly(fis);
 			logger.info("---MD5---" + md5String);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("file name MD5 fail, " + e.getMessage());
 		}
 
 		return new String[] { md5String, "10000" };
@@ -1261,7 +1301,7 @@ public class TaskService {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("get task goodResults export data fail, " + e.getMessage());
 		}
 
 		return result.append(ratioBuffer).append(numBuffer).append(oriAreaBuffer).append(rowsBuffer).append(",")

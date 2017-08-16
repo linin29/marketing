@@ -211,6 +211,12 @@
 
     var picPath = '/pic/marketing';
 	$(function() {
+		var taskStatus = $('#status').attr('status');
+		if(taskStatus == 'task_init'){
+			$('#nextTask').hide();
+		}else{
+			$('#nextTask').show();
+		}
 		getTaskName();
      	$('#taskPullData').click(function() {
     		var taskId = $('#taskId').val();

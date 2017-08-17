@@ -37,7 +37,7 @@ adminService = (function(){
 			$("#myModalLabel").text("修改申请");	
 			$("#new-server-model").modal("show");
 			$("#new-server-model").find("input").removeAttr("disabled");
-			$("#rejectReason").attr("disabled","disabled");
+			$("#rejectReason").attr("disabled", "disabled");
 			$("#errorMsg").html("");
 			$("#server-type").removeAttr("disabled"); 
 		});

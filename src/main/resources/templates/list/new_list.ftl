@@ -226,7 +226,7 @@
          		 success: function(data) {
          			 if(data && data.success){
          				noty({text: '拉取数据成功', layout: "topCenter", type: "success", timeout: 1000});
-         				$('#taskStatus').click();
+         				getTaskResult();
          			 }else{
          				noty({text: '拉取数据失败', layout: "topCenter", type: "warning", timeout: 1000});
          			 }
@@ -527,7 +527,79 @@
 				$("#taskName").val("未命名-" + Date.now());
 			}
 		}
-		
+		function getTaskResult(){
+            var taskId = $('#taskId').val();
+            if (taskId=='-1' || taskId=='0'){
+                noty({text: "请先上传图片", layout: "topCenter", type: "warning", timeout: 2000});
+                return;
+            }
+            $('#waiting').modal({keyboard: false, backdrop: 'static'});
+            $('#waiting').modal('show');
+            $.post('${springMacroRequestContext.contextPath}/' + taskId + '/status').done(function (data) {
+                $('#waiting').modal('hide');
+                if(data.success){
+                    var task_status = data.data.task_status;
+                    if (task_status=='stitch_success' || task_status=='stitch_failure'){
+                        $('img#stitched').attr('src', data.data.image + '?random=' + Date.now()).css('height', '400px');
+                        $('img#stitched').parent().attr('href', data.data.image + '?random=' + Date.now());
+                        $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=1>'+data.data.rows+'</td><th colspan="2">货架总面积</th><td colspan="1">' + data.data.totalArea + '</td></tr>');
+                        
+                        if(task_status=='stitch_failure'){
+	                    	  if(data.data.errorIndices){
+	                    		  noty({text: "the failure image No: "+data.data.errorIndices, layout: "topCenter", type: "warning", timeout: 3000});
+	                    	  }else{
+	                              noty({text: data.data.result.errmsg, layout: "topCenter", type: "warning", timeout: 3000});
+	                    	  }
+	                      }
+                    }else if(task_status=='identify_success'){
+            			$.ajax({
+         	      		 type: 'GET',
+         	      		 url: '${springMacroRequestContext.contextPath}/taskResult/' + taskId,
+         	      		 success: function(data) {
+                           var results = data.data.goodResults;
+                           var crops = data.data.crops;
+                           var totalArea = 0;
+                           if(data.data.totalArea){
+                          	 totalArea = data.data.totalArea;
+                           }
+                           var html0 = '<tr><th colspan=2>货架总层数</th><td colspan=1>'+data.data.rows+'</td><th colspan="2">货架总面积</th><td colspan="1">' + totalArea + '</td></tr>'+
+                                       '<tr><th colspan="2">产品名称</th><th>占比</th><th>牌面数</th><th>货架位置</th><th>sku面积</th></tr>'
+                           var html1 = '';
+                           for(var k in results){
+                         	  if(results[k].isShow){
+                         		  var totalOriArea = 0;
+                         		  if(crops){
+                         			  for(var j in crops){
+                         				  if(crops[j].produce == (parseInt(k) + 1)){
+                         					  totalOriArea += parseInt(crops[j].ori_area);
+                         				  }
+                         			  } 
+                         		  }
+                                   html1 += '<tr><td colspan="2">' + results[k].goods_desc + '</td><td>'+ results[k].ratio +'</td><td>' + results[k].num + '</td>'+
+                                   '<td>' + (results[k].rows ==null?"":results[k].rows) + '</td><td>' + totalOriArea + '</td></tr>';
+                         	  }
+                           }
+                           $("#countInfo").html(html0 + html1);
+                           //$('#status').attr('status', 'identify_success').text('(当前状态：identify_success)');
+                           var majorType = $("#majorType").val();
+                           if(!majorType){
+                         	  majorType = $("#taskMajorType").val();
+                           }
+                           showCropList(results);
+                           $('#stitched').attr('src', '/pic/marketing/' + taskId + '/results.jpg?random='+ $.now()).css('height', '400px');
+                           $('#image_default a').attr('href', '/pic/marketing' + data.data.resultsBorder);
+         	          	},
+         	          	error: function(data) {
+         	          		//返回500错误页面
+         	          		$("html").html(data.responseText);
+         	          	}
+         	      	 });
+                    }
+                }else{
+                    noty({text: data.errmsg, layout: "topCenter", type: "warning", timeout: 3000});
+                }
+            });
+		}
 		function showCropList(results){
 			html = '<div class="brand-list col-sm-3" >';
 			for(var k in results){

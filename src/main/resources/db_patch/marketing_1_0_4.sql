@@ -98,7 +98,10 @@ BEGIN
 	CALL CheckTableExist("major_type", @ret);
 	IF @ret = 1 THEN 
 		UPDATE `major_type` SET `version` = "2.0" where name = "colgate";
-		UPDATE `major_type` SET `version` = "2.0" where name = "cookie";
+		UPDATE `major_type` SET `version` = "6.0" where name = "cookie";
+		UPDATE `major_type` SET `version` = "6.0" where name = "beer";
+		UPDATE `major_type` SET `version` = "4.0" where name = "extra";
+		UPDATE `major_type` SET `version` = "3.0" where name = "driedmilk";
 	END IF;
 END//
 DELIMITER ;

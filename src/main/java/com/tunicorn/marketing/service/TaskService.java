@@ -1101,6 +1101,9 @@ public class TaskService {
 		ObjectNode node = mapper.createObjectNode();
 		node.put("task_status", tempTaskVO.getTaskStatus());
 		node.put("success", true);
+		if (StringUtils.equals(tempTaskVO.getTaskStatus(), MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS)) {
+			node.put("identifySuccessTimes", tempTaskVO.getIdentifySuccessTimes());
+		}
 		String resultStr = (String) tempTaskVO.getResult();
 		if (StringUtils.isNotBlank(resultStr)) {
 			try {

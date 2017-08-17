@@ -358,7 +358,6 @@
           });
           
           $('#taskStatus').click(function(e){
-        	  debugger;
               var taskId = $('#taskId').val();
               if (taskId=='-1' || taskId=='0'){
                   noty({text: "请先上传图片", layout: "topCenter", type: "warning", timeout: 2000});
@@ -370,8 +369,13 @@
                   $('#waiting').modal('hide');
                   if(data.success){
                       var task_status = data.data.task_status;
+                      var identifySuccessTimes = data.data.identifySuccessTimes;
                       $('#status').attr('status', task_status);
-                      $('#status').text("(当前状态：" + task_status + ")");
+                      if(task_status=='identify_success' && identifySuccessTimes){
+                    	  $('#status').text("(当前状态：" + task_status + identifySuccessTimes + ")");
+                      }else{
+                    	  $('#status').text("(当前状态：" + task_status + ")"); 
+                      }
                       noty({text: "当前状态：" + task_status, layout: "topCenter", type: "warning", timeout: 1000});
                       if (task_status=='stitch_success' || task_status=='stitch_failure'){
                           $('img#stitched').attr('src', data.data.image + '?random=' + Date.now()).css('height', '400px');
@@ -414,7 +418,7 @@
                            	  }
                              }
                              $("#countInfo").html(html0 + html1);
-                             $('#status').attr('status', 'identify_success').text('(当前状态：identify_success)');
+                             //$('#status').attr('status', 'identify_success').text('(当前状态：identify_success)');
                              var majorType = $("#majorType").val();
                              if(!majorType){
                            	  majorType = $("#taskMajorType").val();

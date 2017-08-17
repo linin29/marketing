@@ -22,7 +22,7 @@ public interface MajorTypeMapper {
 	public List<MajorTypeVO> getMajorTypeList(@Param("username") String username);
 
 	@Results({ @Result(property = "createTime", column = "create_time") })
-	@Select("select id, `name`, description, create_time from major_type where status='active'")
+	@Select("select id, `name`, `version`, description, create_time from major_type where status='active'")
 	public List<MajorTypeVO> getAllMajorTypeList();
 	
 	public int createMajorType(MajorTypeVO majorTypeVO);
@@ -33,12 +33,12 @@ public interface MajorTypeMapper {
 
 	public int getMajorTypeCount(MajorTypeBO majorTypeBO);
 	
-	@Select("select `name`, description from major_type where status='active'")
+	@Select("select `name`, `version`, description from major_type where status='active'")
 	public List<MajorTypeApiVO> getMajorTypeListForApi();
 	
 	@Select("select count(*) from major_type where name=#{name} and status='active'")
 	public int getMajorTypeCountByName(@Param("name") String name);
 	 
-	@Select("select id, `name`, description, create_time from major_type where id=#{majorTypeId} and status='active'")
+	@Select("select id, `name`, `version`, description, create_time from major_type where id=#{majorTypeId} and status='active'")
 	public MajorTypeVO getMajorTypeById(@Param("majorTypeId") long majorTypeId);
 }

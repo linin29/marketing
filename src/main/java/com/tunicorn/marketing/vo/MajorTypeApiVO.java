@@ -2,6 +2,7 @@ package com.tunicorn.marketing.vo;
 
 public class MajorTypeApiVO {
 	private String name;
+	private String version;
 	private String description;
 
 	public String getName() {
@@ -10,6 +11,14 @@ public class MajorTypeApiVO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	public String getDescription() {

@@ -29,6 +29,7 @@ majorType = (function(){
         	$("#deploy_name").removeAttr("disabled");
         	$('#deploy_name').val("");
         	$('#deploy_des').val("");
+        	$('#deploy_version').val("");
 			$(this).removeData("bs.modal");
         });
 		$('#majorType_delete').on('click', function(e){
@@ -56,18 +57,21 @@ majorType = (function(){
 	function edit(_this, majorTypeId){
 		$('#myModalLabel').text("修改类型");
 		var $tr = $(_this).parents('.tableTr');
-		var name=$tr.find('.name').text();
-		var description=$tr.find('.description').text();
+		var name = $tr.find('.name').text();
+		var description = $tr.find('.description').text();
+		var version = $tr.find('.version').text();
 		$('#deploy_name').val(name);
 		$('#deploy_name').attr("disabled","disabled"); 
 		$('#deploy_des').val(description);
+		$('#deploy_version').val(version);
 		$("#new-type-model").modal("show");	
 		$("#majorTypeId").val(majorTypeId);
 		$("#errorMsg").html("");
 	}
 	function creatType(){
-		var deploy_name=$('#deploy_name').val();
-		var deploy_des=$('#deploy_des').val();
+		var deploy_name = $('#deploy_name').val();
+		var deploy_des = $('#deploy_des').val();
+		var deploy_version = $('#deploy_version').val();
 		var majorTypeId = $("#majorTypeId").val();
 		if (deploy_name == "") {
 			$('#errorMsg').text("请输入名称");
@@ -77,13 +81,13 @@ majorType = (function(){
 			$('#errorMsg').text("请输入描述");
 			return;
 		}
-		var url ='';
+		var url = '';
 		if(majorTypeId){
 			url = marketing_url + '/admin/majortype/' + majorTypeId + '/update';
 		}else{
 			url = marketing_url + '/admin/majortype/create';
 		}
-		var data={'name':deploy_name,'description':deploy_des};		
+		var data={'name':deploy_name, 'description':deploy_des, 'version':deploy_version};		
 		$.ajax({
 			 type: 'POST',
 			 url:url,
@@ -92,7 +96,7 @@ majorType = (function(){
 			 dataType: 'json', 
 			 success: function(data) {
 			 	if (data.success) {
-			 		noty({text: '保存成功', layout: 'topCenter', type: 'warning', timeout: 2000});
+			 		noty({text: '保存成功', layout: 'topCenter', type: 'success', timeout: 2000});
 			 		$('#new-type-model').modal('hide');
 			 		setTimeout(function(){
 			 			$.ajax({

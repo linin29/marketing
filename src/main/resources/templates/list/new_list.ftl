@@ -185,7 +185,7 @@
                        <option value="">请选择一个类型</option>
                         <#if majorTypes?? && (majorTypes?size > 0)>
                          <#list majorTypes as majorType>
-                            <option value="${majorType.name}">${majorType.description}</option>
+                            <option value="${majorType.name}">${majorType.description}${majorType.version!""}</option>
                          </#list>
                          </#if>
                    </select><br>
@@ -226,6 +226,7 @@
          		 success: function(data) {
          			 if(data && data.success){
          				noty({text: '拉取数据成功', layout: "topCenter", type: "success", timeout: 1000});
+         				$('#taskStatus').click();
          			 }else{
          				noty({text: '拉取数据失败', layout: "topCenter", type: "warning", timeout: 1000});
          			 }
@@ -300,7 +301,7 @@
                         }
                         $('#status').attr('status', 'image_uploaded');
                         $('#status').text('(当前状态：image_uploaded)');
-                        noty({text: '成功上传图片张数：'+result.data.length, layout: "topCenter", type: "warning", timeout: 3000});
+                        noty({text: '成功上传图片张数：'+result.data.length, layout: "topCenter", type: "success", timeout: 3000});
                     }else{
                         if (taskId=='0'){
                             $('#taskId').val(-1);
@@ -342,7 +343,7 @@
                  if(data.success){
                      $('#status').attr('status', 'image_uploaded');
                      $('#status').text('(当前状态：image_uploaded)');
-                     noty({text: '保存成功', layout: "topCenter", type: "warning", timeout: 2000});
+                     noty({text: '保存成功', layout: "topCenter", type: "success", timeout: 2000});
                      $('#preview_modal').modal('hide');
                      var defaultImage = '<a href="${springMacroRequestContext.contextPath}/image/2.png" target="_blank">'+
                                         '<img id="stitched" src="${springMacroRequestContext.contextPath}/image/2.png"class="img-thumbnail static_img"></a>';
@@ -357,6 +358,7 @@
           });
           
           $('#taskStatus').click(function(e){
+        	  debugger;
               var taskId = $('#taskId').val();
               if (taskId=='-1' || taskId=='0'){
                   noty({text: "请先上传图片", layout: "topCenter", type: "warning", timeout: 2000});
@@ -610,7 +612,7 @@
                 if(data.success){
               	 	$("#li_"+rid).hide();
               		$("#li_"+rid).remove();
-                    noty({text: '删除成功', layout: "topCenter", type: "warning", timeout: 1000});
+                    noty({text: '删除成功', layout: "topCenter", type: "success", timeout: 1000});
                     $('#status').attr('status', 'image_uploaded');
                     $('#status').text('(当前状态：image_uploaded)');
                     var defaultImage = '<a href="${springMacroRequestContext.contextPath}/image/2.png" target="_blank">'+

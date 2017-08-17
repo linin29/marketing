@@ -4,6 +4,7 @@
 	<resultMap id="MajorTypeMap" type="com.tunicorn.marketing.vo.MajorTypeVO">
 		<result column="id" property="id" jdbcType="INTEGER" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="version" property="version" jdbcType="VARCHAR" />
 		<result column="description" property="description" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
 		<result column="last_update" property="lastUpdateTime"  javaType="java.sql.Date" jdbcType="TIMESTAMP" />
@@ -16,6 +17,9 @@
       <if test="name != null" >
         name,
       </if>
+      <if test="version != null" >
+        version,
+      </if>
       <if test="description != null" >
         description,
       </if>
@@ -27,6 +31,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=VARCHAR},
       </if>
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
@@ -43,6 +50,7 @@
 			<if test="name != null and name !=''">
 			    name=#{name},
 			</if>
+			    version=#{version},
 			<if test="description != null and description !=''">
 			    description=#{description},
 			</if>
@@ -53,7 +61,7 @@
 		 WHERE id=#{id}
 	</update>
 	<select id="getMajorTypeListByBO" resultMap="MajorTypeMap" parameterType="com.tunicorn.marketing.bo.MajorTypeBO">
-		select id, `name`, description, create_time, last_update, status
+		select id, `name`, `version`, description, create_time, last_update, status
 		from major_type
 		where `status` = 'active'
 		<if test="name != null and name != ''">

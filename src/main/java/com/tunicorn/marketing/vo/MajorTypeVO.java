@@ -5,6 +5,7 @@ import java.util.Date;
 public class MajorTypeVO {
 	private long id;
 	private String name;
+	private String version;
 	private String description;
 	private Date createTime;
 	private Date lastUpdateTime;
@@ -24,6 +25,14 @@ public class MajorTypeVO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	public String getDescription() {

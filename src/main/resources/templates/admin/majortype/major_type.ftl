@@ -12,14 +12,16 @@
 		    		<tr style="background-color:#ddd;">
 			    		<th style="text-align:center;width:25%">名称</th>
 			    		<th style="text-align:center;width:25%">描述</th>
-			    		<th style="text-align:center;width:25%">创建时间</th>
+			    		<th style="text-align:center;width:7%">版本</th>
+			    		<th style="text-align:center;width:18%">创建时间</th>
 			    		<th style="text-align:center;width:25%">操作</th>
 		    		</tr>
 		    		<#if majorTypes?? && (majorTypes?size > 0)>
 		    			<#list majorTypes as majorType>
 		    				<tr class="tableTr" majortypeid=${majorType.id} style="text-align:center">
-			    				<td class="name">${majorType.name!}</td>
-			    				<td class="description" style="width: 80px;"><p class="newline">${majorType.description!}</p></td>
+			    				<td class="name">${majorType.name!""}</td>
+			    				<td class="description" style="width: 80px;"><p class="newline">${majorType.description!""}</p></td>
+			    				<td class="version"><p class="newline">${majorType.version!""}</p></td>
 			    				<td>${majorType.createTime}</td>
 			    				<td>
 			    					<button class="btn btn-success" id="modify_${majorType.id!}" onclick="majorType.edit(this, ${majorType.id});">修改</button>
@@ -49,13 +51,19 @@
                     <div class="col-sm-9 ">
                         <input id="deploy_name" style="margin-bottom: 24px" type="text" class="form-control" placeholder="请输入名称">
                     </div>
-              		</div>
-              		<div class="form-group">
+              	</div>
+              	<div class="form-group">
+                    <span class="control-label col-sm-3 text-right" >版本：</span>
+                    <div class="col-sm-9 ">
+                        <input id="deploy_version" style="margin-bottom: 24px" type="text" class="form-control" placeholder="请输入版本，如1.0">
+                    </div>
+              	</div>
+              	<div class="form-group">
                     <span class="control-label col-sm-3 text-right" >描述：</span>
                     <div class="col-sm-9 ">
                         <input id="deploy_des" style="margin-bottom: 24px" type="text" class="form-control" placeholder="请输入描述信息">
                     </div>
-              		</div>
+              	</div>
 	      	</div>
 	      	<div class="cl"></div>
 	      	<div class="modal-footer">

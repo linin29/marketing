@@ -59,7 +59,7 @@ user = (function(){
 			 dataType: 'json', 
 			 success: function(data) {
 			 	if (data.success) {
-			 		noty({text: '保存成功', layout: 'topCenter', type: 'warning', timeout: 2000});
+			 		noty({text: '保存成功', layout: 'topCenter', type: 'success', timeout: 2000});
 			 		$('#new-user-model').modal('hide');
 			 		setTimeout(function(){
 			 			$.ajax({

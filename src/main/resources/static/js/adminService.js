@@ -231,7 +231,7 @@ adminService = (function(){
 				return;
 			}
 			if(result.success){
-				noty({text: '保存成功', layout: 'topCenter', type: 'warning', timeout: 2000});
+				noty({text: '保存成功', layout: 'topCenter', type: 'success', timeout: 2000});
 		 		$('#new-server-model').modal('hide');
 		 		if(!applyId){
 		 			formData.append('applyStatus', 'created');
@@ -486,7 +486,7 @@ adminService = (function(){
 				return;
 			}
 			if(result.success){
-				noty({text: '保存成功', layout: 'topCenter', type: 'warning', timeout: 2000});
+				noty({text: '保存成功', layout: 'topCenter', type: 'success', timeout: 2000});
 		 		$('#new-server-model').modal('hide');
 		 		view(applyId, true);
 			}else{

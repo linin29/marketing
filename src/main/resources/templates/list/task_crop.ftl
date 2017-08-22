@@ -181,11 +181,11 @@
 		initCropper();
 		getPictureCrop(imagePath);
         $('#labelBtn').click(function(){
-        	isCrop = true;
             var skuType = $('#skuType').val();
             if (skuType){
             	imageIds.push($('#imageCrop').attr("imageid"));
             	saveLabelLocally();
+            	isCrop = true;
             }else{
                 noty({text: "你还没有选择SKU类型", layout: "topCenter", type: "warning", timeout: 3000});
             }
@@ -271,13 +271,10 @@
             cropend: cropEnd
         }).on({
             cropstart: function (e) {
-              console.log(e.type, e.action);
             },
             cropmove: function (e) {
-              console.log(e.type, e.action);
             },
             crop: function (e) {
-              console.log(e.type, e.x, e.y, e.width, e.height, e.rotate, e.scaleX, e.scaleY);
             }
         });
     }

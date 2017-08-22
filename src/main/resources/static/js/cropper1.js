@@ -1359,7 +1359,9 @@ var handlers = {
     var $target = $(e.target);
 
     if(action === 'crop'){  //new
-        var $cropBox = $target.parent()
+        var $cropBox = $target.parent();
+        console.log($cropBox);
+        console.log(self.$target);
         name = $cropBox.attr('name');
     }else if(action === 'move'){
       $.each(cropBoxs, function(k, v){

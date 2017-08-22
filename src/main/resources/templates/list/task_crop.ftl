@@ -217,7 +217,7 @@
     	});
         $('#save').on('click', function(){
         	if(!isCrop){
-        		noty({text: '请先进行标注或删除标注', layout: "topCenter", type: "success", timeout: 1000});
+        		noty({text: '请先进行标注或删除标注', layout: "topCenter", type: "warning", timeout: 1000});
         		return;
         	}
             var cropDatas = $('#imageCrop').cropper('getAllData');

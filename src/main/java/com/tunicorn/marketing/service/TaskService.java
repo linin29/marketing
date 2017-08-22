@@ -659,7 +659,9 @@ public class TaskService {
 								cropBO.setY(oNode.get("y").asInt());
 								cropBO.setHeight(oNode.get("height").asInt());
 								cropBO.setWidth(oNode.get("width").asInt());
-								cropBO.setLabel(oNode.get("label").asInt());
+								if (oNode.get("label") != null) {
+									cropBO.setLabel(oNode.get("label").asInt());
+								}
 								cropBOs.add(cropBO);
 							}
 						}

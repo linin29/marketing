@@ -172,6 +172,7 @@
 </div>
 <script type="text/javascript">
     var picPath = '/pic/marketing';
+    var isCrop = true;
     var imageIds = [];
 	$(function() {
 		$("#skuType").select2();
@@ -180,6 +181,7 @@
 		initCropper();
 		getPictureCrop(imagePath);
         $('#labelBtn').click(function(){
+        	isCrop = true;
             var skuType = $('#skuType').val();
             if (skuType){
             	imageIds.push($('#imageCrop').attr("imageid"));
@@ -189,6 +191,7 @@
             }
         });
         $('#cancelBtn').click(function(){
+        	isCrop = true;
             $('#imageCrop').cropper('deleteCrop');
             $('#imageCrop').cropper('enable');
             $('#labelPanel').hide();
@@ -213,6 +216,10 @@
          	 });
     	});
         $('#save').on('click', function(){
+        	if(!isCrop){
+        		noty({text: '请先进行标注或删除标注', layout: "topCenter", type: "success", timeout: 1000});
+        		return;
+        	}
             var cropDatas = $('#imageCrop').cropper('getAllData');
             var taskId = $('#taskId').val();
             var order = $("#order").val();
@@ -360,6 +367,7 @@
 	}
 
     function cropEnd(e) {
+    	isCrop = false;
     	$(".cropper-view-box").css("cssText", "outline: 2px solid #ea230a !important; outline-color: #ea230a !important;")
         clearLabel();
         var data = $(this).cropper('getCropBoxData');

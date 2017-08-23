@@ -507,14 +507,14 @@
                               '<td>' + (results[k].list_rows).toString() + '</td><td>' + totalOriArea + '</td></tr>';
                     	  }
                       }
-                      $("#countInfo").html(html0+html1);
+                      $("#countInfo").html(html0 + html1);
                       $('#status').attr('status', 'identify_success').text('(当前状态：identify_success)');
                       var majorType = $("#majorType").val();
                       if(!majorType){
                     	  majorType = $("#taskMajorType").val();
                       }
                       showCropList(results);
-                      $('#image_default a').attr('href', '/pic/marketing'+data.results_border);
+                      $('#image_default a').attr('href', '/pic/marketing' + data.results_border);
                   }else{
                       noty({text: data.errmsg, layout: "topCenter", type: "warning", timeout: 3000});
                       $('#status').attr('status', 'identify_failure');

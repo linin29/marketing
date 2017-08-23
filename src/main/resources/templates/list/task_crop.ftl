@@ -296,7 +296,7 @@
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);
      			 }else{
-     				noty({text: '当前已经是第一张图片。', layout: "topCenter", type: "warning", timeout: 1000});
+     				noty({text: '当前已经是第一张图片', layout: "topCenter", type: "warning", timeout: 1000});
      			 }
          	},
          	error: function(data) {
@@ -323,7 +323,7 @@
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);
      			 }else{
-     				noty({text: '当前已经是最后一张图片。', layout: "topCenter", type: "warning", timeout: 1000});
+     				noty({text: '当前已经是最后一张图片', layout: "topCenter", type: "warning", timeout: 1000});
      			 }
          	},
          	error: function(data) {

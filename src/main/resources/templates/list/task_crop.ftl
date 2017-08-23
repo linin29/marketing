@@ -279,6 +279,10 @@
         });
     }
 	function getPre(){
+		if(!isCrop){
+    		noty({text: '请先进行标注或删除标注', layout: "topCenter", type: "warning", timeout: 1000});
+    		return;
+    	}
 		$('#save').click();
 		var taskId = $('#taskId').val();
 		var order = $("#order").val();
@@ -291,6 +295,8 @@
      				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);
+     			 }else{
+     				noty({text: '当前已经是第一张图片。', layout: "topCenter", type: "warning", timeout: 1000});
      			 }
          	},
          	error: function(data) {
@@ -300,6 +306,10 @@
      	 });
 	}
 	function getNext(){
+		if(!isCrop){
+    		noty({text: '请先进行标注或删除标注', layout: "topCenter", type: "warning", timeout: 1000});
+    		return;
+    	}
 		$('#save').click();
 		var taskId = $('#taskId').val();
 		var order = $("#order").val();
@@ -312,6 +322,8 @@
      				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);
+     			 }else{
+     				noty({text: '当前已经是最后一张图片。', layout: "topCenter", type: "warning", timeout: 1000});
      			 }
          	},
          	error: function(data) {

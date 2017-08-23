@@ -287,7 +287,7 @@
                 var url = '${springMacroRequestContext.contextPath}/task/create';
                 $('#taskLabel').val($('#taskName').val());
             }else{
-                var url = '${springMacroRequestContext.contextPath}/images/upload/';
+                var url = '${springMacroRequestContext.contextPath}/images/upload';
             }
             //send ajax
              $("#image-form").ajaxSubmit({
@@ -339,7 +339,7 @@
                   	  json.push(j);
               	  }
               }
-              $.post('${springMacroRequestContext.contextPath}/'+$('#taskId').val()+'/order', JSON.stringify(json)).done(function(data){
+              $.post('${springMacroRequestContext.contextPath}/' + $('#taskId').val() + '/order', JSON.stringify(json)).done(function(data){
                  if(data.success){
                      $('#status').attr('status', 'image_uploaded');
                      $('#status').text('(当前状态：image_uploaded)');
@@ -441,7 +441,7 @@
           
           $("#merge").click(function(e){
               var majorType = $('#majorType').val();
-              if(!majorType || majorType.trim()==''){
+              if(!majorType || majorType.trim() == ''){
                   noty({text: 'goods type should be selected!', layout: "topCenter", type: "warning", timeout: 3000});
                   return
               }
@@ -463,7 +463,7 @@
               $('#waiting').modal({keyboard: false, backdrop: 'static'});
               $('#status').attr('status', 'stitching');
               $('#status').text('(当前状态：stitching)');
-               $.post('${springMacroRequestContext.contextPath}/'+taskId+'/stitcher', JSON.stringify(postdata)).done(function (data) {
+               $.post('${springMacroRequestContext.contextPath}/' + taskId + '/stitcher', JSON.stringify(postdata)).done(function (data) {
                   $('#waiting').modal('hide');
                   if(data.success){
                       noty({text: "正在开始合并，请稍后查询状态!", layout: "topCenter", type: "warning", timeout: 3000});

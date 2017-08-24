@@ -260,15 +260,15 @@
 		$('#image-upload').change(function(e){
 			var taskName = $("#taskName").val();
 			if (!/\S/.test(taskName)) {
-				noty({text: '任务名无效!', layout: "topCenter", type: "warning", timeout: 1000});
+				noty({text: '任务名无效', layout: "topCenter", type: "warning", timeout: 1000});
                 return;
 			}
             if(this.files.length == 0){
-                noty({text: '没有选择图片文件!', layout: "topCenter", type: "warning", timeout: 1000});
+                noty({text: '没有选择图片文件', layout: "topCenter", type: "warning", timeout: 1000});
                 return;
             };
             if(this.files.length > 20){
-                noty({text: '图片最多上传20张!', layout: "topCenter", type: "warning", timeout: 1000});
+                noty({text: '图片最多上传20张', layout: "topCenter", type: "warning", timeout: 1000});
                 return;
             };
         	/* for (var i = 0; i < this.files.length; i++) {
@@ -280,7 +280,7 @@
             //pre-deal
             var taskId = $('#taskId').val();
             if (taskId=='0'){
-                noty({text: '当前任务未结束!', layout: "topCenter", type: "warning", timeout: 1000});
+                noty({text: '当前任务未结束', layout: "topCenter", type: "warning", timeout: 1000});
                 return;
             }else if(taskId=='-1'){
                 $('#taskId').val(0);
@@ -442,7 +442,7 @@
           $("#merge").click(function(e){
               var majorType = $('#majorType').val();
               if(!majorType || majorType.trim() == ''){
-                  noty({text: 'goods type should be selected!', layout: "topCenter", type: "warning", timeout: 3000});
+                  noty({text: 'goods type should be selected', layout: "topCenter", type: "warning", timeout: 3000});
                   return
               }
               $('#merge-pre_modal').modal('hide');
@@ -466,7 +466,7 @@
                $.post('${springMacroRequestContext.contextPath}/' + taskId + '/stitcher', JSON.stringify(postdata)).done(function (data) {
                   $('#waiting').modal('hide');
                   if(data.success){
-                      noty({text: "正在开始合并，请稍后查询状态!", layout: "topCenter", type: "warning", timeout: 3000});
+                      noty({text: "正在开始合并，请稍后查询状态", layout: "topCenter", type: "warning", timeout: 3000});
                   }else{
                       noty({text: data.errmsg, layout: "topCenter", type: "warning", timeout: 3000});
                       $('#status').attr('status', 'image_uploaded');
@@ -478,7 +478,7 @@
           $("#count").click(function(e){
               var status = $('#status').attr('status');
               if (status!='stitch_success' && status!='stitch_failure'){
-                  noty({text: 'not ready or is processing!', layout: "topCenter", type: "warning", timeout: 3000});
+                  noty({text: 'not ready or is processing', layout: "topCenter", type: "warning", timeout: 3000});
                   return;
               }
               var taskId = $('#taskId').val();

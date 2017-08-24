@@ -230,7 +230,6 @@
                 order : order,
                 imageCrop : cropDatas
             }
-            console.log(JSON.stringify(data));
             $.ajax({
                 url: '${springMacroRequestContext.contextPath}/taskImageCrop/save/' + taskId,
                 data: JSON.stringify(data),
@@ -361,7 +360,6 @@
     			 if(data){
     	     	      $('#imageCrop').off("ready");
     	     	      $('#imageCrop').cropper('replace', imagePath).on("ready", function(){
-    	     	        console.log('replace ready');
     	     	        if(data && data.length > 0){
     	     	           $('#imageCrop').cropper('setAllData', data);
     	     	        }

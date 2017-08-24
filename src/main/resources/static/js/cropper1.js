@@ -528,7 +528,6 @@ var render$1 = {
     var aspectRatio = canvas.aspectRatio;
     var cropBox = self.cropBox;
     var cropped = self.cropped && cropBox;
-    //debugger;
     if (isSizeLimited) {
       var minCanvasWidth = Number(options.minCanvasWidth) || 0;
       var minCanvasHeight = Number(options.minCanvasHeight) || 0;
@@ -851,7 +850,6 @@ var render$1 = {
     cropBox.height = Math.min(Math.max(cropBox.height, cropBox.minHeight), cropBox.maxHeight);
 
     self.limitCropBox(false, true);
-	//debugger;
     //cropBox.oldLeft = cropBox.left = Math.min(Math.max(cropBox.left, cropBox.minLeft), cropBox.maxLeft);
     //cropBox.oldTop = cropBox.top = Math.min(Math.max(cropBox.top, cropBox.minTop), cropBox.maxTop);
 
@@ -1226,7 +1224,7 @@ var handlers = {
         self.$cropBox = $cropBox = $(e.target).parent();
         var name = $cropBox.attr('name');
         self.cropBox = cropBox = cropBoxs[name];
-    }else{  //resieze
+    }else{  //resize
       self.$cropBox = $cropBox = $(e.target).parent();
       var name = $cropBox.attr('name');
       self.cropBox = cropBox = cropBoxs[name];
@@ -1245,7 +1243,6 @@ var handlers = {
     var oldPointers = {};
     $.extend(true, oldPointers, pointers);
     self.oldPointers = oldPointers;
-	//debugger;
     if (objectKeys(pointers).length > 1 && options.zoomable && options.zoomOnTouch) {
       action = 'zoom';
     }
@@ -1300,7 +1297,6 @@ var handlers = {
     } else {
       $.extend(pointers[originalEvent && originalEvent.pointerId || 0], getPointer(originalEvent || e, true));
     }
-	//debugger;
     self.change(e);
   },
   cropEnd: function cropEnd(e) {
@@ -1348,7 +1344,6 @@ var handlers = {
       delete pointers[originalEvent && originalEvent.pointerId || 0];
     }
 
-	//debugger;
     if (!action) {
       return;
     }
@@ -1360,8 +1355,6 @@ var handlers = {
 
     if(action === 'crop'){  //new
         var $cropBox = $target.parent();
-        console.log($cropBox);
-        console.log(self.$target);
         name = $cropBox.attr('name');
     }else if(action === 'move'){
       $.each(cropBoxs, function(k, v){
@@ -2474,7 +2467,6 @@ var methods = {
     var cropBox = self.cropBox;
     var ratio = void 0;
     var data = void 0;
-    //debugger;
     if (self.ready && self.cropped) {
       data = {
         x: cropBox.left - canvas.left,
@@ -2948,7 +2940,6 @@ var Cropper = function () {
 
         // Should use `$.fn.prop` here. e.g.: "http://example.com/img/picture.jpg"
         url = $this.prop('src');  //原始图片的绝对路径
-        //debugger;
       } else if ($this.is('canvas') && window.HTMLCanvasElement) {  //canvas节点的支持
         url = $this[0].toDataURL();  //生成canvas图片的url地址
       }
@@ -3010,7 +3001,6 @@ var Cropper = function () {
       if (options.checkCrossOrigin && isCrossOriginURL(url) && $this.prop('crossOrigin')) {
         url = addTimestamp(url);
       }
-      //debugger;
       xhr.open('get', url);  //get picture by xhr
       xhr.responseType = 'arraybuffer';
       xhr.withCredentials = $this.prop('crossOrigin') === 'use-credentials';
@@ -3111,7 +3101,6 @@ var Cropper = function () {
       self.crossOriginUrl = crossOriginUrl;
 
       var $clone = $('<img ' + getCrossOrigin(crossOrigin) + ' src="' + (crossOriginUrl || url) + '">');
-      //debugger;
       self.$clone = $clone;
 
       if (self.isImg) {
@@ -3192,7 +3181,6 @@ var Cropper = function () {
       if (!self.isImg) {
         $clone.removeClass('cropper-hide');
       }
-      //debugger;
       self.initPreview();
       self.bind();
 
@@ -3202,7 +3190,6 @@ var Cropper = function () {
       self.cropped = options.autoCrop;
 
       if (options.autoCrop) {
-        //debugger;
         if (options.modal) {
           self.$dragBox.addClass('cropper-modal');
         }

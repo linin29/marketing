@@ -201,7 +201,7 @@ adminService = (function(){
 		};
 		var regex = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
 		if(!email || !regex.test(email)){
-			noty({text: "Email格式不正确!", layout: "topCenter", type: "warning", timeout: 2000});
+			noty({text: "Email格式不正确", layout: "topCenter", type: "warning", timeout: 2000});
 			return false;
 		}
 		var url ='';
@@ -227,7 +227,7 @@ adminService = (function(){
 		formData.append('email', email);
 		tunicorn.utils.postFormData(url, formData, function(err, result){
 			if(err){
-				noty({text: "服务器异常!", layout: "topCenter", type: "error", timeout: 2000});
+				noty({text: "服务器异常", layout: "topCenter", type: "error", timeout: 2000});
 				return;
 			}
 			if(result.success){
@@ -482,7 +482,7 @@ adminService = (function(){
 		formData.append('applyId', applyId);
 		tunicorn.utils.postFormData(marketing_url + '/admin/service/applyAsset/create', formData, function(err, result){
 			if(err){
-				noty({text: "服务器异常!", layout: "topCenter", type: "error", timeout: 2000});
+				noty({text: "服务器异常", layout: "topCenter", type: "error", timeout: 2000});
 				return;
 			}
 			if(result.success){
@@ -525,7 +525,7 @@ adminService = (function(){
 		formData.append('email', data.email);
 		tunicorn.utils.postFormData(marketing_url + '/admin/service/sendEmail', formData, function(err, result){
 			if(err){
-				noty({text: "服务器异常!", layout: "topCenter", type: "error", timeout: 2000});
+				noty({text: "服务器异常", layout: "topCenter", type: "error", timeout: 2000});
 				return;
 			}
 		});

@@ -486,12 +486,12 @@
               var postData = {};
               $('#waiting').modal({keyboard: false, backdrop: 'static'});
               $('#waiting').modal('show');
-              $.post('${springMacroRequestContext.contextPath}/'+taskId+'/identify', postData).done(function (data) {
+              $.post('${springMacroRequestContext.contextPath}/' + taskId + '/identify', postData).done(function (data) {
                   $('#waiting').modal('hide');
                   if(data.success){
                       var results = data.data;
                       var crops = data.crops;
-                      var html0 = '<tr><th colspan=2>货架总层数</th><td colspan=1>'+data.rows+'</td><th colspan="2">货架总面积</th><td colspan="1">' + data.total_area + '</td></tr>'+
+                      var html0 = '<tr><th colspan=2>货架总层数</th><td colspan=1>' + data.rows + '</td><th colspan="2">货架总面积</th><td colspan="1">' + data.total_area + '</td></tr>'+
                                   '<tr><th colspan="2">产品名称</th><th>占比</th><th>牌面数</th><th>货架位置</th><th>sku面积</th></tr>'
                       var html1 = '';
                       for(var k in results){
@@ -630,9 +630,9 @@
 	      				html += '<div class="brand-list col-sm-3" >';
 	      				 for(var i=0; i<data.length;i++){
 	      					 if(data[i].isShow){
-		          				 html+=' <div class="form-group">'+
-			               		   ' <img class="icorn-brand"  src="${springMacroRequestContext.contextPath}/image/'+ data[i].majorType +'.png">'+
-		               		       ' <div class="changeline" produce="'+i+'"><a href="javascript:void(0);" onclick="getCrops('+ i +')">'+ data[i].description +'</a></div></div>';
+		          				 html += ' <div class="form-group">'+
+			               		   	     ' <img class="icorn-brand"  src="${springMacroRequestContext.contextPath}/image/'+ data[i].majorType +'.png">'+
+		               		             ' <div class="changeline" produce="'+i+'"><a href="javascript:void(0);" onclick="getCrops('+ i +')">'+ data[i].description +'</a></div></div>';
 	      					 }
 	      				 }
 	      				 html += '</div>';
@@ -657,7 +657,7 @@
       			 var html='';
       			 if(data && data.length>0){
       				 for(var i=0; i<data.length;i++){
-          				 html+=' <li id="li_'+data[i].id+'">'+
+          				 html+=' <li id="li_' + data[i].id + '">'+
                		           '<img onclick="showCropPage(\''+taskId+'\', \''+data[i].id+'\')"  taskid="'+taskId+'" src="' + picPath + data[i].imagePath+'" title="'+data[i].name+'" class="preview img-thumbnail showCropPage">'+
                                '<div><p class="gallery-controls">'+
                                '<button rid="'+data[i].id+'" onclick="deleteImage(\''+data[i].id+'\')" style="font-size: 12px;" class="btn btn-sm btn-danger iconfont delete">删除</button>'+
@@ -665,7 +665,7 @@
                                '<input name="'+data[i].id+'" value="'+data[i].orderNo+'" class="resourceNo"></div></li>';
       				 }
       			 }else{
-      				 html = '<li class="notice"><p>当前没有任何图片，请点击右上角的“上传图片”开始上传图片！</p></li>';
+      				 html = '<li class="notice"><p>当前没有任何图片，请点击“上传图片”按钮开始上传图片</p></li>';
       			 }
       		 	$("#imageList").html(html);
           	},
@@ -686,7 +686,7 @@
         if (answer){
             var rid = imageId;
             var taskId = $('#taskId').val();
-            $.post('${springMacroRequestContext.contextPath}/'+taskId+'/images/'+rid).done(function (data) {
+            $.post('${springMacroRequestContext.contextPath}/' + taskId + '/images/' + rid).done(function (data) {
                 if(data.success){
               	 	$("#li_"+rid).hide();
               		$("#li_"+rid).remove();

@@ -367,6 +367,7 @@
               $('#waiting').modal('show');
               $.post('${springMacroRequestContext.contextPath}/' + taskId + '/status').done(function (data) {
                   $('#waiting').modal('hide');
+                  $('#stitched').cropper('destroy');
                   if(data.success){
                       var task_status = data.data.task_status;
                       var identifySuccessTimes = data.data.identifySuccessTimes;
@@ -537,6 +538,7 @@
             $('#waiting').modal('show');
             $.post('${springMacroRequestContext.contextPath}/' + taskId + '/status').done(function (data) {
                 $('#waiting').modal('hide');
+                $('#stitched').cropper('destroy');
                 if(data.success){
                     var task_status = data.data.task_status;
                     if (task_status=='stitch_success' || task_status=='stitch_failure'){

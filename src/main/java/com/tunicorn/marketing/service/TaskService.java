@@ -1147,7 +1147,9 @@ public class TaskService {
 			ObjectNode oNode = (ObjectNode) jsonNodes.get(i);
 			BigDecimal b = new BigDecimal(Float.parseFloat(oNode.get("ratio").toString()) * 100);
 			double f1 = b.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
-
+			if (i >= goodArr.size()) {
+				break;
+			}
 			ObjectMapper tempMapper = new ObjectMapper();
 			ObjectNode tempNode = tempMapper.createObjectNode();
 			GoodsSkuVO goodsSkuVO = goodArr.get(i);

@@ -16,8 +16,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+@SuppressWarnings("deprecation")
 public class HttpClientUtil {
-	@SuppressWarnings("deprecation")
 	public static String doPost(String url, Map<String, String> map, String charset) {
 		HttpClient httpClient = null;
 		HttpPost httpPost = null;

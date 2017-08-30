@@ -59,6 +59,8 @@ public class TaskController extends BaseController {
 
 	@RequestMapping(value = "/batch_import", method = RequestMethod.GET)
 	public String batch_import(HttpServletRequest request, Model model) {
+		UserVO user = getCurrentUser(request);
+		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
 		return "list/batch_import";
 	}
 	

@@ -3,8 +3,18 @@
         <h3>批量创建任务</h3>
     </section>
     <div class="content_list" style="margin: 20px;">
+    	<select id="majorType"  class="form-control" style="width:170px;display: inline-block;">
+           <option value="">请选择一个主类型</option>
+            <#if majorTypes?? && (majorTypes?size > 0)>
+             <#list majorTypes as majorType>
+                <option value="${majorType.name}">${majorType.description}${majorType.version!""}</option>
+             </#list>
+             </#if>
+		</select>
+		<input type="checkbox" id="is_need_stitch"><span>勾选取消去重
 		<input type="button" class="btn btn-success" id="barch_import" value="选择批量导入的图片" />
 		<input type="file" id="file_select" style="display:none;" multiple />
+		<span>注：目前仅支持每张图片创建一个任务</span>
     </div>
     <div class="content_list2">
 		<div class="row">
@@ -12,7 +22,7 @@
 			 	<div class="panel panel-success">
 				  <div class="panel-heading">创建任务成功<span id="create_pass_num">（0）</span></div>
 				  <div class="panel-body" id="create_pass">
-				    
+				  
 				  </div>
 				</div>
 			 </div>
@@ -176,6 +186,11 @@ $(function() {
 	}
 
 	$('#barch_import').click(function(){
+		var majorType = $('#majorType').val();
+		if(!majorType || majorType==''){
+			noty({text: '请选择一个主类型', layout: "topCenter", type: "warning", timeout: 1000});
+			return;
+		}
 		$('#file_select').click();
 	});
 	
@@ -187,11 +202,11 @@ $(function() {
 	$('#file_select').change(function(){
 		var _file = $(this)[0];
 		var files = _file.files;
-		var majorType = 'beer';
-		var needStitch = true;
-		
+		var majorType = $('#majorType').val();
+		var needStitch = !$('#is_need_stitch').is(':checked');
 		var total = files.length;
 		
+		//console.log(files)
 		$('#waiting').modal({keyboard: false, backdrop: 'static'});
 		
 		$.each(files, function(index, file){

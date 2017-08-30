@@ -13,7 +13,6 @@ DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS AlterTable;
 DROP PROCEDURE IF EXISTS CreateAdminPrivileges;
 DROP PROCEDURE IF EXISTS AlterServiceTable;
-DROP PROCEDURE IF EXISTS AddData;
 
 DELIMITER //
 CREATE PROCEDURE CheckTableExist(IN p_tablename varchar(64), OUT ret int)
@@ -107,20 +106,6 @@ BEGIN
 	END IF;
 END//
 
-
-
-DELIMITER //
-CREATE PROCEDURE AddData()
-BEGIN
-	SET @ret = 0;
-	CALL CheckTableExist("privilege", @ret);
-	IF @ret = 1 THEN 
-		INSERT INTO `privilege` (`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES ('3', NULL, '数据导出', '/export', '数据导出一级菜单', '3', now());
-		INSERT INTO `role_privilege_mapping` (`id`, `role_id`, `privilege_id`, `create_time`) VALUES ('3', '1', '3', now());
-	END IF;
-END//
-
-
 DELIMITER //
 CREATE PROCEDURE CreateAdminPrivileges()
 BEGIN
@@ -157,7 +142,6 @@ DELIMITER ;
 CALL AlterTable();
 CALL CreateAdminPrivileges();
 CALL AlterServiceTable();
-CALL AddData();
 
 DROP PROCEDURE IF EXISTS CheckTableExist;
 DROP PROCEDURE IF EXISTS CheckColumnExist;
@@ -168,4 +152,3 @@ DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS AlterTable;
 DROP PROCEDURE IF EXISTS CreateAdminPrivileges;
 DROP PROCEDURE IF EXISTS AlterServiceTable;
-DROP PROCEDURE IF EXISTS AddData;

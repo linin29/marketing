@@ -416,11 +416,15 @@ BEGIN
 	IF @ret = 0 THEN
 		INSERT INTO `privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (1, NULL, '任务列表', '/task', '任务列表一级菜单', 1, now());
         INSERT INTO `privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (2, NULL, '调用统计', '/calling', '调用统计一级菜单', 2, now());
-        
+        INSERT INTO `privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time) VALUES (3, NULL, '数据导出', '/export', '数据导出一级菜单', 3, now());
+		INSERT INTO `privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (4, NULL, '批量任务', '/batch_import', '创建批量任务一级菜单', 4, now());
+
         INSERT INTO `role`(`id`, `name`, `description`, `create_time`) VALUES (1, 'admin', '管理员', now());
         
         INSERT INTO `role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (1, 1, 1, now());
         INSERT INTO `role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (2, 1, 2, now());
+        INSERT INTO `role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (3, 1, 3, now());
+        INSERT INTO `role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (4, 1, 4, now());
 	END IF;
 END//
 

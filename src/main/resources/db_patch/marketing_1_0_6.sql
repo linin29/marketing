@@ -91,23 +91,15 @@ BEGIN
 		UPDATE `major_type` SET `version` = "9.0" where name = "beer";
 		UPDATE `major_type` SET `version` = "2.0" where name = "chocolate";
 		
-		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlemilk', '雀巢炼奶', '1.0', now());
 		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nielsennv', '尼尔森女性护理', '1.0', now());
-		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlecoffee', '雀巢咖啡', '1.0', now());
-		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlemilkpowder', '雀巢奶粉', '1.0', now());
 		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nielsendrink', '尼尔森饮料', '1.0', now());
-		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestleoatmeal', '雀巢麦片', '1.0', now());
-		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlericeflour', '雀巢营养品', '1.0', now());
-		
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon1', 'ncon1', 0, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon2', 'ncon2', 1, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon3', 'ncon3', 2, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon4', 'ncon4', 3, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon5', 'ncon5', 4, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon6', 'ncon6', 5, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon7', 'ncon7', 6, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon8', 'ncon8', 7, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'liannai', 'liannai', 8, now());
+		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlemilk', '雀巢炼奶', '1.0', now());
+		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlecoffee', '雀巢咖啡', '2.0', now());
+		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlemilkpowder', '雀巢奶粉', '2.0', now());
+		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestleoatmeal', '雀巢麦片', '2.0', now());
+		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlericeflour', '雀巢营养品', '2.0', now());
+		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlesugar', '雀巢糖果', '1.0', now());
+		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlebiscuit', '雀巢饼干', '2.0', now());
 		
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsennv', 'femnine1', 'femnine1', 0, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsennv', 'femnine2', 'femnine2', 1, now());
@@ -119,6 +111,27 @@ BEGIN
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsennv', 'femnine8', 'femnine8', 7, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsennv', 'femnine9', 'femnine9', 8, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsennv', 'femnine10', 'femnine10', 9, now());
+		
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage1', 'beverage1', 0, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage2', 'beverage2', 1, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage3', 'beverage3', 2, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage4', 'beverage4', 3, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage5', 'beverage5', 4, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage6', 'beverage6', 5, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage7', 'beverage7', 6, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage8', 'beverage8', 7, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage9', 'beverage9', 8, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage10', 'beverage10', 9, now());
+		
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon1', 'ncon1', 0, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon2', 'ncon2', 1, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon3', 'ncon3', 2, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon4', 'ncon4', 3, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon5', 'ncon5', 4, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon6', 'ncon6', 5, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon7', 'ncon7', 6, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon8', 'ncon8', 7, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'liannai', 'liannai', 8, now());
 		
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco1', 'nco1', 0, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco2', 'nco2', 1, now());
@@ -186,14 +199,11 @@ BEGIN
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco64', 'nco64', 63, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco65', 'nco65', 64, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco66', 'nco66', 65, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'Maxwellhouse', 'Maxwellhouse', 66, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'G7', 'G7', 67, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'Oldtown', 'Oldtown', 68, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'Hougu', 'Hougu', 69, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'Kapalapi', 'Kapalapi', 70, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'Moka', 'Moka', 71, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'kopiko', 'kopiko', 72, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'coffee', 'coffee', 73, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco67', 'nco67', 66, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco68', 'nco68', 67, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco69', 'nco69', 68, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco70', 'nco70', 69, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco71', 'nco71', 70, now());
 		
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'Nestle 1', 'Nestle 1', 0, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'Nestle 21', 'Nestle 21', 1, now());
@@ -290,26 +300,6 @@ BEGIN
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'Nestle 94', 'Nestle 94', 92, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'Nestle 95', 'Nestle 95', 93, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'Nestle 96', 'Nestle 96', 94, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'yili', 'yili', 95, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'helan1', 'helan1', 96, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'wyeth', 'wyeth', 97, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'illuma', 'illuma', 98, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'friso', 'friso', 99, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'enfagrou', 'enfagrou', 100, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'nutrilon', 'nutrilon', 101, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'Beingmate', 'Beingmate', 102, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'naifen', 'naifen', 103, now());
-		
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage1', 'beverage1', 0, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage2', 'beverage2', 1, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage3', 'beverage3', 2, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage4', 'beverage4', 3, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage5', 'beverage5', 4, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage6', 'beverage6', 5, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage7', 'beverage7', 6, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage8', 'beverage8', 7, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage9', 'beverage9', 8, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsendrink', 'beverage10', 'beverage10', 9, now());
 		
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'ncor1', 'ncor1', 0, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'ncor2', 'ncor2', 1, now());
@@ -330,22 +320,6 @@ BEGIN
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'ncor17', 'ncor17', 16, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'ncor18', 'ncor18', 17, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'ncor19', 'ncor19', 18, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'Quaker', 'Quaker', 19, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'Seamild', 'Seamild', 20, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'jw', 'jw', 21, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'ncorysl', 'ncorysl', 22, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'hn', 'hn', 23, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'ww', 'ww', 24, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'wangshi', 'wangshi', 25, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'huangshi', 'huangshi', 26, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'maipian', 'maipian', 27, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'dounai', 'dounai', 28, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'zhimahu', 'zhimahu', 29, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'hetaofen', 'hetaofen', 30, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'package1', 'package1', 31, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'package10', 'package10', 32, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'package11', 'package11', 33, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestleoatmeal', 'package17', 'package17', 34, now());
 		
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'nric1', 'nric1', 0, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'nric2', 'nric2', 1, now());
@@ -381,21 +355,56 @@ BEGIN
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'gerber9', 'gerber9', 31, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'gerber10', 'gerber10', 32, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'gerber11', 'gerber11', 33, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'Topfer', 'Topfer', 34, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'Gerber', 'Gerber', 35, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'Heinz', 'Heinz', 36, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'Eastwes', 'Eastwes', 37, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'Happybaby', 'Happybaby', 38, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'Beingmate', 'Beingmate', 39, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'Syretra', 'Syretra', 40, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'nricyili', 'nricyili', 41, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'prolove', 'prolove', 42, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'ysl', 'ysl', 43, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'mifen', 'mifen', 44, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'package1', 'package1', 45, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'package9', 'package9', 46, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'package10', 'package10', 47, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlericeflour', 'package11', 'package11', 48, now());
+		
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg1', 'nqmg1', 0, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg2', 'nqmg2', 1, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg3', 'nqmg3', 2, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg4', 'nqmg4', 3, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg5', 'nqmg5', 4, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg6', 'nqmg6', 5, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg7', 'nqmg7', 6, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg8', 'nqmg8', 7, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg9', 'nqmg9', 8, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg10', 'nqmg10', 9, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg11', 'nqmg11', 10, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg12', 'nqmg12', 11, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg1box', 'nqmg1box', 12, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg2box', 'nqmg2box', 13, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg3box', 'nqmg3box', 14, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg4box', 'nqmg4box', 15, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg5box', 'nqmg5box', 16, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg6box', 'nqmg6box', 17, now());
+		
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs1', 'nccs1', 0, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs2', 'nccs2', 1, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs3', 'nccs3', 2, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs4', 'nccs4', 3, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs5', 'nccs5', 4, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs6', 'nccs6', 5, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs7', 'nccs7', 6, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs8', 'nccs8', 7, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs9', 'nccs9', 8, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs10', 'nccs10', 9, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs11', 'nccs11', 10, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs12', 'nccs12', 11, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs13', 'nccs13', 12, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs14', 'nccs14', 13, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs15', 'nccs15', 14, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs16', 'nccs16', 15, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs17', 'nccs17', 16, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs18', 'nccs18', 17, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs19', 'nccs19', 18, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs20', 'nccs20', 19, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs21', 'nccs21', 20, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs22', 'nccs22', 21, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs23', 'nccs23', 22, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs24', 'nccs24', 23, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs25', 'nccs25', 24, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'nccs26', 'nccs26', 25, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'youcui1', 'youcui1', 26, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'youcui2', 'youcui2', 27, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'youcui3', 'youcui3', 28, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlebiscuit', 'youcui4', 'youcui4', 29, now());
 		
 		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (8, 1, now());
 		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (8, 2, now());
@@ -424,6 +433,14 @@ BEGIN
 		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (14, 1, now());
 		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (14, 2, now());
 		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (14, 3, now());
+		
+		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (15, 1, now());
+		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (15, 2, now());
+		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (15, 3, now());
+		
+		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (16, 1, now());
+		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (16, 2, now());
+		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (16, 3, now());
 	END IF;
 END//
 DELIMITER ;

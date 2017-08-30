@@ -71,7 +71,7 @@ public class TaskController extends BaseController {
 
 		TaskBO taskBO = new TaskBO();
 		taskBO.setUserId(user.getId());
-		SimpleDateFormat sdFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date date = new Date();
 		taskBO.setEndTime(sdFormat.format(date));
 		Date before2Day = getBefore2Day(date);

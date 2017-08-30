@@ -57,6 +57,11 @@ public class TaskController extends BaseController {
 	@Autowired
 	private GoodsSkuService goodsSkuService;
 
+	@RequestMapping(value = "/batch_import", method = RequestMethod.GET)
+	public String batch_import(HttpServletRequest request, Model model) {
+		return "list/batch_import";
+	}
+	
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
 	public String export(HttpServletRequest request, Model model) {
 		UserVO user = getCurrentUser(request);

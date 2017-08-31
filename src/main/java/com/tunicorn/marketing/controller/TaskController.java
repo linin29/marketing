@@ -385,6 +385,23 @@ public class TaskController extends BaseController {
 			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
 	}
+	
+	@RequestMapping(value = "/zipTask/create", method = RequestMethod.POST)
+	@ResponseBody
+	public CommonAjaxResponse createZipTask(HttpServletRequest request,
+			@RequestParam(value = "zipFile", required = false) MultipartFile zipFile,
+			@RequestParam(value = "taskLabel") String taskName, Model model) {
+		UserVO user = getCurrentUser(request);
+		model.addAttribute("user", user);
+
+		ServiceResponseBO response = taskService.createZipTask(user.getId(), taskName, zipFile);
+		if (response.isSuccess()) {
+			return CommonAjaxResponse.toSuccess(response.getResult());
+		} else {
+			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
+			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
+	}
 
 	@RequestMapping(value = "/images/upload", method = RequestMethod.POST)
 	@ResponseBody

@@ -2,6 +2,7 @@ package com.tunicorn.marketing.service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -14,6 +15,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
@@ -160,6 +163,94 @@ public class TaskService {
 	}
 
 	@Transactional
+	public ServiceResponseBO createZipTask(String userId, String taskName, MultipartFile zipFile) {
+		logger.info("params of createTask: taskName: " + taskName + ", userId:" + userId);
+		TaskVO taskVO = taskMapper.getTaskByNameAndUserId(taskName, userId);
+		if (taskVO != null) {
+			return new ServiceResponseBO(false, "marketing_task_existed");
+		}
+
+		if (StringUtils.isBlank(taskName)) {
+			return new ServiceResponseBO(false, "marketing_task_name_not_null");
+		}
+		TaskVO createTaskVO = new TaskVO();
+		List<TaskImagesVO> taskImagesVOs = new ArrayList<TaskImagesVO>();
+		try {
+			createTaskVO.setId(
+					(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
+			createTaskVO.setName(taskName);
+			createTaskVO.setUserId(userId);
+			createTaskVO.setTaskStatus(MarketingConstants.TASK_INIT_STATUS);
+			taskMapper.createTask(createTaskVO);
+
+			String basePath = com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath")
+					+ MarketingConstants.MARKETING + File.separator + createTaskVO.getId() + File.separator
+					+ ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir");
+
+			// String basePath = "D:\\";
+			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
+			ZipEntry ze;
+			int i = 0;
+			while ((ze = zin.getNextEntry()) != null) {
+				if (!ze.isDirectory()) {
+					File imageFile = new File(basePath + File.separator + ze.getName());
+					if (!imageFile.exists()) {
+						imageFile.createNewFile();
+					}
+					FileOutputStream fos = new FileOutputStream(imageFile);
+
+					int len = 0;
+					while ((len = zin.read()) != -1) {
+						fos.write(len);
+					}
+					fos.close();
+					TaskImagesVO taskImagesVO = new TaskImagesVO();
+
+					taskImagesVO
+							.setId((Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13))
+									.toLowerCase());
+					int zeIndex = ze.getName().indexOf("/");
+					String taskImageName = "";
+					if(zeIndex > 0){
+						taskImageName = ze.getName().substring(zeIndex + 1);
+					}else{
+						taskImageName = ze.getName();
+					}
+					taskImagesVO.setName(taskImageName);
+					taskImagesVO.setUserId(createTaskVO.getUserId());
+					taskImagesVO.setTaskId(createTaskVO.getId());
+					int index = (basePath + File.separator + ze.getName()).indexOf(MarketingConstants.MARKETING);
+					String imagePath = (basePath + File.separator + ze.getName())
+							.substring(index + MarketingConstants.MARKETING.length());
+					taskImagesVO.setImagePath(imagePath);
+					taskImagesVO.setFullPath(basePath + File.separator + ze.getName());
+					taskImagesVO.setOrderNo(i + 1);
+					taskImagesVOs.add(taskImagesVO);
+					i++;
+				} else {
+					File imageFileDir = new File(basePath + File.separator + ze.getName());
+					if (!imageFileDir.exists()) {
+						imageFileDir.mkdirs();
+					}
+				}
+			}
+			zin.closeEntry();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode node = mapper.createObjectNode();
+		node.put(MarketingConstants.TASK_ID, createTaskVO.getId());
+		if (taskImagesVOs != null && taskImagesVOs.size() > 0) {
+			taskImagesMapper.batchInsertTaskImages(taskImagesVOs);
+			taskMapper.updateTaskStatus(createTaskVO.getId(), MarketingConstants.TASK_STATUS_IMAGE_UPLOADED, 0);
+			node.put("length", taskImagesVOs.size());
+		}
+		logger.info("result of createTask method: " + node.toString());
+		return new ServiceResponseBO(node);
+	}
+
+	@Transactional
 	public ServiceResponseBO taskImages(List<MultipartFile> images, String taskId, String userId) {
 		logger.info("params of taskImages: taskId:" + taskId + ", userId:" + userId);
 		if (images != null && images.size() > MarketingConstants.IMAGE_MAX_COUNT) {
@@ -271,8 +362,8 @@ public class TaskService {
 	}
 
 	public ServiceResponseBO taskStitcher(String taskId, Boolean needStitch, String majorType, String userId) {
-		logger.info("params of taskStitcher: taskId:" + taskId + ", needStitch:" + needStitch + ", majorType:" + majorType
-				+ ", userId:" + userId);
+		logger.info("params of taskStitcher: taskId:" + taskId + ", needStitch:" + needStitch + ", majorType:"
+				+ majorType + ", userId:" + userId);
 		TaskVO taskVO = taskMapper.getTaskById(taskId);
 		UserVO userVO = userMapper.getUserByID(userId);
 		if (taskVO == null) {
@@ -826,7 +917,7 @@ public class TaskService {
 	public List<GoodsSkuVO> getGoods(String majorType) {
 		return goodsSkuMapper.getGoodsSkuListByMajorType(majorType);
 	}
-	
+
 	public List<GoodsSkuVO> getGoodsSkuListByMajorTypeWithShow(String majorType) {
 		return goodsSkuMapper.getGoodsSkuListByMajorTypeWithShow(majorType);
 	}

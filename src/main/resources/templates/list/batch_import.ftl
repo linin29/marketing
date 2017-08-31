@@ -14,7 +14,7 @@
 		<input type="checkbox" id="is_need_stitch"><span>勾选取消去重
 		<input type="button" class="btn btn-success" id="barch_import" value="选择批量导入的图片" />
 		<input type="file" id="file_select" style="display:none;" multiple />
-		<span>注：目前仅支持每张图片创建一个任务</span>
+		<span>注：目前支持单张图片和ZIP包文件创建任务，<a href="${springMacroRequestContext.contextPath}/download">点击下载打包工具</a></span>
     </div>
     <div class="content_list2">
 		<div class="row">

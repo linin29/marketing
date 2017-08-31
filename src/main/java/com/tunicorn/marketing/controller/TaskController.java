@@ -6,6 +6,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,6 +20,8 @@ import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,7 +67,7 @@ public class TaskController extends BaseController {
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
 		return "list/batch_import";
 	}
-	
+
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
 	public String export(HttpServletRequest request, Model model) {
 		UserVO user = getCurrentUser(request);
@@ -385,7 +389,7 @@ public class TaskController extends BaseController {
 			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(value = "/zipTask/create", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse createZipTask(HttpServletRequest request,
@@ -595,5 +599,51 @@ public class TaskController extends BaseController {
 		calendar.add(Calendar.DAY_OF_MONTH, -2);
 		date = calendar.getTime();
 		return date;
+	}
+
+	@RequestMapping(value = "/download", method = RequestMethod.GET)
+	public void downloadUserManual(HttpServletRequest request, HttpServletResponse response) {
+		rendFile(request, response, MarketingConstants.BATCH_ZIP_PATH, MarketingConstants.BATCH_ZIP_NAME);
+	}
+
+	private void rendFile(HttpServletRequest request, HttpServletResponse response, String filePath, String name) {
+		InputStream inStream = null;
+		try {
+			Resource res = new ClassPathResource(filePath);
+			inStream = res.getInputStream();
+
+			String fileName = URLEncoder.encode(name, MarketingConstants.UTF8);
+			if (MarketingConstants.BROWSER_FIREFOX.equals(getBrowser(request))) {
+				// 针对火狐浏览器处理
+				fileName = new String(name.getBytes(MarketingConstants.UTF8), MarketingConstants.ISO88991);
+			}
+			response.reset();
+			response.setContentType("bin");
+			response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+
+			byte[] b = new byte[100];
+			int len;
+			while ((len = inStream.read(b)) > 0) {
+				response.getOutputStream().write(b, 0, len);
+			}
+			inStream.close();
+		} catch (IOException e) {
+		}
+	}
+
+	private String getBrowser(HttpServletRequest request) {
+		String userAgent = request.getHeader(MarketingConstants.USER_AGENT).toLowerCase();
+		if (userAgent != null) {
+			if (userAgent.indexOf("msie") >= 0) {
+				return MarketingConstants.BROWSER_IE;
+			}
+			if (userAgent.indexOf("firefox") >= 0) {
+				return MarketingConstants.BROWSER_FIREFOX;
+			}
+			if (userAgent.indexOf("safari") >= 0) {
+				return MarketingConstants.BROWSER_SAFARI;
+			}
+		}
+		return null;
 	}
 }

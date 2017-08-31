@@ -1,5 +1,6 @@
 package com.tunicorn.marketing.constant;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -74,7 +75,9 @@ public class MarketingConstants {
 	public static final String MARKETING_IMAGE_BASE_PATH = com.tunicorn.util.ConfigUtils.getInstance().getConfigValue(
 			"storage.private.basePath") + ConfigUtils.getInstance().getConfigValue("marketing.image.root.path");
 	public static final String TIANNUO_PASSWORD = "tiannuo";
+	
 	public static final String UTF8 = "UTF-8";
+	public static final String ISO88991= "iso-8859-1";
 
 	public static final String APPLY_CREATED_STATUS = "created";
 	public static final String APPLY_OPENED_STATUS = "opened";
@@ -89,4 +92,13 @@ public class MarketingConstants {
 	public static final String ADMIN_USER_NAME = "admin";
 
 	public static final String INNOVISION = "innovision";
+	
+	public static final String BROWSER_IE= "IE";
+	public static final String BROWSER_FIREFOX= "FF";
+	public static final String BROWSER_SAFARI= "SF";
+	
+	public static final String USER_AGENT = "USER-AGENT";
+	
+	public static final String BATCH_ZIP_PATH = "static" + File.separator + "zip" + File.separator  + "batch_zip.zip";
+	public static final String BATCH_ZIP_NAME = "batch_zip.zip";
 }

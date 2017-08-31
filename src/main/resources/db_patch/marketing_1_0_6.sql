@@ -93,12 +93,12 @@ BEGIN
 		
 		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nielsennv', '尼尔森女性护理', '1.0', now());
 		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nielsendrink', '尼尔森饮料', '1.0', now());
-		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlemilk', '雀巢炼奶', '1.0', now());
+		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlemilk', '雀巢炼奶', '2.0', now());
 		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlecoffee', '雀巢咖啡', '2.0', now());
 		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlemilkpowder', '雀巢奶粉', '2.0', now());
 		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestleoatmeal', '雀巢麦片', '2.0', now());
 		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlericeflour', '雀巢营养品', '2.0', now());
-		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlesugar', '雀巢糖果', '1.0', now());
+		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlesugar', '雀巢糖果', '2.0', now());
 		INSERT INTO `major_type`(`name`, `description`,`version`, `create_time`) VALUES ('nestlebiscuit', '雀巢饼干', '2.0', now());
 		
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsennv', 'femnine1', 'femnine1', 0, now());
@@ -131,7 +131,6 @@ BEGIN
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon6', 'ncon6', 5, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon7', 'ncon7', 6, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'ncon8', 'ncon8', 7, now());
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilk', 'liannai', 'liannai', 8, now());
 		
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco1', 'nco1', 0, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco2', 'nco2', 1, now());

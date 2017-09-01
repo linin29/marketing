@@ -191,41 +191,6 @@
        </div>
    </div>
 
-   <div class="modal fade" id="merge-pre_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header model_head">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-               </div>
-               <div class="modal-body">
-                   <input type="checkbox" id="is_need_stitch">
-                   <span>勾选取消去重</span><br><span>货物类型</span>
-                   <select id="majorType" name="majorType">
-                       <option value="">请选择一个类型</option>
-                        <#if majorTypes?? && (majorTypes?size > 0)>
-                         <#list majorTypes as majorType>
-                            <option value="${majorType.name}">${majorType.description}</option>
-                         </#list>
-                         </#if>
-                   </select><br>
-                   <button id="merge" type="button" style="margin: 5px 0px;" class="btn btn-success">继续拼接</button>
-               </div>
-           </div>
-       </div>
-   </div>
-   
-   <div class="modal fade" id="waiting" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header model_head">
-                   <h4 id="waitingLabel" style="text-align: center" class="modal-title">正在进行中，客官请稍后...</h4>
-               </div>
-               <div class="modal-body">
-                   <img src="${springMacroRequestContext.contextPath}/image/searchwait.gif" style="margin:0px 0 0 230px"/>
-               </div>
-           </div>
-       </div>
-   </div>
 <script type="text/javascript">
     var picPath = '/pic/marketing';
 	$(function() {

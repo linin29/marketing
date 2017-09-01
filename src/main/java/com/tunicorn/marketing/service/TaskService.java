@@ -211,9 +211,9 @@ public class TaskService {
 									.toLowerCase());
 					int zeIndex = ze.getName().indexOf("/");
 					String taskImageName = "";
-					if(zeIndex > 0){
+					if (zeIndex > 0) {
 						taskImageName = ze.getName().substring(zeIndex + 1);
-					}else{
+					} else {
 						taskImageName = ze.getName();
 					}
 					taskImagesVO.setName(taskImageName);
@@ -237,6 +237,9 @@ public class TaskService {
 			zin.closeEntry();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		if (taskImagesVOs != null && taskImagesVOs.size() > MarketingConstants.IMAGE_MAX_COUNT) {
+			return new ServiceResponseBO(false, "marketing_image_max_count");
 		}
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode node = mapper.createObjectNode();

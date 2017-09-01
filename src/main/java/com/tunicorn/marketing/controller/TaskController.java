@@ -46,6 +46,7 @@ import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.GoodsSkuService;
 import com.tunicorn.marketing.service.TaskService;
+import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
 import com.tunicorn.marketing.vo.TaskVO;
@@ -330,8 +331,7 @@ public class TaskController extends BaseController {
 				model.addAttribute("stitchImagePath", taskVO.getStitchImagePath() + "?random=" + new Date().getTime());
 			}
 		}
-
-		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
+		
 		model.addAttribute("task", taskVO);
 		model.addAttribute("images", imagesVOs);
 		return "list/task_view";
@@ -604,6 +604,54 @@ public class TaskController extends BaseController {
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public void downloadUserManual(HttpServletRequest request, HttpServletResponse response) {
 		rendFile(request, response, MarketingConstants.BATCH_ZIP_PATH, MarketingConstants.BATCH_ZIP_NAME);
+	}
+	
+	@RequestMapping(value = "/showView/tasks", method = RequestMethod.GET)
+	public String Temptasks(HttpServletRequest request, Model model) {
+
+		TaskBO taskBO = new TaskBO();
+		taskBO.setMajorType("beer");
+		taskBO.setStartTime("2017-08-30 00:00:00");
+		taskBO.setEndTime("2017-08-30 23:59:59");
+		taskBO.setUserId(ConfigUtils.getInstance().getConfigValue("marketing.temp.user.id"));
+
+		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
+		int totalCount = taskService.getTaskCount(taskBO);
+
+		model.addAttribute("tasks", taskVOs);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("currentPage", 1);
+		return "list/task_list_temp";
+	}
+	
+	@RequestMapping(value = "/showView/task/search", method = RequestMethod.GET)
+	public String tempSearchTask(HttpServletRequest request, Model model) {
+
+		TaskBO taskBO = new TaskBO();
+		taskBO.setMajorType("beer");
+		taskBO.setStartTime("2017-08-30 00:00:00");
+		taskBO.setEndTime("2017-08-30 23:59:59");
+		taskBO.setUserId(ConfigUtils.getInstance().getConfigValue("marketing.temp.user.id"));
+		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
+			taskBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("taskName"))) {
+			String taskName = request.getParameter("taskName");
+			taskBO.setName(taskName);
+			model.addAttribute("taskName", taskName);
+		}
+		if (StringUtils.isNotBlank(request.getParameter("taskId"))) {
+			String taskId = request.getParameter("taskId");
+			model.addAttribute("taskId", taskId);
+			taskBO.setId(taskId);
+		}
+		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
+		int totalCount = taskService.getTaskCount(taskBO);
+
+		model.addAttribute("tasks", taskVOs);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("currentPage", taskBO.getPageNum() + 1);
+		return "list/task_list_temp";
 	}
 
 	private void rendFile(HttpServletRequest request, HttpServletResponse response, String filePath, String name) {

@@ -92,7 +92,7 @@ public class TempLoginController {
 	 */
 	@RequestMapping(value = "/showView/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request, HttpServletResponse response) {
-		request.getSession().removeAttribute("testUser");
+		request.getSession().removeAttribute(Constant.SESSION_USER);
 		CookieUtils.removeCookie(request, response, Constant.COOKIE_TOKEN);
 		return "redirect:login";
 	}

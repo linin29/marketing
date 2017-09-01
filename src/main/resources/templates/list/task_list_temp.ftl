@@ -67,16 +67,14 @@
    img {max-width: 100%;}
 </style>
 <div class="task_list">
-    <section class="task_list_header">
+    <section class="content_list">
         <h3>任务列表
             <small>共<span id="number">${totalCount}</span>个任务</small>
             <div class="pull-right">
-                <input id="searchTaskflg" type="hidden" value="0">
-            
-          <!--       <input id="taskId" style="width:220px;" onkeyup="if(event.keyCode==13){searchTaskWithId();}"  class="form-control task_list_input" <#if taskId??> value="${taskId}"</#if> type="text" placeholder="请输入任务ID">
+                <input id="taskId" style="width:220px;" onkeyup="if(event.keyCode==13){searchTaskWithId();}"  class="form-control task_list_input" <#if taskId??> value="${taskId}"</#if> type="text" placeholder="请输入任务ID">
                 <button id="searchTaskById" onclick="searchTaskWithId(0)" type="button" class="btn btn-success btn_style1">检索任务</button> 
                 <input id="taskName" type="text" placeholder="请输入任务名" onkeyup="if(event.keyCode==13){searchTaskWithName();}"  <#if taskName??> value="${taskName}"</#if> class="form-control task_list_input">
-                <button id="searchTask" type="button" onclick="searchTaskWithName(0)" class="btn btn-success btn_style1">检索任务</button> -->
+                <button id="searchTask" type="button" onclick="searchTaskWithName(0)" class="btn btn-success btn_style1">检索任务</button>
             </div>
         </h3>
     </section>
@@ -117,7 +115,6 @@
     </section>
 </div>
 <script>
-var searchTaskFlg = 0;
 $(function() {
 	function initPagination(currentPage, totalCount) {
 		var options = {
@@ -135,9 +132,11 @@ $(function() {
 	}
 	
 	function doPaginationClicked(pageNum) {
-		if(searchTaskFlg == 1){
+		var taskId = $("#taskId").val();
+		var taskName = $("#taskName").val();
+		if(taskId){
 			searchTaskWithId(pageNum)
-		}else if(searchTaskFlg == 2){
+		}else if(taskName){
 			searchTaskWithName(pageNum);
 		}else{
 			searchTask(pageNum);
@@ -149,7 +148,6 @@ $(function() {
 });
 
 function searchTaskWithId(pageNum) {
-	searchTaskFlg = 1;
 	var taskId = $("#taskId").val();
 	var page = 0;
 	if (pageNum) {
@@ -187,7 +185,6 @@ function searchTask(pageNum) {
 }
 
 function searchTaskWithName(pageNum) {
-	searchTaskFlg = 2;
 	var taskName = $("#taskName").val();
 	var page = 0;
 	if (pageNum) {

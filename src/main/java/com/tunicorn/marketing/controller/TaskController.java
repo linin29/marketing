@@ -290,7 +290,6 @@ public class TaskController extends BaseController {
 
 	@RequestMapping(value = "/showView/{taskId}", method = RequestMethod.GET)
 	public String viewTask(HttpServletRequest request, Model model, @PathVariable("taskId") String taskId) {
-		UserVO user = getCurrentUser(request);
 		TaskVO taskVO = taskService.getTaskById(taskId);
 		List<TaskImagesVO> imagesVOs = taskService.getTaskImagesListByTaskId(taskId);
 

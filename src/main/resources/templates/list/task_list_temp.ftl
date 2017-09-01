@@ -60,7 +60,31 @@
 	<div class="wrapper">
 	  <section class="content-wrapper" style="margin-left: 0px;">
 	   	<div id="content" style="margin-left: -11px;padding-top: 1px;margin-bottom: -20px;">
-
+	  <header class="main-header">
+		<!- - Logo - ->
+		<a href="javascript:void(0)" class="logo" style="background-color: #000;">
+		  <span class="logo-lg"></span>
+		</a> 
+		<!- - Header Navbar - ->
+		<nav class="navbar navbar-static-top" role="navigation" style="background-color: #000; height: 50px;">
+		   <div class="navbar-custom-menu">
+			  <ul class="nav navbar-nav" style="line-height: 50px;margin-right: 57px;">
+				  <li class="dropdown " style="cursor: pointer">
+					  <p style="color: #fff" class="dropdown-toggle " type="button" id="dropdownMenu1" data-toggle="dropdown">
+					  <#if user??>
+					  	<span style="width:200px;height:25px;padding-right: 10px;">欢迎${user.userName} !</span>
+					  	<img src="${springMacroRequestContext.contextPath}/image/avatar5.png" style="width:20px;height:20px;border-radius: 8px;">
+					  </#if>
+					  </p>
+				  </li>
+				  <#if user??>
+				  <li style="margin-right: -8px;margin-left: 8px;color: #fff">|</li>
+				  <li style="color: #fff"><a href="${springMacroRequestContext.contextPath}/showView/logout">注销</a></li>
+				  </#if>
+			  </ul>
+		   </div>
+		</nav>
+	  </header>
 
 <style type="text/css">
    body {padding-right:0px !important;}

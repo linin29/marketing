@@ -27,7 +27,7 @@ import com.tunicorn.util.MessageUtils;
 @EnableAutoConfiguration
 public class TempLoginController {
 	private static Logger logger = Logger.getLogger(TempLoginController.class);
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -56,6 +56,7 @@ public class TempLoginController {
 
 	/**
 	 * login authentication
+	 * 
 	 * @param user
 	 * @param request
 	 * @param response
@@ -72,17 +73,11 @@ public class TempLoginController {
 			logger.info(message.getMessage());
 			return new RestAPIResponse(message.getCode(), message.getMessage());
 		}
-		UserVO dbUser = userService.getLoginUser(userName);
-		if (dbUser == null) {
-			Message message = MessageUtils.getInstance().getMessage("user_not_existed");
-			logger.info(message.getMessage());
-			return new RestAPIResponse(message.getCode(), message.getMessage());
-		}
-		if (userService.isValidUser(dbUser, password)) {
-			request.getSession().setAttribute(Constant.SESSION_USER, dbUser);
-			CookieUtils.setTokenCookie(response, dbUser);
+		if(StringUtils.equals(userName, "test") && StringUtils.equals(password, "test1234")){
+			request.getSession().setAttribute("testUser", userName);
 			return new RestAPIResponse(null);
 		}
+
 		Message message = MessageUtils.getInstance().getMessage("user_name_password_error");
 		logger.info(message.getMessage());
 		return new RestAPIResponse(message.getCode(), message.getMessage());

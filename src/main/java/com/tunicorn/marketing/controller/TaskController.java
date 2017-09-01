@@ -609,9 +609,9 @@ public class TaskController extends BaseController {
 	public String Temptasks(HttpServletRequest request, Model model) {
 
 		TaskBO taskBO = new TaskBO();
-		taskBO.setMajorType("beer");
-		taskBO.setStartTime("2017-08-30 00:00:00");
-		taskBO.setEndTime("2017-08-30 23:59:59");
+		taskBO.setMajorType(ConfigUtils.getInstance().getConfigValue("marketing.temp.major.type"));
+		taskBO.setStartTime(ConfigUtils.getInstance().getConfigValue("marketing.temp.start.time"));
+		taskBO.setEndTime(ConfigUtils.getInstance().getConfigValue("marketing.temp.end.time"));
 		taskBO.setUserId(ConfigUtils.getInstance().getConfigValue("marketing.temp.user.id"));
 
 		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
@@ -625,12 +625,12 @@ public class TaskController extends BaseController {
 	
 	@RequestMapping(value = "/showView/task/search", method = RequestMethod.GET)
 	public String tempSearchTask(HttpServletRequest request, Model model) {
-
 		TaskBO taskBO = new TaskBO();
-		taskBO.setMajorType("beer");
-		taskBO.setStartTime("2017-08-30 00:00:00");
-		taskBO.setEndTime("2017-08-30 23:59:59");
+		taskBO.setMajorType(ConfigUtils.getInstance().getConfigValue("marketing.temp.major.type"));
+		taskBO.setStartTime(ConfigUtils.getInstance().getConfigValue("marketing.temp.start.time"));
+		taskBO.setEndTime(ConfigUtils.getInstance().getConfigValue("marketing.temp.end.time"));
 		taskBO.setUserId(ConfigUtils.getInstance().getConfigValue("marketing.temp.user.id"));
+		
 		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
 			taskBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
 		}

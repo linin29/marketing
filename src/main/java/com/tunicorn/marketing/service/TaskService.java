@@ -1086,11 +1086,6 @@ public class TaskService {
 	}
 
 	public void generateFile(ImageCropBO cropBO) {
-		/*
-		 * String filenameTemp = File.separator + "mnt" + File.separator +
-		 * cropBO.getMajorType() + File.separator + cropBO.getImageId() +
-		 * ".txt";
-		 */
 		String filenameTemp = String.format("%s%s%s%s%s%s",
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,

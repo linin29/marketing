@@ -335,7 +335,8 @@
 		var imageId = $('#imageCrop').attr("imageid");
 		var cropDatas = $('#imageCrop').cropper('getAllData');
 		var majorType = $("#majorType").val();
-		var data ={imageId:imageId, imageCrop:cropDatas, majorType:majorType};
+		var taskId = $('#taskId').val();
+		var data ={imageId:imageId, imageCrop:cropDatas, majorType:majorType, taskId:taskId};
 		$.ajax({
      		 url: '${springMacroRequestContext.contextPath}/generateFile',
              data: JSON.stringify(data),

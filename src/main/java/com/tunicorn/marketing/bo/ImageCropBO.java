@@ -7,6 +7,7 @@ public class ImageCropBO {
 	private ArrayNode imageCrop;
 	private String imageId;
 	private String majorType;
+	private String taskId;
 
 	public int getOrder() {
 		return order;
@@ -38,6 +39,14 @@ public class ImageCropBO {
 
 	public void setMajorType(String majorType) {
 		this.majorType = majorType;
+	}
+
+	public String getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
 	}
 
 }

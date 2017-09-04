@@ -1086,15 +1086,25 @@ public class TaskService {
 	}
 
 	public void generateFile(ImageCropBO cropBO) {
-		String filenameTemp = File.separator + "mnt" + File.separator + cropBO.getMajorType() + File.separator
-				+ cropBO.getImageId() + ".txt";
+		/*
+		 * String filenameTemp = File.separator + "mnt" + File.separator +
+		 * cropBO.getMajorType() + File.separator + cropBO.getImageId() +
+		 * ".txt";
+		 */
+		String filenameTemp = String.format("%s%s%s%s%s%s",
+				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
+				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
+				cropBO.getTaskId(), File.separator, cropBO.getImageId() + ".txt");
 		File file = new File(filenameTemp);
 		file.setWritable(true, false);
 		TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(cropBO.getImageId());
 		if (imagesVO != null && imagesVO.getFullPath() != null) {
 			try {
-				FileUtils.copyFile(new File(imagesVO.getFullPath()), new File(File.separator + "mnt" + File.separator
-						+ cropBO.getMajorType() + File.separator + cropBO.getImageId() + ".jpeg"));
+				String imageFilenameTemp = String.format("%s%s%s%s%s%s",
+						com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
+						ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
+						cropBO.getTaskId(), File.separator, cropBO.getImageId() + ".jpeg");
+				FileUtils.copyFile(new File(imagesVO.getFullPath()), new File(imageFilenameTemp));
 			} catch (IOException e) {
 				logger.error("imageId:" + cropBO.getImageId() + ", copy file fail, " + e.getMessage());
 			}

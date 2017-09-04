@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tunicorn.common.Constant;
 import com.tunicorn.common.api.Message;
 import com.tunicorn.common.api.RestAPIResponse;
-import com.tunicorn.marketing.service.UserService;
 import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.utils.CookieUtils;
 import com.tunicorn.marketing.vo.UserVO;
@@ -27,9 +25,6 @@ import com.tunicorn.util.MessageUtils;
 @EnableAutoConfiguration
 public class TempLoginController {
 	private static Logger logger = Logger.getLogger(TempLoginController.class);
-
-	@Autowired
-	private UserService userService;
 
 	/**
 	 * Login page

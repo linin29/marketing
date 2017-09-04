@@ -1094,7 +1094,7 @@ public class TaskService {
 		String filenameTemp = String.format("%s%s%s%s%s%s",
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
-				cropBO.getTaskId(), File.separator, cropBO.getImageId() + ".txt");
+				cropBO.getMajorType(), File.separator, cropBO.getImageId() + ".txt");
 		File file = new File(filenameTemp);
 		file.setWritable(true, false);
 		TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(cropBO.getImageId());
@@ -1103,7 +1103,7 @@ public class TaskService {
 				String imageFilenameTemp = String.format("%s%s%s%s%s%s",
 						com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 						ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
-						cropBO.getTaskId(), File.separator, cropBO.getImageId() + ".jpeg");
+						cropBO.getMajorType(), File.separator, cropBO.getImageId() + ".jpeg");
 				FileUtils.copyFile(new File(imagesVO.getFullPath()), new File(imageFilenameTemp));
 			} catch (IOException e) {
 				logger.error("imageId:" + cropBO.getImageId() + ", copy file fail, " + e.getMessage());

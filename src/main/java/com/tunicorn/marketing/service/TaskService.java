@@ -55,6 +55,7 @@ import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.mapper.ApiCallingDetailMapper;
 import com.tunicorn.marketing.mapper.ApiCallingSummaryMapper;
+import com.tunicorn.marketing.mapper.ErrorCorrectionDetailMapper;
 import com.tunicorn.marketing.mapper.GoodsSkuMapper;
 import com.tunicorn.marketing.mapper.MajorTypeMapper;
 import com.tunicorn.marketing.mapper.TaskDumpMapper;
@@ -65,6 +66,7 @@ import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.utils.MarketingStorageUtils;
 import com.tunicorn.marketing.vo.ApiCallingDetailVO;
 import com.tunicorn.marketing.vo.ApiCallingSummaryVO;
+import com.tunicorn.marketing.vo.ErrorCorrectionDetailVO;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
@@ -92,6 +94,8 @@ public class TaskService {
 	private MajorTypeMapper majorTypeMapper;
 	@Autowired
 	private GoodsSkuMapper goodsSkuMapper;
+	@Autowired
+	private ErrorCorrectionDetailMapper errorCorrectionDetailMapper;
 
 	@Transactional
 	public ServiceResponseBO createTask(String userId, String taskName, List<MultipartFile> images) {
@@ -1086,19 +1090,22 @@ public class TaskService {
 	}
 
 	public void generateFile(ImageCropBO cropBO) {
-		String filenameTemp = String.format("%s%s%s%s%s%s",
+		String filenameTemp = String.format("%s%s%s%s%s%s%s%s",
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
-				cropBO.getMajorType(), File.separator, cropBO.getImageId() + ".txt");
+				cropBO.getMajorType(), File.separator, MarketingConstants.CROP_TXT_PATH, File.separator,
+				cropBO.getImageId() + ".txt");
 		File file = new File(filenameTemp);
 		file.setWritable(true, false);
 		TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(cropBO.getImageId());
+		String imageFilenameTemp ="";
 		if (imagesVO != null && imagesVO.getFullPath() != null) {
 			try {
-				String imageFilenameTemp = String.format("%s%s%s%s%s%s",
+				imageFilenameTemp = String.format("%s%s%s%s%s%s%s%s",
 						com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 						ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
-						cropBO.getMajorType(), File.separator, cropBO.getImageId() + ".jpeg");
+						cropBO.getMajorType(), File.separator, MarketingConstants.CROP_IMAGE_PATH, File.separator,
+						cropBO.getImageId() + ".jpeg");
 				FileUtils.copyFile(new File(imagesVO.getFullPath()), new File(imageFilenameTemp));
 			} catch (IOException e) {
 				logger.error("imageId:" + cropBO.getImageId() + ", copy file fail, " + e.getMessage());
@@ -1124,6 +1131,14 @@ public class TaskService {
 				}
 			}
 			FileUtils.writeStringToFile(file, buffer.toString());
+			
+			ErrorCorrectionDetailVO errorCorrectionDetailVO = new ErrorCorrectionDetailVO();
+			errorCorrectionDetailVO.setId(
+					(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
+			errorCorrectionDetailVO.setMajorType(cropBO.getMajorType());
+			errorCorrectionDetailVO.setImagePath(imageFilenameTemp);
+			errorCorrectionDetailVO.setFilePath(filenameTemp);
+			errorCorrectionDetailMapper.createErrorCorrectionDetail(errorCorrectionDetailVO);
 		} catch (Exception e) {
 			logger.error("imageId:" + cropBO.getImageId() + ", generate file fail, " + e.getMessage());
 		}

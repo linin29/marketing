@@ -1,32 +1,24 @@
 <div class="count_list">
-    <section class="task_list_header">
-        <h3>统计列表
-            <small>本次查询共<span id="number">${totalCount}</span>条记录，<span id="number">${callingCount}</span>次调用</small>
-        </h3>
+    <section class="task_list_header" style="width:100%;height:50px;">
+        <h3 class="col-sm-4" style="padding-left:0px;">统计列表<small>本次查询共<span id="number">${totalCount}</span>条记录，<span id="number">${callingCount}</span>次调用</small></h3>
+    	<div class="col-sm-8" style="margin-top:10px;padding-right:0px;">
+    		<input id="startTime" type="hidden" <#if startDate??> value="${startDate}"</#if>>
+			<input id="endTime" type="hidden" <#if endDate??> value="${endDate}"</#if>>
+		 	<div style="float: left; width: 10%;line-height:34px;">时间段：</div>
+		 	<div style="float: left; width: 35%;" class="form-group input-group date form_datetime1" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
+		        <input class="form-control" size="16" type="text" value="" id="startDate">
+		        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+		    </div>
+		    <div  style="float: left;line-height: 34px" class="form-group glyphicon glyphicon-minus"></div>
+		     <div style="float: left;  width: 35%;" class=" input-group date form_datetime2" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
+		        <input class="form-control" size="16" type="text" value="" id="endDate">
+		        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+		    </div>
+		    <button style="float: left;width: 10%;margin-left:8%;" class='btn btn-success' id="query">查询</button>
+    	</div>
     </section>
-    <section>
-		<div class='form-group col-sm-6'>
-			<span class="control-label line-height col-sm-2 text-center">时间段：</span>
-			<div class='col-sm-10'>
-			 	<input id="startTime" type="hidden" <#if startDate??> value="${startDate}"</#if>>
-				<input id="endTime" type="hidden" <#if endDate??> value="${endDate}"</#if>>
-			 	 <div style="float: left; width: 48%;" class="form-group input-group date form_datetime1" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
-			        <input class="form-control" size="16" type="text" value="" id="startDate">
-			        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-			    </div>
-			    <div  style="float: left;line-height: 34px" class="form-group glyphicon glyphicon-minus"></div>
-			     <div style="float: left;  width: 48%;" class=" input-group date form_datetime2" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
-			        <input class="form-control" size="16" type="text" value="" id="endDate">
-			        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-			    </div>
-			</div>
-		</div>	
-		<div class="text-right" style='margin-right:35px;'>
-			<button class='btn btn-success' id="query">查询</button>
-		</div>
-	</section>
     <section class="content_list">
-        <table class="table table-bordered table-hover table-condensed">
+        <table class="table table-bordered table-hover">
             <thead>
                 <tr style='background-color:#ddd;'>
                     <th>调用API</th>

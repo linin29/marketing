@@ -4,55 +4,45 @@
 </style>
 <div class="exportDataContainer">
     <div class="panel-default" style="margin-bottom:0px">
-         <div class="data_list_header" style="margin-left: 2%;">
-       	 	<h3>数据导出
-            	<small>本次查询共<span id="number">${totalCount!0}</span>数据</small>
-        	</h3>
+         <div class="data_list_header" >
+       	 	<h3 class="col-sm-3">数据导出<small>本次查询共<span id="number">${totalCount!0}</span>数据</small></h3>
+       	 	<div class="col-sm-9" style="margin-top:10px;margin-bottom:10px;">
+       	 		<span style="width:8%;float:left;line-height:34px;">品类：</span>
+                <div style="width:25%;float:left;">
+                 	<select id="majorType" style="height: 34px;width: 96%;">
+                      	<option value="">请选择</option>
+                      	<#if majorTypes?? && (majorTypes?size > 0)>
+                   	<#list majorTypes as tempMajorType>
+                       	<option value="${tempMajorType.name}" <#if majorType?? && majorType == tempMajorType.name> selected </#if>>${tempMajorType.description}</option>
+                   	</#list>
+                  		</#if>
+					</select>               
+                </div>
+                <span style="width:8%;float:left;line-height:34px;margin-left:1%">时间段：</span>
+              	<div style="width:55%;float:left;">
+           	 	  <input id="startTime" type="hidden" <#if startTime??> value="${startTime}"</#if>>
+           	 	  <input id="endTime" type="hidden" <#if endTime??> value="${endTime}"</#if>>
+           	 	  <div style="float: left; width: 48%;" class="form-group input-group date form_datetime1" data-date="2016-11-1T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii:ss" >
+                    <input class="form-control" size="16" type="text" value="" id="fromDate">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            	  </div>
+                 <div  style="float: left;line-height: 34px" class="form-group glyphicon glyphicon-minus"></div>
+                 <div style="float: left;  width: 48%;" class=" input-group date form_datetime2" data-date="2016-11-1T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii:ss" >
+                  <input class="form-control" size="16" type="text" value="" id="toDate">
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                 </div>
+               </div>
+       	 	</div>
     	</div>
-        <div class="panel-body">
-            <div class="condition row">
-            	<div class="form-group col-sm-4">
-                     <span class="control-label line-height col-sm-3 text-center" >品类：</span>
-                     <div class="col-sm-9">
-                         <select id="majorType" style="height: 34px;width: 96%;">
-                         	<option value="">请选择</option>
-                         	<#if majorTypes?? && (majorTypes?size > 0)>
-		                    	<#list majorTypes as tempMajorType>
-		                        	<option value="${tempMajorType.name}" <#if majorType?? && majorType == tempMajorType.name> selected </#if>>${tempMajorType.description}</option>
-		                    	</#list>
-	                    	</#if>
-						</select>               
-                     </div>
-                 </div>
-                 
-                 <div class='form-group col-sm-6'>
-                 	<span class="control-label line-height col-sm-2 text-center">时间段：</span>
-                 	 <div class='col-sm-10'>
-                 	 	<input id="startTime" type="hidden" <#if startTime??> value="${startTime}"</#if>>
-                 	 	<input id="endTime" type="hidden" <#if endTime??> value="${endTime}"</#if>>
-                 	 	 <div style="float: left; width: 48%;" class="form-group input-group date form_datetime1" data-date="2016-11-1T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii:ss" >
-		                    <input class="form-control" size="16" type="text" value="" id="fromDate">
-		                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-		                </div>
-		                <div  style="float: left;line-height: 34px" class="form-group glyphicon glyphicon-minus"></div>
-		                 <div style="float: left;  width: 48%;" class=" input-group date form_datetime2" data-date="2016-11-1T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii:ss" >
-		                    <input class="form-control" size="16" type="text" value="" id="toDate">
-		                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-		                </div>
-                 	 </div>
-                 </div>
-                 <div class="form-group col-sm-4" style = "margin-top:20px;">
-                     <span class="control-label line-height col-sm-3 text-center" >状态：</span>
-                     <div class="col-sm-9">
-                         <p><input id="taskStatus" type="checkbox" <#if taskStatus??>checked</#if> name="taskStatus" value="identify_success" />&nbsp;&nbsp;identify_success</p>               
-                     </div>
-                 </div>
-                 <div class="text-right" style='margin-right:35px;'>
-                     <button class='btn btn-success' id="query">查询</button>
-                     <button class='btn btn-success' id="export">导出</button>
-                 </div>
-            </div>
-            
+         <div class="text-right" style="margin-right:15px;">
+             <button class='btn btn-success' id="query">查询</button>
+             <button class='btn btn-success' id="export">导出</button>
+         </div>
+        <div class="panel-body">  
+        	<div style="height:20px;margin-top: -44px;">
+            	<span style="font-size:14px;">状态：</span>
+				<input id="taskStatus" type="checkbox" <#if taskStatus??>checked</#if> name="taskStatus" value="identify_success" />&nbsp;&nbsp;identify_success               
+         	</div>
 			<div class="leftTable " style="margin-top: 15px;">
                 <table id="track-table" class="table table-hover table-bordered" style="margin-top: 5px">
                     <tbody>

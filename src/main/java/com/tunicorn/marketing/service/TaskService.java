@@ -1213,7 +1213,9 @@ public class TaskService {
 					cropBO.getImageId() + ".xml");
 			OutputFormat format = new OutputFormat("    ", true);
 			format.setEncoding("UTF-8");
-			XMLWriter xmlWriter = new XMLWriter(new FileOutputStream(filenameTemp), format);
+			File file = new File(filenameTemp);
+			file.setWritable(true, false);
+			XMLWriter xmlWriter = new XMLWriter(new FileOutputStream(file), format);
 			xmlWriter.write(document);
 			xmlWriter.close();
 		} catch (IOException e) {

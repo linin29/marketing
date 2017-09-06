@@ -24,6 +24,11 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -1098,7 +1103,7 @@ public class TaskService {
 		File file = new File(filenameTemp);
 		file.setWritable(true, false);
 		TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(cropBO.getImageId());
-		String imageFilenameTemp ="";
+		String imageFilenameTemp = "";
 		if (imagesVO != null && imagesVO.getFullPath() != null) {
 			try {
 				imageFilenameTemp = String.format("%s%s%s%s%s%s%s%s",
@@ -1112,7 +1117,8 @@ public class TaskService {
 			}
 		}
 		try {
-			StringBuffer buffer = new StringBuffer();
+			generateXmlFile(cropBO);
+/*			StringBuffer buffer = new StringBuffer();
 			if (cropBO != null && cropBO.getImageCrop() != null && cropBO.getImageCrop().size() > 0) {
 				ArrayNode arrayNode = cropBO.getImageCrop();
 				for (int j = 0; j < arrayNode.size(); j++) {
@@ -1130,8 +1136,8 @@ public class TaskService {
 					buffer.append(fileIn);
 				}
 			}
-			FileUtils.writeStringToFile(file, buffer.toString());
-			
+			FileUtils.writeStringToFile(file, buffer.toString());*/
+
 			ErrorCorrectionDetailVO errorCorrectionDetailVO = new ErrorCorrectionDetailVO();
 			errorCorrectionDetailVO.setId(
 					(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
@@ -1142,6 +1148,78 @@ public class TaskService {
 		} catch (Exception e) {
 			logger.error("imageId:" + cropBO.getImageId() + ", generate file fail, " + e.getMessage());
 		}
+	}
+
+	public void generateXmlFile(ImageCropBO cropBO) {
+		Element root = DocumentHelper.createElement("annotation");
+		Document document = DocumentHelper.createDocument(root);
+
+		// 给根节点添加孩子节点
+		root.addElement("foder");
+		root.addElement("filename");
+		root.addElement("path");
+
+		Element sourceElement = root.addElement("source");
+		sourceElement.addElement("database");
+
+		Element sizeElement = root.addElement("size");
+		sizeElement.addElement("width").addText("100");
+		sizeElement.addElement("height").addText("100");
+		sizeElement.addElement("depth").addText("100");
+
+		root.addElement("segmented");
+		if (cropBO != null && cropBO.getImageCrop() != null && cropBO.getImageCrop().size() > 0) {
+			ArrayNode arrayNode = cropBO.getImageCrop();
+			for (int j = 0; j < arrayNode.size(); j++) {
+				Element objectElement = root.addElement("object");
+
+				ObjectNode nodeResult = (ObjectNode) arrayNode.get(j);
+				String labelName = "Others";
+				GoodsSkuBO goodsSkuBO = new GoodsSkuBO();
+				goodsSkuBO.setOrder(nodeResult.get("label").asInt() - 1);
+				goodsSkuBO.setMajorType(cropBO.getMajorType());
+				List<GoodsSkuVO> goodsSkuVOs = goodsSkuMapper.getGoodsSkuListByBO(goodsSkuBO);
+				if (goodsSkuVOs != null && goodsSkuVOs.size() > 0) {
+					labelName = goodsSkuVOs.get(0).getName();
+				}
+				objectElement.addElement("name").addText(labelName);
+				objectElement.addElement("pose");
+				objectElement.addElement("truncated");
+				objectElement.addElement("difficult");
+				Element bndboxElement = objectElement.addElement("bndbox");
+				int x = 0;
+				int y = 0;
+				if (nodeResult.get("x") != null) {
+					bndboxElement.addElement("xmin").addText(nodeResult.get("x").toString());
+					x = nodeResult.get("x").asInt();
+				}
+				if (nodeResult.get("y") != null) {
+					bndboxElement.addElement("ymin").addText(nodeResult.get("y").toString());
+					y = nodeResult.get("y").asInt();
+				}
+				if (nodeResult.get("width") != null) {
+					bndboxElement.addElement("xmax").addText(String.valueOf(x + nodeResult.get("width").asInt()));
+				}
+				if (nodeResult.get("height") != null) {
+					bndboxElement.addElement("ymax").addText(String.valueOf(y + nodeResult.get("height").asInt()));
+				}
+			}
+		}
+		try {
+			String filenameTemp = String.format("%s%s%s%s%s%s%s%s",
+					com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
+					ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
+					cropBO.getMajorType(), File.separator, MarketingConstants.CROP_TXT_PATH, File.separator,
+					cropBO.getImageId() + ".xml");
+			OutputFormat format = new OutputFormat("    ", true);
+			format.setEncoding("UTF-8");
+			XMLWriter xmlWriter = new XMLWriter(new FileOutputStream(filenameTemp), format);
+			xmlWriter.write(document);
+			xmlWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	private int addImages(String taskId, String userId, List<MultipartFile> images) {

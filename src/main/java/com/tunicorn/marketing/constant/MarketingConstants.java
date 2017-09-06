@@ -103,5 +103,5 @@ public class MarketingConstants {
 	public static final String BATCH_ZIP_NAME = "batch_zip.zip";
 	
 	public static final String CROP_IMAGE_PATH = "JPEGImages";
-	public static final String CROP_TXT_PATH = "txt";
+	public static final String CROP_TXT_PATH = "Annotations";
 }

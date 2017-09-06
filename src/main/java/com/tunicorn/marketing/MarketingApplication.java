@@ -8,9 +8,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.tunicorn.marketing.filter.XssStringJsonSerializer;
 import com.tunicorn.marketing.interceptor.AdminLoginInterceptor;
 import com.tunicorn.marketing.interceptor.LoginInterceptor;
 import com.tunicorn.util.ConfigUtils; 
@@ -51,5 +56,18 @@ public class MarketingApplication extends WebMvcConfigurerAdapter {
 		factory.setMaxRequestSize(total);  //total size of files
 		//factory.setLocation(location);  //file path to storage
 		return factory.createMultipartConfig();
+	}
+	
+	@Bean
+	@Primary
+	public ObjectMapper xssObjectMapper(Jackson2ObjectMapperBuilder builder) {
+	 //解析器
+	 ObjectMapper objectMapper = builder.createXmlMapper(false).build();
+	 //注册xss解析器
+	 SimpleModule xssModule = new SimpleModule("XssStringJsonSerializer");
+	 xssModule.addSerializer(new XssStringJsonSerializer());
+	 objectMapper.registerModule(xssModule);
+	 //返回
+	 return objectMapper;
 	}
 }

@@ -1215,6 +1215,7 @@ public class TaskService {
 			format.setEncoding("UTF-8");
 			File file = new File(filenameTemp);
 			file.setWritable(true, false);
+			FileUtils.writeStringToFile(file, "");
 			XMLWriter xmlWriter = new XMLWriter(new FileOutputStream(file), format);
 			xmlWriter.write(document);
 			xmlWriter.close();

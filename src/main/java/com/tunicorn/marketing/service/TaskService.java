@@ -1179,7 +1179,7 @@ public class TaskService {
 		Element sizeElement = root.addElement("size");
 		sizeElement.addElement("width").addText(String.valueOf(width));
 		sizeElement.addElement("height").addText(String.valueOf(height));
-		sizeElement.addElement("depth").addText("1");
+		sizeElement.addElement("depth").addText("3");
 
 		root.addElement("segmented").addText("0");
 		if (cropBO != null && cropBO.getImageCrop() != null && cropBO.getImageCrop().size() > 0) {
@@ -1220,8 +1220,10 @@ public class TaskService {
 			}
 		}
 		try {
-			OutputFormat format = new OutputFormat("    ", true);
+			OutputFormat format = OutputFormat.createPrettyPrint();
 			format.setEncoding("UTF-8");
+			//设置声明之后不换行
+			format.setNewLineAfterDeclaration(false);
 			File file = new File(filenameTemp);
 			file.setWritable(true, false);
 			FileUtils.writeStringToFile(file, StringUtils.EMPTY);

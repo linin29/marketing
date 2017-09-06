@@ -93,14 +93,19 @@
 			<artifactId>commons-codec</artifactId>
 		</dependency>
 		<!-- email -->
-	   <dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-mail</artifactId>
-	   </dependency>
-	   <!-- dom4j -->
-	   <dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		<!-- dom4j -->
+		<dependency>
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.ethz.ganymed</groupId>
+			<artifactId>ganymed-ssh2</artifactId>
+			<version>build210</version>
 		</dependency>
 	</dependencies>
 

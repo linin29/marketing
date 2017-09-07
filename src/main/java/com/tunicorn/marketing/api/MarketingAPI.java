@@ -81,12 +81,12 @@ public class MarketingAPI {
 		logger.info(url);
 		logger.info(params.convertToJSON());
 		String retValue = HttpClientUtils.post(url, headers, params.convertToJSON());
-
+		
+		logger.info("The response from backend marketing server:" + retValue);
 		if (StringUtils.isBlank(retValue)) {
 			Message message = MessageUtils.getInstance().getMessage("marketing_call_service_failure");
 			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
-		logger.info("The response from backend marketing server:" + retValue);
 
 		ObjectNode node = JsonUtil.toObjectNode(retValue);
 		if (node == null) {

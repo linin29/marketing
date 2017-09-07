@@ -1098,14 +1098,12 @@ public class TaskService {
 	}
 
 	public void generateFile(ImageCropBO cropBO) {
-		String filenameTemp = String.format("%s%s%s%s%s%s%s%s",
+		String xmlFilePath = String.format("%s%s%s%s%s%s%s%s",
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
 				cropBO.getMajorType(), File.separator, MarketingConstants.CROP_TXT_PATH, File.separator,
-				cropBO.getImageId() + ".txt");
-		File file = new File(filenameTemp);
+				cropBO.getImageId() + ".xml");
 		File imageFile;
-		file.setWritable(true, false);
 		TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(cropBO.getImageId());
 		String imageFilenameTemp = "";
 		if (imagesVO != null && imagesVO.getFullPath() != null) {
@@ -1115,63 +1113,35 @@ public class TaskService {
 						com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 						ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
 						cropBO.getMajorType(), File.separator, MarketingConstants.CROP_IMAGE_PATH, File.separator,
-						cropBO.getImageId() + ".jpeg");
+						cropBO.getImageId() + ".jpg");
 				FileUtils.copyFile(new File(imagesVO.getFullPath()), new File(imageFilenameTemp));
 
 				BufferedImage bufferedImage = ImageIO.read(imageFile);
 				int width = bufferedImage.getWidth();
 				int height = bufferedImage.getHeight();
-				generateXmlFile(cropBO, width, height);
+				generateXmlFile(cropBO, xmlFilePath, width, height);
 			} catch (IOException e) {
 				logger.error("imageId:" + cropBO.getImageId() + ", copy file fail, " + e.getMessage());
 			}
 		}
-		try {
 
-			/*
-			 * StringBuffer buffer = new StringBuffer(); if (cropBO != null &&
-			 * cropBO.getImageCrop() != null && cropBO.getImageCrop().size() >
-			 * 0) { ArrayNode arrayNode = cropBO.getImageCrop(); for (int j = 0;
-			 * j < arrayNode.size(); j++) { ObjectNode nodeResult = (ObjectNode)
-			 * arrayNode.get(j); String labelName = "Others"; GoodsSkuBO
-			 * goodsSkuBO = new GoodsSkuBO();
-			 * goodsSkuBO.setOrder(nodeResult.get("label").asInt() - 1);
-			 * goodsSkuBO.setMajorType(cropBO.getMajorType()); List<GoodsSkuVO>
-			 * goodsSkuVOs = goodsSkuMapper.getGoodsSkuListByBO(goodsSkuBO); if
-			 * (goodsSkuVOs != null && goodsSkuVOs.size() > 0) { labelName =
-			 * goodsSkuVOs.get(0).getName(); } String fileIn =
-			 * nodeResult.get("x") + "," + nodeResult.get("y") + "," +
-			 * nodeResult.get("width") + "," + nodeResult.get("height") + "," +
-			 * labelName + "\r\n"; buffer.append(fileIn); } }
-			 * FileUtils.writeStringToFile(file, buffer.toString());
-			 */
-
-			ErrorCorrectionDetailVO errorCorrectionDetailVO = new ErrorCorrectionDetailVO();
-			errorCorrectionDetailVO.setId(
-					(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
-			errorCorrectionDetailVO.setMajorType(cropBO.getMajorType());
-			errorCorrectionDetailVO.setImagePath(imageFilenameTemp);
-			errorCorrectionDetailVO.setFilePath(filenameTemp);
-			errorCorrectionDetailMapper.createErrorCorrectionDetail(errorCorrectionDetailVO);
-		} catch (Exception e) {
-			logger.error("imageId:" + cropBO.getImageId() + ", generate file fail, " + e.getMessage());
-		}
+		ErrorCorrectionDetailVO errorCorrectionDetailVO = new ErrorCorrectionDetailVO();
+		errorCorrectionDetailVO.setId(
+				(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
+		errorCorrectionDetailVO.setMajorType(cropBO.getMajorType());
+		errorCorrectionDetailVO.setImagePath(imageFilenameTemp);
+		errorCorrectionDetailVO.setFilePath(xmlFilePath);
+		errorCorrectionDetailMapper.createErrorCorrectionDetail(errorCorrectionDetailVO);
 	}
 
-	public void generateXmlFile(ImageCropBO cropBO, int width, int height) {
-		String filenameTemp = String.format("%s%s%s%s%s%s%s%s",
-				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
-				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
-				cropBO.getMajorType(), File.separator, MarketingConstants.CROP_TXT_PATH, File.separator,
-				cropBO.getImageId() + ".xml");
-
+	private void generateXmlFile(ImageCropBO cropBO, String xmlFilePath, int width, int height) {
 		Element root = DocumentHelper.createElement("annotation");
 		Document document = DocumentHelper.createDocument(root);
 
 		// 给根节点添加孩子节点
 		root.addElement("foder").addText("newdata");
 		root.addElement("filename").addText(cropBO.getImageId());
-		root.addElement("path").addText(filenameTemp);
+		root.addElement("path").addText(xmlFilePath);
 
 		Element sourceElement = root.addElement("source");
 		sourceElement.addElement("database").addText("mysql");
@@ -1222,9 +1192,9 @@ public class TaskService {
 		try {
 			OutputFormat format = OutputFormat.createPrettyPrint();
 			format.setEncoding("UTF-8");
-			//设置声明之后不换行
+			// 设置声明之后不换行
 			format.setNewLineAfterDeclaration(false);
-			File file = new File(filenameTemp);
+			File file = new File(xmlFilePath);
 			file.setWritable(true, false);
 			FileUtils.writeStringToFile(file, StringUtils.EMPTY);
 			XMLWriter xmlWriter = new XMLWriter(new FileOutputStream(file), format);

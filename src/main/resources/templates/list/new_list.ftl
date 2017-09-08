@@ -59,7 +59,10 @@
 	                        <div class="col-xs-1 choose_btn" style="width: 100px;">
                                 <button id="taskPullData" type="button" class="btn btn-success">拉取数据</button>
                            </div>
-                           </#if>    
+                           </#if>
+                           	<div class="col-xs-1 choose_btn" style="width: 100px;">
+                                <button id="markImage" type="button" class="btn btn-success">图片标注</button>
+                           </div>    
                        </div>
                    </div>
                </h4>
@@ -236,6 +239,15 @@
              		$("html").html(data.responseText);
              	}
          	 });
+    	});
+     	
+     	$('#markImage').click(function() {
+    		var taskId = $('#taskId').val();
+            if (taskId=='-1' || taskId=='0'){
+                noty({text: "请先上传图片", layout: "topCenter", type: "warning", timeout: 2000});
+                return;
+            }
+			window.open("${springMacroRequestContext.contextPath}/showMarkPage/" + taskId);
     	});
      	$('#nextTask').click(function() {
     		var taskId = $('#taskId').val();

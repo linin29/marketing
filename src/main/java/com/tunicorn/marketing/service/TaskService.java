@@ -63,7 +63,6 @@ import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.mapper.ApiCallingDetailMapper;
 import com.tunicorn.marketing.mapper.ApiCallingSummaryMapper;
-import com.tunicorn.marketing.mapper.ErrorCorrectionDetailMapper;
 import com.tunicorn.marketing.mapper.GoodsSkuMapper;
 import com.tunicorn.marketing.mapper.MajorTypeMapper;
 import com.tunicorn.marketing.mapper.TaskDumpMapper;
@@ -74,7 +73,6 @@ import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.utils.MarketingStorageUtils;
 import com.tunicorn.marketing.vo.ApiCallingDetailVO;
 import com.tunicorn.marketing.vo.ApiCallingSummaryVO;
-import com.tunicorn.marketing.vo.ErrorCorrectionDetailVO;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
@@ -102,8 +100,6 @@ public class TaskService {
 	private MajorTypeMapper majorTypeMapper;
 	@Autowired
 	private GoodsSkuMapper goodsSkuMapper;
-	@Autowired
-	private ErrorCorrectionDetailMapper errorCorrectionDetailMapper;
 
 	@Transactional
 	public ServiceResponseBO createTask(String userId, String taskName, List<MultipartFile> images) {
@@ -1124,14 +1120,6 @@ public class TaskService {
 				logger.error("imageId:" + cropBO.getImageId() + ", copy file fail, " + e.getMessage());
 			}
 		}
-
-		ErrorCorrectionDetailVO errorCorrectionDetailVO = new ErrorCorrectionDetailVO();
-		errorCorrectionDetailVO.setId(
-				(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
-		errorCorrectionDetailVO.setMajorType(cropBO.getMajorType());
-		errorCorrectionDetailVO.setImagePath(imageFilenameTemp);
-		errorCorrectionDetailVO.setFilePath(xmlFilePath);
-		errorCorrectionDetailMapper.createErrorCorrectionDetail(errorCorrectionDetailVO);
 	}
 
 	private void generateXmlFile(ImageCropBO cropBO, String xmlFilePath, int width, int height) {
@@ -1160,7 +1148,9 @@ public class TaskService {
 				ObjectNode nodeResult = (ObjectNode) arrayNode.get(j);
 				String labelName = "Others";
 				GoodsSkuBO goodsSkuBO = new GoodsSkuBO();
-				goodsSkuBO.setOrder(nodeResult.get("label").asInt() - 1);
+				if (nodeResult.get("label") != null) {
+					goodsSkuBO.setOrder(nodeResult.get("label").asInt() - 1);
+				}
 				goodsSkuBO.setMajorType(cropBO.getMajorType());
 				List<GoodsSkuVO> goodsSkuVOs = goodsSkuMapper.getGoodsSkuListByBO(goodsSkuBO);
 				if (goodsSkuVOs != null && goodsSkuVOs.size() > 0) {
@@ -1192,7 +1182,7 @@ public class TaskService {
 		try {
 			OutputFormat format = OutputFormat.createPrettyPrint();
 			format.setEncoding("UTF-8");
-			// 设置声明之后不换行
+			// 设置在声明之后不换行
 			format.setNewLineAfterDeclaration(false);
 			File file = new File(xmlFilePath);
 			file.setWritable(true, false);

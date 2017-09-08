@@ -33,8 +33,7 @@ public class SkuController extends BaseController {
 	@Autowired
 	private GoodsSkuService goodsSkuService;
 	@Autowired
-	private 
-	MajorTypeService majorTypeService;
+	private MajorTypeService majorTypeService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String sku(HttpServletRequest request, Model model) {

@@ -48,6 +48,7 @@ import com.tunicorn.marketing.service.GoodsSkuService;
 import com.tunicorn.marketing.service.TaskService;
 import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
+import com.tunicorn.marketing.vo.MajorTypeVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
 import com.tunicorn.marketing.vo.TaskVO;
 import com.tunicorn.marketing.vo.UserVO;
@@ -330,7 +331,7 @@ public class TaskController extends BaseController {
 				model.addAttribute("stitchImagePath", taskVO.getStitchImagePath() + "?random=" + new Date().getTime());
 			}
 		}
-		
+
 		model.addAttribute("task", taskVO);
 		model.addAttribute("images", imagesVOs);
 		return "list/task_view";
@@ -604,7 +605,7 @@ public class TaskController extends BaseController {
 	public void downloadUserManual(HttpServletRequest request, HttpServletResponse response) {
 		rendFile(request, response, MarketingConstants.BATCH_ZIP_PATH, MarketingConstants.BATCH_ZIP_NAME);
 	}
-	
+
 	@RequestMapping(value = "/showView/tasks", method = RequestMethod.GET)
 	public String Temptasks(HttpServletRequest request, Model model) {
 
@@ -622,7 +623,7 @@ public class TaskController extends BaseController {
 		model.addAttribute("currentPage", 1);
 		return "list/task_list_temp";
 	}
-	
+
 	@RequestMapping(value = "/showView/task/search", method = RequestMethod.GET)
 	public String tempSearchTask(HttpServletRequest request, Model model) {
 		TaskBO taskBO = new TaskBO();
@@ -630,7 +631,7 @@ public class TaskController extends BaseController {
 		taskBO.setStartTime(ConfigUtils.getInstance().getConfigValue("marketing.temp.start.time"));
 		taskBO.setEndTime(ConfigUtils.getInstance().getConfigValue("marketing.temp.end.time"));
 		taskBO.setUserId(ConfigUtils.getInstance().getConfigValue("marketing.temp.user.id"));
-		
+
 		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
 			taskBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
 		}
@@ -651,6 +652,25 @@ public class TaskController extends BaseController {
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", taskBO.getPageNum() + 1);
 		return "list/task_list_temp";
+	}
+
+	@RequestMapping(value = "/showMarkPage/{taskId}", method = RequestMethod.GET)
+	public String showMarkPage(@PathVariable("taskId") String taskId, Model model, HttpServletRequest request) {
+		UserVO user = getCurrentUser(request);
+		TaskVO taskVO = taskService.getTaskById(taskId);
+		List<TaskImagesVO> imagesVOs = taskService.getTaskImagesListByTaskId(taskId);
+		taskService.saveGoodsInfo(taskId);
+		if (imagesVOs != null && imagesVOs.size() > 0) {
+			TaskImagesVO image = imagesVOs.get(0);
+			model.addAttribute("image", image);
+		}
+		List<MajorTypeVO> majorTypeVOs = taskService.getMajorTypeVOList(user.getUserName());
+
+		model.addAttribute("majorTypes", majorTypeVOs);
+		model.addAttribute("images", imagesVOs);
+		model.addAttribute("task", taskVO);
+		model.addAttribute("goodResults", taskService.getResultList(taskVO));
+		return "list/task_mark";
 	}
 
 	private void rendFile(HttpServletRequest request, HttpServletResponse response, String filePath, String name) {

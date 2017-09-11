@@ -608,6 +608,8 @@ BEGIN
 		  `major_type` varchar(50) NOT NULL,
 		  `image_path` varchar(256) NOT NULL,
 		  `file_path` varchar(256) NOT NULL,
+		  `result` mediumtext,
+		  `image_id` varchar(256) NOT NULL,
 		  `create_time` datetime DEFAULT NULL,
 		  `last_update` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		  `status` enum('active','deleted','inactive') NOT NULL DEFAULT 'active',

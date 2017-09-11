@@ -8,6 +8,8 @@ public class ErrorCorrectionDetailVO {
 	private String majorType;
 	private String imagePath;
 	private String filePath;
+	private String result;
+	private String imageId;
 	private Date createTime;
 	private Date lastUpdateTime;
 	private String status;
@@ -42,6 +44,22 @@ public class ErrorCorrectionDetailVO {
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+
+	public String getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
 	}
 
 	public Date getCreateTime() {

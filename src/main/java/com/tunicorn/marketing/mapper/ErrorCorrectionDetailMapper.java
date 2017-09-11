@@ -9,4 +9,6 @@ public interface ErrorCorrectionDetailMapper {
 	public int createErrorCorrectionDetail(ErrorCorrectionDetailVO errorCorrectionDetailVO);
 	
 	public void batchDeleteErrorCorrectionDetail(List<ErrorCorrectionDetailVO> correctionDetailVOs);
+	
+	public int updateErrorCorrectionDetail(ErrorCorrectionDetailVO errorCorrectionDetailVO);
 }

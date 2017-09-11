@@ -6,55 +6,89 @@
 		<result column="major_type" property="majorType" jdbcType="VARCHAR" />
 		<result column="image_path" property="imagePath" jdbcType="VARCHAR" />
 		<result column="file_path" property="filePath" jdbcType="VARCHAR" />
+		<result column="result" property="result" jdbcType="VARCHAR" />
+		<result column="image_id" property="imageId" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
 		<result column="last_update" property="lastUpdateTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
 	</resultMap>
 	
 	<insert id="createErrorCorrectionDetail" parameterType="com.tunicorn.marketing.vo.ErrorCorrectionDetailVO">
-    insert into `error_correction_detail`
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    	insert into `error_correction_detail`
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         id,
       </if>
-      <if test="majorType != null" >
+      <if test="majorType != null">
         major_type,
        </if>
-      <if test="imagePath != null" >
+      <if test="imagePath != null">
         image_path,
       </if>
-      <if test="filePath != null" >
+      <if test="filePath != null">
         file_path,
       </if>
+      <if test="result != null">
+        result,
+      </if>
+      <if test="imageId != null">
+        image_id,
+      </if>
         create_time,
-      <if test="lastUpdateTime != null" >
+      <if test="lastUpdateTime != null">
         last_update,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="majorType != null" >
+      <if test="majorType != null">
         #{majorType,jdbcType=VARCHAR},
       </if>
-      <if test="imagePath != null" >
+      <if test="imagePath != null">
         #{imagePath,jdbcType=VARCHAR},
       </if>
-      <if test="filePath != null" >
+      <if test="filePath != null">
         #{filePath,jdbcType=VARCHAR},
       </if>
+      <if test="result != null">
+        #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="imageId != null">
+        #{imageId,jdbcType=VARCHAR},
+      </if>
         now(),
-      <if test="lastUpdateTime != null" >
+      <if test="lastUpdateTime != null">
         #{lastUpdateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  
+  <update id="updateErrorCorrectionDetail"  parameterType="com.tunicorn.marketing.vo.ErrorCorrectionDetailVO">
+	  UPDATE error_correction_detail
+	  <trim prefix="set" suffixOverrides=",">
+			<if test="majorType != null and majorType !=''">
+			    major_type=#{majorType},
+			</if>
+			<if test="imagePath != null and imagePath !=''">
+			    image_path=#{imagePath},
+			</if>
+			<if test="filePath != null and filePath !=''">
+			    `file_path`=#{filePath},
+			</if>
+			<if test="result != null and result !=''">
+			    result=#{result},
+			</if>
+			<if test="imageId != null and imageId !=''">
+			    image_id=#{imageId},
+			</if>
+	 </trim>
+		 WHERE id=#{id}
+  </update>
   <delete id="batchDeleteErrorCorrectionDetail" parameterType="java.util.List">  
     delete from `error_correction_detail` where id in  
     <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
         #{item.id}   
     </foreach>  
-</delete>
+ </delete>
 </mapper>

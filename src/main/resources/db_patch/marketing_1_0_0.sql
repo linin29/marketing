@@ -166,7 +166,7 @@ BEGIN
 		  `last_update` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		  `status` enum('active','deleted','inactive') DEFAULT 'active',
 		  `stitch_image_path` varchar(255) DEFAULT NULL,
-          `result` text,
+          `result` mediumtext,
           `rows` varchar(100) DEFAULT NULL,
           `major_type` varchar(20) DEFAULT NULL,
 		  PRIMARY KEY (`id`),

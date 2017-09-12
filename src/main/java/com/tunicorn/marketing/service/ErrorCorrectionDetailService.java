@@ -49,7 +49,6 @@ public class ErrorCorrectionDetailService {
 			ObjectMapper mapper = new ObjectMapper();
 			try {
 				ArrayNode jsonNodes = (ArrayNode) mapper.readTree(result);
-				;
 				if (jsonNodes != null && jsonNodes.size() > 0) {
 					for (int i = 0; i < jsonNodes.size(); i++) {
 						ObjectNode oNode = (ObjectNode) jsonNodes.get(i);
@@ -66,7 +65,7 @@ public class ErrorCorrectionDetailService {
 					}
 				}
 			} catch (IOException e) {
-				logger.error("taskId:" + imageId + ", getTaskMarkImageCrops method 获取getTaskMarkImageCrops失败, " + e.getMessage());
+				logger.error("imageId:" + imageId + ", getTaskMarkImageCrops method 获取getTaskMarkImageCrops失败, " + e.getMessage());
 			}
 		}
 

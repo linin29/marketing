@@ -1124,14 +1124,25 @@ public class TaskService {
 				logger.error("imageId:" + cropBO.getImageId() + ", copy file fail, " + e.getMessage());
 			}
 		}
-
-		ErrorCorrectionDetailVO errorCorrectionDetailVO = new ErrorCorrectionDetailVO();
-		errorCorrectionDetailVO.setId(
-				(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
-		errorCorrectionDetailVO.setMajorType(cropBO.getMajorType());
-		errorCorrectionDetailVO.setImagePath(imageFilenameTemp);
-		errorCorrectionDetailVO.setFilePath(xmlFilePath);
-		errorCorrectionDetailMapper.createErrorCorrectionDetail(errorCorrectionDetailVO);
+		if(StringUtils.isNotBlank(cropBO.getImageId())){
+			ErrorCorrectionDetailVO correctionDetailVO = errorCorrectionDetailMapper
+					.getErrorCorrectionDetailByImageId(cropBO.getImageId());
+			if (correctionDetailVO != null) {
+				correctionDetailVO.setResult(cropBO.getImageCrop().toString());
+				errorCorrectionDetailMapper.updateErrorCorrectionDetail(correctionDetailVO);
+			} else {
+				correctionDetailVO = new ErrorCorrectionDetailVO();
+				correctionDetailVO.setId(
+						(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
+				correctionDetailVO.setResult(cropBO.getImageCrop().toString());
+				correctionDetailVO.setImageId(cropBO.getImageId());
+				correctionDetailVO.setFilePath(xmlFilePath);
+				correctionDetailVO.setImageId(cropBO.getImageId());
+				correctionDetailVO.setImagePath(imageFilenameTemp);
+				correctionDetailVO.setMajorType(cropBO.getMajorType());
+				errorCorrectionDetailMapper.createErrorCorrectionDetail(correctionDetailVO);
+			}
+		}
 	}
 
 	private void generateXmlFile(ImageCropBO cropBO, String xmlFilePath, int width, int height) {

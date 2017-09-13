@@ -58,4 +58,10 @@ public class MarkImageCropBO {
 		this.imagePath = imagePath;
 	}
 
+	@Override
+	public String toString() {
+		return "MarkImageCropBO [order=" + order + ", imageCrop=" + imageCrop + ", imageId=" + imageId + ", majorType="
+				+ majorType + ", filePath=" + filePath + ", imagePath=" + imagePath + "]";
+	}
+
 }

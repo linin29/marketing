@@ -65,10 +65,12 @@ public class ErrorCorrectionDetailService {
 	}
 
 	public void saveMarkImageCrop(MarkImageCropBO markImageCropBO) {
+		logger.info("params of saveMarkImageCrop method: markImageCropBO:" + markImageCropBO.toString());
 		String imageId = markImageCropBO.getImageId();
 		if (StringUtils.isNotBlank(imageId)) {
 			ErrorCorrectionDetailVO correctionDetailVO = errorCorrectionDetailMapper
 					.getErrorCorrectionDetailByImageId(imageId);
+			generateFile(markImageCropBO);
 			if (correctionDetailVO != null) {
 				correctionDetailVO.setResult(markImageCropBO.getImageCrop().toString());
 				this.updateErrorCorrectionDetail(correctionDetailVO);
@@ -84,12 +86,13 @@ public class ErrorCorrectionDetailService {
 				correctionDetailVO.setMajorType(markImageCropBO.getMajorType());
 				this.createErrorCorrectionDetail(correctionDetailVO);
 			}
-			generateFile(markImageCropBO);
+		}else{
+			logger.info("imageId param of saveMarkImageCrop method is null");
 		}
 	}
 
-	public List<CropBO> getTaskMarkImageCrops(String imageId, Integer imageOrderNo) {
-		logger.info("params of getTaskMarkImageCrops method: imageId:" + imageId + ",imageOrderNo:" + imageOrderNo);
+	public List<CropBO> getTaskMarkImageCrops(String imageId) {
+		logger.info("params of getTaskMarkImageCrops method: imageId:" + imageId);
 		List<CropBO> cropBOs = new ArrayList<CropBO>();
 		ErrorCorrectionDetailVO correctionDetailVO = errorCorrectionDetailMapper
 				.getErrorCorrectionDetailByImageId(imageId);
@@ -145,18 +148,12 @@ public class ErrorCorrectionDetailService {
 				int width = bufferedImage.getWidth();
 				int height = bufferedImage.getHeight();
 				generateXmlFile(cropBO, xmlFilePath, width, height);
+				cropBO.setFilePath(xmlFilePath);
+				cropBO.setImagePath(imageFilenameTemp);
 			} catch (IOException e) {
 				logger.error("imageId:" + cropBO.getImageId() + ", copy file fail, " + e.getMessage());
 			}
 		}
-
-		ErrorCorrectionDetailVO errorCorrectionDetailVO = new ErrorCorrectionDetailVO();
-		errorCorrectionDetailVO.setId(
-				(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
-		errorCorrectionDetailVO.setMajorType(cropBO.getMajorType());
-		errorCorrectionDetailVO.setImagePath(imageFilenameTemp);
-		errorCorrectionDetailVO.setFilePath(xmlFilePath);
-		errorCorrectionDetailMapper.createErrorCorrectionDetail(errorCorrectionDetailVO);
 	}
 
 	private void generateXmlFile(MarkImageCropBO cropBO, String xmlFilePath, int width, int height) {

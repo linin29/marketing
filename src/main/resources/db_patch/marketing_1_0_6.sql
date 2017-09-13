@@ -597,29 +597,6 @@ BEGIN
 	END IF;
 END//
 
-DELIMITER //
-CREATE PROCEDURE CreateErrorCorrectionDetailTable()
-BEGIN
-	SET @ret = 0;
-	CALL CheckTableExist("error_correction_detail", @ret);
-	IF @ret = 0 THEN
-		CREATE TABLE IF NOT EXISTS `error_correction_detail` (
-		  `id` varchar(40) NOT NULL,
-		  `major_type` varchar(50) NOT NULL,
-		  `image_path` varchar(256) NOT NULL,
-		  `file_path` varchar(256) NOT NULL,
-		  `result` mediumtext,
-		  `image_id` varchar(256) NOT NULL,
-		  `create_time` datetime DEFAULT NULL,
-		  `last_update` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-		  `status` enum('active','deleted','inactive') NOT NULL DEFAULT 'active',
-		  PRIMARY KEY (`id`),
-		  KEY `idx_major_type` (`major_type`)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-	END IF;
-END//
-
-
 DELIMITER ;
 	
 CALL InsertMajorTypeAndSkuTableData();

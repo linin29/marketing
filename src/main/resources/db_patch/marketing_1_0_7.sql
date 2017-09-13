@@ -11,6 +11,8 @@ DROP PROCEDURE IF EXISTS CheckConstraintExist;
 DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS UpdateMajorTypeAndSkuTableData;
+DROP PROCEDURE IF EXISTS CreateErrorCorrectionDetailTable;
+DROP PROCEDURE IF EXISTS AlterTaskImageTable;
 
 DELIMITER //
 CREATE PROCEDURE CheckTableExist(IN p_tablename varchar(64), OUT ret int)
@@ -94,16 +96,57 @@ BEGIN
 		UPDATE `major_type` SET `version` = "4.0" where name = "nestlesugar";
 		UPDATE `major_type` SET `version` = "4.0" where name = "nestlebiscuit";
 		
+		UPDATE `goods_sku` SET `order` = 13 where major_type = "nestlesugar" and `name` = "nqmg1box";
+		UPDATE `goods_sku` SET `order` = 14 where major_type = "nestlesugar" and `name` = "nqmg2box";
+		UPDATE `goods_sku` SET `order` = 15 where major_type = "nestlesugar" and `name` = "nqmg3box";
+		UPDATE `goods_sku` SET `order` = 16 where major_type = "nestlesugar" and `name` = "nqmg4box";
+		UPDATE `goods_sku` SET `order` = 17 where major_type = "nestlesugar" and `name` = "nqmg5box";
+		UPDATE `goods_sku` SET `order` = 18 where major_type = "nestlesugar" and `name` = "nqmg6box";
+		
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'Nestle 97', 'Nestle 97', 96, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'Nestle 98', 'Nestle 98', 97, now());
 		
-		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'femnine3', 'femnine3', 18, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg13', 'nqmg13', 12, now());
+	END IF;
+END//
+
+DELIMITER //
+CREATE PROCEDURE CreateErrorCorrectionDetailTable()
+BEGIN
+	SET @ret = 0;
+	CALL CheckTableExist("error_correction_detail", @ret);
+	IF @ret = 0 THEN
+		CREATE TABLE IF NOT EXISTS `error_correction_detail` (
+		  `id` varchar(40) NOT NULL,
+		  `image_id` varchar(256) NOT NULL,
+		  `major_type` varchar(50) NOT NULL,
+		  `image_path` varchar(256) NOT NULL,
+		  `file_path` varchar(256) NOT NULL,
+		  `create_time` datetime DEFAULT NULL,
+		  `last_update` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		  `flag` tinyint NOT NULL DEFAULT 0,
+		  `status` enum('active','deleted','inactive') NOT NULL DEFAULT 'active',
+		  PRIMARY KEY (`id`),
+		  KEY `idx_major_type` (`major_type`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	END IF;
+END//
+
+DELIMITER //
+CREATE PROCEDURE AlterTaskImageTable()
+BEGIN
+	SET @ret = 0;
+	CALL CheckTableExist("task_images", @ret);
+	IF @ret = 1 THEN 
+		ALTER TABLE task_images ADD COLUMN `result` mediumtext;
 	END IF;
 END//
 
 DELIMITER ;
 	
 CALL UpdateMajorTypeAndSkuTableData();
+CALL CreateErrorCorrectionDetailTable();
+CALL AlterTaskImageTable();
 
 DROP PROCEDURE IF EXISTS CheckTableExist;
 DROP PROCEDURE IF EXISTS CheckColumnExist;
@@ -112,3 +155,5 @@ DROP PROCEDURE IF EXISTS CheckConstraintExist;
 DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS UpdateMajorTypeAndSkuTableData;
+DROP PROCEDURE IF EXISTS CreateErrorCorrectionDetailTable;
+DROP PROCEDURE IF EXISTS AlterTaskImageTable;

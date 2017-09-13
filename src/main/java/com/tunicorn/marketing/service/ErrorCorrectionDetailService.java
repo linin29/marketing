@@ -68,17 +68,18 @@ public class ErrorCorrectionDetailService {
 		logger.info("params of saveMarkImageCrop method: markImageCropBO:" + markImageCropBO.toString());
 		String imageId = markImageCropBO.getImageId();
 		if (StringUtils.isNotBlank(imageId)) {
+			TaskImagesVO taskImagesVO = new TaskImagesVO();
+			taskImagesVO.setId(markImageCropBO.getImageId());
+			taskImagesVO.setResult(markImageCropBO.getImageCrop().toString());
+			taskImagesMapper.updateTaskImage(taskImagesVO);
+			
 			ErrorCorrectionDetailVO correctionDetailVO = errorCorrectionDetailMapper
-					.getErrorCorrectionDetailByImageId(imageId);
-			generateFile(markImageCropBO);
-			if (correctionDetailVO != null) {
-				correctionDetailVO.setResult(markImageCropBO.getImageCrop().toString());
-				this.updateErrorCorrectionDetail(correctionDetailVO);
-			} else {
+					.getErrorCorrectionDetailByImageId(markImageCropBO.getImageId());
+			if (correctionDetailVO == null || correctionDetailVO.getFlag() == 1) {
 				correctionDetailVO = new ErrorCorrectionDetailVO();
-				correctionDetailVO.setId(
-						(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
-				correctionDetailVO.setResult(markImageCropBO.getImageCrop().toString());
+				correctionDetailVO
+						.setId((Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13))
+								.toLowerCase());
 				correctionDetailVO.setImageId(markImageCropBO.getImageId());
 				correctionDetailVO.setFilePath(markImageCropBO.getFilePath());
 				correctionDetailVO.setImageId(markImageCropBO.getImageId());
@@ -86,7 +87,7 @@ public class ErrorCorrectionDetailService {
 				correctionDetailVO.setMajorType(markImageCropBO.getMajorType());
 				this.createErrorCorrectionDetail(correctionDetailVO);
 			}
-		}else{
+		} else {
 			logger.info("imageId param of saveMarkImageCrop method is null");
 		}
 	}
@@ -94,10 +95,9 @@ public class ErrorCorrectionDetailService {
 	public List<CropBO> getTaskMarkImageCrops(String imageId) {
 		logger.info("params of getTaskMarkImageCrops method: imageId:" + imageId);
 		List<CropBO> cropBOs = new ArrayList<CropBO>();
-		ErrorCorrectionDetailVO correctionDetailVO = errorCorrectionDetailMapper
-				.getErrorCorrectionDetailByImageId(imageId);
-		if (correctionDetailVO != null && StringUtils.isNotBlank(correctionDetailVO.getResult())) {
-			String result = correctionDetailVO.getResult();
+		TaskImagesVO taskImagesVO = taskImagesMapper.getTaskImagesById(imageId);
+		if (StringUtils.isNotBlank(taskImagesVO.getResult())) {
+			String result = taskImagesVO.getResult();
 			ObjectMapper mapper = new ObjectMapper();
 			try {
 				ArrayNode jsonNodes = (ArrayNode) mapper.readTree(result);
@@ -125,7 +125,7 @@ public class ErrorCorrectionDetailService {
 		return cropBOs;
 	}
 
-	private void generateFile(MarkImageCropBO cropBO) {
+	public void generateFile(MarkImageCropBO cropBO) {
 		String xmlFilePath = String.format("%s%s%s%s%s%s%s%s",
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,

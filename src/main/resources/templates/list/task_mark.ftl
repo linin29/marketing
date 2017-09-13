@@ -321,7 +321,6 @@
         	}
     	 });
 	}
-
     function cropEnd(e) {
     	isCrop = false;
     	$(".cropper-view-box").css("cssText", "outline: 2px solid #ea230a !important; outline-color: #ea230a !important;")

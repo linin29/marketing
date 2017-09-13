@@ -1124,17 +1124,15 @@ public class TaskService {
 				logger.error("imageId:" + cropBO.getImageId() + ", copy file fail, " + e.getMessage());
 			}
 		}
-		if(StringUtils.isNotBlank(cropBO.getImageId())){
+		if (StringUtils.isNotBlank(cropBO.getImageId())) {
+	
 			ErrorCorrectionDetailVO correctionDetailVO = errorCorrectionDetailMapper
 					.getErrorCorrectionDetailByImageId(cropBO.getImageId());
-			if (correctionDetailVO != null) {
-				correctionDetailVO.setResult(cropBO.getImageCrop().toString());
-				errorCorrectionDetailMapper.updateErrorCorrectionDetail(correctionDetailVO);
-			} else {
+			if (correctionDetailVO == null || correctionDetailVO.getFlag() == 1) {
 				correctionDetailVO = new ErrorCorrectionDetailVO();
-				correctionDetailVO.setId(
-						(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
-				correctionDetailVO.setResult(cropBO.getImageCrop().toString());
+				correctionDetailVO
+						.setId((Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13))
+								.toLowerCase());
 				correctionDetailVO.setImageId(cropBO.getImageId());
 				correctionDetailVO.setFilePath(xmlFilePath);
 				correctionDetailVO.setImageId(cropBO.getImageId());

@@ -48,6 +48,7 @@ import com.tunicorn.marketing.service.GoodsSkuService;
 import com.tunicorn.marketing.service.TaskService;
 import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
+import com.tunicorn.marketing.vo.MajorTypeVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
 import com.tunicorn.marketing.vo.TaskVO;
 import com.tunicorn.marketing.vo.UserVO;
@@ -653,6 +654,25 @@ public class TaskController extends BaseController {
 		return "list/task_list_temp";
 	}
 
+	@RequestMapping(value = "/showMarkPage/{taskId}", method = RequestMethod.GET)
+	public String showMarkPage(@PathVariable("taskId") String taskId, Model model, HttpServletRequest request) {
+		UserVO user = getCurrentUser(request);
+		TaskVO taskVO = taskService.getTaskById(taskId);
+		List<TaskImagesVO> imagesVOs = taskService.getTaskImagesListByTaskId(taskId);
+		taskService.saveGoodsInfo(taskId);
+		if (imagesVOs != null && imagesVOs.size() > 0) {
+			TaskImagesVO image = imagesVOs.get(0);
+			model.addAttribute("image", image);
+		}
+		List<MajorTypeVO> majorTypeVOs = taskService.getMajorTypeVOList(user.getUserName());
+
+		model.addAttribute("majorTypes", majorTypeVOs);
+		model.addAttribute("images", imagesVOs);
+		model.addAttribute("task", taskVO);
+		model.addAttribute("goodResults", taskService.getResultList(taskVO));
+		return "list/task_mark";
+	}
+	
 	private void rendFile(HttpServletRequest request, HttpServletResponse response, String filePath, String name) {
 		InputStream inStream = null;
 		try {

@@ -20,52 +20,12 @@
                 <input type="text" id="userName" name="userName"  class="form-control" value=""placeholder="请输入用户名" />
             </div>
             <div class="form-group">
-                <input type="password" id="password" name="password" onkeydown="checkPassword()"  class="form-control"  value="" placeholder="请输入密码" />
+                <input type="password" id="password" name="password" onkeydown="mp.checkPassword()"  class="form-control"  value="" placeholder="请输入密码" />
             </div>
             <div><font color="red" id="errorMsg"></font></div>
-			<button id="button" class="btn btn-success pull-right" onclick="checkLogin()"> 登录</button>
+			<button id="button" class="btn btn-success pull-right" onclick="mp.checkLogin()"> 登录</button>
 		</div>	
+		
+		<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/admin-main-login.js"></script>
 	</body>
-  <script type="text/javascript">
-	function login(){
-		var userName = $("#userName").val();
-		var password = $("#password").val();
-		var data = {"userName":userName, "password":password};
-		$.ajax({
-			 type: 'POST',
-			 url: 'login',
-			 contentType : 'application/json',
-			 data: JSON.stringify(data),
-			 dataType: 'json', 
-			 success: function(data) {
-			 	if (data.success) {
-			 		location.href="dashboard/index";
-			 	} else {
-			 		$('#errorMsg').text(data.errorMessage);
-            	} 
-        	},
-        	error: function(data) {
-        		//返回500错误页面
-        		$("html").html(data.responseText);
-        	}
-		});
-	}
-	function checkLogin(){
-		if($("#userName").val().trim()==""){
-        	$('#errorMsg').text('请输入用户名');
-        	return false;
-        } else if ($("#password").val().trim()==""){
-        	$('#errorMsg').text('请输入密码');
-    		return false;
-        　　　　} else {
-        	login();
-       }
-	}
-	function checkPassword(){
-		var event=arguments.callee.caller.arguments[0]||window.event;
-        if(event.keyCode==13){
-		    $("#button").click();
-		}
-	}
-</script>
 </html>

@@ -79,10 +79,10 @@
         <h3>任务列表
             <small>共<span id="number">${totalCount}</span>个任务</small>
             <div class="pull-right">
-                <input id="taskId" style="width:220px;" onkeyup="if(event.keyCode==13){searchTaskWithId();}"  class="form-control task_list_input" <#if taskId??> value="${taskId}"</#if> type="text" placeholder="请输入任务ID">
-                <button id="searchTaskById" onclick="searchTaskWithId(0)" type="button" class="btn btn-success btn_style1">检索任务</button> 
-                <input id="taskName" type="text" placeholder="请输入任务名" onkeyup="if(event.keyCode==13){searchTaskWithName();}"  <#if taskName??> value="${taskName}"</#if> class="form-control task_list_input">
-                <button id="searchTask" type="button" onclick="searchTaskWithName(0)" class="btn btn-success btn_style1">检索任务</button>
+                <input id="taskId" style="width:220px;" onkeyup="if(event.keyCode==13){taskListTemp.searchTaskWithId();}"  class="form-control task_list_input" <#if taskId??> value="${taskId}"</#if> type="text" placeholder="请输入任务ID">
+                <button id="searchTaskById" onclick="taskListTemp.searchTaskWithId(0)" type="button" class="btn btn-success btn_style1">检索任务</button> 
+                <input id="taskName" type="text" placeholder="请输入任务名" onkeyup="if(event.keyCode==13){taskListTemp.searchTaskWithName();}"  <#if taskName??> value="${taskName}"</#if> class="form-control task_list_input">
+                <button id="searchTask" type="button" onclick="taskListTemp.searchTaskWithName(0)" class="btn btn-success btn_style1">检索任务</button>
             </div>
         </h3>
     </section>
@@ -122,94 +122,14 @@
          <div id="table_paginator" style="margin-top: -10px; margin-bottom: -10px; text-align:center; display:block;"></div>
     </section>
 </div>
-<script>
-$(function() {
-	function initPagination(currentPage, totalCount) {
-		var options = {
-			alignment: 'center',
-	        currentPage: currentPage,
-	        totalPages: Math.ceil(totalCount / dface.constants.PAGINATION_ITEMS_PER_PAGE),
-	        numberOfPages: dface.constants.PAGINATION_ITEMS_PER_PAGE,
-	        onPageClicked: function (event, originalEvent, type, page) {
-	        	doPaginationClicked(page);
-	        }
-		};
-		
-		$('#table_paginator').bootstrapPaginator(options);
-		$("#table_paginator").show();
-	}
-	
-	function doPaginationClicked(pageNum) {
-		var taskId = $("#taskId").val();
-		var taskName = $("#taskName").val();
-		if(taskId){
-			searchTaskWithId(pageNum)
-		}else if(taskName){
-			searchTaskWithName(pageNum);
-		}else{
-			searchTask(pageNum);
-		}
-	}
-	if(${totalCount} != 0){
-		initPagination(${currentPage}, ${totalCount?c});
-	}
-});
 
-function searchTaskWithId(pageNum) {
-	var taskId = $("#taskId").val();
-	var page = 0;
-	if (pageNum) {
-		page = pageNum -1;
-	}
-	$.ajax({
-		 type: 'GET',
-		 url: '${springMacroRequestContext.contextPath}/showView/task/search?pageNum=' + page +"&taskId=" + taskId,
-		 success: function(data) {
-		 	$("#content").html(data);
-    	},
-    	error: function(data) {
-    		//返回500错误页面
-    		$("html").html(data.responseText);
-    	}
+<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/task_list_temp.js"></script>
+<script type="text/javascript">
+	$(function() {	
+		var currentPage="${currentPage}";
+		var totalCount="${totalCount?c}";
+		taskListTemp._init(currentPage, totalCount);
 	});
-}
-
-function searchTask(pageNum) {
-	var page = 0;
-	if (pageNum) {
-		page = pageNum -1;
-	}
-	$.ajax({
-		 type: 'GET',
-		 url: '${springMacroRequestContext.contextPath}/showView/task/search?pageNum=' + page,
-		 success: function(data) {
-		 	$("#content").html(data);
-    	},
-    	error: function(data) {
-    		//返回500错误页面
-    		$("html").html(data.responseText);
-    	}
-	});
-}
-
-function searchTaskWithName(pageNum) {
-	var taskName = $("#taskName").val();
-	var page = 0;
-	if (pageNum) {
-		page = pageNum -1;
-	}
-	$.ajax({
-		 type: 'GET',
-		 url: '${springMacroRequestContext.contextPath}/showView/task/search?pageNum=' + page +"&taskName=" +taskName,
-		 success: function(data) {
-		 	$("#content").html(data);
-    	},
-    	error: function(data) {
-    		//返回500错误页面
-    		$("html").html(data.responseText);
-    	}
-	});
-}
 </script>
 </body>
 </html>

@@ -232,6 +232,7 @@ public class TaskController extends BaseController {
 		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
 		int totalCount = taskService.getTaskCount(taskBO);
 
+		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
 		model.addAttribute("tasks", taskVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", 1);
@@ -364,9 +365,15 @@ public class TaskController extends BaseController {
 			model.addAttribute("taskId", taskId);
 			taskBO.setId(taskId);
 		}
+		if (StringUtils.isNotBlank(request.getParameter("majorType"))) {
+			String majorType = request.getParameter("majorType");
+			model.addAttribute("majorType", majorType);
+			taskBO.setMajorType(majorType);
+		}
 		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
 		int totalCount = taskService.getTaskCount(taskBO);
 
+		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
 		model.addAttribute("tasks", taskVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", taskBO.getPageNum() + 1);

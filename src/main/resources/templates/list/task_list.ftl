@@ -1,10 +1,10 @@
 
 <div class="task_list">
-    <section class="task_list_header">
-        <h3 style="display: inline-block;">任务列表
+    <section style="height:47px;">
+        <h3 style="float:left;">任务列表
             <small>共<span id="number">${totalCount}</span>个任务</small>
          </h3>
-         <div class="pull-right" style="margin-top: -35px;">
+         <div style="float:left;line-height: 46px;margin-left: 47px;">
              <input id="searchTaskflg" type="hidden" value="0">
              <input id="taskId" style="width:220px;" onkeyup="if(event.keyCode==13){taskList.searchTaskWithId();}"  class="form-control task_list_input" <#if taskId??> value="${taskId}"</#if> type="text" placeholder="请输入任务ID">
              <button id="searchTaskById" onclick="taskList.searchTaskWithId(0)" type="button" class="btn btn-success btn_style1">检索任务</button>
@@ -22,7 +22,7 @@
          </div>    
     </section>
     <section class="content_list">
-        <table class="table table-bordered table-hover table-condensed">
+        <table class="table table-bordered table-hover ">
               <thead>
                     <tr style="background-color:#ddd;">
                         <th style="width:25%">任务名</th>

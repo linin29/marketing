@@ -1,10 +1,10 @@
 
 <div class="task_list">
-    <section style="height:47px;">
-        <h3 style="float:left;">任务列表
+    <section class="task_list_header" style="width:100%;height:50px;">
+        <h3 class="col-sm-3" style="padding-left:0px;width:20%">任务列表
             <small>共<span id="number">${totalCount}</span>个任务</small>
          </h3>
-         <div style="float:left;line-height: 46px;margin-left: 47px;">
+         <div  class="col-sm-9" style="margin-top:10px;padding-right:0px;width:80%;">
              <input id="searchTaskflg" type="hidden" value="0">
              <input id="taskId" style="width:220px;" onkeyup="if(event.keyCode==13){taskList.searchTaskWithId();}"  class="form-control task_list_input" <#if taskId??> value="${taskId}"</#if> type="text" placeholder="请输入任务ID">
              <button id="searchTaskById" onclick="taskList.searchTaskWithId(0)" type="button" class="btn btn-success btn_style1">检索任务</button>

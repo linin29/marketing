@@ -7,7 +7,7 @@
          <div  class="col-sm-9" style="margin-top:10px;padding-right:0px;width:80%;">
              <input id="searchTaskflg" type="hidden" value="0">
              <input id="taskId" style="width:26%;" onkeyup="if(event.keyCode==13){taskList.searchTaskWithId();}"  class="form-control task_list_input" <#if taskId??> value="${taskId}"</#if> type="text" placeholder="请输入任务ID">
-             <button id="searchTaskById" style="width: 10%;" onclick="taskList.searchTaskWithId(0)" type="button" class="btn btn-success btn_style1">检索任务</button>
+             <button id="searchTaskById" style="margin-right: 2%;" onclick="taskList.searchTaskWithId(0)" type="button" class="btn btn-success btn_style1">检索任务</button>
              <select id="majorType" style="height: 34px;width:20%;">
                 <option value="">请选择品类</option>
                   <#if majorTypes?? && (majorTypes?size > 0)>
@@ -17,8 +17,8 @@
                	 </#if>
 			 </select>  
              <input style="width:16%;" id="taskName" type="text" placeholder="请输入任务名" onkeyup="if(event.keyCode==13){taskList.searchTaskWithName();}"  <#if taskName??> value="${taskName}"</#if> class="form-control task_list_input">
-             <button id="searchTask" type="button" style="width: 10%;" onclick="taskList.searchTaskWithName(0)" class="btn btn-success btn_style1">检索任务</button>
-             <a href="javascript:void(0)" onclick ="taskList.addTask()" class="ajax-link"><button id="merge" type="button" class="btn btn-success" style="width: 10%;">新建任务</button></a>
+             <button id="searchTask" type="button" style="margin-right: 2%;" onclick="taskList.searchTaskWithName(0)" class="btn btn-success btn_style1">检索任务</button>
+             <a href="javascript:void(0)" onclick ="taskList.addTask()" class="ajax-link"><button id="merge" type="button" class="btn btn-success" >新建任务</button></a>
          </div>    
     </section>
     <section class="content_list">

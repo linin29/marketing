@@ -38,7 +38,7 @@
                    <tr>
                        <td style="word-break: break-all;">${task.name!""}</td>
                        <td>${task.id!""}</td>
-                       <td>${task.majorType!""}</td>
+                       <td>${task.majorTypeName!""}</td>
                        <td>${task.lastUpdateTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
                        <td>
                        <#if task?? && task.taskStatus=='identify_success' && task.identifySuccessTimes gt 0>

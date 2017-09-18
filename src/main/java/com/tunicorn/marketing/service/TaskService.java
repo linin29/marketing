@@ -1124,22 +1124,6 @@ public class TaskService {
 				logger.error("imageId:" + cropBO.getImageId() + ", copy file fail, " + e.getMessage());
 			}
 		}
-		if (StringUtils.isNotBlank(cropBO.getImageId())) {
-	
-			TrainingDataVO trainingDataVO = trainingDataMapper
-					.getTrainingDataByImageId(cropBO.getImageId());
-			if (trainingDataVO == null || trainingDataVO.getFlag() == 1) {
-				trainingDataVO = new TrainingDataVO();
-				trainingDataVO
-						.setId((Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13))
-								.toLowerCase());
-				trainingDataVO.setImageId(cropBO.getImageId());
-				trainingDataVO.setFilePath(xmlFilePath);
-				trainingDataVO.setImagePath(imageFilenameTemp);
-				trainingDataVO.setMajorType(cropBO.getMajorType());
-				trainingDataMapper.createTrainingData(trainingDataVO);
-			}
-		}
 	}
 
 	private void generateXmlFile(ImageCropBO cropBO, String xmlFilePath, int width, int height) {

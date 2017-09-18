@@ -65,10 +65,6 @@ public class TrainingDataService {
 		return trainingDataMapper.updateTrainingData(trainingDataVO);
 	}
 
-	public TrainingDataVO getTrainingDataByImageId(String imageId) {
-		return trainingDataMapper.getTrainingDataByImageId(imageId);
-	}
-
 	@Transactional
 	public ServiceResponseBO upload(List<MultipartFile> zipFiles) {
 		String basePath = String.format("%s%s%s%s",

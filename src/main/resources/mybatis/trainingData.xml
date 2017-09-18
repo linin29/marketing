@@ -6,11 +6,7 @@
 		<result column="major_type" property="majorType" jdbcType="VARCHAR" />
 		<result column="image_path" property="imagePath" jdbcType="VARCHAR" />
 		<result column="file_path" property="filePath" jdbcType="VARCHAR" />
-		<result column="image_id" property="imageId" jdbcType="VARCHAR" />
 		<result column="flag" property="flag" jdbcType="INTEGER" />
-		<result column="create_time" property="createTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
-		<result column="last_update" property="lastUpdateTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
-		<result column="status" property="status" jdbcType="VARCHAR" />
 	</resultMap>
 	
 	<insert id="createTrainingData" parameterType="com.tunicorn.marketing.vo.TrainingDataVO">
@@ -28,13 +24,6 @@
       <if test="filePath != null">
         file_path,
       </if>
-      <if test="imageId != null">
-        image_id,
-      </if>
-        create_time,
-      <if test="lastUpdateTime != null">
-        last_update,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -49,13 +38,6 @@
       <if test="filePath != null">
         #{filePath,jdbcType=VARCHAR},
       </if>
-      <if test="imageId != null">
-        #{imageId,jdbcType=VARCHAR},
-      </if>
-        now(),
-      <if test="lastUpdateTime != null">
-        #{lastUpdateTime,jdbcType=TIMESTAMP},
-      </if>
     </trim>
   </insert>
   <update id="updateTrainingData"  parameterType="com.tunicorn.marketing.vo.TrainingDataVO">
@@ -69,9 +51,6 @@
 			</if>
 			<if test="filePath != null and filePath !=''">
 			    `file_path`=#{filePath},
-			</if>
-			<if test="imageId != null and imageId !=''">
-			    image_id=#{imageId},
 			</if>
 			<if test="flag != null and flag !=''">
 			    flag=#{flag},

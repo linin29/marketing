@@ -59,10 +59,7 @@
 	                        <div class="col-xs-1 choose_btn" style="width: 100px;">
                                 <button id="taskPullData" type="button" class="btn btn-success">拉取数据</button>
                            </div>
-                           </#if>
-                           	<div class="col-xs-1 choose_btn" style="width: 100px;">
-                                <button id="markImage" type="button" class="btn btn-success">图片标注</button>
-                           </div>    
+                           </#if> 
                        </div>
                    </div>
                </h4>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tunicorn.marketing.mapper.ErrorCorrectionDetailMapper">
-	<resultMap id="TaskResultMap" type="com.tunicorn.marketing.vo.ErrorCorrectionDetailVO">
+<mapper namespace="com.tunicorn.marketing.mapper.TrainingDataMapper">
+	<resultMap id="TaskResultMap" type="com.tunicorn.marketing.vo.TrainingDataVO">
 		<result column="id" property="id" jdbcType="VARCHAR" />
 		<result column="major_type" property="majorType" jdbcType="VARCHAR" />
 		<result column="image_path" property="imagePath" jdbcType="VARCHAR" />
@@ -13,8 +13,8 @@
 		<result column="status" property="status" jdbcType="VARCHAR" />
 	</resultMap>
 	
-	<insert id="createErrorCorrectionDetail" parameterType="com.tunicorn.marketing.vo.ErrorCorrectionDetailVO">
-    	insert into `error_correction_detail`
+	<insert id="createTrainingData" parameterType="com.tunicorn.marketing.vo.TrainingDataVO">
+    	insert into `training_data`
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -58,8 +58,8 @@
       </if>
     </trim>
   </insert>
-  <update id="updateErrorCorrectionDetail"  parameterType="com.tunicorn.marketing.vo.ErrorCorrectionDetailVO">
-	  UPDATE error_correction_detail
+  <update id="updateTrainingData"  parameterType="com.tunicorn.marketing.vo.TrainingDataVO">
+	  UPDATE training_data
 	  <trim prefix="set" suffixOverrides=",">
 			<if test="majorType != null and majorType !=''">
 			    major_type=#{majorType},
@@ -79,8 +79,8 @@
 	 </trim>
 		 WHERE id=#{id}
   </update>
-  <delete id="batchDeleteErrorCorrectionDetail" parameterType="java.util.List">  
-    delete from `error_correction_detail` where id in  
+  <delete id="batchDeleteTrainingData" parameterType="java.util.List">  
+    delete from `training_data` where id in  
     <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
         #{item.id}   
     </foreach>  

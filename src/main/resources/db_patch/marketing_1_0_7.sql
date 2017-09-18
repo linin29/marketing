@@ -11,7 +11,7 @@ DROP PROCEDURE IF EXISTS CheckConstraintExist;
 DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS UpdateMajorTypeAndSkuTableData;
-DROP PROCEDURE IF EXISTS CreateErrorCorrectionDetailTable;
+DROP PROCEDURE IF EXISTS CreateTrainingTable;
 DROP PROCEDURE IF EXISTS AlterTaskImageTable;
 
 DELIMITER //
@@ -107,19 +107,22 @@ BEGIN
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'Nestle 98', 'Nestle 98', 97, now());
 		
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg13', 'nqmg13', 12, now());
+		
+		INSERT INTO `privilege`(`parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (NULL, '文件上传', '/fileUpload', '文件上传一级菜单', 5, now());
+		INSERT INTO `role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (5, 1, 5, now());
 	END IF;
 END//
 
 DELIMITER //
-CREATE PROCEDURE CreateErrorCorrectionDetailTable()
+CREATE PROCEDURE CreateTrainingTable()
 BEGIN
 	SET @ret = 0;
-	CALL CheckTableExist("error_correction_detail", @ret);
+	CALL CheckTableExist("training_data", @ret);
 	IF @ret = 0 THEN
-		CREATE TABLE IF NOT EXISTS `error_correction_detail` (
+		CREATE TABLE IF NOT EXISTS `training_data` (
 		  `id` varchar(40) NOT NULL,
-		  `image_id` varchar(256) NOT NULL,
 		  `major_type` varchar(50) NOT NULL,
+		  `image_id` varchar(100),
 		  `image_path` varchar(256) NOT NULL,
 		  `file_path` varchar(256) NOT NULL,
 		  `create_time` datetime DEFAULT NULL,
@@ -129,23 +132,24 @@ BEGIN
 		  PRIMARY KEY (`id`),
 		  KEY `idx_major_type` (`major_type`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-	END IF;
-END//
-
-DELIMITER //
-CREATE PROCEDURE AlterTaskImageTable()
-BEGIN
-	SET @ret = 0;
-	CALL CheckTableExist("task_images", @ret);
-	IF @ret = 1 THEN 
-		ALTER TABLE task_images ADD COLUMN `result` mediumtext;
+		
+		CREATE TABLE IF NOT EXISTS `training_statistics` (
+		  `id` varchar(40) NOT NULL,
+		  `major_type` varchar(50) NOT NULL,
+		  `count` int(11) DEFAULT 0,
+		  `create_time` datetime DEFAULT NULL,
+		  `last_update` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		  `status` enum('active','deleted','inactive') NOT NULL DEFAULT 'active',
+		  PRIMARY KEY (`id`),
+		  KEY `idx_major_type` (`major_type`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	END IF;
 END//
 
 DELIMITER ;
 	
 CALL UpdateMajorTypeAndSkuTableData();
-CALL CreateErrorCorrectionDetailTable();
+CALL CreateTrainingTable();
 CALL AlterTaskImageTable();
 
 DROP PROCEDURE IF EXISTS CheckTableExist;
@@ -155,5 +159,5 @@ DROP PROCEDURE IF EXISTS CheckConstraintExist;
 DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS UpdateMajorTypeAndSkuTableData;
-DROP PROCEDURE IF EXISTS CreateErrorCorrectionDetailTable;
+DROP PROCEDURE IF EXISTS CreateTrainingTable;
 DROP PROCEDURE IF EXISTS AlterTaskImageTable;

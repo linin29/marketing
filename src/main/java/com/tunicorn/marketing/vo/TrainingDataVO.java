@@ -2,7 +2,7 @@ package com.tunicorn.marketing.vo;
 
 import java.util.Date;
 
-public class ErrorCorrectionDetailVO {
+public class TrainingDataVO {
 
 	private String id;
 	private String majorType;

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.mockito.internal.util.reflection.FieldInitializationReport;
+
 import com.tunicorn.marketing.utils.ConfigUtils;
 
 public class MarketingConstants {
@@ -104,4 +106,6 @@ public class MarketingConstants {
 	
 	public static final String CROP_IMAGE_PATH = "JPEGImages";
 	public static final String CROP_TXT_PATH = "Annotations";
+	
+	public static final String UPLOAD_PATH = "upload";
 }

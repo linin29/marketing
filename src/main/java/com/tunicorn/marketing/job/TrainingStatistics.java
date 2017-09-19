@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.tunicorn.marketing.service.TrainingStatisticsService;
+import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.utils.RemoteSSHUtils;
 import com.tunicorn.marketing.vo.TrainingStatisticsVO;
 
@@ -17,13 +17,12 @@ import com.tunicorn.marketing.vo.TrainingStatisticsVO;
 @EnableScheduling
 public class TrainingStatistics {
 	private static Logger logger = Logger.getLogger(TrainingStatistics.class);
-	private static final int TRAINING_THRESHHOLD = 2;
-	private static final String TRAINING_SCRIPT = "python /home/feng/script/test.py";
+	private static final int TRAINING_THRESHHOLD = Integer.parseInt(ConfigUtils.getInstance().getConfigValue("training.stat.threshhold"));
+	private static final String TRAINING_SCRIPT = ConfigUtils.getInstance().getConfigValue("remote.ssh.script");
 	@Autowired
 	TrainingStatisticsService trainingStatisticsService;
 	//invoke for each 10 minutes
-	@Scheduled(cron = "0 */1 * * * ? ")
-	@Transactional
+	@Scheduled(cron = "0 */10 * * * ? ")
     public synchronized void statistics() {
 		List<TrainingStatisticsVO> stats = trainingStatisticsService.getTrainingStatisticsList();
 		if (stats != null && stats.size() > 0) {

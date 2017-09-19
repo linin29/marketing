@@ -19,9 +19,9 @@ import com.tunicorn.marketing.bo.AnnotationBO;
 
 public class FTPClientHelper {
 	private static Logger logger = Logger.getLogger(FTPClientHelper.class);
-	private final static  String REMOTE_BASE_PATH = "/test";
-	private final static  String REMOTE_IMAGE_FOLDER = "JPEGImages";
-	private final static  String REMOTE_ANNOTATION_FOLDER = "Annotations";
+	private final static  String REMOTE_BASE_PATH = ConfigUtils.getInstance().getConfigValue("ftp.base.path");
+	private final static  String REMOTE_IMAGE_FOLDER = ConfigUtils.getInstance().getConfigValue("ftp.image.directory");
+	private final static  String REMOTE_ANNOTATION_FOLDER = ConfigUtils.getInstance().getConfigValue("ftp.annotation.directory");
 	private final static  String SEPRATOR = "/";
 	private final static  String CHARSET = "UTF-8";
 	private FTPClient ftpClient = new FTPClient();     

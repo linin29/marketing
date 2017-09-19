@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tunicorn.marketing.bo.AnnotationBO;
 import com.tunicorn.marketing.service.TrainingDataService;
 import com.tunicorn.marketing.service.TrainingStatisticsService;
+import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.utils.FTPTransferUtils;
 import com.tunicorn.marketing.vo.TrainingDataVO;
 import com.tunicorn.marketing.vo.TrainingStatisticsVO;
@@ -25,13 +26,13 @@ import com.tunicorn.marketing.vo.TrainingStatisticsVO;
 @EnableScheduling
 public class TrainingData {
 	private static Logger logger = Logger.getLogger(TrainingData.class);
-	private static final int RETRIEVE_NUMBER = 200;
+	private static final int RETRIEVE_NUMBER = Integer.parseInt(ConfigUtils.getInstance().getConfigValue("training.data.number"));
 	@Autowired
 	TrainingDataService trainingDataService;
 	@Autowired
 	TrainingStatisticsService trainingStatisticsService;
 	//invoke for each 10 minutes
-	@Scheduled(cron = "0 */1 * * * ? ")
+	@Scheduled(cron = "0 */10 * * * ? ")
 	@Transactional
     public void transferFiles() {
 		logger.info("Transfer files to FTP server timely...");

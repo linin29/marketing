@@ -14,10 +14,10 @@ import com.tunicorn.marketing.bo.AnnotationBO;
 
 public class FTPTransferUtils {
 	private static Logger logger = Logger.getLogger(FTPTransferUtils.class);
-	private static final String FTP_IP = "172.16.1.89";
-	private static final int FTP_PORT = 21;
-	private static final String FTP_USERNAME = "Anonymous";
-	private static final String FTP_PASSWORD = "";
+	private static final String FTP_IP = ConfigUtils.getInstance().getConfigValue("ftp.server.ip");
+	private static final int FTP_PORT = Integer.parseInt(ConfigUtils.getInstance().getConfigValue("ftp.server.port"));
+	private static final String FTP_USERNAME = ConfigUtils.getInstance().getConfigValue("ftp.server.username");
+	private static final String FTP_PASSWORD = ConfigUtils.getInstance().getConfigValue("ftp.server.password");
 	/**
 	 * 触发模型训练, 首先将所有图片和标注数据上传到远程FTP服务器;然后远程执行模型训练脚本
 	 * @param entities
@@ -63,14 +63,7 @@ public class FTPTransferUtils {
 			 for (String type : typeEntitiesMap.keySet()) {
 				 List<AnnotationBO> totalEntities = typeEntitiesMap.get(type);
 				 FTPClientHelper client = new FTPClientHelper(FTP_IP, FTP_PORT, FTP_USERNAME, FTP_PASSWORD);
-				 client.connect();
-				 if(client.createRemoteDirectory(type)){
-					 transferThreadPool.execute(new TransferThread(client, latch, failedEntities, totalEntities, type));
-				 } else {
-					 logger.error("Create remote directory failed...");
-					 failedEntities.addAll(totalEntities);
-				 }
-				 
+				 transferThreadPool.execute(new TransferThread(client, latch, failedEntities, totalEntities, type));
 			 }
 			 try {
 				latch.await();
@@ -106,8 +99,12 @@ class TransferThread implements Runnable {
 	public void run() {
 		List<AnnotationBO> failedEntityList = new ArrayList<AnnotationBO>();
 		try {
-			//client.connect();
-			failedEntityList = client.upload(entities, type);
+			client.connect();
+			if(client.createRemoteDirectory(type)){
+				failedEntityList = client.upload(entities, type);
+			 } else {
+				 failedEntities.addAll(entities);
+			 }
 			synchronized(latch) {
 				failedEntities.addAll(failedEntityList);
 			}

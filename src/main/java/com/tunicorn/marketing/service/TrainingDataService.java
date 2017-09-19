@@ -91,7 +91,8 @@ public class TrainingDataService {
 							int lastXmlPointIndex = fileName.lastIndexOf(MarketingConstants.POINT);
 							int lastXmlSlashIndex = fileName.lastIndexOf("/");
 							String fileRealName = fileName.substring(lastXmlSlashIndex + 1, lastXmlPointIndex);
-
+							generateFile(zin, fileBasePath);
+							
 							if (fileName.contains(".xml")) {
 								xmlFileMap.put(fileRealName, fileBasePath);
 							} else {
@@ -100,41 +101,10 @@ public class TrainingDataService {
 						}
 					}
 					zin.closeEntry();
-					for (String xmlKey : xmlFileMap.keySet()) {
-						if (imageFileMap.containsKey(xmlKey)) {
-							String imagePath = imageFileMap.get(xmlKey);
-							String xmlFilePath = xmlFileMap.get(xmlKey);
-
-							File imagefile = new File(imagePath);
-							File xmlfile = new File(xmlFilePath);
-
-							FileUtils.writeStringToFile(imagefile, StringUtils.EMPTY);
-							FileUtils.writeStringToFile(xmlfile, StringUtils.EMPTY);
-							FileOutputStream fos = new FileOutputStream(imagefile);
-
-							int len = 0;
-							byte[] buffer = new byte[4096];
-							while ((len = zin.read(buffer)) != -1) {
-								fos.write(buffer, 0, len);
-							}
-							fos.close();
-							fos = new FileOutputStream(xmlfile);
-							len = 0;
-							buffer = new byte[4096];
-							while ((len = zin.read(buffer)) != -1) {
-								fos.write(buffer, 0, len);
-							}
-							fos.close();
-
-							TrainingDataVO trainingDataVO = new TrainingDataVO();
-							trainingDataVO.setFilePath(xmlFileMap.get(xmlKey));
-							trainingDataVO.setImagePath(imagePath);
-							trainingDataVO.setMajorType(originalFileName.substring(0, lastPointIndex));
-							trainingDataVOs.add(trainingDataVO);
-						}
-					}
+					String majorType = originalFileName.substring(0, lastPointIndex);
+					getTrainingDataList(zin, majorType, xmlFileMap, imageFileMap, trainingDataVOs);
 				}
-				this.batchInsertTrainingData(trainingDataVOs);
+				batchInsertTrainingData(trainingDataVOs);
 				long endTime = System.currentTimeMillis();
 				logger.info("time consuming : " + (endTime - startTime));
 			}
@@ -144,6 +114,39 @@ public class TrainingDataService {
 			return new ServiceResponseBO(false, "marketing_save_upload_file_error");
 		}
 		return new ServiceResponseBO(null);
+	}
+
+	private List<TrainingDataVO> getTrainingDataList(ZipInputStream zin, String majorType,
+			Map<String, String> xmlFileMap, Map<String, String> imageFileMap, List<TrainingDataVO> trainingDataVOs) {
+		for (String xmlKey : xmlFileMap.keySet()) {
+			if (imageFileMap.containsKey(xmlKey)) {
+				String imagePath = imageFileMap.get(xmlKey);
+				TrainingDataVO trainingDataVO = new TrainingDataVO();
+				trainingDataVO.setFilePath(xmlFileMap.get(xmlKey));
+				trainingDataVO.setImagePath(imagePath);
+				trainingDataVO.setMajorType(majorType);
+				trainingDataVOs.add(trainingDataVO);
+			}
+		}
+		return trainingDataVOs;
+	}
+
+	private void generateFile(ZipInputStream zin, String filePath) {
+		try {
+			File file = new File(filePath);
+			FileUtils.writeStringToFile(file, StringUtils.EMPTY);
+			FileOutputStream fos = new FileOutputStream(file);
+
+			int len = 0;
+			byte[] buffer = new byte[4096];
+			while ((len = zin.read(buffer)) != -1) {
+				fos.write(buffer, 0, len);
+			}
+			fos.close();
+		} catch (IOException e) {
+			logger.error("upload zip file fail, " + e.getMessage());
+		}
+
 	}
 
 	private void batchInsertTrainingData(List<TrainingDataVO> trainingDataVOs) {

@@ -53,12 +53,12 @@ public class TrainingDataService {
 	@Transactional
 	public ServiceResponseBO upload(List<MultipartFile> zipFiles) {
 
-		String basePath = String.format("%s%s%s%s",
+		/*String basePath = String.format("%s%s%s%s",
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
-				MarketingConstants.UPLOAD_PATH);
+				MarketingConstants.UPLOAD_PATH);*/
 
-		// String basePath = "C:\\mnt\\storage4\\marketing";
+		 String basePath = "C:\\mnt\\storage4\\marketing";
 		try {
 			if (zipFiles != null && zipFiles.size() > 0) {
 				Map<String, String> xmlFileMap;

@@ -14,6 +14,7 @@
        <div class="modal-content">
            <div class="modal-header model_head">
                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <h4 id="waitingLabel" style="text-align: center" class="modal-title">正在上传，请稍后...</h4>
            </div>
            <div class="modal-body">
                <img src="${springMacroRequestContext.contextPath}/image/searchwait.gif" style="margin:0px 0 0 230px"/>

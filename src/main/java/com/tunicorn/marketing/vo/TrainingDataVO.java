@@ -1,19 +1,18 @@
 package com.tunicorn.marketing.vo;
 
-
 public class TrainingDataVO {
 
-	private String id;
+	private int id;
 	private String majorType;
 	private String imagePath;
 	private String filePath;
 	private int flag;
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

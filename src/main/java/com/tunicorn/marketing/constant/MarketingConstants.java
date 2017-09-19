@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.mockito.internal.util.reflection.FieldInitializationReport;
-
 import com.tunicorn.marketing.utils.ConfigUtils;
 
 public class MarketingConstants {

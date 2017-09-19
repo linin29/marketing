@@ -1,46 +1,29 @@
 package com.tunicorn.marketing.service;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.imageio.ImageIO;
-
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.tunicorn.marketing.bo.GoodsSkuBO;
-import com.tunicorn.marketing.bo.MarkImageCropBO;
 import com.tunicorn.marketing.bo.ServiceResponseBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
-import com.tunicorn.marketing.mapper.TrainingDataMapper;
 import com.tunicorn.marketing.mapper.GoodsSkuMapper;
 import com.tunicorn.marketing.mapper.TaskImagesMapper;
+import com.tunicorn.marketing.mapper.TrainingDataMapper;
 import com.tunicorn.marketing.utils.ConfigUtils;
-import com.tunicorn.marketing.vo.TrainingDataVO;
-import com.tunicorn.marketing.vo.GoodsSkuVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
-import com.tunicorn.marketing.vo.TaskVO;
+import com.tunicorn.marketing.vo.TrainingDataVO;
 
 @Service
 public class TrainingDataService {
@@ -65,6 +48,14 @@ public class TrainingDataService {
 		return trainingDataMapper.updateTrainingData(trainingDataVO);
 	}
 
+	public List<TrainingDataVO> getAllNeedHandleTrainingData (int retrieveNumber) {
+		return trainingDataMapper.getAllNeedHandleTrainingData(retrieveNumber);
+	}
+	
+	public void batchUpdateFlag (List<TrainingDataVO> trainingDataList) {
+		trainingDataMapper.batchUpdateFlag(trainingDataList);
+	}
+	
 	@Transactional
 	public ServiceResponseBO upload(List<MultipartFile> zipFiles) {
 		String basePath = String.format("%s%s%s%s",

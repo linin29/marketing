@@ -89,8 +89,8 @@ BEGIN
 	CALL CheckTableExist("major_type", @ret);
 	IF @ret = 1 THEN 
 		UPDATE `major_type` SET `version` = "4.0" where name = "nestlemilk";
-		UPDATE `major_type` SET `version` = "4.0" where name = "nestlecoffee";
-		UPDATE `major_type` SET `version` = "4.0" where name = "nestlemilkpowder";
+		UPDATE `major_type` SET `version` = "5.0" where name = "nestlecoffee";
+		UPDATE `major_type` SET `version` = "5.0" where name = "nestlemilkpowder";
 		UPDATE `major_type` SET `version` = "4.0" where name = "nestleoatmeal";
 		UPDATE `major_type` SET `version` = "4.0" where name = "nestlericeflour";
 		UPDATE `major_type` SET `version` = "4.0" where name = "nestlesugar";
@@ -107,6 +107,13 @@ BEGIN
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'Nestle 98', 'Nestle 98', 97, now());
 		
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg13', 'nqmg13', 12, now());
+		
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco79', 'nco79', 78, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco80', 'nco80', 79, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco81', 'nco81', 80, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco82', 'nco82', 81, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco83', 'nco83', 82, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco84', 'nco84', 83, now());
 		
 		INSERT INTO `privilege`(`parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (NULL, '文件上传', '/fileUpload', '文件上传一级菜单', 5, now());
 		INSERT INTO `role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (5, 1, 5, now());

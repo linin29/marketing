@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tunicorn.marketing.bo.ServiceResponseBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.mapper.TrainingDataMapper;
+import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.vo.TrainingDataVO;
 
 @Service
@@ -41,34 +42,38 @@ public class TrainingDataService {
 		return trainingDataMapper.updateTrainingData(trainingDataVO);
 	}
 
-	public List<TrainingDataVO> getAllNeedHandleTrainingData (int retrieveNumber) {
+	public List<TrainingDataVO> getAllNeedHandleTrainingData(int retrieveNumber) {
 		return trainingDataMapper.getAllNeedHandleTrainingData(retrieveNumber);
 	}
-	
-	public void batchUpdateFlag (List<TrainingDataVO> trainingDataList) {
+
+	public void batchUpdateFlag(List<TrainingDataVO> trainingDataList) {
 		trainingDataMapper.batchUpdateFlag(trainingDataList);
 	}
-	
+
 	@Transactional
 	public ServiceResponseBO upload(List<MultipartFile> zipFiles) {
-		/*String basePath = String.format("%s%s%s%s",
+
+		String basePath = String.format("%s%s%s%s",
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
-				MarketingConstants.UPLOAD_PATH);*/
-		 String basePath = "D:\\";
+				MarketingConstants.UPLOAD_PATH);
+
+		// String basePath = "C:\\mnt\\storage4\\marketing";
 		try {
 			if (zipFiles != null && zipFiles.size() > 0) {
 				Map<String, String> xmlFileMap;
 				Map<String, String> imageFileMap;
+				
 				for (MultipartFile zipFile : zipFiles) {
 					xmlFileMap = new HashMap<String, String>();
 					imageFileMap = new HashMap<String, String>();
 					String originalFileName = zipFile.getOriginalFilename();
 					int lastPointIndex = originalFileName.lastIndexOf(MarketingConstants.POINT);
-					File imageFileDir = new File(
+					
+					File majorTypeDir = new File(
 							basePath + File.separator + originalFileName.substring(0, lastPointIndex));
-					if (!imageFileDir.exists()) {
-						imageFileDir.mkdirs();
+					if (!majorTypeDir.exists()) {
+						majorTypeDir.mkdirs();
 					}
 					ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
 					ZipEntry ze;
@@ -77,8 +82,8 @@ public class TrainingDataService {
 							String fileName = ze.getName();
 							String fileBasePath = basePath + File.separator + ze.getName();
 							int lastXmlPointIndex = fileName.lastIndexOf(MarketingConstants.POINT);
-							int lastXmlIndex = fileName.lastIndexOf("/");
-							String fileRealName = fileName.substring(lastXmlIndex + 1, lastXmlPointIndex);
+							int lastXmlSlashIndex = fileName.lastIndexOf("/");
+							String fileRealName = fileName.substring(lastXmlSlashIndex + 1, lastXmlPointIndex);
 
 							if (fileName.contains(".xml")) {
 								xmlFileMap.put(fileRealName, fileBasePath);
@@ -91,8 +96,9 @@ public class TrainingDataService {
 							FileOutputStream fos = new FileOutputStream(file);
 
 							int len = 0;
-							while ((len = zin.read()) != -1) {
-								fos.write(len);
+							byte[] buffer = new byte[4096];
+							while ((len = zin.read(buffer)) != -1) {
+								fos.write(buffer, 0, len);
 							}
 							fos.close();
 						}
@@ -112,6 +118,7 @@ public class TrainingDataService {
 			}
 
 		} catch (IOException e) {
+			logger.error("upload zip file fail, " + e.getMessage());
 			return new ServiceResponseBO(false, "marketing_save_upload_file_error");
 		}
 		return new ServiceResponseBO(null);

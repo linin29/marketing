@@ -154,7 +154,7 @@ public class FTPClientHelper {
 	        fileInput.close();     
 	        out.close();    
 	        success = ftpClient.completePendingCommand();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.error("Failed to write file on remote server, file name:" + remoteFileName);
 		}
         return success;

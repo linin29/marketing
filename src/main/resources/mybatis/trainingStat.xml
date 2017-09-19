@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tunicorn.marketing.mapper.TrainingStatisticsMapper">
+	<resultMap id="TrainingStatisticsResultMap" type="com.tunicorn.marketing.vo.TrainingStatisticsVO">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="major_type" property="majorType" jdbcType="VARCHAR" />
+		<result column="count" property="count" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<insert id="createTrainingStatistics" parameterType="com.tunicorn.marketing.vo.TrainingStatisticsVO">
+    	insert into training_statistics (major_type) values (#{majorType})
+  	</insert>
+  	<update id="updateTrainingStatistics"  parameterType="com.tunicorn.marketing.vo.TrainingStatisticsVO">
+	  	UPDATE training_statistics set count=#{count} where id=#{id}
+  	</update>
+</mapper>

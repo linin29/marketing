@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,19 +15,25 @@ import org.springframework.stereotype.Component;
 
 import com.tunicorn.marketing.bo.AnnotationBO;
 import com.tunicorn.marketing.service.TrainingDataService;
+import com.tunicorn.marketing.service.TrainingStatisticsService;
 import com.tunicorn.marketing.utils.FTPTransferUtils;
 import com.tunicorn.marketing.vo.TrainingDataVO;
+import com.tunicorn.marketing.vo.TrainingStatisticsVO;
 
 @Component
 @EnableScheduling
 public class TrainingData {
+	private static Logger logger = Logger.getLogger(TrainingData.class);
 	private static final int RETRIEVE_NUMBER = 200;
 	@Autowired
 	TrainingDataService trainingDataService;
-	//每隔10分钟调用一次此方法
+	@Autowired
+	TrainingStatisticsService trainingStatisticsService;
+	
+	//invoke for each 10 minutes
 	@Scheduled(cron = "0 */10 * * * ? ")
     public void transferFiles() {
-		System.out.println("Transfer files to FTP server timely...");
+		logger.info("Transfer files to FTP server timely...");
 		//Set flag to 1
 		List<TrainingDataVO> data = new ArrayList<TrainingDataVO>();
 		synchronized (this) {
@@ -44,7 +51,6 @@ public class TrainingData {
 		deleteSuccessfulAnnotations(annotations);
 		//Update successfully transferred count per major type
 		updateTrainingCount(annotations);
-		
 	}
 	
 	private void updateTrainingCount (List<AnnotationBO> annotations) {
@@ -61,7 +67,17 @@ public class TrainingData {
 		synchronized (this) {
 			for (String majorType : typeCountMapping.keySet()) {
 				//Retrieve current count
-				//Update with added count
+				TrainingStatisticsVO stat = trainingStatisticsService.getTrainingStatisticsByType(majorType);
+				if (stat == null) {
+					stat = new TrainingStatisticsVO();
+					stat.setMajorType(majorType);
+					stat.setCount(typeCountMapping.get(majorType));
+					trainingStatisticsService.createTrainingStatistics(stat);
+				} else {
+					int currentCount = stat.getCount() + typeCountMapping.get(majorType);
+					stat.setCount(currentCount);
+					trainingStatisticsService.updateTrainingStatistics(stat);
+				}
 			}
 		}
 	}

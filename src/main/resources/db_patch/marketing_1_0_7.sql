@@ -120,26 +120,19 @@ BEGIN
 	CALL CheckTableExist("training_data", @ret);
 	IF @ret = 0 THEN
 		CREATE TABLE IF NOT EXISTS `training_data` (
-		  `id` varchar(40) NOT NULL,
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `major_type` varchar(50) NOT NULL,
-		  `image_id` varchar(100),
 		  `image_path` varchar(256) NOT NULL,
 		  `file_path` varchar(256) NOT NULL,
-		  `create_time` datetime DEFAULT NULL,
-		  `last_update` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		  `flag` tinyint NOT NULL DEFAULT 0,
-		  `status` enum('active','deleted','inactive') NOT NULL DEFAULT 'active',
 		  PRIMARY KEY (`id`),
 		  KEY `idx_major_type` (`major_type`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		
 		CREATE TABLE IF NOT EXISTS `training_statistics` (
-		  `id` varchar(40) NOT NULL,
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `major_type` varchar(50) NOT NULL,
 		  `count` int(11) DEFAULT 0,
-		  `create_time` datetime DEFAULT NULL,
-		  `last_update` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-		  `status` enum('active','deleted','inactive') NOT NULL DEFAULT 'active',
 		  PRIMARY KEY (`id`),
 		  KEY `idx_major_type` (`major_type`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8;

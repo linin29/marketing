@@ -203,6 +203,7 @@ public class FTPClientHelper {
         	}
         	ftpClient.changeWorkingDirectory(SEPRATOR);
     	} catch (IOException exception) {
+    		success = false;
     		logger.error("Failed to create directory on remote server, caused by:" + exception.getStackTrace());
     	}
     	return success;

@@ -18,11 +18,11 @@ import com.tunicorn.marketing.vo.TrainingStatisticsVO;
 public class TrainingStatistics {
 	private static Logger logger = Logger.getLogger(TrainingStatistics.class);
 	private static final int TRAINING_THRESHHOLD = 2;
-	private static final String TRAINING_SCRIPT = "";
+	private static final String TRAINING_SCRIPT = "python /home/feng/script/test.py";
 	@Autowired
 	TrainingStatisticsService trainingStatisticsService;
 	//invoke for each 10 minutes
-	@Scheduled(cron = "0 */10 * * * ? ")
+	@Scheduled(cron = "0 */1 * * * ? ")
 	@Transactional
     public synchronized void statistics() {
 		List<TrainingStatisticsVO> stats = trainingStatisticsService.getTrainingStatisticsList();

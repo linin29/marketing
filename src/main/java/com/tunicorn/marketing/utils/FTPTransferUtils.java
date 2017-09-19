@@ -61,8 +61,9 @@ public class FTPTransferUtils {
 			 CountDownLatch latch = new CountDownLatch(typeEntitiesMap.size());
 			 ExecutorService transferThreadPool = Executors.newFixedThreadPool(typeEntitiesMap.size());
 			 for (String type : typeEntitiesMap.keySet()) {
-				 FTPClientHelper client = new FTPClientHelper(FTP_IP, FTP_PORT, FTP_USERNAME, FTP_PASSWORD);
 				 List<AnnotationBO> totalEntities = typeEntitiesMap.get(type);
+				 FTPClientHelper client = new FTPClientHelper(FTP_IP, FTP_PORT, FTP_USERNAME, FTP_PASSWORD);
+				 client.connect();
 				 if(client.createRemoteDirectory(type)){
 					 transferThreadPool.execute(new TransferThread(client, latch, failedEntities, totalEntities, type));
 				 } else {
@@ -105,13 +106,13 @@ class TransferThread implements Runnable {
 	public void run() {
 		List<AnnotationBO> failedEntityList = new ArrayList<AnnotationBO>();
 		try {
-			client.connect();
+			//client.connect();
 			failedEntityList = client.upload(entities, type);
 			synchronized(latch) {
 				failedEntities.addAll(failedEntityList);
 			}
-			client.disconnect();
 		} finally {
+			client.disconnect();
 			latch.countDown();
 		}
 	}

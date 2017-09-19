@@ -31,7 +31,7 @@ public class TrainingData {
 	@Autowired
 	TrainingStatisticsService trainingStatisticsService;
 	//invoke for each 10 minutes
-	@Scheduled(cron = "0 */10 * * * ? ")
+	@Scheduled(cron = "0 */1 * * * ? ")
 	@Transactional
     public void transferFiles() {
 		logger.info("Transfer files to FTP server timely...");
@@ -51,12 +51,16 @@ public class TrainingData {
 			List<AnnotationBO> failedAnnotations = FTPTransferUtils.transferFiles(annotations);
 			logger.info("Failed size:" + failedAnnotations.size());
 			//Reset Flag to 0 for the failed annotations
-			batchResetFailedFlag(failedAnnotations);
+			if (failedAnnotations != null && failedAnnotations.size() > 0) {
+				batchResetFailedFlag(failedAnnotations);
+			}
 			//Delete successful annotations
 			annotations.removeAll(failedAnnotations);
-			deleteSuccessfulAnnotations(annotations);
-			//Update successfully transferred count per major type
-			updateTrainingCount(annotations);
+			if (annotations != null && annotations.size() > 0) {
+				deleteSuccessfulAnnotations(annotations);
+				//Update successfully transferred count per major type
+				updateTrainingCount(annotations);
+			}
 		}
 	}
 	/**
@@ -139,9 +143,14 @@ public class TrainingData {
 			if (StringUtils.isEmpty(data.getFilePath()) || StringUtils.isEmpty(data.getImagePath())) {
 				continue;
 			}
+			File imageFile = new File(data.getImagePath());
+			File annotationFile = new File(data.getFilePath());
+			if (!imageFile.exists() || !annotationFile.exists()) {
+				continue;
+			}
 			annotation.setType(data.getMajorType());
-			annotation.setImage(new File(data.getImagePath()));
-			annotation.setAnnotationXML(new File(data.getFilePath()));
+			annotation.setImage(imageFile);
+			annotation.setAnnotationXML(annotationFile);
 			annotations.add(annotation);
 		}
 		return annotations;

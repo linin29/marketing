@@ -13,7 +13,7 @@ public interface TrainingStatisticsMapper {
 
 	public int updateTrainingStatistics(TrainingStatisticsVO trainingStatisticsVO);
 	
-	@Delete("delete training_statistics where id=#{id}")
+	@Delete("delete from training_statistics where id=#{id}")
 	public void deleteTrainingStatisticsById(int id);
 
 	@Select("Select id, major_type as majorType, count from training_statistics where major_type=#{majorType}")

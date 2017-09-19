@@ -8,7 +8,7 @@
 	</resultMap>
 	
 	<insert id="createTrainingStatistics" parameterType="com.tunicorn.marketing.vo.TrainingStatisticsVO">
-    	insert into training_statistics (major_type) values (#{majorType})
+    	insert into training_statistics (major_type, count) values (#{majorType}, #{count})
   	</insert>
   	<update id="updateTrainingStatistics"  parameterType="com.tunicorn.marketing.vo.TrainingStatisticsVO">
 	  	UPDATE training_statistics set count=#{count} where id=#{id}

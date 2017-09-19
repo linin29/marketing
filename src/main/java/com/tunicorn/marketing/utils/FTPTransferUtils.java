@@ -8,9 +8,16 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.log4j.Logger;
+
 import com.tunicorn.marketing.bo.AnnotationBO;
 
 public class FTPTransferUtils {
+	private static Logger logger = Logger.getLogger(FTPTransferUtils.class);
+	private static final String FTP_IP = "172.16.1.89";
+	private static final int FTP_PORT = 21;
+	private static final String FTP_USERNAME = "Anonymous";
+	private static final String FTP_PASSWORD = "";
 	/**
 	 * 触发模型训练, 首先将所有图片和标注数据上传到远程FTP服务器;然后远程执行模型训练脚本
 	 * @param entities
@@ -54,12 +61,20 @@ public class FTPTransferUtils {
 			 CountDownLatch latch = new CountDownLatch(typeEntitiesMap.size());
 			 ExecutorService transferThreadPool = Executors.newFixedThreadPool(typeEntitiesMap.size());
 			 for (String type : typeEntitiesMap.keySet()) {
-				 transferThreadPool.execute(new TransferThread(latch, failedEntities, typeEntitiesMap.get(type), type));
+				 FTPClientHelper client = new FTPClientHelper(FTP_IP, FTP_PORT, FTP_USERNAME, FTP_PASSWORD);
+				 List<AnnotationBO> totalEntities = typeEntitiesMap.get(type);
+				 if(client.createRemoteDirectory(type)){
+					 transferThreadPool.execute(new TransferThread(client, latch, failedEntities, totalEntities, type));
+				 } else {
+					 logger.error("Create remote directory failed...");
+					 failedEntities.addAll(totalEntities);
+				 }
+				 
 			 }
 			 try {
 				latch.await();
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				logger.error("Thread interrupte exception, caused by:" + e.getStackTrace());
 			} finally {
 				transferThreadPool.shutdown();
 			}
@@ -73,16 +88,14 @@ public class FTPTransferUtils {
  *
  */
 class TransferThread implements Runnable {
-	private String ip = "172.16.1.89";
-	private int port = 21;
-	private String userName = "Anonymous";
-	private String password = "";
+	private FTPClientHelper client;
 	private CountDownLatch latch;
 	private List<AnnotationBO> failedEntities;
 	private List<AnnotationBO> entities;
 	private String type;
 	
-	public TransferThread (CountDownLatch latch, List<AnnotationBO> failedEntities, List<AnnotationBO> totalEntities, String type) {
+	public TransferThread (FTPClientHelper client, CountDownLatch latch, List<AnnotationBO> failedEntities, List<AnnotationBO> totalEntities, String type) {
+		this.client = client;
 		this.latch = latch;
 		this.failedEntities = failedEntities;
 		this.entities = totalEntities;
@@ -90,15 +103,10 @@ class TransferThread implements Runnable {
 	}
 	
 	public void run() {
-		FTPClientHelper client = new FTPClientHelper(ip, port, userName, password);
 		List<AnnotationBO> failedEntityList = new ArrayList<AnnotationBO>();
 		try {
 			client.connect();
-			if(client.createRemoteDirectory(type)){
-				failedEntityList = client.upload(entities, type);
-	        } else {
-	        	failedEntityList.addAll(entities);
-	        }
+			failedEntityList = client.upload(entities, type);
 			synchronized(latch) {
 				failedEntities.addAll(failedEntityList);
 			}

@@ -13,10 +13,12 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
+import org.apache.log4j.Logger;
 
 import com.tunicorn.marketing.bo.AnnotationBO;
 
 public class FTPClientHelper {
+	private static Logger logger = Logger.getLogger(FTPClientHelper.class);
 	private final static  String REMOTE_BASE_PATH = "/test";
 	private final static  String REMOTE_IMAGE_FOLDER = "JPEGImages";
 	private final static  String REMOTE_ANNOTATION_FOLDER = "Annotations";
@@ -50,9 +52,9 @@ public class FTPClientHelper {
 	        }     
 	        disconnect();     
 		} catch (SocketException e) {
-			e.printStackTrace();
+			logger.error("Failed to connect remote server, caused by:" + e.getStackTrace());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Failed to connect/login remote server, caused by:" + e.getStackTrace());
 		}     
     	return false;  
     }     
@@ -65,7 +67,7 @@ public class FTPClientHelper {
         		ftpClient.disconnect();
         	}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Failed to disconnect remote server, caused by:" + e.getStackTrace());
 		}     
     }
     /**
@@ -82,7 +84,7 @@ public class FTPClientHelper {
 		try {
 			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Failed to set file type on remote server, caused by:" + e.getStackTrace());
 			failedEntity.addAll(entities);
 			return failedEntity;
 		}
@@ -104,12 +106,12 @@ public class FTPClientHelper {
 	        		ftpClient.deleteFile(remoteImageFile);
 	        	}
 				if (!uploadFile(remoteImageFile, entity.getImage())){
-	        		//TODO: log upload file ${remoteFileName} failed
+					logger.error("Failed to upload file to remote server, file name:" + localImageName);
 	        		failedEntity.add(entity);
 	        		continue;
 	        	}
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("Failed to operate file on remote server, file name:" + localImageName + ". Caused by:" + e.getStackTrace());
 				failedEntity.add(entity);
 				continue;
 			}
@@ -120,12 +122,12 @@ public class FTPClientHelper {
 	        		ftpClient.deleteFile(remoteAnnotationFile);
 	        	}
 				if (!uploadFile(remoteAnnotationFile, entity.getAnnotationXML())){
-	        		//TODO: log upload file ${remoteFileName} failed
+					logger.error("Failed to upload file to remote server, file name:" + localAnnotationName);
 	        		failedEntity.add(entity);
 	        		ftpClient.deleteFile(remoteImageFile);
 	        	}
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("Failed to operate file on remote server, file name:" + localAnnotationName + ". Caused by:" + e.getStackTrace());
 				failedEntity.add(entity);
 			}
         }
@@ -153,7 +155,7 @@ public class FTPClientHelper {
 	        out.close();    
 	        success = ftpClient.completePendingCommand();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Failed to write file on remote server, file name:" + remoteFileName);
 		}
         return success;
     }
@@ -193,7 +195,7 @@ public class FTPClientHelper {
         			if(ftpClient.makeDirectory(directory)){
                         ftpClient.changeWorkingDirectory(directory);     
                     } else {
-                    	//TODO: log the creating directory ${directory} failed
+                    	logger.error("Failed to create directory on remote server, directory name:" + directory);
                     	success = false;
                     	return success;
                     }
@@ -201,7 +203,7 @@ public class FTPClientHelper {
         	}
         	ftpClient.changeWorkingDirectory(SEPRATOR);
     	} catch (IOException exception) {
-    		exception.printStackTrace();
+    		logger.error("Failed to create directory on remote server, caused by:" + exception.getStackTrace());
     	}
     	return success;
     }     

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tunicorn.marketing.bo.AnnotationBO;
 import com.tunicorn.marketing.service.TrainingDataService;
@@ -29,30 +30,39 @@ public class TrainingData {
 	TrainingDataService trainingDataService;
 	@Autowired
 	TrainingStatisticsService trainingStatisticsService;
-	
 	//invoke for each 10 minutes
 	@Scheduled(cron = "0 */10 * * * ? ")
+	@Transactional
     public void transferFiles() {
 		logger.info("Transfer files to FTP server timely...");
 		//Set flag to 1
 		List<TrainingDataVO> data = new ArrayList<TrainingDataVO>();
 		synchronized (this) {
 			data = trainingDataService.getAllNeedHandleTrainingData(RETRIEVE_NUMBER);
-			batchSetFlag(data, 1);
+			if (data != null && data.size() > 0) {
+				batchSetFlag(data, 1);
+			}
 		}
-		//Construct annotations
-		List<AnnotationBO> annotations = constructAnnotations(data);
-		//Transfer files
-		List<AnnotationBO> failedAnnotations = FTPTransferUtils.transferFiles(annotations);
-		//Reset Flag to 0 for the failed annotations
-		batchResetFailedFlag(failedAnnotations);
-		//Delete successful annotations
-		annotations.removeAll(failedAnnotations);
-		deleteSuccessfulAnnotations(annotations);
-		//Update successfully transferred count per major type
-		updateTrainingCount(annotations);
+		if (data != null && data.size() > 0) {
+			//Construct annotations
+			List<AnnotationBO> annotations = constructAnnotations(data);
+			logger.info("Total size:" + annotations.size());
+			//Transfer files
+			List<AnnotationBO> failedAnnotations = FTPTransferUtils.transferFiles(annotations);
+			logger.info("Failed size:" + failedAnnotations.size());
+			//Reset Flag to 0 for the failed annotations
+			batchResetFailedFlag(failedAnnotations);
+			//Delete successful annotations
+			annotations.removeAll(failedAnnotations);
+			deleteSuccessfulAnnotations(annotations);
+			//Update successfully transferred count per major type
+			updateTrainingCount(annotations);
+		}
 	}
-	
+	/**
+	 * 更新统计表数据
+	 * @param annotations
+	 */
 	private void updateTrainingCount (List<AnnotationBO> annotations) {
 		Map<String, Integer> typeCountMapping = new HashMap<String, Integer>();
 		for (AnnotationBO annotation : annotations) {
@@ -81,7 +91,10 @@ public class TrainingData {
 			}
 		}
 	}
-	
+	/**
+	 * 批量reset失败的flag
+	 * @param annotations
+	 */
 	private void batchResetFailedFlag (List<AnnotationBO> annotations) {
 		List<TrainingDataVO> traingData = new ArrayList<TrainingDataVO>();
 		for (AnnotationBO annotation : annotations) {
@@ -92,7 +105,10 @@ public class TrainingData {
 		}
 		batchSetFlag(traingData, 0);
 	}
-	
+	/**
+	 * 删除所有成功
+	 * @param annotations
+	 */
 	private void deleteSuccessfulAnnotations (List<AnnotationBO> annotations) {
 		batchDeleteTrainingData(annotations);
 		deleteFiles(annotations);

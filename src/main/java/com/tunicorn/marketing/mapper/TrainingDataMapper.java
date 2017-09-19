@@ -20,4 +20,6 @@ public interface TrainingDataMapper {
 	public List<TrainingDataVO> getAllNeedHandleTrainingData(@Param("retrieveNumber") int retrieveNumber);
 	
 	public void batchUpdateFlag(List<TrainingDataVO> trainingDataList);
+	
+	public void batchInsertTrainingData(List<TrainingDataVO> trainingDataList);
 }

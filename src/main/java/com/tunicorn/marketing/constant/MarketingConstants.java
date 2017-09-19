@@ -78,6 +78,7 @@ public class MarketingConstants {
 	
 	public static final String UTF8 = "UTF-8";
 	public static final String ISO88991= "iso-8859-1";
+	public static final String GBK = "GBK";
 
 	public static final String APPLY_CREATED_STATUS = "created";
 	public static final String APPLY_OPENED_STATUS = "opened";
@@ -106,4 +107,6 @@ public class MarketingConstants {
 	public static final String CROP_TXT_PATH = "Annotations";
 	
 	public static final String UPLOAD_PATH = "upload";
+	
+	public static final int BATCH_INSERT_SIZE = Integer.parseInt(ConfigUtils.getInstance().getConfigValue("marketing.batch.insert.size"));
 }

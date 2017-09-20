@@ -44,9 +44,9 @@ public class TransferTrainingDataJob {
 		logger.info("Transfer files to FTP server timely...");
 		List<TrainingDataVO> data = retrieveTraingData();
 		if (data != null && data.size() > 0) {
-			for (TrainingDataVO trainingData : data) {
+			/*for (TrainingDataVO trainingData : data) {
 				logger.info("Data ID:" + trainingData.getId());
-			}
+			}*/
 			//Construct annotations
 			List<AnnotationBO> annotations = constructAnnotations(data);
 			logger.info("Total size:" + annotations.size());

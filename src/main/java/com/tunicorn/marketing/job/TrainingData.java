@@ -37,6 +37,9 @@ public class TrainingData {
 		logger.info("Transfer files to FTP server timely...");
 		List<TrainingDataVO> data = retrieveTraingData();
 		if (data != null && data.size() > 0) {
+			for (TrainingDataVO trainingData : data) {
+				logger.info("Data ID:" + trainingData.getId());
+			}
 			//Construct annotations
 			List<AnnotationBO> annotations = constructAnnotations(data);
 			logger.info("Total size:" + annotations.size());
@@ -57,7 +60,6 @@ public class TrainingData {
 		}
 	}
 	
-	@Transactional
 	private List<TrainingDataVO> retrieveTraingData () {
 		List<TrainingDataVO> data = trainingDataService.getAllNeedHandleTrainingData(RETRIEVE_NUMBER);
 		if (data != null && data.size() > 0) {
@@ -87,7 +89,6 @@ public class TrainingData {
 		}
 	}
 	
-	@Transactional
 	private void updateTraingStatistics (String majorType, int count) {
 		//Retrieve current count
 		TrainingStatisticsVO stat = trainingStatisticsService.getTrainingStatisticsByType(majorType);

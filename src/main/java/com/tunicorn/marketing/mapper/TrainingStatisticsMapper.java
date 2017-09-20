@@ -19,6 +19,6 @@ public interface TrainingStatisticsMapper {
 	@Select("Select id, major_type as majorType, count from training_statistics where major_type=#{majorType}")
 	public TrainingStatisticsVO getTrainingStatisticsByType(String majorType);
 	
-	@Select("Select id, major_type as majorType, count from training_statistics")
+	@Select("Select id, major_type as majorType, count from training_statistics for update")
 	public List<TrainingStatisticsVO> getTrainingStatisticsList();
 }

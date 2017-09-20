@@ -16,7 +16,7 @@ public interface TrainingDataMapper {
 	public int updateTrainingData(TrainingDataVO trainingDataVO);
 
 	@Select("Select id, major_type as majorType, image_path as imagePath, file_path as filePath from training_data "
-			+ "where flag=0 order by major_type limit #{retrieveNumber}")
+			+ "where flag=0 order by major_type limit #{retrieveNumber} for update")
 	public List<TrainingDataVO> getAllNeedHandleTrainingData(@Param("retrieveNumber") int retrieveNumber);
 	
 	public void batchUpdateFlag(List<TrainingDataVO> trainingDataList);

@@ -139,7 +139,8 @@ BEGIN
 		  `file_path` varchar(256) NOT NULL,
 		  `flag` tinyint NOT NULL DEFAULT 0,
 		  PRIMARY KEY (`id`),
-		  KEY `idx_major_type` (`major_type`)
+		  KEY `major_type_training_data_idx` (`major_type`),
+		  KEY `flag_training_data_idx` (`flag`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		
 		CREATE TABLE IF NOT EXISTS `training_statistics` (
@@ -147,7 +148,7 @@ BEGIN
 		  `major_type` varchar(50) NOT NULL,
 		  `count` int(11) DEFAULT 0,
 		  PRIMARY KEY (`id`),
-		  KEY `idx_major_type` (`major_type`)
+		  KEY `major_type_training_statistics_idx` (`major_type`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	END IF;
 END//

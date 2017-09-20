@@ -32,7 +32,8 @@ public class FTPClientHelper {
     	this.server = ip;   
     	this.userName = userName;   
     	this.password = password;   
-    	this.port = port;   
+    	this.port = port;
+    	ftpClient.setConnectTimeout(10*60*1000);
     	//设置将过程中使用到的命令输出到控制台 -for debugging
         //this.ftpClient.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));     
     }     
@@ -156,6 +157,7 @@ public class FTPClientHelper {
 	        success = ftpClient.completePendingCommand();
 		} catch (Exception e) {
 			logger.error("Failed to write file on remote server, file name:" + remoteFileName);
+			e.printStackTrace();
 		}
         return success;
     }

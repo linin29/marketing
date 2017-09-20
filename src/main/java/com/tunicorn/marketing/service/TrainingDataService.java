@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tunicorn.marketing.bo.ServiceResponseBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.mapper.TrainingDataMapper;
+import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.vo.TrainingDataVO;
 
 @Service
@@ -55,15 +56,11 @@ public class TrainingDataService {
 	@Transactional
 	public ServiceResponseBO upload(List<MultipartFile> zipFiles) {
 
-		/*
-		 * String basePath = String.format("%s%s%s%s",
-		 * com.tunicorn.util.ConfigUtils.getInstance().getConfigValue(
-		 * "storage.private.basePath"),
-		 * ConfigUtils.getInstance().getConfigValue("marketing.image.root.path")
-		 * , File.separator, MarketingConstants.UPLOAD_PATH);
-		 */
-
-		String basePath = "C:\\mnt\\storage4\\marketing";
+		
+		String basePath = String.format("%s%s%s%s",
+				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
+				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), 
+				File.separator, MarketingConstants.UPLOAD_PATH);
 		try {
 			if (zipFiles != null && zipFiles.size() > 0) {
 				long startTime = System.currentTimeMillis();

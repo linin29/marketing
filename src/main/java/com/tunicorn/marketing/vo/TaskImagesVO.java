@@ -16,7 +16,6 @@ public class TaskImagesVO {
 	private String resourceId;
 	private String imageUrl;
 	private int order_no;
-	private String result;
 
 	public int getOrder_no() {
 		return order_no;
@@ -121,13 +120,4 @@ public class TaskImagesVO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-	public String getResult() {
-		return result;
-	}
-
-	public void setResult(String result) {
-		this.result = result;
-	}
-
 }

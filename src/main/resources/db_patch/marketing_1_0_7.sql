@@ -11,7 +11,7 @@ DROP PROCEDURE IF EXISTS CheckConstraintExist;
 DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS UpdateMajorTypeAndSkuTableData;
-DROP PROCEDURE IF EXISTS CreateErrorCorrectionDetailTable;
+DROP PROCEDURE IF EXISTS CreateTrainingTable;
 DROP PROCEDURE IF EXISTS AlterTaskImageTable;
 
 DELIMITER //
@@ -89,8 +89,8 @@ BEGIN
 	CALL CheckTableExist("major_type", @ret);
 	IF @ret = 1 THEN 
 		UPDATE `major_type` SET `version` = "4.0" where name = "nestlemilk";
-		UPDATE `major_type` SET `version` = "4.0" where name = "nestlecoffee";
-		UPDATE `major_type` SET `version` = "4.0" where name = "nestlemilkpowder";
+		UPDATE `major_type` SET `version` = "5.0" where name = "nestlecoffee";
+		UPDATE `major_type` SET `version` = "5.0" where name = "nestlemilkpowder";
 		UPDATE `major_type` SET `version` = "4.0" where name = "nestleoatmeal";
 		UPDATE `major_type` SET `version` = "4.0" where name = "nestlericeflour";
 		UPDATE `major_type` SET `version` = "4.0" where name = "nestlesugar";
@@ -107,45 +107,49 @@ BEGIN
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlemilkpowder', 'Nestle 98', 'Nestle 98', 97, now());
 		
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlesugar', 'nqmg13', 'nqmg13', 12, now());
+		
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco79', 'nco79', 78, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco80', 'nco80', 79, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco81', 'nco81', 80, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco82', 'nco82', 81, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco83', 'nco83', 82, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nestlecoffee', 'nco84', 'nco84', 83, now());
+		
+		INSERT INTO `privilege`(`parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (NULL, '文件上传', '/fileUpload', '文件上传一级菜单', 5, now());
+		INSERT INTO `role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (5, 1, 5, now());
 	END IF;
 END//
 
 DELIMITER //
-CREATE PROCEDURE CreateErrorCorrectionDetailTable()
+CREATE PROCEDURE CreateTrainingTable()
 BEGIN
 	SET @ret = 0;
-	CALL CheckTableExist("error_correction_detail", @ret);
+	CALL CheckTableExist("training_data", @ret);
 	IF @ret = 0 THEN
-		CREATE TABLE IF NOT EXISTS `error_correction_detail` (
-		  `id` varchar(40) NOT NULL,
-		  `image_id` varchar(256) NOT NULL,
+		CREATE TABLE IF NOT EXISTS `training_data` (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `major_type` varchar(50) NOT NULL,
 		  `image_path` varchar(256) NOT NULL,
 		  `file_path` varchar(256) NOT NULL,
-		  `create_time` datetime DEFAULT NULL,
-		  `last_update` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		  `flag` tinyint NOT NULL DEFAULT 0,
-		  `status` enum('active','deleted','inactive') NOT NULL DEFAULT 'active',
+		  PRIMARY KEY (`id`),
+		  KEY `idx_major_type` (`major_type`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		
+		CREATE TABLE IF NOT EXISTS `training_statistics` (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `major_type` varchar(50) NOT NULL,
+		  `count` int(11) DEFAULT 0,
 		  PRIMARY KEY (`id`),
 		  KEY `idx_major_type` (`major_type`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	END IF;
 END//
 
-DELIMITER //
-CREATE PROCEDURE AlterTaskImageTable()
-BEGIN
-	SET @ret = 0;
-	CALL CheckTableExist("task_images", @ret);
-	IF @ret = 1 THEN 
-		ALTER TABLE task_images ADD COLUMN `result` mediumtext;
-	END IF;
-END//
-
 DELIMITER ;
 	
 CALL UpdateMajorTypeAndSkuTableData();
-CALL CreateErrorCorrectionDetailTable();
+CALL CreateTrainingTable();
 CALL AlterTaskImageTable();
 
 DROP PROCEDURE IF EXISTS CheckTableExist;
@@ -155,5 +159,5 @@ DROP PROCEDURE IF EXISTS CheckConstraintExist;
 DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS UpdateMajorTypeAndSkuTableData;
-DROP PROCEDURE IF EXISTS CreateErrorCorrectionDetailTable;
+DROP PROCEDURE IF EXISTS CreateTrainingTable;
 DROP PROCEDURE IF EXISTS AlterTaskImageTable;

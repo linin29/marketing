@@ -63,7 +63,6 @@ import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.mapper.ApiCallingDetailMapper;
 import com.tunicorn.marketing.mapper.ApiCallingSummaryMapper;
-import com.tunicorn.marketing.mapper.ErrorCorrectionDetailMapper;
 import com.tunicorn.marketing.mapper.GoodsSkuMapper;
 import com.tunicorn.marketing.mapper.MajorTypeMapper;
 import com.tunicorn.marketing.mapper.TaskDumpMapper;
@@ -74,7 +73,6 @@ import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.utils.MarketingStorageUtils;
 import com.tunicorn.marketing.vo.ApiCallingDetailVO;
 import com.tunicorn.marketing.vo.ApiCallingSummaryVO;
-import com.tunicorn.marketing.vo.ErrorCorrectionDetailVO;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
@@ -102,8 +100,6 @@ public class TaskService {
 	private MajorTypeMapper majorTypeMapper;
 	@Autowired
 	private GoodsSkuMapper goodsSkuMapper;
-	@Autowired
-	private ErrorCorrectionDetailMapper errorCorrectionDetailMapper;
 
 	@Transactional
 	public ServiceResponseBO createTask(String userId, String taskName, List<MultipartFile> images) {
@@ -1122,23 +1118,6 @@ public class TaskService {
 				generateXmlFile(cropBO, xmlFilePath, width, height);
 			} catch (IOException e) {
 				logger.error("imageId:" + cropBO.getImageId() + ", copy file fail, " + e.getMessage());
-			}
-		}
-		if (StringUtils.isNotBlank(cropBO.getImageId())) {
-	
-			ErrorCorrectionDetailVO correctionDetailVO = errorCorrectionDetailMapper
-					.getErrorCorrectionDetailByImageId(cropBO.getImageId());
-			if (correctionDetailVO == null || correctionDetailVO.getFlag() == 1) {
-				correctionDetailVO = new ErrorCorrectionDetailVO();
-				correctionDetailVO
-						.setId((Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13))
-								.toLowerCase());
-				correctionDetailVO.setImageId(cropBO.getImageId());
-				correctionDetailVO.setFilePath(xmlFilePath);
-				correctionDetailVO.setImageId(cropBO.getImageId());
-				correctionDetailVO.setImagePath(imageFilenameTemp);
-				correctionDetailVO.setMajorType(cropBO.getMajorType());
-				errorCorrectionDetailMapper.createErrorCorrectionDetail(correctionDetailVO);
 			}
 		}
 	}

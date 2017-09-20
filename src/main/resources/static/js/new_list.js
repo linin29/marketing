@@ -62,15 +62,7 @@ newList=(function(){
              	}
          	 });
     	});
-     	
-     	$('#markImage').click(function() {
-    		var taskId = $('#taskId').val();
-            if (taskId=='-1' || taskId=='0'){
-                noty({text: "请先上传图片", layout: "topCenter", type: "warning", timeout: 2000});
-                return;
-            }
-			window.open(m_url+"showMarkPage/" + taskId);
-    	});
+
      	$('#nextTask').click(function() {
     		var taskId = $('#taskId').val();
     		$.ajax({

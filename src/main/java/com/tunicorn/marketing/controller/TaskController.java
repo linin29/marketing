@@ -46,9 +46,9 @@ import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.GoodsSkuService;
 import com.tunicorn.marketing.service.TaskService;
+import com.tunicorn.marketing.service.TrainingDataService;
 import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
-import com.tunicorn.marketing.vo.MajorTypeVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
 import com.tunicorn.marketing.vo.TaskVO;
 import com.tunicorn.marketing.vo.UserVO;
@@ -62,6 +62,8 @@ public class TaskController extends BaseController {
 	private TaskService taskService;
 	@Autowired
 	private GoodsSkuService goodsSkuService;
+	@Autowired
+	private TrainingDataService trainingDataService;
 
 	@RequestMapping(value = "/batch_import", method = RequestMethod.GET)
 	public String batch_import(HttpServletRequest request, Model model) {
@@ -660,24 +662,26 @@ public class TaskController extends BaseController {
 		model.addAttribute("currentPage", taskBO.getPageNum() + 1);
 		return "list/task_list_temp";
 	}
-
-	@RequestMapping(value = "/showMarkPage/{taskId}", method = RequestMethod.GET)
-	public String showMarkPage(@PathVariable("taskId") String taskId, Model model, HttpServletRequest request) {
+	
+	@RequestMapping(value = "/fileUpload", method = RequestMethod.GET)
+	public String fileUpload(HttpServletRequest request, Model model) {
+		return "list/file_upload";
+	}
+	
+	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
+	@ResponseBody
+	public CommonAjaxResponse zipUpload(HttpServletRequest request,
+			@RequestParam(value = "zipFiles", required = false) List<MultipartFile> zipFiles, Model model) {
 		UserVO user = getCurrentUser(request);
-		TaskVO taskVO = taskService.getTaskById(taskId);
-		List<TaskImagesVO> imagesVOs = taskService.getTaskImagesListByTaskId(taskId);
-		taskService.saveGoodsInfo(taskId);
-		if (imagesVOs != null && imagesVOs.size() > 0) {
-			TaskImagesVO image = imagesVOs.get(0);
-			model.addAttribute("image", image);
-		}
-		List<MajorTypeVO> majorTypeVOs = taskService.getMajorTypeVOList(user.getUserName());
+		model.addAttribute("user", user);
 
-		model.addAttribute("majorTypes", majorTypeVOs);
-		model.addAttribute("images", imagesVOs);
-		model.addAttribute("task", taskVO);
-		model.addAttribute("goodResults", taskService.getResultList(taskVO));
-		return "list/task_mark";
+		ServiceResponseBO response = trainingDataService.upload(zipFiles);
+		if (response.isSuccess()) {
+			return CommonAjaxResponse.toSuccess(response.getResult());
+		} else {
+			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
+			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
 	}
 	
 	private void rendFile(HttpServletRequest request, HttpServletResponse response, String filePath, String name) {

@@ -24,6 +24,7 @@ public class TaskVO extends PaginationBO {
 	private String endTime;
 	private String goodsInfo;
 	private long identifySuccessTimes;
+	private String majorTypeName;
 
 	public String getAuthor() {
 		return author;
@@ -175,6 +176,14 @@ public class TaskVO extends PaginationBO {
 
 	public void setIdentifySuccessTimes(long identifySuccessTimes) {
 		this.identifySuccessTimes = identifySuccessTimes;
+	}
+
+	public String getMajorTypeName() {
+		return majorTypeName;
+	}
+
+	public void setMajorTypeName(String majorTypeName) {
+		this.majorTypeName = majorTypeName;
 	}
 
 }

@@ -12,7 +12,6 @@ DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS InsertMajorTypeAndSkuTableData;
 DROP PROCEDURE IF EXISTS UpdateSkuTableData;
-DROP PROCEDURE IF EXISTS CreateErrorCorrectionDetailTable;
 
 DELIMITER //
 CREATE PROCEDURE CheckTableExist(IN p_tablename varchar(64), OUT ret int)
@@ -601,7 +600,6 @@ DELIMITER ;
 	
 CALL InsertMajorTypeAndSkuTableData();
 CALL UpdateSkuTableData();
-CALL CreateErrorCorrectionDetailTable();
 
 DROP PROCEDURE IF EXISTS CheckTableExist;
 DROP PROCEDURE IF EXISTS CheckColumnExist;
@@ -611,4 +609,3 @@ DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS InsertMajorTypeAndSkuTableData;
 DROP PROCEDURE IF EXISTS UpdateSkuTableData;
-DROP PROCEDURE IF EXISTS CreateErrorCorrectionDetailTable;

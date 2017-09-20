@@ -117,6 +117,12 @@ BEGIN
 		
 		INSERT INTO `privilege`(`parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (NULL, '文件上传', '/fileUpload', '文件上传一级菜单', 5, now());
 		INSERT INTO `role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (5, 1, 5, now());
+		
+		INSERT INTO `role`(`name`, `description`, `create_time`) VALUES ('user', '普通用户', now());
+		
+		INSERT INTO `role_privilege_mapping`(`role_id`, `privilege_id`, `create_time`) VALUES (2, 1, now());
+        INSERT INTO `role_privilege_mapping`(`role_id`, `privilege_id`, `create_time`) VALUES (2, 2, now());
+        INSERT INTO `role_privilege_mapping`(`role_id`, `privilege_id`, `create_time`) VALUES (2, 3, now());
 	END IF;
 END//
 

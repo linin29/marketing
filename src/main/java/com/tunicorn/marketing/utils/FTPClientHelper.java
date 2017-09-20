@@ -52,9 +52,9 @@ public class FTPClientHelper {
 	        }     
 	        disconnect();     
 		} catch (SocketException e) {
-			logger.error("Failed to connect remote server, caused by:" + e.getStackTrace());
+			logger.error("Failed to connect remote server, caused by:" + e.getMessage());
 		} catch (IOException e) {
-			logger.error("Failed to connect/login remote server, caused by:" + e.getStackTrace());
+			logger.error("Failed to connect/login remote server, caused by:" + e.getMessage());
 		}     
     	return false;  
     }     
@@ -67,7 +67,7 @@ public class FTPClientHelper {
         		ftpClient.disconnect();
         	}
 		} catch (IOException e) {
-			logger.error("Failed to disconnect remote server, caused by:" + e.getStackTrace());
+			logger.error("Failed to disconnect remote server, caused by:" + e.getMessage());
 		}     
     }
     /**
@@ -84,7 +84,7 @@ public class FTPClientHelper {
 		try {
 			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 		} catch (IOException e) {
-			logger.error("Failed to set file type on remote server, caused by:" + e.getStackTrace());
+			logger.error("Failed to set file type on remote server, caused by:" + e.getMessage());
 			failedEntity.addAll(entities);
 			return failedEntity;
 		}
@@ -111,7 +111,7 @@ public class FTPClientHelper {
 	        		continue;
 	        	}
 			} catch (IOException e) {
-				logger.error("Failed to operate file on remote server, file name:" + localImageName + ". Caused by:" + e.getStackTrace());
+				logger.error("Failed to operate file on remote server, file name:" + localImageName + ". Caused by:" + e.getMessage());
 				failedEntity.add(entity);
 				continue;
 			}
@@ -127,7 +127,7 @@ public class FTPClientHelper {
 	        		ftpClient.deleteFile(remoteImageFile);
 	        	}
 			} catch (IOException e) {
-				logger.error("Failed to operate file on remote server, file name:" + localAnnotationName + ". Caused by:" + e.getStackTrace());
+				logger.error("Failed to operate file on remote server, file name:" + localAnnotationName + ". Caused by:" + e.getMessage());
 				failedEntity.add(entity);
 			}
         }
@@ -204,7 +204,7 @@ public class FTPClientHelper {
         	ftpClient.changeWorkingDirectory(SEPRATOR);
     	} catch (IOException exception) {
     		success = false;
-    		logger.error("Failed to create directory on remote server, caused by:" + exception.getStackTrace());
+    		logger.error("Failed to create directory on remote server, caused by:" + exception.getMessage());
     	}
     	return success;
     }     

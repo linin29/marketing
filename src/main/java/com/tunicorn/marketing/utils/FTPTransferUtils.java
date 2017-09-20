@@ -68,7 +68,7 @@ public class FTPTransferUtils {
 			 try {
 				latch.await();
 			} catch (InterruptedException e) {
-				logger.error("Thread interrupte exception, caused by:" + e.getStackTrace());
+				logger.error("Thread interrupte exception, caused by:" + e.getMessage());
 			} finally {
 				transferThreadPool.shutdown();
 			}

@@ -5,12 +5,12 @@
     		<input id="startTime" type="hidden" <#if startDate??> value="${startDate}"</#if>>
 			<input id="endTime" type="hidden" <#if endDate??> value="${endDate}"</#if>>
 		 	<div style="float: left; width: 10%;line-height:34px;">时间段：</div>
-		 	<div style="float: left; width: 35%;" class="form-group input-group date form_datetime1" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
+		 	<div style="float: left; width: 28%;" class="form-group input-group date form_datetime1" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
 		        <input class="form-control" size="16" type="text" value="" id="startDate">
 		        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 		    </div>
 		    <div  style="float: left;line-height: 34px" class="form-group glyphicon glyphicon-minus"></div>
-		     <div style="float: left;  width: 35%;" class=" input-group date form_datetime2" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
+		     <div style="float: left;  width: 28%;" class=" input-group date form_datetime2" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
 		        <input class="form-control" size="16" type="text" value="" id="endDate">
 		        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 		    </div>

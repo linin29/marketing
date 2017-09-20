@@ -29,7 +29,8 @@ public class TrainingStatistics {
 			for (TrainingStatisticsVO stat : stats) {
 				logger.info("Type:" + stat.getMajorType() + ";Current size:" + stat.getCount());
 				if (stat.getCount() >= TRAINING_THRESHHOLD) {
-					RemoteSSHUtils.execute(TRAINING_SCRIPT);
+					String result = RemoteSSHUtils.execute(TRAINING_SCRIPT);
+					logger.info("Remote return:" + result);
 					trainingStatisticsService.deleteTrainingStatisticsById(stat.getId());
 					logger.info("Trigger trainging for type:" + stat.getMajorType());
 				}

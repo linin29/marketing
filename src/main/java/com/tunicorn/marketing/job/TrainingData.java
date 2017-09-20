@@ -36,10 +36,7 @@ public class TrainingData {
     public void transferFiles() {
 		logger.info("Transfer files to FTP server timely...");
 		List<TrainingDataVO> data = retrieveTraingData();
-		//data = trainingDataService.getAllNeedHandleTrainingData(RETRIEVE_NUMBER);
 		if (data != null && data.size() > 0) {
-			/*//Set flag to 1
-			batchSetFlag(data, 1);*/
 			//Construct annotations
 			List<AnnotationBO> annotations = constructAnnotations(data);
 			logger.info("Total size:" + annotations.size());
@@ -130,8 +127,14 @@ public class TrainingData {
 	
 	private void deleteFiles (List<AnnotationBO> annotations) {
 		for (AnnotationBO annotation : annotations) {
-			annotation.getImage().deleteOnExit();
-			annotation.getAnnotationXML().deleteOnExit();
+			File image = annotation.getImage();
+			File xml = annotation.getAnnotationXML();
+			if (image.exists()) {
+				image.delete();
+			}
+			if (xml.exists()) {
+				xml.delete();
+			}
 		}
 	}
 	

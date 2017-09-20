@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.tunicorn.marketing.bo.AnnotationBO;
 import com.tunicorn.marketing.service.TrainingDataService;
@@ -24,9 +23,10 @@ import com.tunicorn.marketing.vo.TrainingStatisticsVO;
 
 @Component
 @EnableScheduling
-public class TrainingData {
-	private static Logger logger = Logger.getLogger(TrainingData.class);
+public class TransferTrainingDataJob {
+	private static Logger logger = Logger.getLogger(TransferTrainingDataJob.class);
 	private static final int RETRIEVE_NUMBER = Integer.parseInt(ConfigUtils.getInstance().getConfigValue("training.data.number"));
+	private static int SLEEP_TIME = (int)(Math.random()*100000);
 	@Autowired
 	TrainingDataService trainingDataService;
 	@Autowired
@@ -34,6 +34,13 @@ public class TrainingData {
 	//invoke for each 10 minutes
 	@Scheduled(cron = "0 */10 * * * ? ")
     public void transferFiles() {
+		try {
+			logger.info("Transfer job sleep:" + SLEEP_TIME + "ms");
+			Thread.sleep(SLEEP_TIME);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			logger.error("Transfer job interrupt failed, caused by:" + e.getMessage());
+		}
 		logger.info("Transfer files to FTP server timely...");
 		List<TrainingDataVO> data = retrieveTraingData();
 		if (data != null && data.size() > 0) {
@@ -83,7 +90,6 @@ public class TrainingData {
 				typeCountMapping.put(majorType, 1);
 			}
 		}
-		
 		for (String majorType : typeCountMapping.keySet()) {
 			updateTraingStatistics(majorType, typeCountMapping.get(majorType));
 		}

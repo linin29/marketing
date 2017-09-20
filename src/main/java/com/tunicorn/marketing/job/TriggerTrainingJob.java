@@ -15,15 +15,23 @@ import com.tunicorn.marketing.vo.TrainingStatisticsVO;
 
 @Component
 @EnableScheduling
-public class TrainingStatistics {
-	private static Logger logger = Logger.getLogger(TrainingStatistics.class);
+public class TriggerTrainingJob {
+	private static Logger logger = Logger.getLogger(TriggerTrainingJob.class);
 	private static final int TRAINING_THRESHHOLD = Integer.parseInt(ConfigUtils.getInstance().getConfigValue("training.stat.threshhold"));
 	private static final String TRAINING_SCRIPT = ConfigUtils.getInstance().getConfigValue("remote.ssh.script");
+	private static int SLEEP_TIME = (int)(Math.random()*100000);
 	@Autowired
 	TrainingStatisticsService trainingStatisticsService;
 	//invoke for each 10 minutes
 	@Scheduled(cron = "0 */10 * * * ? ")
     public synchronized void statistics() {
+		try {
+			logger.info("Trigger job sleep:" + SLEEP_TIME + "ms");
+			Thread.sleep(SLEEP_TIME);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			logger.error("Transfer job interrupt failed, caused by:" + e.getMessage());
+		}
 		List<TrainingStatisticsVO> stats = trainingStatisticsService.getTrainingStatisticsList();
 		if (stats != null && stats.size() > 0) {
 			for (TrainingStatisticsVO stat : stats) {

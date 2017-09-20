@@ -31,4 +31,8 @@ public interface TaskMapper {
 	public TaskVO getTaskById(@Param("taskId") String taskId);
 
 	public TaskVO getNextTask(@Param("taskId") String taskId, @Param("userId") String userId);
+	
+	public List<TaskVO> getTempTaskList(TaskBO taskBO);
+
+	public int getTempTaskCount(TaskBO taskBO);
 }

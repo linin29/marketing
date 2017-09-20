@@ -212,5 +212,67 @@
 		order by last_update desc
 		limit 1
 	</select>
+	<select id="getTempTaskList" resultMap="TaskResultMap" parameterType="com.tunicorn.marketing.bo.TaskBO">
+		select id, id as _id,  `name`, task_status, task_status as status, user_id, user_id as author,
+		 create_time,create_time as createdAt, stitch_image_path, result, rows, major_type,last_update as updatedAt,
+		 last_update as lastUpdateTime,identify_success_times
+		from task
+		where `status` = 'active'
+		<if test="userId != null and userId != ''">
+			and user_id = #{userId}
+		</if>
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+			and `name` like concat(concat('%',#{name}),'%')
+		</if>
+		<if test="majorTypeArray != null and majorTypeArray != ''">
+			and `major_type` in
+		 	<foreach item="item" index="index" collection="majorTypeArray" open="(" separator="," close=")">  
+  				#{item}  
+ 			</foreach> 
+		</if>
+		<if test="taskStatus != null and taskStatus != ''">
+			and `task_status` = #{taskStatus}
+		</if>
+		<if test="startTime != null and startTime != ''">
+    		and last_update <![CDATA[ >= #{startTime}]]> 
+    	</if>
+    	<if test="endTime != null and endTime != ''">
+    		and last_update <![CDATA[ <= #{endTime}]]> 
+    	</if>
+		order by last_update desc
+		limit #{startNum}, #{perPage}
+	</select>
+	<select id="getTempTaskCount" resultType="int" parameterType="com.tunicorn.marketing.bo.TaskBO">
+		select count(*)
+		from task
+		where `status` = 'active'
+		<if test="userId != null and userId != ''">
+			and user_id = #{userId}
+		</if>
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+			and `name` like concat(concat('%',#{name}),'%')
+		</if>
+		<if test="majorTypeArray != null and majorTypeArray != ''">
+			and `major_type` in
+		 	<foreach item="item" index="index" collection="majorTypeArray" open="(" separator="," close=")">  
+  				#{item}  
+ 			</foreach> 
+		</if>
+		<if test="taskStatus != null and taskStatus != ''">
+			and `task_status` = #{taskStatus}
+		</if>
+		<if test="startTime != null and startTime != ''">
+    		and last_update <![CDATA[ >= #{startTime}]]> 
+    	</if>
+    	<if test="endTime != null and endTime != ''">
+    		and last_update <![CDATA[ <= #{endTime}]]> 
+    	</if>
+	</select>
 </mapper>
 

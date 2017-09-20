@@ -8,6 +8,7 @@ public class TaskBO extends PaginationBO {
 	private String majorType;
 	private String startTime;
 	private String endTime;
+	private String[] majorTypeArray;
 
 	public String getUserId() {
 		return userId;
@@ -63,6 +64,14 @@ public class TaskBO extends PaginationBO {
 
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
+	}
+
+	public String[] getMajorTypeArray() {
+		return majorTypeArray;
+	}
+
+	public void setMajorTypeArray(String[] majorTypeArray) {
+		this.majorTypeArray = majorTypeArray;
 	}
 
 }

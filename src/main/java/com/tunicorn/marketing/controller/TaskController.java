@@ -610,13 +610,17 @@ public class TaskController extends BaseController {
 	public String Temptasks(HttpServletRequest request, Model model) {
 
 		TaskBO taskBO = new TaskBO();
-		taskBO.setMajorType(ConfigUtils.getInstance().getConfigValue("marketing.temp.major.type"));
+		String majorType = ConfigUtils.getInstance().getConfigValue("marketing.temp.major.type");
+		if(StringUtils.isNotBlank(majorType)){
+			String[] majorTypeArray = majorType.split(",");
+			taskBO.setMajorTypeArray(majorTypeArray);
+		}
 		taskBO.setStartTime(ConfigUtils.getInstance().getConfigValue("marketing.temp.start.time"));
 		taskBO.setEndTime(ConfigUtils.getInstance().getConfigValue("marketing.temp.end.time"));
 		taskBO.setUserId(ConfigUtils.getInstance().getConfigValue("marketing.temp.user.id"));
 
-		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
-		int totalCount = taskService.getTaskCount(taskBO);
+		List<TaskVO> taskVOs = taskService.getTempTaskList(taskBO);
+		int totalCount = taskService.getTempTaskCount(taskBO);
 
 		model.addAttribute("tasks", taskVOs);
 		model.addAttribute("totalCount", totalCount);
@@ -627,7 +631,11 @@ public class TaskController extends BaseController {
 	@RequestMapping(value = "/showView/task/search", method = RequestMethod.GET)
 	public String tempSearchTask(HttpServletRequest request, Model model) {
 		TaskBO taskBO = new TaskBO();
-		taskBO.setMajorType(ConfigUtils.getInstance().getConfigValue("marketing.temp.major.type"));
+		String majorType = ConfigUtils.getInstance().getConfigValue("marketing.temp.major.type");
+		if(StringUtils.isNotBlank(majorType)){
+			String[] majorTypeArray = majorType.split(",");
+			taskBO.setMajorTypeArray(majorTypeArray);
+		}
 		taskBO.setStartTime(ConfigUtils.getInstance().getConfigValue("marketing.temp.start.time"));
 		taskBO.setEndTime(ConfigUtils.getInstance().getConfigValue("marketing.temp.end.time"));
 		taskBO.setUserId(ConfigUtils.getInstance().getConfigValue("marketing.temp.user.id"));
@@ -645,8 +653,8 @@ public class TaskController extends BaseController {
 			model.addAttribute("taskId", taskId);
 			taskBO.setId(taskId);
 		}
-		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
-		int totalCount = taskService.getTaskCount(taskBO);
+		List<TaskVO> taskVOs = taskService.getTempTaskList(taskBO);
+		int totalCount = taskService.getTempTaskCount(taskBO);
 
 		model.addAttribute("tasks", taskVOs);
 		model.addAttribute("totalCount", totalCount);

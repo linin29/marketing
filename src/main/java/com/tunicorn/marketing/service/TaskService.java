@@ -699,6 +699,14 @@ public class TaskService {
 	public int getTaskCount(TaskBO taskBO) {
 		return taskMapper.getTaskCount(taskBO);
 	}
+	
+	public List<TaskVO> getTempTaskList(TaskBO taskBO) {
+		return taskMapper.getTempTaskList(taskBO);
+	}
+
+	public int getTempTaskCount(TaskBO taskBO) {
+		return taskMapper.getTempTaskCount(taskBO);
+	}
 
 	public TaskVO getTaskById(String taskId) {
 		return taskMapper.getTaskById(taskId);

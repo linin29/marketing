@@ -33,14 +33,13 @@ public class TrainingData {
 	TrainingStatisticsService trainingStatisticsService;
 	//invoke for each 10 minutes
 	@Scheduled(cron = "0 */10 * * * ? ")
-	@Transactional
-    public synchronized void transferFiles() {
+    public void transferFiles() {
 		logger.info("Transfer files to FTP server timely...");
-		List<TrainingDataVO> data = new ArrayList<TrainingDataVO>();
-		data = trainingDataService.getAllNeedHandleTrainingData(RETRIEVE_NUMBER);
+		List<TrainingDataVO> data = retrieveTraingData();
+		//data = trainingDataService.getAllNeedHandleTrainingData(RETRIEVE_NUMBER);
 		if (data != null && data.size() > 0) {
-			//Set flag to 1
-			batchSetFlag(data, 1);
+			/*//Set flag to 1
+			batchSetFlag(data, 1);*/
 			//Construct annotations
 			List<AnnotationBO> annotations = constructAnnotations(data);
 			logger.info("Total size:" + annotations.size());
@@ -60,6 +59,17 @@ public class TrainingData {
 			}
 		}
 	}
+	
+	@Transactional
+	private List<TrainingDataVO> retrieveTraingData () {
+		List<TrainingDataVO> data = trainingDataService.getAllNeedHandleTrainingData(RETRIEVE_NUMBER);
+		if (data != null && data.size() > 0) {
+			//Set flag to 1
+			batchSetFlag(data, 1);
+		}
+		return data;
+	}
+	
 	/**
 	 * 更新统计表数据
 	 * @param annotations
@@ -76,18 +86,23 @@ public class TrainingData {
 		}
 		
 		for (String majorType : typeCountMapping.keySet()) {
-			//Retrieve current count
-			TrainingStatisticsVO stat = trainingStatisticsService.getTrainingStatisticsByType(majorType);
-			if (stat == null) {
-				stat = new TrainingStatisticsVO();
-				stat.setMajorType(majorType);
-				stat.setCount(typeCountMapping.get(majorType));
-				trainingStatisticsService.createTrainingStatistics(stat);
-			} else {
-				int currentCount = stat.getCount() + typeCountMapping.get(majorType);
-				stat.setCount(currentCount);
-				trainingStatisticsService.updateTrainingStatistics(stat);
-			}
+			updateTraingStatistics(majorType, typeCountMapping.get(majorType));
+		}
+	}
+	
+	@Transactional
+	private void updateTraingStatistics (String majorType, int count) {
+		//Retrieve current count
+		TrainingStatisticsVO stat = trainingStatisticsService.getTrainingStatisticsByType(majorType);
+		if (stat == null) {
+			stat = new TrainingStatisticsVO();
+			stat.setMajorType(majorType);
+			stat.setCount(count);
+			trainingStatisticsService.createTrainingStatistics(stat);
+		} else {
+			int currentCount = stat.getCount() + count;
+			stat.setCount(currentCount);
+			trainingStatisticsService.updateTrainingStatistics(stat);
 		}
 	}
 	/**

@@ -89,14 +89,14 @@ public class RemoteSSHUtils {
 			}
 			br.close();
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			logger.error("execute processStdout method fail UnsupportedEncodingException: " + e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("execute processStdout method fail IOException: " + e.getMessage());
 		} finally {
 			try {
 				stdout.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("execute processStdout method fail IOException: " + e.getMessage());
 			}
 		}
 		return buffer.toString();

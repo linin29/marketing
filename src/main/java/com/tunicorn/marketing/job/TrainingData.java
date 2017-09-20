@@ -34,17 +34,13 @@ public class TrainingData {
 	//invoke for each 10 minutes
 	@Scheduled(cron = "0 */10 * * * ? ")
 	@Transactional
-    public void transferFiles() {
+    public synchronized void transferFiles() {
 		logger.info("Transfer files to FTP server timely...");
-		//Set flag to 1
 		List<TrainingDataVO> data = new ArrayList<TrainingDataVO>();
-		synchronized (this) {
-			data = trainingDataService.getAllNeedHandleTrainingData(RETRIEVE_NUMBER);
-			if (data != null && data.size() > 0) {
-				batchSetFlag(data, 1);
-			}
-		}
+		data = trainingDataService.getAllNeedHandleTrainingData(RETRIEVE_NUMBER);
 		if (data != null && data.size() > 0) {
+			//Set flag to 1
+			batchSetFlag(data, 1);
 			//Construct annotations
 			List<AnnotationBO> annotations = constructAnnotations(data);
 			logger.info("Total size:" + annotations.size());
@@ -79,20 +75,18 @@ public class TrainingData {
 			}
 		}
 		
-		synchronized (this) {
-			for (String majorType : typeCountMapping.keySet()) {
-				//Retrieve current count
-				TrainingStatisticsVO stat = trainingStatisticsService.getTrainingStatisticsByType(majorType);
-				if (stat == null) {
-					stat = new TrainingStatisticsVO();
-					stat.setMajorType(majorType);
-					stat.setCount(typeCountMapping.get(majorType));
-					trainingStatisticsService.createTrainingStatistics(stat);
-				} else {
-					int currentCount = stat.getCount() + typeCountMapping.get(majorType);
-					stat.setCount(currentCount);
-					trainingStatisticsService.updateTrainingStatistics(stat);
-				}
+		for (String majorType : typeCountMapping.keySet()) {
+			//Retrieve current count
+			TrainingStatisticsVO stat = trainingStatisticsService.getTrainingStatisticsByType(majorType);
+			if (stat == null) {
+				stat = new TrainingStatisticsVO();
+				stat.setMajorType(majorType);
+				stat.setCount(typeCountMapping.get(majorType));
+				trainingStatisticsService.createTrainingStatistics(stat);
+			} else {
+				int currentCount = stat.getCount() + typeCountMapping.get(majorType);
+				stat.setCount(currentCount);
+				trainingStatisticsService.updateTrainingStatistics(stat);
 			}
 		}
 	}

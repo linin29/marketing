@@ -22,8 +22,8 @@ public class TriggerTrainingJob {
 	private static int SLEEP_TIME = (int)(Math.random()*100000);
 	@Autowired
 	TrainingStatisticsService trainingStatisticsService;
-	//invoke for each 10 minutes
-	@Scheduled(cron = "0 */10 * * * ? ")
+	//invoke for each 30 minutes
+	@Scheduled(cron = "0 */30 * * * ? ")
     public synchronized void statistics() {
 		try {
 			logger.info("Trigger job sleep:" + SLEEP_TIME + "ms");

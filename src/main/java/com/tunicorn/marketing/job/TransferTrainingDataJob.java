@@ -31,8 +31,8 @@ public class TransferTrainingDataJob {
 	TrainingDataService trainingDataService;
 	@Autowired
 	TrainingStatisticsService trainingStatisticsService;
-	//invoke for each 10 minutes
-	@Scheduled(cron = "0 */10 * * * ? ")
+	//invoke for each 20 minutes
+	@Scheduled(cron = "0 */20 * * * ? ")
     public void transferFiles() {
 		try {
 			logger.info("Transfer job sleep:" + SLEEP_TIME + "ms");

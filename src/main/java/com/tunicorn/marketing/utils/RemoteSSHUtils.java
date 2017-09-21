@@ -101,12 +101,4 @@ public class RemoteSSHUtils {
 		}
 		return buffer.toString();
 	}
-
-	public static void main(String[] args) {
-		// 执行命令
-		System.out.println(RemoteSSHUtils.execute("ifconfig"));
-		// 执行脚本
-		System.out.println(RemoteSSHUtils.execute("python /home/feng/script/test.py"));
-		System.out.println(RemoteSSHUtils.execute("/home/feng/script/test.sh"));
-	}
 }

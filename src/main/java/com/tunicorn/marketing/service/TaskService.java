@@ -1105,7 +1105,7 @@ public class TaskService {
 		String xmlFilePath = String.format("%s%s%s%s%s%s%s%s",
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
-				cropBO.getMajorType(), File.separator, MarketingConstants.CROP_TXT_PATH, File.separator,
+				cropBO.getMajorType(), File.separator, MarketingConstants.CROP_XML_PATH, File.separator,
 				cropBO.getImageId() + ".xml");
 		File imageFile;
 		TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(cropBO.getImageId());

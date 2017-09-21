@@ -4,7 +4,7 @@
     </section>
     <div class="content_list" style="margin: 20px;">
 		<input type="button" class="btn btn-success" id="zip_import" value="选择上传的文件" />
-		<input type="file" id="file_select" style="display:none;" multiple />
+		<input type="file" id="file_select" style="display:none;" accept="application/x-zip-compressed"/>
 		<span>注：目前支持ZIP包文件上传</span>
     </div>  
 </div>

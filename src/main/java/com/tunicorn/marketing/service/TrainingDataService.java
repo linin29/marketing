@@ -92,7 +92,7 @@ public class TrainingDataService {
 							
 							if (fileName.contains(".xml")) {
 								xmlFileMap.put(fileRealName, fileBasePath);
-							} else {
+							} else if(!fileName.contains(".txt")) {
 								imageFileMap.put(fileRealName, fileBasePath);
 							}
 						}

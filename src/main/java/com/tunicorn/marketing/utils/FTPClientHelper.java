@@ -200,7 +200,7 @@ public class FTPClientHelper {
 			logger.error("Failed to set file type on remote server, caused by:" + e.getMessage());
 		}
 		ftpClient.setControlEncoding(CHARSET);
-		String localSkuFile = LOCAL_BASE_PATH + File.separator + type+File.separator + SKU_FILE_NAME;
+		String localSkuFile = LOCAL_BASE_PATH + File.separator + type + File.separator + SKU_FILE_NAME;
         String remoteSkuFile = REMOTE_BASE_PATH + File.separator + type + SEPRATOR + SKU_FILE_NAME;
     	
 		try {

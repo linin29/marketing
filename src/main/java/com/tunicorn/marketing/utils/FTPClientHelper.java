@@ -16,6 +16,7 @@ import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
 
 import com.tunicorn.marketing.bo.AnnotationBO;
+import com.tunicorn.marketing.constant.MarketingConstants;
 
 public class FTPClientHelper {
 	private static Logger logger = Logger.getLogger(FTPClientHelper.class);
@@ -24,6 +25,11 @@ public class FTPClientHelper {
 	private final static  String REMOTE_ANNOTATION_FOLDER = ConfigUtils.getInstance().getConfigValue("ftp.annotation.directory");
 	private final static  String SEPRATOR = "/";
 	private final static  String CHARSET = "UTF-8";
+	private final static  String SKU_FILE_NAME = ConfigUtils.getInstance().getConfigValue("ftp.sku.file.name");
+	private final static  String LOCAL_BASE_PATH = String.format("%s%s%s%s",
+												   com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
+												   ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
+												   MarketingConstants.UPLOAD_PATH);
 	private FTPClient ftpClient = new FTPClient();     
     private String server, userName, password;
     private int port;
@@ -179,6 +185,35 @@ public class FTPClientHelper {
         }
         return true;
         
+    }
+    /**
+     * 上传sku列表文件
+     * @param type
+     */
+    public void uploadSkuFile(String type){
+    	//设置PassiveMode传输 -被动模式，client主动向服务器发送数据
+        ftpClient.enterLocalPassiveMode();     
+        //设置以二进制流的方式传输 -默认是ASCII(文本)方式
+		try {
+			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+		} catch (IOException e) {
+			logger.error("Failed to set file type on remote server, caused by:" + e.getMessage());
+		}
+		ftpClient.setControlEncoding(CHARSET);
+		String localSkuFile = LOCAL_BASE_PATH + File.separator + type+File.separator + SKU_FILE_NAME;
+        String remoteSkuFile = REMOTE_BASE_PATH + File.separator + type + SEPRATOR + SKU_FILE_NAME;
+    	
+		try {
+			FTPFile[] remoteSkuFiles = ftpClient.listFiles(remoteSkuFile);
+			if (null != remoteSkuFiles && remoteSkuFiles.length > 0) {
+        		ftpClient.deleteFile(remoteSkuFile);
+        	}
+			if (!uploadFile(remoteSkuFile, new File(localSkuFile))){
+				logger.error("Failed to upload file to remote server, file name:" + SKU_FILE_NAME);
+        	}
+		} catch (IOException e) {
+			logger.error("Failed to operate file on remote server, file name:" + SKU_FILE_NAME + ". Caused by:" + e.getMessage());
+		}
     }
     /**
      * 循环创建远程目录

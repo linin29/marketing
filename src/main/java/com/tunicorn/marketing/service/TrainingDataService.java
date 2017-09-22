@@ -56,11 +56,10 @@ public class TrainingDataService {
 	@Transactional
 	public ServiceResponseBO upload(List<MultipartFile> zipFiles) {
 
-		
 		String basePath = String.format("%s%s%s%s",
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
-				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), 
-				File.separator, MarketingConstants.UPLOAD_PATH);
+				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
+				MarketingConstants.UPLOAD_PATH);
 		try {
 			if (zipFiles != null && zipFiles.size() > 0) {
 				long startTime = System.currentTimeMillis();
@@ -80,6 +79,9 @@ public class TrainingDataService {
 					}
 					ZipInputStream zin = new ZipInputStream(zipFile.getInputStream(),
 							Charset.forName(MarketingConstants.GBK));
+					File zipDestFile = new File(
+							basePath + File.separator + MarketingConstants.ZIP_PATH + File.separator + originalFileName);
+					FileUtils.copyInputStreamToFile(zipFile.getInputStream(), zipDestFile);
 					ZipEntry ze;
 					while ((ze = zin.getNextEntry()) != null) {
 						if (!ze.isDirectory()) {
@@ -89,10 +91,10 @@ public class TrainingDataService {
 							int lastXmlSlashIndex = fileName.lastIndexOf("/");
 							String fileRealName = fileName.substring(lastXmlSlashIndex + 1, lastXmlPointIndex);
 							generateFile(zin, fileBasePath);
-							
+
 							if (fileName.contains(".xml")) {
 								xmlFileMap.put(fileRealName, fileBasePath);
-							} else if(!fileName.contains(".txt")) {
+							} else if (!fileName.contains(".txt")) {
 								imageFileMap.put(fileRealName, fileBasePath);
 							}
 						}

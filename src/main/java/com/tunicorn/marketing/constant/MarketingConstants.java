@@ -107,6 +107,7 @@ public class MarketingConstants {
 	public static final String CROP_XML_PATH = "Annotations";
 	
 	public static final String UPLOAD_PATH = "upload";
+	public static final String ZIP_PATH = "zip";
 	
 	public static final int BATCH_INSERT_SIZE = Integer.parseInt(ConfigUtils.getInstance().getConfigValue("marketing.batch.insert.size"));
 }

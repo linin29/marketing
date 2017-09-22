@@ -101,6 +101,7 @@ class TransferThread implements Runnable {
 		try {
 			client.connect();
 			if(client.createRemoteDirectory(type)){
+				client.uploadSkuFile(type);
 				failedEntityList = client.upload(entities, type);
 			 } else {
 				 failedEntities.addAll(entities);

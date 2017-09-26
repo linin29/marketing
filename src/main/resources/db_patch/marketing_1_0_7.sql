@@ -11,7 +11,6 @@ DROP PROCEDURE IF EXISTS CheckConstraintExist;
 DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS UpdateMajorTypeAndSkuTableData;
-DROP PROCEDURE IF EXISTS CreateTrainingTable;
 
 DELIMITER //
 CREATE PROCEDURE CheckTableExist(IN p_tablename varchar(64), OUT ret int)
@@ -125,37 +124,9 @@ BEGIN
 	END IF;
 END//
 
-DELIMITER //
-CREATE PROCEDURE CreateTrainingTable()
-BEGIN
-	SET @ret = 0;
-	CALL CheckTableExist("training_data", @ret);
-	IF @ret = 0 THEN
-		CREATE TABLE IF NOT EXISTS `training_data` (
-		  `id` int(11) NOT NULL AUTO_INCREMENT,
-		  `major_type` varchar(50) NOT NULL,
-		  `image_path` varchar(256) NOT NULL,
-		  `file_path` varchar(256) NOT NULL,
-		  `flag` tinyint NOT NULL DEFAULT 0,
-		  PRIMARY KEY (`id`),
-		  KEY `major_type_training_data_idx` (`major_type`),
-		  KEY `flag_training_data_idx` (`flag`)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-		
-		CREATE TABLE IF NOT EXISTS `training_statistics` (
-		  `id` int(11) NOT NULL AUTO_INCREMENT,
-		  `major_type` varchar(50) NOT NULL,
-		  `count` int(11) DEFAULT 0,
-		  PRIMARY KEY (`id`),
-		  KEY `major_type_training_statistics_idx` (`major_type`)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-	END IF;
-END//
-
 DELIMITER ;
 	
 CALL UpdateMajorTypeAndSkuTableData();
-CALL CreateTrainingTable();
 
 DROP PROCEDURE IF EXISTS CheckTableExist;
 DROP PROCEDURE IF EXISTS CheckColumnExist;
@@ -164,4 +135,3 @@ DROP PROCEDURE IF EXISTS CheckConstraintExist;
 DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS UpdateMajorTypeAndSkuTableData;
-DROP PROCEDURE IF EXISTS CreateTrainingTable;

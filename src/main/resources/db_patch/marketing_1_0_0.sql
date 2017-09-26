@@ -169,6 +169,9 @@ BEGIN
           `result` mediumtext,
           `rows` varchar(100) DEFAULT NULL,
           `major_type` varchar(20) DEFAULT NULL,
+          `host` VARCHAR(50) DEFAULT NULL,
+          `need_stitch` INT(11) DEFAULT '1' COMMENT '是否去重,默认为去重',
+          `goods_info` text,
 		  PRIMARY KEY (`id`),
 		  KEY `user_task_fk_idx` (`user_id`),
 		  KEY `idx_task_name` (`name`)
@@ -337,6 +340,8 @@ BEGIN
 	CREATE TABLE IF NOT EXISTS `admin_service_apply` (
 		`id` INT(11) NOT NULL AUTO_INCREMENT,
 		`user_id` INT(11),
+  		`username` varchar(128) NOT NULL,
+  		`email` varchar(128) NOT NULL,
 		`app_business_name` varchar(128) NOT NULL,
 		`app_business_address` varchar(256) NOT NULL,
 		`app_business_mobile` varchar(20) NOT NULL,
@@ -344,6 +349,7 @@ BEGIN
 		`max_call_number` INT(20) NOT NULL,
 		`creator_id` INT(11) NOT NULL,
 		`create_time` DATETIME DEFAULT NULL,
+		`reject_reason` varchar(256) DEFAULT NULL,
 		`apply_status` ENUM('created','opened','rejected') NOT NULL DEFAULT 'created',
 		`last_update` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		`status` ENUM('active','deleted','inactive') NOT NULL DEFAULT 'active',
@@ -388,6 +394,24 @@ BEGIN
 		INDEX `major_type_id_idx` (`major_type_id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	
+	CREATE TABLE IF NOT EXISTS `training_data` (
+		`id` int(11) NOT NULL AUTO_INCREMENT,
+		`major_type` varchar(50) NOT NULL,
+		`image_path` varchar(256) NOT NULL,
+		`file_path` varchar(256) NOT NULL,
+		`flag` tinyint NOT NULL DEFAULT 0,
+		PRIMARY KEY (`id`),
+		KEY `major_type_training_data_idx` (`major_type`),
+		KEY `flag_training_data_idx` (`flag`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		
+	CREATE TABLE IF NOT EXISTS `training_statistics` (
+		`id` int(11) NOT NULL AUTO_INCREMENT,
+		`major_type` varchar(50) NOT NULL,
+		`count` int(11) DEFAULT 0,
+		PRIMARY KEY (`id`),
+		KEY `major_type_training_statistics_idx` (`major_type`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	END IF;
 END//
 
@@ -416,7 +440,7 @@ BEGIN
 	IF @ret = 0 THEN
 		INSERT INTO `privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (1, NULL, '任务列表', '/task', '任务列表一级菜单', 1, now());
         INSERT INTO `privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (2, NULL, '调用统计', '/calling', '调用统计一级菜单', 2, now());
-        INSERT INTO `privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time) VALUES (3, NULL, '数据导出', '/export', '数据导出一级菜单', 3, now());
+        INSERT INTO `privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (3, NULL, '数据导出', '/export', '数据导出一级菜单', 3, now());
 		INSERT INTO `privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (4, NULL, '批量任务', '/batch_import', '创建批量任务一级菜单', 4, now());
 
         INSERT INTO `role`(`id`, `name`, `description`, `create_time`) VALUES (1, 'admin', '管理员', now());
@@ -425,6 +449,28 @@ BEGIN
         INSERT INTO `role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (2, 1, 2, now());
         INSERT INTO `role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (3, 1, 3, now());
         INSERT INTO `role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (4, 1, 4, now());
+        
+        INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (1, NULL, '服务申请', '/admin/service/apply', '服务申请一级菜单', 1, now());
+        INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (2, NULL, '服务管理', '/admin/service/manage', '服务管理一级菜单', 2, now());
+        INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (3, NULL, '主类型配置', '/admin/majortype', '主类型配置一级菜单', 3, now());
+        INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (4, NULL, 'SKU配置', '/admin/sku', 'SKU配置一级菜单', 4, now());
+        INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (5, NULL, '用户管理', '/admin/user', '用户管理一级菜单', 5, now());
+        INSERT INTO `admin_privilege`(`id`, `parent_id`, `item_name`, `item_value`, `description`, `display_order`, `create_time`) VALUES (6, NULL, '调用统计', '/admin/calling', '调用统计一级菜单', 6, now());
+        
+        INSERT INTO `admin_user`(`id`, `username`,`password`, `email`, `name`, `create_time`) VALUES (1, 'admin', '5e13b0e702535b199b9063e60eaf5a909514d9ee25c3242f7ae8d362c945d25b000000142e10f370266e33794eb4dca6bf067e6c13cdced803e54f2e78ca15e2e9492bfb', 'jifeng@tunicorn.cn', '后台管理员', now());
+        INSERT INTO `admin_user`(`id`, `username`,`password`, `email`, `name`, `create_time`) VALUES (2, 'applyAdmin', '5e13b0e702535b199b9063e60eaf5a909514d9ee25c3242f7ae8d362c945d25b000000142e10f370266e33794eb4dca6bf067e6c13cdced803e54f2e78ca15e2e9492bfb', 'jifeng@tunicorn.cn', '服务申请管理员', now());
+
+        INSERT INTO `admin_role`(`id`, `name`, `description`, `create_time`) VALUES (1, 'admin', '后台管理员', now());
+        INSERT INTO `admin_role`(`id`, `name`, `description`, `create_time`) VALUES (2, 'applyAdmin', '服务申请管理员', now());
+        INSERT INTO `admin_user_role_mapping`(`id`, `user_id`,`role_id`, `create_time`) VALUES (1, 1, 1, now());
+        INSERT INTO `admin_user_role_mapping`(`id`, `user_id`,`role_id`, `create_time`) VALUES (2, 2, 2, now());
+        
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (1, 2, 1, now());
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (2, 1, 2, now());
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (3, 1, 3, now());
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (4, 1, 4, now());
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (5, 1, 5, now());
+        INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (6, 1, 6, now());
 	END IF;
 END//
 
@@ -445,14 +491,79 @@ BEGIN
 	SET @ret = 0;
 	CALL CheckDataExist("major_type", "id=1", @ret);
 	IF @ret = 0 THEN
-		INSERT INTO `major_type`(`id`, `name`, `description`, `create_time`) VALUES (1, 'coffee', '咖啡', now());
-		INSERT INTO `major_type`(`id`, `name`, `description`, `create_time`) VALUES (2, 'chocolate', '巧克力', now());
-		INSERT INTO `major_type`(`id`, `name`, `description`, `create_time`) VALUES (3, 'beer', '啤酒', now());
-		INSERT INTO `major_type`(`id`, `name`, `description`, `create_time`) VALUES (4, 'driedmilk', '奶粉', now());
-		INSERT INTO `major_type`(`id`, `name`, `description`, `create_time`) VALUES (5, 'cookie', '饼干', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('coffee', '咖啡', NULL, now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('chocolate', '巧克力', '2.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('beer', '啤酒', '9.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('driedmilk', '奶粉', '3.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('cookie', '饼干', '6.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('extra', '口香糖', '4.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('colgate', '高露洁', '2.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nielsennv', '尼尔森女性护理', '1.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nielsendrink', '尼尔森饮料', '1.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestlemilk', '雀巢炼奶', '3.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestlecoffee', '雀巢咖啡', '5.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestlemilkpowder', '雀巢奶粉', '3.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestleoatmeal', '雀巢麦片', '3.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestlericeflour', '雀巢营养品', '3.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestlesugar', '雀巢糖果', '3.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestlebiscuit', '雀巢饼干', '3.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestlenutrition', '雀巢营养品', '1.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestleconfectionery', '雀巢糕点糖果', '1.0', now());
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestledairy', '雀巢奶制品', '1.0', now());
+		
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('coffee', 'NesCafe', 'NesCafe', 0, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('coffee', 'Maxwell', 'Maxwell', 1, now());
+		
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'BRK New 125g BLUE', 'BRK New 125g BLUE', 0, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'BRK New 125g PFC', 'BRK New 125g PFC', 1, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'BRK New Others', 'BRK New Others', 2, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Hello kitty black', 'Hello kitty black', 3, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Hello kitty blue', 'Hello kitty blue', 4, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Hello kitty red', 'Hello kitty red', 5, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Bar 210g Almond', 'HSY Bar 210g Almond', 6, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Bar 210g CNC', 'HSY Bar 210g CNC', 7, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Bar 210g CNCH', 'HSY Bar 210g CNCH', 8, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Bar 210g Dark', 'HSY Bar 210g Dark', 9, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Bar 210g Milk', 'HSY Bar 210g Milk', 10, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Bar 40g CNC', 'HSY Bar 40g CNC', 11, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Bar 40g CNCH', 'HSY Bar 40g CNCH', 12, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Bar 40g Dark', 'HSY Bar 40g Dark', 13, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Bar 40g Milk', 'HSY Bar 40g Milk', 14, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Drops 60g Almond', 'HSY Drops 60g Almond', 15, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Drops 60g CNC', 'HSY Drops 60g CNC', 16, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Drops 60g Milk', 'HSY Drops 60g Milk', 17, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Drops 140g Almond', 'HSY Drops 140g Almond', 18, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Drops 140g CNC', 'HSY Drops 140g CNC', 19, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Drops 140g Milk', 'HSY Drops 140g Milk', 20, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 146g CNC', 'Kisses 146g CNC', 21, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 146g Dark', 'Kisses 146g Dark', 22, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 146g Dark Almond', 'Kisses 146g Dark Almond', 23, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 146g Dark Hazel', 'Kisses 146g Dark Hazel', 24, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 146g Milk', 'Kisses 146g Milk', 25, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY Gift Package', 'HSY Gift Package', 26, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'HSY others', 'HSY others', 27, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Ferrero Rocher', 'Ferrero Rocher', 28, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Ferrero Rocher Kinder', 'Ferrero Rocher Kinder', 29, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'MARS Crispy', 'MARS Crispy', 30, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'MARS Dove', 'MARS Dove', 31, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'MARS SNICKERS', 'MARS SNICKERS', 32, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', "MARS M&M'S", "MARS M&M'S", 33, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Mondelez Milka', 'Mondelez Milka', 34, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'BRK New 30g BLUE', 'BRK New 30g BLUE', 35, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'BRK New 30g PFC', 'BRK New 30g PFC', 36, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 82g CNC', 'Kisses 82g CNC', 37, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 36g CNC', 'Kisses 36g CNC', 38, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 82g Dark', 'Kisses 82g Dark', 39, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 36g Dark', 'Kisses 36g Dark', 40, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 82g Dark Almond', 'Kisses 82g Dark Almond', 41, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 36g Dark Almond', 'Kisses 36g Dark Almond', 42, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 82g Dark Hazel', 'Kisses 82g Dark Hazel', 43, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 36g Dark Hazel', 'Kisses 36g Dark Hazel', 44, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 82g Milk', 'Kisses 82g Milk', 45, now());
+		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('chocolate', 'Kisses 36g Milk', 'Kisses 36g Milk', 46, now());
 		
 		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (1, 'driedmilk', 'NESTLE Senior mainstream milk powder 400g pouch', '雀巢中老年营养奶粉400g', 0, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`,`create_time`) VALUES (2, 'driedmilk', 'NESTLE YinYang JianXin Senior mainstream Hi-Cal fish oil milk powder 800g tin', '雀巢怡养健心中老年高钙营养奶粉鱼油配方800g', 1, now());
+		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (2, 'driedmilk', 'NESTLE YinYang JianXin Senior mainstream Hi-Cal fish oil milk powder 800g tin', '雀巢怡养健心中老年高钙营养奶粉鱼油配方800g', 1, now());
 		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (3, 'driedmilk', 'NESTLE YiYang JianXin Senior mainstream Hi-Cal fish oil milk powder 400g pouch', '雀巢怡养健心中老年高钙营养奶粉鱼油配方400g', 2, now());
 		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (4, 'driedmilk', 'NESTLE YIYANG PRTCTSM-Aged&SrMPwdr 850g tin', '雀巢奶粉怡养益护因子高钙无蔗糖中老年奶粉850g', 3, now());
 		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (5, 'driedmilk', 'NESPRAY Student milk powder 400g pouch', '雀巢中小学生儿童营养奶粉钙铁锌400g袋装', 4, now());
@@ -476,56 +587,6 @@ BEGIN
 		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (22, 'beer', 'Harbin Wheat 330ML Can', 'Harbin Wheat 330ML Can', 3, now());
 		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (23, 'beer', 'Harbin ICE 500ML Can', 'Harbin ICE 500ML Can', 4, now());
 		
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (24, 'coffee', 'NesCafe', 'NesCafe', 0, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (25, 'coffee', 'Maxwell', 'Maxwell', 1, now());
-		
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (26, 'chocolate', 'BRK New 125g BLUE', 'BRK New 125g BLUE', 0, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (27, 'chocolate', 'BRK New 125g PFC', 'BRK New 125g PFC', 1, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (28, 'chocolate', 'BRK New Others', 'BRK New Others', 2, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (29, 'chocolate', 'Hello kitty black', 'Hello kitty black', 3, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (30, 'chocolate', 'Hello kitty blue', 'Hello kitty blue', 4, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (31, 'chocolate', 'Hello kitty red', 'Hello kitty red', 5, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (32, 'chocolate', 'HSY Bar 210g Almond', 'HSY Bar 210g Almond', 6, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (33, 'chocolate', 'HSY Bar 210g CNC', 'HSY Bar 210g CNC', 7, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (34, 'chocolate', 'HSY Bar 210g CNCH', 'HSY Bar 210g CNCH', 8, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (35, 'chocolate', 'HSY Bar 210g Dark', 'HSY Bar 210g Dark', 9, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (36, 'chocolate', 'HSY Bar 210g Milk', 'HSY Bar 210g Milk', 10, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (37, 'chocolate', 'HSY Bar 40g CNC', 'HSY Bar 40g CNC', 11, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (38, 'chocolate', 'HSY Bar 40g CNCH', 'HSY Bar 40g CNCH', 12, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (39, 'chocolate', 'HSY Bar 40g Dark', 'HSY Bar 40g Dark', 13, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (40, 'chocolate', 'HSY Bar 40g Milk', 'HSY Bar 40g Milk', 14, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (41, 'chocolate', 'HSY Drops 60g Almond', 'HSY Drops 60g Almond', 15, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (42, 'chocolate', 'HSY Drops 60g CNC', 'HSY Drops 60g CNC', 16, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (43, 'chocolate', 'HSY Drops 60g Milk', 'HSY Drops 60g Milk', 17, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (44, 'chocolate', 'HSY Drops 140g Almond', 'HSY Drops 140g Almond', 18, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (45, 'chocolate', 'HSY Drops 140g CNC', 'HSY Drops 140g CNC', 19, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (46, 'chocolate', 'HSY Drops 140g Milk', 'HSY Drops 140g Milk', 20, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (47, 'chocolate', 'Kisses 146g CNC', 'Kisses 146g CNC', 21, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (48, 'chocolate', 'Kisses 146g Dark', 'Kisses 146g Dark', 22, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (49, 'chocolate', 'Kisses 146g Dark Almond', 'Kisses 146g Dark Almond', 23, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (50, 'chocolate', 'Kisses 146g Dark Hazel', 'Kisses 146g Dark Hazel', 24, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (51, 'chocolate', 'Kisses 146g Milk', 'Kisses 146g Milk', 25, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (52, 'chocolate', 'HSY Gift Package', 'HSY Gift Package', 26, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (53, 'chocolate', 'HSY others', 'HSY others', 27, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (54, 'chocolate', 'Ferrero Rocher', 'Ferrero Rocher', 28, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (55, 'chocolate', 'Ferrero Rocher Kinder', 'Ferrero Rocher Kinder', 29, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (56, 'chocolate', 'MARS Crispy', 'MARS Crispy', 30, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (57, 'chocolate', 'MARS Dove', 'MARS Dove', 31, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (58, 'chocolate', 'MARS SNICKERS', 'MARS SNICKERS', 32, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (59, 'chocolate', "MARS M&M'S'", "MARS M&M'S'", 33, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (60, 'chocolate', 'Mondelez Milka', 'Mondelez Milka', 34, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (61, 'chocolate', 'BRK New 30g BLUE', 'BRK New 30g BLUE', 35, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (62, 'chocolate', 'BRK New 30g PFC', 'BRK New 30g PFC', 36, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (63, 'chocolate', 'Kisses 82g CNC', 'Kisses 82g CNC', 37, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (64, 'chocolate', 'Kisses 36g CNC', 'Kisses 36g CNC', 38, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (65, 'chocolate', 'Kisses 82g Dark', 'Kisses 82g Dark', 39, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (66, 'chocolate', 'Kisses 36g Dark', 'Kisses 36g Dark', 40, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (67, 'chocolate', 'Kisses 82g Dark Almond', 'Kisses 82g Dark Almond', 41, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (68, 'chocolate', 'Kisses 36g Dark Almond', 'Kisses 36g Dark Almond', 42, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (69, 'chocolate', 'Kisses 82g Dark Hazel', 'Kisses 82g Dark Hazel', 43, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (70, 'chocolate', 'Kisses 36g Dark Hazel', 'Kisses 36g Dark Hazel', 44, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (71, 'chocolate', 'Kisses 82g Milk', 'Kisses 82g Milk', 45, now());
-		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (72, 'chocolate', 'Kisses 36g Milk', 'Kisses 36g Milk', 46, now());
 		
 		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (73, 'cookie', 'Belvita Breakfast Bing 150g*24 M&C', 'Belvita Breakfast Bing 150g*24 M&C', 0, now());
 		INSERT INTO `goods_sku`(`id`,`major_type`, `name`, `description`, `order`, `create_time`) VALUES (74, 'cookie', 'Belvita Breakfast Bing 300g*12 M&C', 'Belvita Breakfast Bing 300g*12 M&C', 1, now());

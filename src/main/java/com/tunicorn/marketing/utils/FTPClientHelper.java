@@ -30,7 +30,7 @@ public class FTPClientHelper {
 												   com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 												   ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
 												   MarketingConstants.UPLOAD_PATH);
-	private final static String SITE_UMASK_COMMAND = "site umask 666";
+	private final static String SITE_UMASK_COMMAND = "site umask 022";
 	private FTPClient ftpClient = new FTPClient();     
     private String server, userName, password;
     private int port;

@@ -14,7 +14,9 @@ countList=(function(){
     			searchApiCalling(1);
     		});
     		
-    		initPagination(currentPage, totalCount);
+    		if(totalCount!= 0){
+    			initPagination(currentPage, totalCount);
+    		}
      };
      
      function initPagination(currentPage, totalCount) {

@@ -2,12 +2,14 @@ package com.tunicorn.marketing.job;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.TrainingStatisticsService;
 import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.utils.RemoteSSHUtils;
@@ -39,7 +41,9 @@ public class TriggerTrainingJob {
 				if (stat.getCount() >= TRAINING_THRESHHOLD) {
 					String result = RemoteSSHUtils.execute(TRAINING_SCRIPT);
 					logger.info("Remote return:" + result);
-					trainingStatisticsService.deleteTrainingStatisticsById(stat.getId());
+					if(StringUtils.isNotBlank(result) && result.contains(MarketingConstants.REMOTE_SSH_RETURN)){
+						trainingStatisticsService.deleteTrainingStatisticsById(stat.getId());
+					}
 					logger.info("Trigger trainging for type:" + stat.getMajorType());
 				}
 			}

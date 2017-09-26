@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.mockito.internal.util.reflection.FieldInitializationReport;
+
 import com.tunicorn.marketing.utils.ConfigUtils;
 
 public class MarketingConstants {
@@ -110,4 +112,6 @@ public class MarketingConstants {
 	public static final String ZIP_PATH = "zip";
 	
 	public static final int BATCH_INSERT_SIZE = Integer.parseInt(ConfigUtils.getInstance().getConfigValue("marketing.batch.insert.size"));
+	
+	public static final String REMOTE_SSH_RETURN = "tunicorn ret success";
 }

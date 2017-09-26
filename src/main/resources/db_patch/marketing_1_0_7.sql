@@ -12,7 +12,6 @@ DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS UpdateMajorTypeAndSkuTableData;
 DROP PROCEDURE IF EXISTS CreateTrainingTable;
-DROP PROCEDURE IF EXISTS AlterTaskImageTable;
 
 DELIMITER //
 CREATE PROCEDURE CheckTableExist(IN p_tablename varchar(64), OUT ret int)
@@ -157,7 +156,6 @@ DELIMITER ;
 	
 CALL UpdateMajorTypeAndSkuTableData();
 CALL CreateTrainingTable();
-CALL AlterTaskImageTable();
 
 DROP PROCEDURE IF EXISTS CheckTableExist;
 DROP PROCEDURE IF EXISTS CheckColumnExist;
@@ -167,4 +165,3 @@ DROP PROCEDURE IF EXISTS CheckPrimaryKeyExist;
 DROP PROCEDURE IF EXISTS CheckDataExist;
 DROP PROCEDURE IF EXISTS UpdateMajorTypeAndSkuTableData;
 DROP PROCEDURE IF EXISTS CreateTrainingTable;
-DROP PROCEDURE IF EXISTS AlterTaskImageTable;

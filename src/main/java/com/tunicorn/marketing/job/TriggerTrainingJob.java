@@ -39,7 +39,7 @@ public class TriggerTrainingJob {
 			for (TrainingStatisticsVO stat : stats) {
 				logger.info("Type:" + stat.getMajorType() + ";Current size:" + stat.getCount());
 				if (stat.getCount() >= TRAINING_THRESHHOLD) {
-					String result = RemoteSSHUtils.execute(TRAINING_SCRIPT);
+					String result = RemoteSSHUtils.execute(TRAINING_SCRIPT + stat.getMajorType());
 					logger.info("Remote return:" + result);
 					if(StringUtils.isNotBlank(result) && result.contains(MarketingConstants.REMOTE_SSH_RETURN)){
 						trainingStatisticsService.deleteTrainingStatisticsById(stat.getId());

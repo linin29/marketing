@@ -673,20 +673,17 @@ public class TaskController extends BaseController {
 	
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.GET)
 	public String fileUpload(HttpServletRequest request, Model model) {
-		UserVO user = getCurrentUser(request);
-		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
 		return "list/file_upload";
 	}
 	
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse zipUpload(HttpServletRequest request,
-			@RequestParam(value = "zipFiles", required = false) List<MultipartFile> zipFiles,
-			@RequestParam(value = "majorType") String majorType, Model model) {
+			@RequestParam(value = "zipFiles", required = false) List<MultipartFile> zipFiles, Model model) {
 		UserVO user = getCurrentUser(request);
 		model.addAttribute("user", user);
 
-		ServiceResponseBO response = trainingDataService.upload(zipFiles, majorType);
+		ServiceResponseBO response = trainingDataService.upload(zipFiles);
 		if (response.isSuccess()) {
 			return CommonAjaxResponse.toSuccess(response.getResult());
 		} else {

@@ -3,14 +3,14 @@
         <h3>上传文件</h3>
     </section>
     <div class="content_list" style="margin: 20px;">
-        <select id="majorType"  class="form-control" style="width:170px;display: inline-block;">
+<!--         <select id="majorType"  class="form-control" style="width:170px;display: inline-block;">
            <option value="">请选择一个主类型</option>
             <#if majorTypes?? && (majorTypes?size > 0)>
              <#list majorTypes as majorType>
-                <option value="${majorType.name}">${majorType.description}<!-- ${majorType.version!""} --></option>
+                <option value="${majorType.name}">${majorType.description}${majorType.version!""}</option>
              </#list>
              </#if>
-		</select>
+		</select> -->
 		<input type="button" class="btn btn-success" id="zip_import" value="选择上传的文件" />
 		<input type="file" id="file_select" style="display:none;"/>
 		<span>注：目前支持ZIP包文件上传</span>

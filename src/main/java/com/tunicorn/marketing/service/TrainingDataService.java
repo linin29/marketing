@@ -54,7 +54,7 @@ public class TrainingDataService {
 	}
 
 	@Transactional
-	public ServiceResponseBO upload(List<MultipartFile> zipFiles, String majorType) {
+	public ServiceResponseBO upload(List<MultipartFile> zipFiles) {
 
 		String basePath = String.format("%s%s%s%s",
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
@@ -70,44 +70,37 @@ public class TrainingDataService {
 					xmlFileMap = new HashMap<String, String>();
 					imageFileMap = new HashMap<String, String>();
 					String originalFileName = zipFile.getOriginalFilename();
-					//int lastPointIndex = originalFileName.lastIndexOf(MarketingConstants.POINT);
+					int lastPointIndex = originalFileName.lastIndexOf(MarketingConstants.POINT);
 
-					File majorTypeDir = new File(basePath + File.separator + majorType);
+					File majorTypeDir = new File(
+							basePath + File.separator + originalFileName.substring(0, lastPointIndex));
 					if (!majorTypeDir.exists()) {
 						majorTypeDir.mkdirs();
 					}
 					ZipInputStream zin = new ZipInputStream(zipFile.getInputStream(),
 							Charset.forName(MarketingConstants.GBK));
-					File zipDestFile = new File(basePath + File.separator + MarketingConstants.ZIP_PATH + File.separator
-							+ originalFileName);
+					File zipDestFile = new File(
+							basePath + File.separator + MarketingConstants.ZIP_PATH + File.separator + originalFileName);
 					FileUtils.copyInputStreamToFile(zipFile.getInputStream(), zipDestFile);
 					ZipEntry ze;
 					while ((ze = zin.getNextEntry()) != null) {
 						if (!ze.isDirectory()) {
 							String fileName = ze.getName();
-							//String fileBasePath = basePath + File.separator + ze.getName();
+							String fileBasePath = basePath + File.separator + ze.getName();
 							int lastXmlPointIndex = fileName.lastIndexOf(MarketingConstants.POINT);
 							int lastXmlSlashIndex = fileName.lastIndexOf("/");
 							String fileRealName = fileName.substring(lastXmlSlashIndex + 1, lastXmlPointIndex);
-							
-							String fileBasePath = "";
+							generateFile(zin, fileBasePath);
+
 							if (fileName.contains(".xml")) {
-								fileBasePath = basePath + File.separator + majorType + File.separator
-										+ MarketingConstants.CROP_XML_PATH + File.separator + fileName.substring(lastXmlSlashIndex + 1);
 								xmlFileMap.put(fileRealName, fileBasePath);
-							} else if (fileName.contains(".txt")) {
-								fileBasePath = basePath + File.separator + majorType + File.separator + fileName.substring(lastXmlSlashIndex + 1);
-							}else{
-								fileBasePath = basePath + File.separator + majorType + File.separator
-										+ MarketingConstants.CROP_IMAGE_PATH + File.separator + fileName.substring(lastXmlSlashIndex + 1);
+							} else if (!fileName.contains(".txt")) {
 								imageFileMap.put(fileRealName, fileBasePath);
 							}
-							generateFile(zin, fileBasePath);
 						}
 					}
 					zin.closeEntry();
-					// String TempMajorType = originalFileName.substring(0,
-					// lastPointIndex);
+					String majorType = originalFileName.substring(0, lastPointIndex);
 					getTrainingDataList(zin, majorType, xmlFileMap, imageFileMap, trainingDataVOs);
 				}
 				batchInsertTrainingData(trainingDataVOs);

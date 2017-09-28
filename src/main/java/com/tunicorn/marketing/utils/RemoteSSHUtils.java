@@ -105,10 +105,11 @@ public class RemoteSSHUtils {
 	
 	public static void main(String[] args) {
 		// 执行命令
-		System.out.println(RemoteSSHUtils.execute("ifconfig"));
+		//System.out.println(RemoteSSHUtils.execute("ifconfig"));
 		// 执行脚本
 		//System.out.println(RemoteSSHUtils.execute("python /home/feng/script/test.py"));
-		String result  = RemoteSSHUtils.execute("python /storage2/RFCN/run_one_shell.pyc --goods=nestleoatmeal");
+		String result  = RemoteSSHUtils.execute("python /storage2/RFCN/run_one_shell.pyc --goods=nestlecoffee");
+		System.out.println(result);
 		if (result.contains("tunicorn ret success")){
 			System.out.println("success");
 		}else{

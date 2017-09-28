@@ -10,6 +10,11 @@ fileUpload = (function(){
 	var ERROR_STITCH_LIST = [];	
     function init(){
     	$('#zip_import').click(function(){
+    		var majorType = $('#majorType').val();
+    		if(!majorType || majorType==''){
+    			noty({text: '请选择一个主类型', layout: "topCenter", type: "warning", timeout: 1000});
+    			return;
+    		}
     		$('#file_select').click();
     	});
     	
@@ -18,7 +23,13 @@ fileUpload = (function(){
     		var files = _file.files;
     		var total = files.length;
     		var url = m_url + 'fileUpload';
+    		var majorType = $('#majorType').val();
+    		if(!majorType || majorType==''){
+    			noty({text: '请选择一个主类型', layout: "topCenter", type: "warning", timeout: 1000});
+    			return;
+    		}
     		var formData = new FormData();
+    		formData.append('majorType', majorType);
     		for (var i = 0; i < files.length; i++) {
       			var file = files[i];
       			formData.append('zipFiles', file, file.name);

@@ -96,7 +96,7 @@
 		                        <#if goodResult.isShow && (goodResult.num?eval >0)>
 		               	         <div class="form-group">
 			               		   <span class="icorn-brand"></span>
-			               		   <div class="changeline" produce="${goodResult_index}"><a href="javascript:void(0);" onclick="getCrops(${goodResult_index})">${goodResult.goods_desc}(${goodResult.num})</a></div>  
+			               		   <div class="changeline" produce="${goodResult_index}"><a href="javascript:void(0);" onclick="newList.getCrops(${goodResult_index})">${goodResult.goods_desc}(${goodResult.num})</a></div>  
 		           			     </div>
 		           			    </#if>
 		           			   </#list>

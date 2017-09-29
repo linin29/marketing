@@ -24,6 +24,7 @@ import com.tunicorn.marketing.mapper.AdminUserMapper;
 import com.tunicorn.marketing.mapper.ApplicationMapper;
 import com.tunicorn.marketing.mapper.MajorTypeMapper;
 import com.tunicorn.marketing.mapper.UserMapper;
+import com.tunicorn.marketing.mapper.UserRoleMapper;
 import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.utils.MarketingStorageUtils;
 import com.tunicorn.marketing.utils.SendMailUtils;
@@ -35,6 +36,7 @@ import com.tunicorn.marketing.vo.ApplicationVO;
 import com.tunicorn.marketing.vo.ApproveEmailVO;
 import com.tunicorn.marketing.vo.MajorTypeApplicationMappingVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
+import com.tunicorn.marketing.vo.UserRoleVO;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.SecurityUtils;
 
@@ -55,6 +57,8 @@ public class AdminServiceApplyService {
 	UserMapper userMapper;
 	@Autowired
 	AdminUserMapper adminUserMapper;
+	@Autowired
+	UserRoleMapper userRoleMapper;
 
 	@Transactional
 	public int createAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO, List<MultipartFile> images ,int userId) {
@@ -130,6 +134,10 @@ public class AdminServiceApplyService {
 			userVO.setPassword(SecurityUtils.generateHashPassword(MarketingConstants.TIANNUO_PASSWORD));
 			userMapper.createUser(userVO);
 
+			UserRoleVO userRole = new UserRoleVO();
+			userRole.setUserId(userVO.getId());
+			userRole.setRoleId(1);
+			userRoleMapper.createUserRoleMapping(userRole);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 			ApplicationVO applicationVO = new ApplicationVO();
 			applicationVO.setUserId(userVO.getId());

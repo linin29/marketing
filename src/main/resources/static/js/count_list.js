@@ -13,10 +13,7 @@ countList=(function(){
     		$('#query').click(function(){
     			searchApiCalling(1);
     		});
-    		
-    		if(totalCount!= 0){
-    			initPagination(currentPage, totalCount);
-    		}
+
      };
      
      function initPagination(currentPage, totalCount) {

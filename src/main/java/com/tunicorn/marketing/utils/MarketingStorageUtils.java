@@ -16,8 +16,8 @@ public class MarketingStorageUtils {
 	public static UploadFile getUploadFile(MultipartFile file, int userId, long appId, boolean isTemp) {
 		return StorageWrapper.getUploadFile(file, MarketingConstants.PATH_MARKETING, userId, appId, isTemp);
 	}
-	public static UploadFile getUploadFile(MultipartFile file, String taskId, String sub, boolean isTemp) {
-		return StorageWrapper.getUploadFile(file, MarketingConstants.PATH_MARKETING, taskId, sub, isTemp);
+	public static UploadFile getUploadFile(MultipartFile file, String userId, String taskId, String sub, boolean isTemp) {
+		return StorageWrapper.getUploadFile(file, MarketingConstants.PATH_MARKETING, userId, taskId, sub, isTemp);
 	}
 	public static UploadFile getUploadFile(String url, long userId, long appId, boolean isTemp) {
 		return StorageWrapper.getUploadFile(url, MarketingConstants.PATH_MARKETING, userId, appId, isTemp);

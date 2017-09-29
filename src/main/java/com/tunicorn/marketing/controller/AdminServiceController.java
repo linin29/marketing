@@ -132,7 +132,7 @@ public class AdminServiceController extends BaseController {
 			adminServiceApplyVO.setEmail(request.getParameter("email"));
 		}
 		adminServiceApplyVO.setCreatorId(user.getId());
-		int result = adminServiceApplyService.createAdminServiceApply(adminServiceApplyVO, images);
+		int result = adminServiceApplyService.createAdminServiceApply(adminServiceApplyVO, images, user.getId());
 		if (result == 0) {
 			Message message = MessageUtils.getInstance().getMessage("marketing_major_type_create_failed");
 			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
@@ -275,8 +275,9 @@ public class AdminServiceController extends BaseController {
 	@ResponseBody
 	public CommonAjaxResponse createApplyAsset(HttpServletRequest request,
 			@RequestParam(value = "images", required = false) List<MultipartFile> images) {
+		AdminUserVO user = getCurrentAdminUser(request);
 		if (StringUtils.isNotBlank(request.getParameter("applyId"))) {
-			adminServiceApplyService.addApplyAsset(Long.valueOf(request.getParameter("applyId")), images);
+			adminServiceApplyService.addApplyAsset(Long.valueOf(request.getParameter("applyId")), images, user.getId());
 		}
 		return CommonAjaxResponse.toSuccess(null);
 	}

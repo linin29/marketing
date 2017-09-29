@@ -57,9 +57,9 @@ public class AdminServiceApplyService {
 	AdminUserMapper adminUserMapper;
 
 	@Transactional
-	public int createAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO, List<MultipartFile> images) {
+	public int createAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO, List<MultipartFile> images ,int userId) {
 		int result = adminServiceApplyMapper.createAdminServiceApply(adminServiceApplyVO);
-		addApplyAsset(adminServiceApplyVO.getId(), images);
+		addApplyAsset(adminServiceApplyVO.getId(), images, userId);
 		this.createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);
 		logger.info("result of createAdminServiceApply method: " + result);
 		return result;
@@ -183,12 +183,12 @@ public class AdminServiceApplyService {
 		adminServiceApplyAssetMapper.deleteAdminServiceApplyAsset(applyAssetId);
 	}
 
-	public void addApplyAsset(long applyId, List<MultipartFile> images) {
+	public void addApplyAsset(long applyId, List<MultipartFile> images, int userId) {
 		List<AdminServiceApplyAssetVO> assets = new ArrayList<AdminServiceApplyAssetVO>();
 		if (images != null && images.size() > 0) {
 			for (MultipartFile image : images) {
 				AdminServiceApplyAssetVO asset = new AdminServiceApplyAssetVO();
-				UploadFile file = MarketingStorageUtils.getUploadFile(image, String.valueOf(applyId),
+				UploadFile file = MarketingStorageUtils.getUploadFile(image,String.valueOf(userId), String.valueOf(applyId),
 						ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
 				asset.setServiceApplyId(applyId);
 				asset.setFilePath(file.getPath());

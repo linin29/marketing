@@ -233,7 +233,7 @@ public class TaskResource extends BaseResource {
 
 		TokenVO token = (TokenVO) tokenStatus.getData();
 
-		ServiceResponseBO response = taskService.replace(taskId, taskImageId, image, token.getAppId());
+		ServiceResponseBO response = taskService.replace(taskId, taskImageId, image, token.getAppId(), token.getUserId());
 		if (response.isSuccess()) {
 			return CommonAjaxResponse.toSuccess(response.getResult());
 		} else {

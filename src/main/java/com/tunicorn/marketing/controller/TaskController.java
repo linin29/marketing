@@ -515,6 +515,7 @@ public class TaskController extends BaseController {
 	public TaskImagesVO getPreOrderTaskImage(@PathVariable("taskId") String taskId,
 			@PathVariable("order") Integer order) {
 		TaskImagesVO imagesVO = taskService.getPreOrderTaskImage(taskId, order);
+		imagesVO.setTask(taskService.getTaskById(taskId));
 		return imagesVO;
 	}
 
@@ -523,6 +524,7 @@ public class TaskController extends BaseController {
 	public TaskImagesVO getNextOrderTaskImage(@PathVariable("taskId") String taskId,
 			@PathVariable("order") Integer order) {
 		TaskImagesVO imagesVO = taskService.getNextOrderTaskImage(taskId, order);
+		imagesVO.setTask(taskService.getTaskById(taskId));
 		return imagesVO;
 	}
 
@@ -540,10 +542,11 @@ public class TaskController extends BaseController {
 		taskService.saveGoodsInfo(taskId);
 		String imageId = request.getParameter("imageId");
 		if (StringUtils.isNotBlank(imageId)) {
+			String stitchImagePath = taskVO.getStitchImagePath();
+			int index = stitchImagePath.lastIndexOf("/");
 			TaskImagesVO image = taskService.getTaskImagesById(imageId);
 			model.addAttribute("image", image);
-			model.addAttribute("initCropImagePath",
-					taskId + "/results_" + (image.getOrderNo() - 1) + ".jpg?random=" + new Date().getTime());
+			model.addAttribute("initCropImagePath",stitchImagePath.substring(0, index) + "/results_" + (image.getOrderNo() - 1) + ".jpg?random=" + new Date().getTime());
 		}
 		List<GoodsSkuVO> goodsSkuVOs = taskService.getGoods(taskVO.getMajorType());
 
@@ -611,7 +614,7 @@ public class TaskController extends BaseController {
 
 		TaskBO taskBO = new TaskBO();
 		String majorType = ConfigUtils.getInstance().getConfigValue("marketing.temp.major.type");
-		if(StringUtils.isNotBlank(majorType)){
+		if (StringUtils.isNotBlank(majorType)) {
 			String[] majorTypeArray = majorType.split(",");
 			taskBO.setMajorTypeArray(majorTypeArray);
 		}
@@ -632,7 +635,7 @@ public class TaskController extends BaseController {
 	public String tempSearchTask(HttpServletRequest request, Model model) {
 		TaskBO taskBO = new TaskBO();
 		String majorType = ConfigUtils.getInstance().getConfigValue("marketing.temp.major.type");
-		if(StringUtils.isNotBlank(majorType)){
+		if (StringUtils.isNotBlank(majorType)) {
 			String[] majorTypeArray = majorType.split(",");
 			taskBO.setMajorTypeArray(majorTypeArray);
 		}

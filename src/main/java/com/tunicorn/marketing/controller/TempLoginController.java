@@ -33,7 +33,7 @@ public class TempLoginController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = { "/showView/login"}, method = RequestMethod.GET)
+	@RequestMapping(value = "/showView/login", method = RequestMethod.GET)
 	public String index(HttpServletRequest request, Model model) {
 		UserVO user = (UserVO) request.getSession().getAttribute(Constant.SESSION_USER);
 		String isOpen = ConfigUtils.getInstance().getConfigValue("register.isOpen");

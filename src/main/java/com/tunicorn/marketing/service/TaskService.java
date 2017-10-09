@@ -1046,6 +1046,7 @@ public class TaskService {
 				} else {
 					node.put("rows", rowsStr);
 				}
+				node.put("stitchImagePath", taskVO.getStitchImagePath());
 			}
 			if (StringUtils.endsWith(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())
 					&& taskVO.getResult() != null) {

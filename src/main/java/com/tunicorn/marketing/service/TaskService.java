@@ -139,7 +139,7 @@ public class TaskService {
 			List<TaskImagesVO> taskImagesVOs = new ArrayList<TaskImagesVO>();
 			for (int i = 0; i < images.size(); i++) {
 				TaskImagesVO taskImagesVO = new TaskImagesVO();
-				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), createTaskVO.getId(),
+				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, createTaskVO.getId(),
 						ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
 				if (file == null) {
 					return new ServiceResponseBO(false, "marketing_save_upload_file_error");
@@ -536,7 +536,7 @@ public class TaskService {
 		}
 	}
 
-	public ServiceResponseBO replace(String taskId, String taskImageId, MultipartFile image, int appId) {
+	public ServiceResponseBO replace(String taskId, String taskImageId, MultipartFile image, int appId, String userId) {
 		logger.info("params of replace method: taskId:" + taskId + ", taskImagesId:" + taskImageId + ",appId:" + appId);
 		if (StringUtils.isBlank(taskId) || StringUtils.isBlank(taskImageId) || image == null) {
 			return new ServiceResponseBO(false, "marketing_parameter_invalid");
@@ -550,7 +550,7 @@ public class TaskService {
 		if (tempImagesVO == null) {
 			return new ServiceResponseBO(false, "marketing_db_not_found");
 		}
-		UploadFile file = MarketingStorageUtils.getUploadFile(image, taskVO.getId(),
+		UploadFile file = MarketingStorageUtils.getUploadFile(image, userId, taskVO.getId(),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
 		TaskImagesVO imagesVO = new TaskImagesVO();
 		int index = file.getPath().indexOf(MarketingConstants.MARKETING);
@@ -1215,7 +1215,7 @@ public class TaskService {
 			}
 			for (int i = 0; i < images.size(); i++) {
 				TaskImagesVO taskImagesVO = new TaskImagesVO();
-				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), taskId,
+				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, taskId,
 						ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
 				if (file == null) {
 					logger.error("taskId:" + taskId + ", save form-data file failure");

@@ -515,7 +515,9 @@ public class TaskController extends BaseController {
 	public TaskImagesVO getPreOrderTaskImage(@PathVariable("taskId") String taskId,
 			@PathVariable("order") Integer order) {
 		TaskImagesVO imagesVO = taskService.getPreOrderTaskImage(taskId, order);
-		imagesVO.setTask(taskService.getTaskById(taskId));
+		if (imagesVO != null) {
+			imagesVO.setTask(taskService.getTaskById(taskId));
+		}
 		return imagesVO;
 	}
 
@@ -524,7 +526,9 @@ public class TaskController extends BaseController {
 	public TaskImagesVO getNextOrderTaskImage(@PathVariable("taskId") String taskId,
 			@PathVariable("order") Integer order) {
 		TaskImagesVO imagesVO = taskService.getNextOrderTaskImage(taskId, order);
-		imagesVO.setTask(taskService.getTaskById(taskId));
+		if (imagesVO != null) {
+			imagesVO.setTask(taskService.getTaskById(taskId));
+		}
 		return imagesVO;
 	}
 

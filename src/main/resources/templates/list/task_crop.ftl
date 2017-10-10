@@ -291,8 +291,10 @@
      		 success: function(data) {
      			 if(data){
      				var stitchImagePath = data.task.stitchImagePath;
-    				var index  = stitchImagePath.lastIndexOf("/");
-     				$("#initCropImage").attr("src", picPath + stitchImagePath.substring(0, index) + "/results_" + (order - 2) + ".jpg?random=" + new Date().getTime());
+     				if(stitchImagePath){
+        				var index  = stitchImagePath.lastIndexOf("/");
+         				$("#initCropImage").attr("src", picPath + stitchImagePath.substring(0, index) + "/results_" + (order - 2) + ".jpg?random=" + new Date().getTime());
+     				}
      				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);
      				getPictureCrop(picPath + data.imagePath);

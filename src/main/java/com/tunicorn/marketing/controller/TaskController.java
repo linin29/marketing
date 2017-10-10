@@ -547,10 +547,13 @@ public class TaskController extends BaseController {
 		String imageId = request.getParameter("imageId");
 		if (StringUtils.isNotBlank(imageId)) {
 			String stitchImagePath = taskVO.getStitchImagePath();
-			int index = stitchImagePath.lastIndexOf("/");
 			TaskImagesVO image = taskService.getTaskImagesById(imageId);
 			model.addAttribute("image", image);
-			model.addAttribute("initCropImagePath",stitchImagePath.substring(0, index) + "/results_" + (image.getOrderNo() - 1) + ".jpg?random=" + new Date().getTime());
+			if(StringUtils.isNotBlank(stitchImagePath)){
+				int index = stitchImagePath.lastIndexOf("/");
+				model.addAttribute("initCropImagePath",stitchImagePath.substring(0, index) + "/results_" + (image.getOrderNo() - 1) + ".jpg?random=" + new Date().getTime());
+			}
+
 		}
 		List<GoodsSkuVO> goodsSkuVOs = taskService.getGoods(taskVO.getMajorType());
 

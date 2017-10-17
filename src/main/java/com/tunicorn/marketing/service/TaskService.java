@@ -1149,7 +1149,7 @@ public class TaskService {
 
 				ObjectNode retData = (ObjectNode) result.getData();
 				if (retData.get("name") != null) {
-					priceIdentifyBO.setPrice(retData.get("name").asText());
+					priceIdentifyBO.setName(retData.get("name").asText());
 				}
 				if (retData.get("price") != null) {
 					priceIdentifyBO.setPrice(retData.get("price").asText());

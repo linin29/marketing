@@ -7,6 +7,8 @@ priceIdentify = (function(){
     	});
     	
     	$('#file_select').change(function(){
+    		$("#priceIdentifyResult").html("");
+    		
     		var _file = $(this)[0];
     		var files = _file.files;
     		var total = files.length;

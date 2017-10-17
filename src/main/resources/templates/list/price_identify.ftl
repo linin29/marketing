@@ -27,7 +27,7 @@
                    <img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
                    <span>商品价格照片</span>
                    <div style="clear:both"></div>                   
-                   <div class="row" id="stitch_image">
+                   <div class="row">
 	                   <div id="image_default"  align="center"  class="col-sm-8">
 		                   <img id="preview" src="${springMacroRequestContext.contextPath}/image/2.png"class="img-thumbnail static_img">
 	                   </div>
@@ -61,7 +61,7 @@
        <div class="modal-dialog" role="document">
            <div class="modal-content">
                <div class="modal-header model_head">
-                   <h4 id="waitingLabel" style="text-align: center" class="modal-title">正在进行中，请稍后...</h4>
+                   <h4 id="waitingLabel" style="text-align: center" class="modal-title">正在进行识别，请稍后...</h4>
                </div>
                <div class="modal-body">
                    <img src="${springMacroRequestContext.contextPath}/image/searchwait.gif" style="margin:0px 0 0 230px"/>

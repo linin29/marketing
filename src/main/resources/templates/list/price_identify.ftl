@@ -18,9 +18,6 @@
 								   <input type="file" id="file_select" style="display:none;"/>
                                </span>
                            </div>
-                       <!--     <div  class="col-xs-1 choose_btn" style="width: 100px;">
-                               <button id="merge-pre" type="button" class="btn btn-success">识别价格</button>
-                           </div>  -->  
                        </div>
                    </div>
                </h4>

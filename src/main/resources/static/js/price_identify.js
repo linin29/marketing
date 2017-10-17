@@ -43,7 +43,7 @@ priceIdentify = (function(){
 		        		return;
 		        	}
 		        	noty({text: "识别价格成功", layout: "topCenter", type: "success", timeout: 1000});
-		        	var html = '<th colspan="2">' + name + '</th><th>' + price + '</th>';
+		        	var html = '<td colspan="2">' + name + '</td><td colspan="2">' + price + '</td>';
 		        	$("#priceIdentifyResult").html(html);
 		        },
 		        error: function (message) {

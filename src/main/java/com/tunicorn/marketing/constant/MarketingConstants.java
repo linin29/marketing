@@ -57,6 +57,7 @@ public class MarketingConstants {
 	public static final String MARKETING_RECTIFY_SERVICE = "marketing_rectify_service";
 	public static final String MARKETING_PULL_DATA_SERVICE = "marketing_pull_data_service";
 	public static final String MARKETING_GET_STORE_SERVICE = "marketing_get_store_service";
+	public static final String MARKETING_PRICE_IDENTIFY_SERVICE = "marketing_price_identify_service";
 
 	public static final String API_MARKETING = "/api/marketing/";
 	public static final String PIC_MARKETING = "/pic/marketing";
@@ -104,4 +105,7 @@ public class MarketingConstants {
 	
 	public static final String CROP_IMAGE_PATH = "JPEGImages";
 	public static final String CROP_TXT_PATH = "Annotations";
+	
+	public static final String PRICE_IDENTIFY = "priceIdentify";
+	public static final String CORE_SERVER_MARKETING_PRICE_IDENTIFY_URL = "/priceIdentify";
 }

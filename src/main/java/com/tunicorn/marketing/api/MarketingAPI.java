@@ -13,6 +13,7 @@ import com.tunicorn.common.api.param.IRequestParam;
 import com.tunicorn.marketing.api.param.MarketingGetStoreRequestParam;
 import com.tunicorn.marketing.api.param.MarketingIdentifyMockRequestParam;
 import com.tunicorn.marketing.api.param.MarketingIdentifyRequestParam;
+import com.tunicorn.marketing.api.param.MarketingPriceIdentifyRequestParam;
 import com.tunicorn.marketing.api.param.MarketingRectifyRequestParam;
 import com.tunicorn.marketing.api.param.MarketingStitcherRequestParam;
 import com.tunicorn.marketing.constant.MarketingConstants;
@@ -53,6 +54,12 @@ public class MarketingAPI {
 		return callGetStoreService(null, params, MarketingConstants.MARKETING_GET_STORE_SERVICE);
 	}
 
+	// priceIdentify method
+	public static CommonAjaxResponse priceIdentify(MarketingPriceIdentifyRequestParam params) {
+		return callPriceIdentifyService(MarketingConstants.CORE_SERVER_MARKETING_PRICE_IDENTIFY_URL, params,
+				MarketingConstants.MARKETING_PRICE_IDENTIFY_SERVICE);
+	}
+
 	private static CommonAjaxResponse callCoreService(String uri, IRequestParam params, String apiErrMsgTag) {
 		String url = ConfigUtils.getInstance().getConfigValue("marketing.service.url") + uri;
 
@@ -81,7 +88,7 @@ public class MarketingAPI {
 		logger.info(url);
 		logger.info(params.convertToJSON());
 		String retValue = HttpClientUtils.post(url, headers, params.convertToJSON());
-		
+
 		logger.info("The response from backend marketing server:" + retValue);
 		if (StringUtils.isBlank(retValue)) {
 			Message message = MessageUtils.getInstance().getMessage("marketing_call_service_failure");
@@ -107,11 +114,11 @@ public class MarketingAPI {
 
 		logger.info(url);
 		logger.info(params.convertToJSON());
-		
+
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("TaskId", ((MarketingGetStoreRequestParam)params).getTaskId());
-		map.put("token", ((MarketingGetStoreRequestParam)params).getToken());
-		
+		map.put("TaskId", ((MarketingGetStoreRequestParam) params).getTaskId());
+		map.put("token", ((MarketingGetStoreRequestParam) params).getToken());
+
 		String retValue = HttpClientUtil.doPost(url, map, MarketingConstants.UTF8);
 
 		if (StringUtils.isBlank(retValue)) {
@@ -131,6 +138,34 @@ public class MarketingAPI {
 			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
 
+		return CommonAjaxResponse.toSuccess(node);
+	}
+
+	private static CommonAjaxResponse callPriceIdentifyService(String uri, IRequestParam params, String apiErrMsgTag) {
+		String url = ConfigUtils.getInstance().getConfigValue("marketing.service.url") + uri;
+
+		logger.info(url);
+		logger.info(params.convertToJSON());
+
+		Map<String, String> headers = new HashMap<String, String>();
+		MarketingPriceIdentifyRequestParam requestParams = (MarketingPriceIdentifyRequestParam) params;
+		if (StringUtils.isNotBlank(requestParams.getMajorType())) {
+			headers.put(MarketingConstants.MAJOR_TYPE, requestParams.getMajorType());
+		}
+
+		String retValue = HttpClientUtils.post(url, headers, params.convertToJSON());
+
+		if (StringUtils.isBlank(retValue)) {
+			Message message = MessageUtils.getInstance().getMessage("marketing_call_service_failure");
+			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
+		logger.info("The response from backend marketing server:" + retValue);
+
+		ObjectNode node = JsonUtil.toObjectNode(retValue);
+		if (node == null) {
+			Message message = MessageUtils.getInstance().getMessage("marketing_call_service_failure");
+			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
 		return CommonAjaxResponse.toSuccess(node);
 	}
 }

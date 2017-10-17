@@ -48,6 +48,7 @@ import com.tunicorn.marketing.api.MarketingAPI;
 import com.tunicorn.marketing.api.param.MarketingGetStoreRequestParam;
 import com.tunicorn.marketing.api.param.MarketingIdentifyMockRequestParam;
 import com.tunicorn.marketing.api.param.MarketingIdentifyRequestParam;
+import com.tunicorn.marketing.api.param.MarketingPriceIdentifyRequestParam;
 import com.tunicorn.marketing.api.param.MarketingRectifyRequestParam;
 import com.tunicorn.marketing.api.param.MarketingStitcherRequestParam;
 import com.tunicorn.marketing.bo.ApiCallingSummaryBO;
@@ -57,6 +58,7 @@ import com.tunicorn.marketing.bo.GoodsSkuBO;
 import com.tunicorn.marketing.bo.IdentifyUpdateParamBO;
 import com.tunicorn.marketing.bo.ImageCropBO;
 import com.tunicorn.marketing.bo.OrderBO;
+import com.tunicorn.marketing.bo.PriceIdentifyBO;
 import com.tunicorn.marketing.bo.ServiceResponseBO;
 import com.tunicorn.marketing.bo.StitcherUpdateParamBO;
 import com.tunicorn.marketing.bo.TaskBO;
@@ -140,8 +142,9 @@ public class TaskService {
 			List<TaskImagesVO> taskImagesVOs = new ArrayList<TaskImagesVO>();
 			for (int i = 0; i < images.size(); i++) {
 				TaskImagesVO taskImagesVO = new TaskImagesVO();
-				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, createTaskVO.getId(),tempTaskVO.getCreateTime(),
-						ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
+				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, createTaskVO.getId(),
+						tempTaskVO.getCreateTime(), ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"),
+						false);
 				if (file == null) {
 					return new ServiceResponseBO(false, "marketing_save_upload_file_error");
 				}
@@ -700,7 +703,7 @@ public class TaskService {
 	public int getTaskCount(TaskBO taskBO) {
 		return taskMapper.getTaskCount(taskBO);
 	}
-	
+
 	public List<TaskVO> getTempTaskList(TaskBO taskBO) {
 		return taskMapper.getTempTaskList(taskBO);
 	}
@@ -1132,6 +1135,30 @@ public class TaskService {
 		}
 	}
 
+	public PriceIdentifyBO priceIdentify(MultipartFile image, String userId) {
+
+		UploadFile file = MarketingStorageUtils.getUploadFile(image, userId, MarketingConstants.PRICE_IDENTIFY, new Date(),
+				ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
+		PriceIdentifyBO priceIdentifyBO = new PriceIdentifyBO();
+		if (file != null) {
+			MarketingPriceIdentifyRequestParam param = new MarketingPriceIdentifyRequestParam();
+			param.setMajorType(MarketingConstants.PRICE_IDENTIFY);
+			param.setImg_url(file.getPath());
+			CommonAjaxResponse result = MarketingAPI.priceIdentify(param);
+			if (result.getSuccess()) {
+
+				ObjectNode retData = (ObjectNode) result.getData();
+				if (retData.get("name") != null) {
+					priceIdentifyBO.setPrice(retData.get("name").asText());
+				}
+				if (retData.get("price") != null) {
+					priceIdentifyBO.setPrice(retData.get("price").asText());
+				}
+			}
+		}
+		return priceIdentifyBO;
+	}
+
 	private void generateXmlFile(ImageCropBO cropBO, String xmlFilePath, int width, int height) {
 		Element root = DocumentHelper.createElement("annotation");
 		Document document = DocumentHelper.createDocument(root);
@@ -1218,8 +1245,9 @@ public class TaskService {
 			TaskVO taskVO = taskMapper.getTaskById(taskId);
 			for (int i = 0; i < images.size(); i++) {
 				TaskImagesVO taskImagesVO = new TaskImagesVO();
-				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, taskId, taskVO.getCreateTime(),
-						ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
+				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, taskId,
+						taskVO.getCreateTime(), ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"),
+						false);
 				if (file == null) {
 					logger.error("taskId:" + taskId + ", save form-data file failure");
 					return -1;

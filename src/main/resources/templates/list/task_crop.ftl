@@ -324,7 +324,7 @@
      				 var stitchImagePath = data.task.stitchImagePath;
      				if(stitchImagePath){
         				var index  = stitchImagePath.lastIndexOf("/");
-         				$("#initCropImage").attr("src", picPath + stitchImagePath.substring(0, index) + "/results_" + (order - 2) + ".jpg?random=" + new Date().getTime());
+         				$("#initCropImage").attr("src", picPath + stitchImagePath.substring(0, index) + "/results_" + order + ".jpg?random=" + new Date().getTime());
      				}
      				$('#imageCrop').attr("imageid", data.id);
      				$("#order").val(data.orderNo);

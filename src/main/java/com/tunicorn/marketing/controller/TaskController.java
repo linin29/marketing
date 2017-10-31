@@ -605,14 +605,6 @@ public class TaskController extends BaseController {
 		return result;
 	}
 
-	private Date getBefore2Day(Date date) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		calendar.add(Calendar.DAY_OF_MONTH, -2);
-		date = calendar.getTime();
-		return date;
-	}
-
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public void downloadUserManual(HttpServletRequest request, HttpServletResponse response) {
 		rendFile(request, response, MarketingConstants.BATCH_ZIP_PATH, MarketingConstants.BATCH_ZIP_NAME);

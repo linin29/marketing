@@ -1,6 +1,10 @@
 package com.tunicorn.marketing.vo;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.tunicorn.marketing.bo.PaginationBO;
 
@@ -175,6 +179,30 @@ public class TaskVO extends PaginationBO {
 
 	public void setIdentifySuccessTimes(long identifySuccessTimes) {
 		this.identifySuccessTimes = identifySuccessTimes;
+	}
+
+	/////////////////////////////////////
+
+	private String createTimeStr;
+	private String lastUpdateTimeStr;
+
+	public String getCreateTimeStr() {
+		return getTimeStr(createTime, createTimeStr);
+	}
+
+	public String getLastUpdateTimeStr() {
+		return getTimeStr(lastUpdateTime, lastUpdateTimeStr);
+	}
+
+	private String getTimeStr(Date time, String timeStr) {
+		if (StringUtils.isEmpty(timeStr)) {
+			if (time != null) {
+				timeStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time);
+			} else {
+				timeStr = "";
+			}
+		}
+		return timeStr;
 	}
 
 }

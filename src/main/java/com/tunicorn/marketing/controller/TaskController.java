@@ -40,6 +40,7 @@ import com.tunicorn.marketing.api.CommonAjaxResponse;
 import com.tunicorn.marketing.bo.CropBO;
 import com.tunicorn.marketing.bo.ImageCropBO;
 import com.tunicorn.marketing.bo.OrderBO;
+import com.tunicorn.marketing.bo.PriceIdentifyBO;
 import com.tunicorn.marketing.bo.ServiceResponseBO;
 import com.tunicorn.marketing.bo.StitcherBO;
 import com.tunicorn.marketing.bo.TaskBO;
@@ -549,9 +550,10 @@ public class TaskController extends BaseController {
 			String stitchImagePath = taskVO.getStitchImagePath();
 			TaskImagesVO image = taskService.getTaskImagesById(imageId);
 			model.addAttribute("image", image);
-			if(StringUtils.isNotBlank(stitchImagePath)){
+			if (StringUtils.isNotBlank(stitchImagePath)) {
 				int index = stitchImagePath.lastIndexOf("/");
-				model.addAttribute("initCropImagePath",stitchImagePath.substring(0, index) + "/results_" + (image.getOrderNo() - 1) + ".jpg?random=" + new Date().getTime());
+				model.addAttribute("initCropImagePath", stitchImagePath.substring(0, index) + "/results_"
+						+ (image.getOrderNo() - 1) + ".jpg?random=" + new Date().getTime());
 			}
 
 		}
@@ -689,6 +691,21 @@ public class TaskController extends BaseController {
 		model.addAttribute("task", taskVO);
 		model.addAttribute("goodResults", taskService.getResultList(taskVO));
 		return "list/task_mark";
+	}
+
+	@RequestMapping(value = "/priceIdentify", method = RequestMethod.GET)
+	public String priceIdentify(HttpServletRequest request, Model model) {
+		return "list/price_identify";
+	}
+
+	@RequestMapping(value = "/priceIdentify", method = RequestMethod.POST)
+	@ResponseBody
+	public PriceIdentifyBO doPriceIdentify(HttpServletRequest request,
+			@RequestParam(value = "image", required = false) MultipartFile image) {
+		UserVO user = getCurrentUser(request);
+
+		PriceIdentifyBO identifyBOs = taskService.priceIdentify(image, user.getId());
+		return identifyBOs;
 	}
 
 	private void rendFile(HttpServletRequest request, HttpServletResponse response, String filePath, String name) {

@@ -132,7 +132,7 @@
                          <#list goodResults as goodResult>
                            <#if goodResult.isShow>
                             <tr>
-                              <td colspan="2">${goodResult.goods_desc}</th>
+                              <td colspan="2">${goodResult.goods_desc}</td>
                               <td>${goodResult.ratio}</td>
                               <td>${goodResult.num}</td>
                               <td>${goodResult.rows!""}</td>

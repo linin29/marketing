@@ -1,22 +1,16 @@
 package com.tunicorn.marketing.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -24,14 +18,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.tunicorn.common.api.Message;
 import com.tunicorn.marketing.api.CommonAjaxResponse;
+import com.tunicorn.marketing.bo.AecBO;
+import com.tunicorn.marketing.bo.ServiceResponseBO;
 import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.TaskService;
+import com.tunicorn.marketing.utils.ZipUtils;
 import com.tunicorn.marketing.vo.TaskVO;
 import com.tunicorn.marketing.vo.UserVO;
+import com.tunicorn.util.MessageUtils;
 
 @Controller
 @EnableAutoConfiguration
@@ -84,66 +85,38 @@ public class AECController extends BaseController {
 	}
 
 	@RequestMapping(value = "/aec/download", method = RequestMethod.POST)
-	@ResponseBody
-	public String download(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		UserVO user = getCurrentUser(request);
-		String majorType = request.getParameter("taskIds");
-		String startTime = request.getParameter("startTime");
-		String endTime = request.getParameter("endTime");
-		List<String> dataList = taskService.getTaskExportData(majorType, startTime, endTime, user.getId());
-		response.setCharacterEncoding("UTF-8");
-		SimpleDateFormat dfs = new SimpleDateFormat("yyyyMMddHHmmss");
-		Date time = new Date();
-		String formatTime = dfs.format(time);
-		String fileName = majorType + "_" + formatTime + ".csv";
-
-		response.setHeader("contentType", "text/html; charset=utf-8");
+	public void download(HttpServletRequest request, HttpServletResponse response, @RequestBody TaskBO taskBO)
+			throws Exception {
+		String zipName = "E:\\aec\\myfile.zip";
+		List<AecBO> fileList = taskService.getAecsByTaskIds(taskBO.getTaskIds());
 		response.setContentType("application/octet-stream");
-		response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
-
-		String realPath = request.getSession().getServletContext().getRealPath("/");
-		String path = realPath + "/" + fileName;
-		File file = new File(path);
-		BufferedInputStream bis = null;
-		BufferedOutputStream out = null;
-		FileWriterWithEncoding fwwe = new FileWriterWithEncoding(file, "UTF-8");
-		fwwe.write(new String(new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF }));
-		BufferedWriter bw = new BufferedWriter(fwwe);
-		if (dataList != null && !dataList.isEmpty()) {
-			for (String data : dataList) {
-				bw.write(data);
-				bw.write("\n");
-			}
-		}
-		bw.close();
-		fwwe.close();
+		response.setHeader("Content-Disposition", "attachment; filename=" + zipName);
+		ZipOutputStream out = new ZipOutputStream(response.getOutputStream());
 		try {
-			bis = new BufferedInputStream(new FileInputStream(file));
-			out = new BufferedOutputStream(response.getOutputStream());
-			byte[] buff = new byte[2048];
-			while (true) {
-				int bytesRead;
-				if (-1 == (bytesRead = bis.read(buff, 0, buff.length))) {
-					break;
-				}
-				out.write(buff, 0, bytesRead);
-			}
-		} catch (IOException e) {
-			throw e;
+			for (AecBO aecBO : fileList) {
+				ZipUtils.doCompress(aecBO.getImage(), out);
+				ZipUtils.doCompress(aecBO.getAnnotationXML(), out);
+				response.flushBuffer();
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
-			try {
-				if (bis != null) {
-					bis.close();
-				}
-				if (out != null) {
-					out.flush();
-					out.close();
-				}
-			} catch (IOException e) {
-				throw e;
-			}
+			out.close();
 		}
-		file.delete();
-		return null;
+	}
+	
+	@RequestMapping(value = "/aec/upload", method = RequestMethod.POST)
+	@ResponseBody
+	public CommonAjaxResponse upload(HttpServletRequest request,
+			@RequestParam(value = "zipFile", required = false) MultipartFile zipFile) {
+		UserVO user = getCurrentUser(request);
+
+		ServiceResponseBO response =null;
+		if (response.isSuccess()) {
+			return CommonAjaxResponse.toSuccess(response.getResult());
+		} else {
+			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
+			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
 	}
 }

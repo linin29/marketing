@@ -4,8 +4,8 @@
 </style>
 <div class="exportDataContainer">
     <div class="panel-default" style="margin-bottom:0px">
-         <div class="data_list_header" >
-       	 	<div class="col-sm-9" style="margin-top:10px;margin-bottom:10px;">
+         <div class="data_list_header" style="text-align:center;">
+       	 	<div class="col-sm-9" style="margin-top:21px;margin-bottom:10px;margin-left:14px;">
        	 		<span style="width:8%;float:left;line-height:34px;">品类：</span>
                 <div style="width:25%;float:left;">
                  	<select id="majorType" style="height: 34px;width: 96%;">
@@ -33,11 +33,11 @@
                </div>
        	 	</div>
     	</div>
-         <div class="text-right" style="margin-right:15px;">
+         <div style="display:inline-block;margin-top:10px;margin-left:109px;">
              <button class='btn btn-success' id="query">查询</button>
-             <button class='btn btn-success' id="download">下载</button>
+             <button class='btn btn-success' id="download" style="margin-left: 8px;">下载</button>
          </div>
-        <div class="panel-body">  
+        <div class="panel-body" style="padding:0px;">  
 			<div class="leftTable " style="margin-top: 15px;">
 			  <section class="content_list">
                 <table id="track-table" class="table table-hover table-bordered" style="margin-top: 5px">

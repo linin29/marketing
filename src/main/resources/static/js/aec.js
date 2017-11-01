@@ -12,24 +12,14 @@ aec = (function(){
 			queryTask();
 		});
 		$("#download").click(function(){
-			var majorType = $("#majorType").val();
-			var startTime = $("#fromDate").val();
-			var endTime = $("#toDate").val();
-			if(!majorType){
-				 noty({text: '请选择品类', layout: "topCenter", type: "warning", timeout: 2000});
-				 return;
-			}
+			var data = {taskIds:checkedIds};
 			$.ajax({
-				 type: 'GET',
+				 type: 'POST',
 				 url: marketing_url + '/aec/download',
-				 data:{
-					 startTime:startTime,
-					 endTime:endTime,
-					 majorType:majorType
-				 },
+				 data: JSON.stringify(data),
 				 success: function(data) {
 				 	if(data && data.success && data.data > 0){
-				 		window.open(marketing_url +"/exportData?majorType=" + majorType+"&startTime=" + startTime + "&endTime=" + endTime);  
+				 		//window.open(marketing_url +"/exportData?majorType=" + majorType+"&startTime=" + startTime + "&endTime=" + endTime);  
 				 	}else{
 				 		noty({text: '当前品类无可导出数据', layout: "topCenter", type: "warning", timeout: 2000});
 				 		return;
@@ -61,7 +51,7 @@ aec = (function(){
 		    endDate : new Date()
 		}).on('changeDate',function(e){
 		    var d = e.date;  
-		    $('.form_datetime2').datetimepicker('setStartDate',d);
+		    $('.form_datetime2').datetimepicker('setStartDate', d);
 		});
 		$('.form_datetime2').datetimepicker({
 		    language: 'zh-CN',
@@ -70,7 +60,7 @@ aec = (function(){
 		    endDate : new Date()
 		}).on('changeDate',function(e){
 		    var d = e.date;  
-		    $('.form_datetime1').datetimepicker('setEndDate',d);
+		    $('.form_datetime1').datetimepicker('setEndDate', d);
 		    var end = d.setDate(d.getDate() - 2);
 		    var newdata = moment(d);
 		});

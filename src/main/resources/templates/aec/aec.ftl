@@ -33,7 +33,7 @@
                </div>
        	 	</div>
     	</div>
-         <div style="display:inline-block;margin-top:10px;margin-left:109px;">
+         <div style="display:inline-block;margin-top:10px;margin-left:10%;">
              <button class='btn btn-success' id="query">查询</button>
              <button class='btn btn-success' id="download" style="margin-left: 8px;">下载</button>
          </div>

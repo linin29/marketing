@@ -897,10 +897,11 @@ public class TaskService {
 	}
 
 	public ServiceResponseBO aecUpload(MultipartFile zipFile) {
-		String basePath = String.format("%s%s%s%s%s%s",
+/*		String basePath = String.format("%s%s%s%s%s%s",
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
-				MarketingConstants.AEC_PATH, File.separator, MarketingConstants.UPLOAD_PATH);
+				MarketingConstants.AEC_PATH, File.separator, MarketingConstants.UPLOAD_PATH);*/
+		String basePath = "D:\\aec";
 		CommonAjaxResponse ajaxResponse = null;
 		try {
 			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
@@ -929,7 +930,7 @@ public class TaskService {
 					TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
 					ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
 					ajaxResponse = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
-					xmlFile.delete();
+					//xmlFile.delete();
 				}
 			}
 			zin.closeEntry();

@@ -111,6 +111,7 @@ aec = (function(){
 					}
 					var tasks = resp.data.tasks;
 					if(tasks.length == 0){
+						$('#track-table').find('tbody').html("");
 						$("#table_paginator").hide();
 						return;
 					}

@@ -39,7 +39,8 @@
 	    		</div>
 		         <div class="text-right" style="padding-top:19px;">
 		             <button class='btn btn-success' id="query">查询</button>
-		             <button class='btn btn-success' id="download" style="margin-left: 8px;">下载</button>
+		             <button class='btn btn-success' id="download" style="margin-left: 20px;">下载</button>
+		              <button class='btn btn-success' id="upload" style="margin-left: 8px;">文件上传</button>
 		         </div>
                 <table id="track-table" class="table table-hover table-bordered" style="margin-top: 5px">
                   <#if tasks?? && (tasks?size > 0)>

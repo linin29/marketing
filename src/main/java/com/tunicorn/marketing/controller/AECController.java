@@ -97,21 +97,19 @@ public class AECController extends BaseController {
 				ZipUtils.doCompress(aecBO.getImage(), out);
 				ZipUtils.doCompress(aecBO.getAnnotationXML(), out);
 				response.flushBuffer();
-			} 
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			out.close();
 		}
 	}
-	
+
 	@RequestMapping(value = "/aec/upload", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse upload(HttpServletRequest request,
 			@RequestParam(value = "zipFile", required = false) MultipartFile zipFile) {
-		UserVO user = getCurrentUser(request);
-
-		ServiceResponseBO response =null;
+		ServiceResponseBO response = taskService.aecUpload(zipFile);;
 		if (response.isSuccess()) {
 			return CommonAjaxResponse.toSuccess(response.getResult());
 		} else {

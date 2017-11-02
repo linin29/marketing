@@ -110,4 +110,5 @@ public class MarketingConstants {
 	public static final String CORE_SERVER_MARKETING_PRICE_IDENTIFY_URL = "/priceIdentify";
 	
 	public static final String AEC_PATH = "aec";
+	public static final String UPLOAD_PATH = "upload";
 }

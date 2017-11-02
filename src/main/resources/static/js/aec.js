@@ -177,7 +177,7 @@ aec = (function(){
         	  }
               checkAll.prop('checked', tbr.find('input:checked').length == tbr.length ? true : false);  
               event.stopPropagation(); 
-              console.log(checkedIds.length);
+              //console.log(checkedIds.length);
           });  
           tbr.click(function(){  
               $(this).find('input').click();  

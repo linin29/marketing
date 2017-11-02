@@ -28,9 +28,11 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,7 +76,6 @@ import com.tunicorn.marketing.mapper.TaskMapper;
 import com.tunicorn.marketing.mapper.UserMapper;
 import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.utils.MarketingStorageUtils;
-import com.tunicorn.marketing.utils.ZipUtils;
 import com.tunicorn.marketing.vo.ApiCallingDetailVO;
 import com.tunicorn.marketing.vo.ApiCallingSummaryVO;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
@@ -855,7 +856,8 @@ public class TaskService {
 							bufferedImage = ImageIO.read(new File(taskImagesVO.getFullPath()));
 							int width = bufferedImage.getWidth();
 							int height = bufferedImage.getHeight();
-							//String imageFilePath = "E:\\aec\\" + taskImagesVO.getId() + ".jpg";
+							// String imageFilePath = "E:\\aec\\" +
+							// taskImagesVO.getId() + ".jpg";
 							String imageFilePath = String.format("%s%s%s%s%s%s%s%s",
 									com.tunicorn.util.ConfigUtils.getInstance()
 											.getConfigValue("storage.private.basePath"),
@@ -864,7 +866,8 @@ public class TaskService {
 									File.separator, taskImagesVO.getId() + ".jpg");
 
 							FileUtils.copyFile(new File(taskImagesVO.getFullPath()), new File(imageFilePath));
-							//String xmlFilePath = "E:\\aec\\" + taskImagesVO.getId() + ".xml";
+							// String xmlFilePath = "E:\\aec\\" +
+							// taskImagesVO.getId() + ".xml";
 							String xmlFilePath = String.format("%s%s%s%s%s%s%s%s",
 									com.tunicorn.util.ConfigUtils.getInstance()
 											.getConfigValue("storage.private.basePath"),
@@ -877,9 +880,9 @@ public class TaskService {
 							cropBO.setImageId(taskImagesVO.getId());
 							cropBO.setMajorType(taskVO.getMajorType());
 							cropBO.setOrder(taskImagesVO.getOrderNo());
-							cropBO.setImageCrop(getImageCrops(taskVO,taskImagesVO.getOrderNo()));
+							cropBO.setImageCrop(getImageCrops(taskVO, taskImagesVO.getOrderNo()));
 							generateXmlFile(cropBO, xmlFilePath, width, height);
-							
+
 							aecBO.setImage(imageFilePath);
 							aecBO.setAnnotationXML(xmlFilePath);
 							aecBOs.add(aecBO);
@@ -892,8 +895,129 @@ public class TaskService {
 		}
 		return aecBOs;
 	}
-	
-	private ArrayNode getImageCrops(TaskVO taskVO, int imageOrder){
+
+	public ServiceResponseBO aecUpload(MultipartFile zipFile) {
+		String basePath = String.format("%s%s%s%s%s%s",
+				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
+				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
+				MarketingConstants.AEC_PATH, File.separator, MarketingConstants.UPLOAD_PATH);
+		CommonAjaxResponse ajaxResponse = null;
+		try {
+			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
+			ZipEntry ze;
+			while ((ze = zin.getNextEntry()) != null) {
+				if (!ze.isDirectory()) {
+					File xmlFile = new File(basePath + File.separator + ze.getName());
+					if (!xmlFile.exists()) {
+						xmlFile.createNewFile();
+					}
+					FileOutputStream fos = new FileOutputStream(xmlFile);
+
+					int len = 0;
+					byte b[] = new byte[1024];
+					while ((len = zin.read(b)) != -1) {
+						fos.write(b, 0, len);
+					}
+					fos.close();
+
+					int zeIndex = ze.getName().indexOf("/");
+					String taskImageId = "";
+					if (zeIndex > 0) {
+						taskImageId = ze.getName().substring(zeIndex + 1);
+					}
+					TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(taskImageId);
+					TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
+					ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
+					ajaxResponse = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
+					xmlFile.delete();
+				}
+			}
+			zin.closeEntry();
+			return new ServiceResponseBO(ajaxResponse);
+		} catch (IOException e) {
+			return new ServiceResponseBO(false, "marketing_save_upload_file_error");
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private ArrayNode parseXml(File xmlFile, String majorType) {
+
+		SAXReader saxReader = new SAXReader();
+		ObjectMapper mapper = new ObjectMapper();
+		ArrayNode arrayNode = mapper.createArrayNode();
+		Document document;
+		try {
+			document = saxReader.read(xmlFile);
+
+			Element root = document.getRootElement();
+			List<Element> objectList = root.elements("object");
+			if (objectList != null && objectList.size() > 0) {
+				for (Element element : objectList) {
+					String name = element.attributeValue("name");
+
+					Element bndboxElement = element.element("bndbox");
+					String xmin = bndboxElement.attributeValue("xmin");
+					String ymin = bndboxElement.attributeValue("ymin");
+					String xmax = bndboxElement.attributeValue("xmax");
+					String ymax = bndboxElement.attributeValue("ymax");
+
+					ObjectNode node = mapper.createObjectNode();
+
+					GoodsSkuBO goodsSkuBO = new GoodsSkuBO();
+					goodsSkuBO.setName(name);
+					goodsSkuBO.setMajorType(majorType);
+
+					List<GoodsSkuVO> goodsSkuVOs = goodsSkuMapper.getGoodsSkuListByBO(goodsSkuBO);
+					if (goodsSkuVOs != null && goodsSkuVOs.size() > 0) {
+						node.put("label", goodsSkuVOs.get(0).getOrder() + 1);
+					}
+
+					node.put("x", xmin);
+					node.put("y", ymin);
+					if (StringUtils.isNotBlank(xmin) && StringUtils.isNotBlank(xmax)) {
+						node.put("width", Integer.valueOf(xmax) - Integer.valueOf(xmin));
+					}
+					if (StringUtils.isNotBlank(ymin) && StringUtils.isNotBlank(ymax)) {
+						node.put("height", Integer.valueOf(ymax) - Integer.valueOf(ymin));
+					}
+					arrayNode.add(node);
+				}
+			}
+
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+		return arrayNode;
+	}
+
+	private CommonAjaxResponse updateTaskGoodInfoAndRectify(ArrayNode arrayNode, TaskVO taskVO, int imageOrder) {
+		CommonAjaxResponse ajaxResponse = null;
+		String result = (String) taskVO.getResult();
+		if (StringUtils.isNotBlank(result)) {
+			ObjectMapper mapper = new ObjectMapper();
+			ObjectNode nodeResult;
+			try {
+				nodeResult = (ObjectNode) mapper.readTree(result);
+				if (nodeResult.findValue("goodInfo") != null) {
+					ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodInfo");
+					ObjectNode jsonNode = (ObjectNode) jsonNodes.get(imageOrder - 1);
+					jsonNode.set("rect", arrayNode);
+					taskVO.setGoodsInfo(jsonNodes.toString());
+					int updateResult = taskMapper.updateTask(taskVO);
+					if (updateResult > 0) {
+						ajaxResponse = rectify(taskVO.getId());
+					}
+					logger.info("taskId:" + taskVO.getId() + ", aecUpload result: " + updateResult);
+				}
+
+			} catch (IOException e) {
+				logger.error("taskId:" + taskVO.getId() + ", aecUpload fail, " + e.getMessage());
+			}
+		}
+		return ajaxResponse;
+	}
+
+	private ArrayNode getImageCrops(TaskVO taskVO, int imageOrder) {
 		if (taskVO != null) {
 			String result = (String) taskVO.getResult();
 			String goodInfo = taskVO.getGoodsInfo();

@@ -47,24 +47,12 @@ aec = (function(){
 	 		 });
 	 	});
 		$("#download").click(function(){
-			var data = {taskIds:checkedIds};
-			$.ajax({
-				 type: 'POST',
-				 url: marketing_url + '/aec/download',
-				 data: JSON.stringify(data),
-				 success: function(data) {
-				 	if(data && data.success && data.data > 0){
-				 		//window.open(marketing_url +"/exportData?majorType=" + majorType+"&startTime=" + startTime + "&endTime=" + endTime);  
-				 	}else{
-				 		noty({text: '当前品类无可导出数据', layout: "topCenter", type: "warning", timeout: 2000});
-				 		return;
-				 	}
-		    	},
-		    	error: function(data) {
-		    		//返回500错误页面
-		    		$("html").html(data.responseText);
-		    	}
-			});
+			if(checkedIds && checkedIds.length > 0){
+				window.open(marketing_url +"/aec/download?taskIds=" + checkedIds.toString());
+			}else{
+				noty({text: '请选择任务进行下载', layout: "topCenter", type: "warning", timeout: 2000});
+		 		return;
+			}
 		}); 
 	};
 	function initDate() {

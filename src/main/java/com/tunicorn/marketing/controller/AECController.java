@@ -84,18 +84,35 @@ public class AECController extends BaseController {
 		return CommonAjaxResponse.toSuccess(results);
 	}
 
-	@RequestMapping(value = "/aec/download", method = RequestMethod.POST)
-	public void download(HttpServletRequest request, HttpServletResponse response, @RequestBody TaskBO taskBO)
+	@RequestMapping(value = "/aec/download", method = RequestMethod.GET)
+	public void download(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		String zipName = "E:\\aec\\myfile.zip";
-		List<AecBO> fileList = taskService.getAecsByTaskIds(taskBO.getTaskIds());
-		response.setContentType("application/octet-stream");
+		SimpleDateFormat dfs = new SimpleDateFormat("yyyyMMddHHmmss");
+		Date time = new Date();
+		String formatTime = dfs.format(time);
+		String zipName = "aec_" + formatTime + ".zip";
+		
+		String taskIdStr = request.getParameter("taskIds");
+		String[] taskIds = taskIdStr.split(",");
+		List<AecBO> fileList = taskService.getAecsByTaskIds(taskIds);
+		
+		response.setHeader("contentType", "text/html; charset=utf-8");
 		response.setHeader("Content-Disposition", "attachment; filename=" + zipName);
+		
+		response.setContentType("application/octet-stream");
+		
 		ZipOutputStream out = new ZipOutputStream(response.getOutputStream());
 		try {
 			for (AecBO aecBO : fileList) {
 				ZipUtils.doCompress(aecBO.getImage(), out);
 				ZipUtils.doCompress(aecBO.getAnnotationXML(), out);
+				
+				/*File imageFile = new File(aecBO.getImage());
+				File xmlFile = new File(aecBO.getAnnotationXML());
+				
+				imageFile.delete();
+				xmlFile.delete();*/
+				
 				response.flushBuffer();
 			}
 		} catch (Exception e) {
@@ -109,7 +126,7 @@ public class AECController extends BaseController {
 	@ResponseBody
 	public CommonAjaxResponse upload(HttpServletRequest request,
 			@RequestParam(value = "zipFile", required = false) MultipartFile zipFile) {
-		ServiceResponseBO response = taskService.aecUpload(zipFile);;
+		ServiceResponseBO response = taskService.aecUpload(zipFile);
 		if (response.isSuccess()) {
 			return CommonAjaxResponse.toSuccess(response.getResult());
 		} else {
@@ -117,4 +134,13 @@ public class AECController extends BaseController {
 			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
 	}
+	
+/*	private List<AecBO> getAecBOList(){
+		List<AecBO> fileList = new ArrayList<AecBO>();
+		AecBO aecBO = new AecBO();
+		aecBO.setAnnotationXML("D:\\雀巢咖啡0831-410\\雀巢咖啡0831-410\\nco00380.xml");
+		aecBO.setImage("D:\\雀巢咖啡0831-410\\雀巢咖啡0831-410\\nco00380.jpg");
+		fileList.add(aecBO);
+		return fileList;
+	}*/
 }

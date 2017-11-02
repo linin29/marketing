@@ -887,7 +887,7 @@ public class TaskService {
 							aecBO.setAnnotationXML(xmlFilePath);
 							aecBOs.add(aecBO);
 						} catch (IOException e) {
-							e.printStackTrace();
+							logger.error("getAecsByTaskIds method 获取指定任务的标记信息失败, "+ e.getMessage());
 						}
 					}
 				}

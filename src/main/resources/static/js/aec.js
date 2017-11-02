@@ -1,7 +1,7 @@
 var marketing_url = '/marketing';
 var aec = aec || {};
 aec = (function(){
-	var checkedIds= [];
+	var checkedIds = [];
 	function init(currentPage, totalCount){
 		initDate();
 		initTableCheckbox();
@@ -9,6 +9,8 @@ aec = (function(){
 			initPagination(currentPage, totalCount);
 		}
 		$("#query").click(function(){
+			$('table thead tr').find("input").prop('checked', false);
+			checkedIds = [];
 			queryTask();
 		});
 		$("#download").click(function(){
@@ -88,7 +90,7 @@ aec = (function(){
 					}
 					var tasks = resp.data.tasks;
 					if(tasks.length ==0){
-						$('#track-table').find('tbody').html('<p id="noCaptureMsg" style="text-align: center;">当前没有任何查询信息</p>');
+						$('#track-table').html('<p id="noCaptureMsg" style="text-align: center;">当前没有任何查询信息</p>');
 						$("#table_paginator").hide();
 						return;
 					}
@@ -101,7 +103,7 @@ aec = (function(){
             						'<td>' + item.majorType + '</td>'+
             						'<td>' + item.lastUpdateTimeStr + '</td>'+
             						'<td>'+
-            							'<a href="javascript:void(0);" onclick="getTaskDetail(' + item.id + ')" class="ajax-link">查看</a>'+
+            							'<a href="javascript:void(0);" onclick="getTaskDetail(\'' + item.id + '\')" class="ajax-link">查看</a>'+
             						'</td>'+
             					'</tr>';
 					});
@@ -175,14 +177,12 @@ aec = (function(){
         	             }
         	         }
         	  }
-              checkAll.prop('checked', tbr.find('input:checked').length == tbr.length ? true : false);  
+              checkAll.prop('checked', tbr.find('input:checked').length == tbr.length ? true : false);
+              console.log(checkedIds.length);
               event.stopPropagation(); 
-              //console.log(checkedIds.length);
-          });  
-          tbr.click(function(){  
-              $(this).find('input').click();  
           });  
       };
+      
       function setChecked(){
           var boxes = $('table tbody tr').find("input");
           for(var i = 0; i < boxes.length; i++){

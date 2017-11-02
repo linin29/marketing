@@ -42,6 +42,7 @@
 		             <button class='btn btn-success' id="download" style="margin-left: 8px;">下载</button>
 		         </div>
                 <table id="track-table" class="table table-hover table-bordered" style="margin-top: 5px">
+                  <#if tasks?? && (tasks?size > 0)>
               		<thead>
                     	<tr style="background-color:#ddd;">
                     		<th><input type="checkbox" id="checkAll" name="checkAll" /></th>
@@ -49,12 +50,10 @@
 	                    	<th style='width:20%;'>任务ID</th>
 	                    	<th style='width:20%;'>类型</th>
 	                    	<th style='width:20%;'>更新时间</th>
-	                    	<!-- <th style='width:10%;'>状态</th> -->
 	                    	<th style='width:10%;'>操作</th>
                    	 	</tr>
               		</thead>
                 	<tbody>
-	                    <#if tasks?? && (tasks?size > 0)>
 		                   <#list tasks as task>
 	                    		<tr class='tabelCenter data'>
 	                    			<td><input id="${task.id}" type="checkbox" name="checkItem" /></td>
@@ -62,14 +61,15 @@
                        				<td>${task.id!""}</td>
                       				<td>${task.majorType!""}</td>
                       				<td>${task.lastUpdateTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
-                      				<!-- <td>${task.taskStatus!""}</td> -->
 	                    			<td>
 	                    				<a href="javascript:void(0);" onclick="getTaskDetail('${task.id}')" class="ajax-link">查看</a>
 	                    			</td>
 	                   			</tr>
 	                   		</#list>
-	                   	</#if>
                     </tbody>
+                   <#else>
+	                 <p id="noCaptureMsg" style="text-align: center;">当前没有任何查询信息</p>
+	             </#if>
                 </table>               
                <div id="table_paginator" style="margin-top: -10px; margin-bottom: -10px; text-align:center; display:block;"></div>
               </section>

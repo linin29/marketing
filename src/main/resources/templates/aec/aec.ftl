@@ -44,7 +44,6 @@
 					 <input type="file" id="file_select" style="display:none;"/>
 		         </div>
                 <table id="track-table" class="table table-hover table-bordered" style="margin-top: 5px">
-                  <#if tasks?? && (tasks?size > 0)>
               		<thead>
                     	<tr style="background-color:#ddd;">
                     		<th><input type="checkbox" id="checkAll" name="checkAll" /></th>
@@ -56,6 +55,7 @@
                    	 	</tr>
               		</thead>
                 	<tbody>
+                		<#if tasks?? && (tasks?size > 0)>
 		                   <#list tasks as task>
 	                    		<tr class='tabelCenter data'>
 	                    			<td><input id="${task.id}" type="checkbox" name="checkItem" /></td>
@@ -68,10 +68,8 @@
 	                    			</td>
 	                   			</tr>
 	                   		</#list>
+	                   	</#if>
                     </tbody>
-                   <#else>
-	                 <p id="noCaptureMsg" style="text-align: center;">当前没有任何查询信息</p>
-	             </#if>
                 </table>               
                <div id="table_paginator" style="margin-top: -10px; margin-bottom: -10px; text-align:center; display:block;"></div>
               </section>

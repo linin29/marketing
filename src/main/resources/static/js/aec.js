@@ -110,8 +110,7 @@ aec = (function(){
 						return;
 					}
 					var tasks = resp.data.tasks;
-					if(tasks.length ==0){
-						$('#track-table').html('<p id="noCaptureMsg" style="text-align: center;">当前没有任何查询信息</p>');
+					if(tasks.length == 0){
 						$("#table_paginator").hide();
 						return;
 					}

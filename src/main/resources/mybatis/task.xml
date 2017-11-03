@@ -15,6 +15,7 @@
 		<result column="major_type" property="majorType" jdbcType="VARCHAR" />
 		<result column="goods_info" property="goodsInfo" jdbcType="VARCHAR" />
 		<result column="identify_success_times" property="identifySuccessTimes" jdbcType="INTEGER" />
+		<result column="majorTypeName" property="majorTypeName" jdbcType="VARCHAR" />
 	</resultMap>
 
    <insert id="createTask" parameterType="com.tunicorn.marketing.vo.TaskVO">
@@ -82,34 +83,37 @@
   </insert>
 
 	<select id="getTaskList" resultMap="TaskResultMap" parameterType="com.tunicorn.marketing.bo.TaskBO">
-		select id, id as _id,  `name`, task_status, task_status as status, user_id, user_id as author,
-		 create_time,create_time as createdAt, stitch_image_path, result, rows, major_type,last_update as updatedAt,
-		 last_update as lastUpdateTime,identify_success_times
-		from task
-		where `status` = 'active'
-		<if test="userId != null and userId != ''">
-			and user_id = #{userId}
-		</if>
-		<if test="id != null and id != ''">
-			and id = #{id}
-		</if>
-		<if test="name != null and name != ''">
-			and `name` like concat(concat('%',#{name}),'%')
-		</if>
-		<if test="majorType != null and majorType != ''">
-			and `major_type` = #{majorType}
-		</if>
-		<if test="taskStatus != null and taskStatus != ''">
-			and `task_status` = #{taskStatus}
-		</if>
-		<if test="startTime != null and startTime != ''">
-    		and last_update <![CDATA[ >= #{startTime}]]> 
-    	</if>
-    	<if test="endTime != null and endTime != ''">
-    		and last_update <![CDATA[ <= #{endTime}]]> 
-    	</if>
-		order by last_update desc
-		limit #{startNum}, #{perPage}
+		SELECT task.*, m.description as majorTypeName from
+			(select t.id, t.id as _id,  t.`name`, t.task_status, t.task_status as status, t.user_id, t.user_id as author,
+				t.create_time, t.create_time as createdAt, t.stitch_image_path, t.result, t.rows, t.major_type,
+		 		t.last_update as updatedAt, t.last_update as lastUpdateTime, t.identify_success_times
+				from task t
+				where t.`status` = 'active'
+				<if test="userId != null and userId != ''">
+					and t.user_id = #{userId}
+				</if>
+				<if test="id != null and id != ''">
+					and t.id = #{id}
+				</if>
+				<if test="name != null and name != ''">
+					and t.`name` like concat(concat('%',#{name}),'%')
+				</if>
+				<if test="majorType != null and majorType != ''">
+					and t.`major_type` = #{majorType}
+				</if>
+				<if test="taskStatus != null and taskStatus != ''">
+					and t.`task_status` = #{taskStatus}
+				</if>
+				<if test="startTime != null and startTime != ''">
+    				and t.last_update <![CDATA[ >= #{startTime}]]> 
+    			</if>
+    			<if test="endTime != null and endTime != ''">
+    				and t.last_update <![CDATA[ <= #{endTime}]]> 
+    			</if>
+				order by t.last_update desc
+				limit #{startNum}, #{perPage}
+			) task 
+			left join major_type m on m.name=task.major_type
 	</select>
 	<select id="getTaskListByVO" resultMap="TaskResultMap" parameterType="com.tunicorn.marketing.vo.TaskVO">
 		select id, `name`, task_status, user_id, create_time,

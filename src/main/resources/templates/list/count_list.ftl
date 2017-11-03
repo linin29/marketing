@@ -5,12 +5,12 @@
     		<input id="startTime" type="hidden" <#if startDate??> value="${startDate}"</#if>>
 			<input id="endTime" type="hidden" <#if endDate??> value="${endDate}"</#if>>
 		 	<div style="float: left; width: 10%;line-height:34px;">时间段：</div>
-		 	<div style="float: left; width: 35%;" class="form-group input-group date form_datetime1" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
+		 	<div style="float: left; width: 28%;" class="form-group input-group date form_datetime1" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
 		        <input class="form-control" size="16" type="text" value="" id="startDate">
 		        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 		    </div>
 		    <div  style="float: left;line-height: 34px" class="form-group glyphicon glyphicon-minus"></div>
-		     <div style="float: left;  width: 35%;" class=" input-group date form_datetime2" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
+		     <div style="float: left;  width: 28%;" class=" input-group date form_datetime2" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
 		        <input class="form-control" size="16" type="text" value="" id="endDate">
 		        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 		    </div>
@@ -43,96 +43,11 @@
         <div id="table_paginator" style="margin-top: -10px; margin-bottom: -10px; text-align:center; display:block;"></div>
     </section>
 </div>
-<script>
-var PAGINATION_ITEMS_PER_PAGE = 20;
-$(function() {
-	function initPagination(currentPage, totalCount) {
-		var options = {
-			alignment: 'center',
-	        currentPage: currentPage,
-	        totalPages: Math.ceil(totalCount / PAGINATION_ITEMS_PER_PAGE),
-	        numberOfPages: PAGINATION_ITEMS_PER_PAGE,
-	        onPageClicked: function (event, originalEvent, type, page) {
-	        	searchApiCalling(page);
-	        }
-		};
-		
-		$('#table_paginator').bootstrapPaginator(options);
-		$("#table_paginator").show();
-	}
-	
-	if(${totalCount} != 0){
-		initPagination(${currentPage}, ${totalCount?c});
-	}else{
-		$("#table_paginator").hide();
-	}
-	initDate();
-	
-	$('#query').click(function(){
-		searchApiCalling(1);
+<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/count_list.js"></script>
+<script type="text/javascript">
+	$(function() {	
+		var currentPage="${currentPage}";
+		var count="${totalCount?c}";
+		countList._init(currentPage,count);
 	});
-});
-function initDate() {
-	var current = moment();
-	var startTime = $("#startTime").val();
-	var endTime = $("#endTime").val();
-	$("#endDate").val(current.format('YYYY-MM-DD'));
-    $("#startDate").val(current.subtract(5, 'days').format('YYYY-MM-DD'));
-    if(startTime){
-    	$("#startDate").val(startTime);
-    }
-    if(endTime){
-    	$("#endDate").val(endTime);
-    }
-	//时间段显示
-	$('.form_datetime1').datetimepicker({
-	    language: 'zh-CN',
-	    autoclose:true,
-	    endDate : new Date(),
-	    minView : 2
-	}).on('changeDate',function(e){
-		var d=e.date;  
-		$('.form_datetime2').datetimepicker('setStartDate',d);
-	});
-	$('.form_datetime2').datetimepicker({
-	    language: 'zh-CN',
-	    autoclose:true, //选择日期后自动关闭
-	    startDate: $("#startDate").val(),
-	    endDate : new Date(),
-	    minView : 2
-	}).on('changeDate',function(e){
-	    var d=e.date;  
-	    $('.form_datetime1').datetimepicker('setEndDate',d);
-	    var end=d.setDate(d.getDate()-2);
-	    var newdata=moment(d);
-	});
-	
-};
-function searchApiCalling(pageNum) {
-	if (pageNum) {
-		pageNum = pageNum - 1;
-	}else{
-		pageNum = 0;
-	}
-	var startDate = $('#startDate').val();
-	var endDate = $('#endDate').val();
-	var data = {
-		perPage: PAGINATION_ITEMS_PER_PAGE,
-		pageNum: pageNum,
-		startDate: startDate,
-		endDate: endDate
-	}
-	$.ajax({
-		 type: 'GET',
-		 data: data,
-		 url: '${springMacroRequestContext.contextPath}/calling',
-		 success: function(data) {
-		 	$("#content").html(data);
-    	},
-    	error: function(data) {
-    		//返回500错误页面
-    		$("html").html(data.responseText);
-    	}
-	});
-}
 </script>

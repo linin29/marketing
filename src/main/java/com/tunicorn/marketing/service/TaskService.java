@@ -142,9 +142,10 @@ public class TaskService {
 			List<TaskImagesVO> taskImagesVOs = new ArrayList<TaskImagesVO>();
 			for (int i = 0; i < images.size(); i++) {
 				TaskImagesVO taskImagesVO = new TaskImagesVO();
-				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, createTaskVO.getId(),
-						tempTaskVO.getCreateTime(), ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"),
-						false);
+
+				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, createTaskVO.getId(),tempTaskVO.getCreateTime(),
+						ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
+
 				if (file == null) {
 					return new ServiceResponseBO(false, "marketing_save_upload_file_error");
 				}
@@ -711,7 +712,7 @@ public class TaskService {
 	public int getTempTaskCount(TaskBO taskBO) {
 		return taskMapper.getTempTaskCount(taskBO);
 	}
-
+	
 	public TaskVO getTaskById(String taskId) {
 		return taskMapper.getTaskById(taskId);
 	}
@@ -1110,7 +1111,7 @@ public class TaskService {
 		String xmlFilePath = String.format("%s%s%s%s%s%s%s%s",
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
-				cropBO.getMajorType(), File.separator, MarketingConstants.CROP_TXT_PATH, File.separator,
+				cropBO.getMajorType(), File.separator, MarketingConstants.CROP_XML_PATH, File.separator,
 				cropBO.getImageId() + ".xml");
 		File imageFile;
 		TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(cropBO.getImageId());
@@ -1245,9 +1246,10 @@ public class TaskService {
 			TaskVO taskVO = taskMapper.getTaskById(taskId);
 			for (int i = 0; i < images.size(); i++) {
 				TaskImagesVO taskImagesVO = new TaskImagesVO();
-				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, taskId,
-						taskVO.getCreateTime(), ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"),
-						false);
+
+				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, taskId, taskVO.getCreateTime(),
+						ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
+
 				if (file == null) {
 					logger.error("taskId:" + taskId + ", save form-data file failure");
 					return -1;

@@ -129,5 +129,4 @@ public class TaskImagesVO {
 	public void setTask(TaskVO task) {
 		this.task = task;
 	}
-
 }

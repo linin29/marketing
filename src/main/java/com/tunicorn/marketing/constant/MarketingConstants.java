@@ -76,9 +76,10 @@ public class MarketingConstants {
 	public static final String MARKETING_IMAGE_BASE_PATH = com.tunicorn.util.ConfigUtils.getInstance().getConfigValue(
 			"storage.private.basePath") + ConfigUtils.getInstance().getConfigValue("marketing.image.root.path");
 	public static final String TIANNUO_PASSWORD = "tiannuo";
-	
+
 	public static final String UTF8 = "UTF-8";
-	public static final String ISO88991= "iso-8859-1";
+	public static final String ISO88991 = "iso-8859-1";
+	public static final String GBK = "GBK";
 
 	public static final String APPLY_CREATED_STATUS = "created";
 	public static final String APPLY_OPENED_STATUS = "opened";
@@ -93,19 +94,30 @@ public class MarketingConstants {
 	public static final String ADMIN_USER_NAME = "admin";
 
 	public static final String INNOVISION = "innovision";
-	
-	public static final String BROWSER_IE= "IE";
-	public static final String BROWSER_FIREFOX= "FF";
-	public static final String BROWSER_SAFARI= "SF";
-	
+
+	public static final String BROWSER_IE = "IE";
+	public static final String BROWSER_FIREFOX = "FF";
+	public static final String BROWSER_SAFARI = "SF";
+
 	public static final String USER_AGENT = "USER-AGENT";
-	
-	public static final String BATCH_ZIP_PATH = "static" + File.separator + "zip" + File.separator  + "batch_zip.zip";
+
+	public static final String BATCH_ZIP_PATH = "static" + File.separator + "zip" + File.separator + "batch_zip.zip";
 	public static final String BATCH_ZIP_NAME = "batch_zip.zip";
-	
+
 	public static final String CROP_IMAGE_PATH = "JPEGImages";
-	public static final String CROP_TXT_PATH = "Annotations";
-	
+
+	public static final String CROP_XML_PATH = "Annotations";
+
 	public static final String PRICE_IDENTIFY = "priceIdentify";
 	public static final String CORE_SERVER_MARKETING_PRICE_IDENTIFY_URL = "/priceIdentify";
+
+	public static final String UPLOAD_PATH = "upload";
+	public static final String ZIP_PATH = "zip";
+
+	public static final int BATCH_INSERT_SIZE = Integer
+			.parseInt(ConfigUtils.getInstance().getConfigValue("marketing.batch.insert.size"));
+
+	public static final String REMOTE_SSH_RETURN = "tunicorn ret success";
+
+	public static final String DATE_PATTERN = "yyyyMMdd";
 }

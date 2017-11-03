@@ -47,7 +47,7 @@ public class MarketingApplication extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public MultipartConfigElement multipartConfigElement() {
-		String size = ConfigUtils.getInstance().getConfigValue("file.upload.size");
+		String size = ConfigUtils.getInstance().getConfigValue("file.upload.total.size");
 		String total = ConfigUtils.getInstance().getConfigValue("file.upload.total.size");
 		//String location = ConfigUtils.getInstance().getConfigValue("file.upload.storage");
 

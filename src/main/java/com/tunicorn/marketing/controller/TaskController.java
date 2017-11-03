@@ -47,6 +47,7 @@ import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.GoodsSkuService;
 import com.tunicorn.marketing.service.TaskService;
+import com.tunicorn.marketing.service.TrainingDataService;
 import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
@@ -63,6 +64,8 @@ public class TaskController extends BaseController {
 	private TaskService taskService;
 	@Autowired
 	private GoodsSkuService goodsSkuService;
+	@Autowired
+	private TrainingDataService trainingDataService;
 
 	@RequestMapping(value = "/batch_import", method = RequestMethod.GET)
 	public String batch_import(HttpServletRequest request, Model model) {
@@ -233,6 +236,7 @@ public class TaskController extends BaseController {
 		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
 		int totalCount = taskService.getTaskCount(taskBO);
 
+		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
 		model.addAttribute("tasks", taskVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", 1);
@@ -365,9 +369,15 @@ public class TaskController extends BaseController {
 			model.addAttribute("taskId", taskId);
 			taskBO.setId(taskId);
 		}
+		if (StringUtils.isNotBlank(request.getParameter("majorType"))) {
+			String majorType = request.getParameter("majorType");
+			model.addAttribute("majorType", majorType);
+			taskBO.setMajorType(majorType);
+		}
 		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
 		int totalCount = taskService.getTaskCount(taskBO);
 
+		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
 		model.addAttribute("tasks", taskVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", taskBO.getPageNum() + 1);
@@ -621,9 +631,9 @@ public class TaskController extends BaseController {
 	@RequestMapping(value = "/showView/tasks", method = RequestMethod.GET)
 	public String Temptasks(HttpServletRequest request, Model model) {
 
-		TaskBO taskBO = new TaskBO();
+		TaskBO taskBO = new TaskBO();		
 		String majorType = ConfigUtils.getInstance().getConfigValue("marketing.temp.major.type");
-		if (StringUtils.isNotBlank(majorType)) {
+		if(StringUtils.isNotBlank(majorType)){
 			String[] majorTypeArray = majorType.split(",");
 			taskBO.setMajorTypeArray(majorTypeArray);
 		}
@@ -644,7 +654,8 @@ public class TaskController extends BaseController {
 	public String tempSearchTask(HttpServletRequest request, Model model) {
 		TaskBO taskBO = new TaskBO();
 		String majorType = ConfigUtils.getInstance().getConfigValue("marketing.temp.major.type");
-		if (StringUtils.isNotBlank(majorType)) {
+		
+		if (StringUtils.isNotBlank(majorType)){
 			String[] majorTypeArray = majorType.split(",");
 			taskBO.setMajorTypeArray(majorTypeArray);
 		}
@@ -673,7 +684,28 @@ public class TaskController extends BaseController {
 		model.addAttribute("currentPage", taskBO.getPageNum() + 1);
 		return "list/task_list_temp";
 	}
+	
+	@RequestMapping(value = "/fileUpload", method = RequestMethod.GET)
+	public String fileUpload(HttpServletRequest request, Model model) {
+		return "list/file_upload";
+	}
+	
+	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
+	@ResponseBody
+	public CommonAjaxResponse zipUpload(HttpServletRequest request,
+			@RequestParam(value = "zipFiles", required = false) List<MultipartFile> zipFiles, Model model) {
+		UserVO user = getCurrentUser(request);
+		model.addAttribute("user", user);
 
+		ServiceResponseBO response = trainingDataService.upload(zipFiles);
+		if (response.isSuccess()) {
+			return CommonAjaxResponse.toSuccess(response.getResult());
+		} else {
+			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
+			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
+	}
+	
 	@RequestMapping(value = "/showMarkPage/{taskId}", method = RequestMethod.GET)
 	public String showMarkPage(@PathVariable("taskId") String taskId, Model model, HttpServletRequest request) {
 		UserVO user = getCurrentUser(request);
@@ -707,7 +739,7 @@ public class TaskController extends BaseController {
 		PriceIdentifyBO identifyBOs = taskService.priceIdentify(image, user.getId());
 		return identifyBOs;
 	}
-
+	
 	private void rendFile(HttpServletRequest request, HttpServletResponse response, String filePath, String name) {
 		InputStream inStream = null;
 		try {

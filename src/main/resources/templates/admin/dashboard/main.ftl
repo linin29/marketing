@@ -37,7 +37,7 @@
     <link href="${springMacroRequestContext.contextPath}/css/jquery-editable-select.min.css" rel="stylesheet">
     <link href="${springMacroRequestContext.contextPath}/css/bootstrap-select.css" rel="stylesheet">
     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/admin-style.css"  type="text/css">
-     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/cropper.css"  type="text/css">
+    <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/cropper.css"  type="text/css">
 	<style type="text/css">
 		.skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu>li.active>a {
 			color: #fff;
@@ -57,42 +57,7 @@
 		.default{
 			color:#8aa4af;
 		}
-	</style>
-	<script type="text/javascript">
-		function changeMenu(obj){
-			var intervalId = $('body').data('alert_info_interval_id');
-			if(intervalId) {
-				clearInterval(intervalId);
-				$('body').removeData('alert_info_interval_id');
-			}
-			var intervalId2 = $('body').data('alert_info_interval_id2');
-			if(intervalId2) {
-				clearInterval(intervalId2);
-				$('body').removeData('alert_info_interval_id2');
-			}
-			
-			var url = $(obj).attr('url');
-			var allLinks =$(obj).parents('.sidebar').find('a');
-			var center =$(obj).parents('.center').find('a');
-			center.css("color", "#b8c7ce");
-			allLinks.css("color", "#8aa4af");
-			 	$(obj).css("color", "#fff");
-		    tunicorn.utils.get(url, function(data){
-		    	$("#content").html(data);
-		     });
-		 }
-		$(function(){
-			var firstMenu = $(".treeview").children("a").get(0);
-			if(firstMenu){
-				$(firstMenu).css("color","white");
-			}
-		     var listurl = "${springMacroRequestContext.contextPath}/${indexUrl}";
-	         tunicorn.utils.get(listurl,function(data){
-	        	 $("#content").html(data);
-	         });
-	     });
-		var searchTaskFlg = 0;
-</script>
+	</style>	
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -120,7 +85,7 @@
 					  </p>
 					  <ul class="center dropdown-menu dropdown-menu-left" role="menu" aria-labelledby="dropdownMenu1" style="margin-right: -72px;text-align: center;background-color:#222d32;border: 1px #222d32 solid;margin-top:-10px">
 						  <li role="presentation">
-						 	<a style="color:#b8c7ce" class="menu" role="menuitem" tabindex="-1" href="javascript:void(0)" url="${springMacroRequestContext.contextPath}/admin/user/personcenter" onclick="changeMenu(this)">个人中心</a>
+						 	<a style="color:#b8c7ce" class="menu" role="menuitem" tabindex="-1" href="javascript:void(0)" url="${springMacroRequestContext.contextPath}/admin/user/personcenter" onclick="mp.changeMenu(this)">个人中心</a>
 						 </li>
 					  </ul>
 				  </li>
@@ -132,54 +97,60 @@
 	  </header>
 	  <aside class="main-sidebar" style="width: 230px;">
 		<section class="sidebar">
-		<ul class="sidebar-menu">
-			<#list menus as item>
-	          	<#if item.subMenus?size gt 0>
-					<li class="treeview">
-						<#if (item.url)??>
-							<a url="${springMacroRequestContext.contextPath}${item.url}" href="javascript:void(0)" data-title="${item.name}">
-						  
-						   		<span >${item.name}</span><i class="fa fa-angle-left pull-right"></i>
-							</a>
-						<#else>	
-							<a href="javascript:void(0)" data-title="${item.name}">
+			<ul class="sidebar-menu">
+				<#list menus as item>
+		          	<#if item.subMenus?size gt 0>
+						<li class="treeview">
+							<#if (item.url)??>
+								<a url="${springMacroRequestContext.contextPath}${item.url}" href="javascript:void(0)" data-title="${item.name}">
+							  
+							   		<span >${item.name}</span><i class="fa fa-angle-left pull-right"></i>
+								</a>
+							<#else>	
+								<a href="javascript:void(0)" data-title="${item.name}">
+							   		
+							   		<span >${item.name}</span><i class="fa fa-angle-left pull-right"></i>
+								</a>
+							</#if>
+							<ul class="treeview-menu">
+								<#list item.subMenus as sub>
+								   <li>
+									  <a style="margin-left: 15px;" url="${springMacroRequestContext.contextPath}${sub.url}" href="javascript:void(0)" data-title="${sub.name}" menu="${item.name}" submenu="${sub.name}" class="menu" onclick="mp.changeMenu(this)">
+										${sub.name}
+									  </a>
+								   </li>
+								</#list>
+							</ul>
+						</li>
+					<#else>
+						<li class="treeview">
+		            	<#if (item.url)??>
+							<a url="${springMacroRequestContext.contextPath}${item.url}" href="javascript:void(0)" data-title="${item.name}" class="menu" onclick="mp.changeMenu(this)">
 						   		
-						   		<span >${item.name}</span><i class="fa fa-angle-left pull-right"></i>
+						   		<span>${item.name}</span><i class="fa"></i>
+							</a>
+						<#else>
+							<a href="javascript:void(0)" data-title="${item.name}" class="menu">
+						   		
+						   		<span>${item.name}</span><i class="fa"></i>
 							</a>
 						</#if>
-						<ul class="treeview-menu">
-							<#list item.subMenus as sub>
-							   <li>
-								  <a style="margin-left: 15px;" url="${springMacroRequestContext.contextPath}${sub.url}" href="javascript:void(0)" data-title="${sub.name}" menu="${item.name}" submenu="${sub.name}" class="menu" onclick="changeMenu(this)">
-									${sub.name}
-								  </a>
-							   </li>
-							</#list>
-						</ul>
-					</li>
-				<#else>
-					<li class="treeview">
-	            	<#if (item.url)??>
-						<a url="${springMacroRequestContext.contextPath}${item.url}" href="javascript:void(0)" data-title="${item.name}" class="menu" onclick="changeMenu(this)">
-					   		
-					   		<span>${item.name}</span><i class="fa"></i>
-						</a>
-					<#else>
-						<a href="javascript:void(0)" data-title="${item.name}" class="menu">
-					   		
-					   		<span>${item.name}</span><i class="fa"></i>
-						</a>
+						</li>
 					</#if>
-					</li>
-				</#if>
-			</#list>
-		</ul>
+				</#list>
+			</ul>
 		</section>
 	  </aside>
-	  <section class="content-wrapper" >
-	   	<div id="content" style="margin-left: -11px;padding-top: 1px;">
-	   	</div>		
-	</section>
-	</div>
+	 <section class="content-wrapper" >
+	   	<div id="content" style="margin-left: -11px;padding-top: 1px;"></div>		
+	 </section>
+ </div>
+<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/admin-main-login.js"></script>
+<script type="text/javascript">
+	$(function() {	
+		var indexUrl='${indexUrl}'
+		mp._init(indexUrl);
+	});
+</script>
 </body>
 </html>

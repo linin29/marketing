@@ -8,7 +8,7 @@
        	 	<h3 class="col-sm-3">数据导出<small>本次查询共<span id="number">${totalCount!0}</span>数据</small></h3>
        	 	<div class="col-sm-9" style="margin-top:10px;margin-bottom:10px;">
        	 		<span style="width:8%;float:left;line-height:34px;">品类：</span>
-                <div style="width:25%;float:left;">
+                <div style="width:23%;float:left;">
                  	<select id="majorType" style="height: 34px;width: 96%;">
                       	<option value="">请选择</option>
                       	<#if majorTypes?? && (majorTypes?size > 0)>

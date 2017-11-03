@@ -20,6 +20,7 @@ public class RemoteSSHUtils {
 
 	private static Connection conn;
 	private final static String IP = ConfigUtils.getInstance().getConfigValue("remote.ssh.ip");
+	private final static String PORT = ConfigUtils.getInstance().getConfigValue("remote.ssh.port");
 	private final static String USERNAME = ConfigUtils.getInstance().getConfigValue("remote.ssh.username");
 	private final static String PASSWORD = ConfigUtils.getInstance().getConfigValue("remote.ssh.password");
 
@@ -31,7 +32,7 @@ public class RemoteSSHUtils {
 	private static boolean login() {
 		boolean success = false;
 		try {
-			conn = new Connection(IP);
+			conn = new Connection(IP, Integer.valueOf(PORT));
 			conn.connect();
 			success = conn.authenticateWithPassword(USERNAME, PASSWORD);
 		} catch (IOException e) {
@@ -89,24 +90,31 @@ public class RemoteSSHUtils {
 			}
 			br.close();
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			logger.error("execute processStdout method fail UnsupportedEncodingException: " + e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("execute processStdout method fail IOException: " + e.getMessage());
 		} finally {
 			try {
 				stdout.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("execute processStdout method fail IOException: " + e.getMessage());
 			}
 		}
 		return buffer.toString();
 	}
-
+	
 	public static void main(String[] args) {
 		// 执行命令
-		System.out.println(RemoteSSHUtils.execute("ifconfig"));
+		//System.out.println(RemoteSSHUtils.execute("ifconfig"));
 		// 执行脚本
-		System.out.println(RemoteSSHUtils.execute("python /home/feng/script/test.py"));
-		System.out.println(RemoteSSHUtils.execute("/home/feng/script/test.sh"));
+		//System.out.println(RemoteSSHUtils.execute("python /home/feng/script/test.py"));
+		String result  = RemoteSSHUtils.execute("python /storage2/RFCN/run_one_shell.pyc --goods=nestlecoffee");
+		System.out.println(result);
+		if (result.contains("tunicorn ret success")){
+			System.out.println("success");
+		}else{
+			System.out.println("failure");
+		}
+		//System.out.println(RemoteSSHUtils.execute("/home/feng/script/test.sh"));
 	}
 }

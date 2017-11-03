@@ -897,15 +897,13 @@ public class TaskService {
 	}
 
 	public ServiceResponseBO aecUpload(MultipartFile zipFile) {
-		/*
-		 * String basePath = String.format("%s%s%s%s%s%s",
-		 * com.tunicorn.util.ConfigUtils.getInstance().getConfigValue(
-		 * "storage.private.basePath"),
-		 * ConfigUtils.getInstance().getConfigValue("marketing.image.root.path")
-		 * , File.separator, MarketingConstants.AEC_PATH, File.separator,
-		 * MarketingConstants.UPLOAD_PATH);
-		 */
-		String basePath = "D:\\aec";
+
+		String basePath = String.format("%s%s%s%s%s%s",
+				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
+				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
+				MarketingConstants.AEC_PATH, File.separator, MarketingConstants.UPLOAD_PATH);
+
+		// String basePath = "D:\\aec";
 		CommonAjaxResponse ajaxResponse = null;
 		try {
 			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
@@ -977,7 +975,7 @@ public class TaskService {
 					List<GoodsSkuVO> goodsSkuVOs = goodsSkuMapper.getGoodsSkuListByBO(goodsSkuBO);
 					if (goodsSkuVOs != null && goodsSkuVOs.size() > 0) {
 						node.put("label", goodsSkuVOs.get(0).getOrder() + 1);
-					}else{
+					} else {
 						node.put("label", 0);
 					}
 
@@ -1011,7 +1009,7 @@ public class TaskService {
 					ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodInfo");
 					ObjectNode jsonNode = (ObjectNode) jsonNodes.get(imageOrder - 1);
 					jsonNode.set("rect", arrayNode);
-					taskVO.setGoodsInfo(jsonNodes.toString());
+					taskVO.setResult(nodeResult.toString());
 					int updateResult = taskMapper.updateTask(taskVO);
 					if (updateResult > 0) {
 						ajaxResponse = rectify(taskVO.getId());

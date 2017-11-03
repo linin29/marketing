@@ -123,7 +123,11 @@ taskCrop=(function(){
       		 url: m_url + 'preOrderTaskImage/' + taskId + '/' + order,
       		 success: function(data) {
       			 if(data){
-      				$("#initCropImage").attr("src", picPath + "/" + taskId + "/results_" + (order - 2) + ".jpg?random=" + new Date().getTime());
+      				var stitchImagePath = data.task.stitchImagePath;
+     				if(stitchImagePath){
+        				var index  = stitchImagePath.lastIndexOf("/");
+         				$("#initCropImage").attr("src", picPath + stitchImagePath.substring(0, index) + "/results_" + (order - 2) + ".jpg?random=" + new Date().getTime());
+     				}
       				$('#imageCrop').attr("imageid", data.id);
       				$("#order").val(data.orderNo);
       				getPictureCrop(picPath + data.imagePath);
@@ -151,7 +155,11 @@ taskCrop=(function(){
       		 url: m_url + taskId + '/' + order,
       		 success: function(data) {
       			 if(data){
-      				$("#initCropImage").attr("src", picPath + "/" + taskId + "/results_" + order + ".jpg?random=" + new Date().getTime());
+      				var stitchImagePath = data.task.stitchImagePath;
+     				if(stitchImagePath){
+        				var index  = stitchImagePath.lastIndexOf("/");
+         				$("#initCropImage").attr("src", picPath + stitchImagePath.substring(0, index) + "/results_" + order + ".jpg?random=" + new Date().getTime());
+     				}
       				$('#imageCrop').attr("imageid", data.id);
       				$("#order").val(data.orderNo);
       				getPictureCrop(picPath + data.imagePath);

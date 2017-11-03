@@ -1010,7 +1010,7 @@ public class TaskService {
 					taskVO.setResult(nodeResult.toString());
 					 updateResult = taskMapper.updateTask(taskVO);
 					if (updateResult > 0) {
-						CommonAjaxResponse ajaxResponse = rectify(taskVO.getId());
+						rectify(taskVO.getId());
 					}
 					logger.info("taskId:" + taskVO.getId() + ", aecUpload result: " + updateResult);
 				}

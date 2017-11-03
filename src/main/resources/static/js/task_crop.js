@@ -152,7 +152,7 @@ taskCrop=(function(){
  		var order = $("#order").val();
  		$.ajax({
       		 type: 'GET',
-      		 url: m_url + taskId + '/' + order,
+      		 url: m_url + 'nextOrderTaskImage/' + taskId + '/' + order,
       		 success: function(data) {
       			 if(data){
       				var stitchImagePath = data.task.stitchImagePath;

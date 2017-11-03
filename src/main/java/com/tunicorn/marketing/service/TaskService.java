@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -143,8 +144,9 @@ public class TaskService {
 			for (int i = 0; i < images.size(); i++) {
 				TaskImagesVO taskImagesVO = new TaskImagesVO();
 
-				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, createTaskVO.getId(),tempTaskVO.getCreateTime(),
-						ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
+				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, createTaskVO.getId(),
+						tempTaskVO.getCreateTime(), ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"),
+						false);
 
 				if (file == null) {
 					return new ServiceResponseBO(false, "marketing_save_upload_file_error");
@@ -658,7 +660,15 @@ public class TaskService {
 							GoodsBO goods = new GoodsBO();
 							goods.setGoods_name(goodsSkuVO.getName());
 							goods.setGoods_desc(goodsSkuVO.getDescription());
-							goods.setNum(oNode.get("num").toString());
+							if (oNode.get("num") != null) {
+								String num = oNode.get("num").toString();
+								if (!isInteger(oNode.get("num").toString())) {
+									BigDecimal b1 = new BigDecimal(Float.parseFloat(oNode.get("num").toString()));
+									double f2 = b1.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+									num = String.valueOf(f2);
+								}
+								goods.setNum(num);
+							}
 							goods.setRatio(f1 + "%");
 							goods.setIsShow(goodsSkuVO.getIsShow());
 							ArrayNode jsonNodesCrops = (ArrayNode) nodeResult.findValue("crops");
@@ -712,7 +722,7 @@ public class TaskService {
 	public int getTempTaskCount(TaskBO taskBO) {
 		return taskMapper.getTempTaskCount(taskBO);
 	}
-	
+
 	public TaskVO getTaskById(String taskId) {
 		return taskMapper.getTaskById(taskId);
 	}
@@ -1138,8 +1148,8 @@ public class TaskService {
 
 	public PriceIdentifyBO priceIdentify(MultipartFile image, String userId) {
 
-		UploadFile file = MarketingStorageUtils.getUploadFile(image, userId, MarketingConstants.PRICE_IDENTIFY, new Date(),
-				ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
+		UploadFile file = MarketingStorageUtils.getUploadFile(image, userId, MarketingConstants.PRICE_IDENTIFY,
+				new Date(), ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
 		PriceIdentifyBO priceIdentifyBO = new PriceIdentifyBO();
 		if (file != null) {
 			MarketingPriceIdentifyRequestParam param = new MarketingPriceIdentifyRequestParam();
@@ -1247,8 +1257,9 @@ public class TaskService {
 			for (int i = 0; i < images.size(); i++) {
 				TaskImagesVO taskImagesVO = new TaskImagesVO();
 
-				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, taskId, taskVO.getCreateTime(),
-						ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
+				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, taskId,
+						taskVO.getCreateTime(), ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"),
+						false);
 
 				if (file == null) {
 					logger.error("taskId:" + taskId + ", save form-data file failure");
@@ -1364,7 +1375,15 @@ public class TaskService {
 			tempNode.put("goods_name", goodsSkuVO.getName());
 			tempNode.put("goods_desc", goodsSkuVO.getDescription());
 			tempNode.put("ratio", f1 + "%");
-			tempNode.put("num", oNode.get("num").toString());
+			if (oNode.get("num") != null) {
+				String num = oNode.get("num").toString();
+				if (!isInteger(oNode.get("num").toString())) {
+					BigDecimal b1 = new BigDecimal(Float.parseFloat(oNode.get("num").toString()));
+					double f2 = b1.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+					num = String.valueOf(f2);
+				}
+				tempNode.put("num", num);
+			}
 			tempNode.put("isShow", goodsSkuVO.getIsShow());
 			tempNode.put("list_rows", oNode.get("list_rows"));
 			tempNode.put("produce", i + 1);
@@ -1490,7 +1509,15 @@ public class TaskService {
 						double f1 = b.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
 
 						ratioBuffer.append(",").append(f1 + "%");
-						numBuffer.append(",").append(oNode.get("num").toString());
+						if (oNode.get("num") != null) {
+							String num = oNode.get("num").toString();
+							if (!isInteger(oNode.get("num").toString())) {
+								BigDecimal b1 = new BigDecimal(Float.parseFloat(oNode.get("num").toString()));
+								double f2 = b1.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+								num = String.valueOf(f2);
+							}
+							numBuffer.append(",").append(num);
+						}
 						JsonNode listRows = oNode.get("list_rows");
 						rowsBuffer.append(",");
 						if (listRows != null && listRows.size() > 0) {
@@ -1526,5 +1553,10 @@ public class TaskService {
 
 		return result.append(ratioBuffer).append(numBuffer).append(oriAreaBuffer).append(rowsBuffer).append(",")
 				.append(totalArea).append(",").append(rows).toString();
+	}
+
+	public boolean isInteger(String str) {
+		Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+		return pattern.matcher(str).matches();
 	}
 }

@@ -138,7 +138,22 @@ dataExport=(function(){
 	function doPaginationClicked(pageNum) {
 		queryTask(pageNum);
 	};
+	
+	function getTaskDetail(taskId) {
+		$.ajax({
+			 type: 'GET',
+			 url: m_url + '/showTask/' + taskId,
+			 success: function(data) {
+			 	$("#content").html(data);
+	    	},
+	    	error: function(data) {
+	    		//返回500错误页面
+	    		$("html").html(data.responseText);
+	    	}
+		});
+	};
 	return {
-		_init:init
+		_init:init,
+		getTaskDetail:getTaskDetail
 	}
 })()

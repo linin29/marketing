@@ -63,7 +63,7 @@
                       				<td>${task.lastUpdateTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
                       				<td>${task.taskStatus!""}</td>
 	                    			<td>
-	                    				<a href="javascript:void(0);" onclick="getTaskDetail('${task.id}')" class="ajax-link">查看</a>
+	                    				<a href="javascript:void(0);" onclick="dataExport.getTaskDetail('${task.id}')" class="ajax-link">查看</a>
 	                    			</td>
 	                   			</tr>
 	                   		</#list>

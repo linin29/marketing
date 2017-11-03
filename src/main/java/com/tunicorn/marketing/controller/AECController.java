@@ -134,13 +134,4 @@ public class AECController extends BaseController {
 			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
 	}
-	
-/*	private List<AecBO> getAecBOList(){
-		List<AecBO> fileList = new ArrayList<AecBO>();
-		AecBO aecBO = new AecBO();
-		aecBO.setAnnotationXML("D:\\雀巢咖啡0831-410\\雀巢咖啡0831-410\\nco00380.xml");
-		aecBO.setImage("D:\\雀巢咖啡0831-410\\雀巢咖啡0831-410\\nco00380.jpg");
-		fileList.add(aecBO);
-		return fileList;
-	}*/
 }

@@ -900,7 +900,6 @@ public class TaskService {
 				MarketingConstants.AEC_PATH, File.separator, MarketingConstants.UPLOAD_PATH);
 
 		//String basePath1 = "D:\\aecq";
-		CommonAjaxResponse ajaxResponse = null;
 		try {
 			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
 			ZipEntry ze;
@@ -928,14 +927,14 @@ public class TaskService {
 					if (imagesVO != null) {
 						TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
 						ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
-						ajaxResponse = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
+						updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
 						// xmlFile.delete();
 					}
 				}
 			}
 			zin.closeEntry();
 			logger.info("updateTaskGoodInfoAndRectify end");
-			return new ServiceResponseBO(ajaxResponse);
+			return new ServiceResponseBO(true);
 		} catch (IOException e) {
 			return new ServiceResponseBO(false, "marketing_save_upload_file_error");
 		}
@@ -996,9 +995,9 @@ public class TaskService {
 		return arrayNode;
 	}
 
-	private CommonAjaxResponse updateTaskGoodInfoAndRectify(ArrayNode arrayNode, TaskVO taskVO, int imageOrder) {
-		CommonAjaxResponse ajaxResponse = null;
+	private int updateTaskGoodInfoAndRectify(ArrayNode arrayNode, TaskVO taskVO, int imageOrder) {
 		String result = (String) taskVO.getResult();
+		int updateResult = 0;
 		if (StringUtils.isNotBlank(result)) {
 			ObjectMapper mapper = new ObjectMapper();
 			ObjectNode nodeResult;
@@ -1009,9 +1008,9 @@ public class TaskService {
 					ObjectNode jsonNode = (ObjectNode) jsonNodes.get(imageOrder - 1);
 					jsonNode.set("rect", arrayNode);
 					taskVO.setResult(nodeResult.toString());
-					int updateResult = taskMapper.updateTask(taskVO);
+					 updateResult = taskMapper.updateTask(taskVO);
 					if (updateResult > 0) {
-						ajaxResponse = rectify(taskVO.getId());
+						CommonAjaxResponse ajaxResponse = rectify(taskVO.getId());
 					}
 					logger.info("taskId:" + taskVO.getId() + ", aecUpload result: " + updateResult);
 				}
@@ -1020,7 +1019,7 @@ public class TaskService {
 				logger.error("taskId:" + taskVO.getId() + ", aecUpload fail, " + e.getMessage());
 			}
 		}
-		return ajaxResponse;
+		return updateResult;
 	}
 
 	private static ArrayNode getImageCrops(TaskVO taskVO, int imageOrder) {

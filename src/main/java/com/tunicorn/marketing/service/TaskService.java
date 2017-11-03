@@ -856,8 +856,6 @@ public class TaskService {
 							bufferedImage = ImageIO.read(new File(taskImagesVO.getFullPath()));
 							int width = bufferedImage.getWidth();
 							int height = bufferedImage.getHeight();
-							// String imageFilePath = "E:\\aec\\" +
-							// taskImagesVO.getId() + ".jpg";
 							String imageFilePath = String.format("%s%s%s%s%s%s%s%s",
 									com.tunicorn.util.ConfigUtils.getInstance()
 											.getConfigValue("storage.private.basePath"),
@@ -866,8 +864,6 @@ public class TaskService {
 									File.separator, taskImagesVO.getId() + ".jpg");
 
 							FileUtils.copyFile(new File(taskImagesVO.getFullPath()), new File(imageFilePath));
-							// String xmlFilePath = "E:\\aec\\" +
-							// taskImagesVO.getId() + ".xml";
 							String xmlFilePath = String.format("%s%s%s%s%s%s%s%s",
 									com.tunicorn.util.ConfigUtils.getInstance()
 											.getConfigValue("storage.private.basePath"),
@@ -1024,12 +1020,11 @@ public class TaskService {
 		return ajaxResponse;
 	}
 
-	private ArrayNode getImageCrops(TaskVO taskVO, int imageOrder) {
+	private static ArrayNode getImageCrops(TaskVO taskVO, int imageOrder) {
+		ObjectMapper mapper = new ObjectMapper();
 		if (taskVO != null) {
 			String result = (String) taskVO.getResult();
-			String goodInfo = taskVO.getGoodsInfo();
-			if (StringUtils.isNotBlank(result) && StringUtils.isBlank(goodInfo)) {
-				ObjectMapper mapper = new ObjectMapper();
+			if (StringUtils.isNotBlank(result) ) {
 				ObjectNode nodeResult;
 				try {
 					nodeResult = (ObjectNode) mapper.readTree(result);
@@ -1046,7 +1041,7 @@ public class TaskService {
 				}
 			}
 		}
-		return null;
+		return mapper.createArrayNode();
 	}
 
 	private int updateTaskStatusByStitcher(StitcherUpdateParamBO updateParam) {

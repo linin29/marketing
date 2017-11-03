@@ -1037,6 +1037,7 @@ public class TaskService {
 						ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodInfo");
 						JsonNode tempNode = jsonNodes.get(imageOrder - 1);
 						ArrayNode tempArrayNode = (ArrayNode) tempNode.get("rect");
+						logger.error("taskId:" + taskVO.getId() + ", getImageCrops method, imageCrops size :" + tempArrayNode.size());
 						return tempArrayNode;
 					}
 

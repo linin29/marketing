@@ -975,12 +975,14 @@ public class TaskService {
 						node.put("label", 0);
 					}
 
-					node.put("x", xmin);
-					node.put("y", ymin);
+					
+					
 					if (StringUtils.isNotBlank(xmin) && StringUtils.isNotBlank(xmax)) {
+						node.put("x", Integer.valueOf(xmin));
 						node.put("width", Integer.valueOf(xmax) - Integer.valueOf(xmin));
 					}
 					if (StringUtils.isNotBlank(ymin) && StringUtils.isNotBlank(ymax)) {
+						node.put("y", Integer.valueOf(ymin));
 						node.put("height", Integer.valueOf(ymax) - Integer.valueOf(ymin));
 					}
 					arrayNode.add(node);

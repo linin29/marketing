@@ -52,17 +52,7 @@ aec = (function(){
 	 	});
 		$("#download").click(function(){
 			if(checkedIds && checkedIds.length > 0){
-				//window.open(marketing_url +"/aec/download?taskIds=" + checkedIds.toString());
-				 $.ajax({
-						type: 'GET',
-						url: marketing_url + '/aec/download?taskIds=' + checkedIds.toString(),
-						//dataType: 'json', 
-						success: function(data) {
-			        	},
-			        	error: function(data) {
-			        		noty({text: '下载失败', layout: 'topCenter', type: 'error', timeout: 2000});
-			        	}
-				});
+				window.open(marketing_url +"/aec/download?taskIds=" + checkedIds.toString());
 			}else{
 				noty({text: '请选择任务进行下载', layout: "topCenter", type: "warning", timeout: 2000});
 		 		return;

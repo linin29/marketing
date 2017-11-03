@@ -899,20 +899,17 @@ public class TaskService {
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
 				MarketingConstants.AEC_PATH, File.separator, MarketingConstants.UPLOAD_PATH);
 
-		//String basePath = "D:\\aec";
+		//String basePath1 = "D:\\aecq";
 		CommonAjaxResponse ajaxResponse = null;
-		logger.info("aecUpload start...");
 		try {
 			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
 			ZipEntry ze;
 			while ((ze = zin.getNextEntry()) != null) {
-				logger.info("aecUpload unzip start...");
 				if (!ze.isDirectory()) {
-					logger.info("aecUpload xml name:" + ze.getName());
 					File xmlFile = new File(basePath + File.separator + ze.getName());
-					if (!xmlFile.exists()) {
-						xmlFile.createNewFile();
-					}
+					xmlFile.setWritable(true, false);
+					FileUtils.writeStringToFile(xmlFile, StringUtils.EMPTY);
+
 					FileOutputStream fos = new FileOutputStream(xmlFile);
 
 					int len = 0;
@@ -928,11 +925,9 @@ public class TaskService {
 						taskImageId = ze.getName().substring(0, zeIndex);
 					}
 					TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(taskImageId);
-					logger.info("aecUpload ing...");
 					if (imagesVO != null) {
 						TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
 						ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
-						logger.info("updateTaskGoodInfoAndRectify start");
 						ajaxResponse = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
 						// xmlFile.delete();
 					}

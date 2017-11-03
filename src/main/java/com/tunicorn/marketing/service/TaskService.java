@@ -899,14 +899,14 @@ public class TaskService {
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
 				MarketingConstants.AEC_PATH, File.separator, MarketingConstants.UPLOAD_PATH);
 
-		// String basePath = "D:\\aec";
+		String basePath1 = "D:\\aec";
 		CommonAjaxResponse ajaxResponse = null;
 		try {
 			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
 			ZipEntry ze;
 			while ((ze = zin.getNextEntry()) != null) {
 				if (!ze.isDirectory()) {
-					File xmlFile = new File(basePath + File.separator + ze.getName());
+					File xmlFile = new File(basePath1 + File.separator + ze.getName());
 					if (!xmlFile.exists()) {
 						xmlFile.createNewFile();
 					}
@@ -928,6 +928,7 @@ public class TaskService {
 					if (imagesVO != null) {
 						TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
 						ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
+						logger.info("updateTaskGoodInfoAndRectify start");
 						ajaxResponse = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
 						// xmlFile.delete();
 					}

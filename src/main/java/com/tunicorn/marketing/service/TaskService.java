@@ -901,6 +901,7 @@ public class TaskService {
 
 		//String basePath = "D:\\aec";
 		CommonAjaxResponse ajaxResponse = null;
+		logger.info("aecUpload start...");
 		try {
 			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
 			ZipEntry ze;
@@ -925,6 +926,7 @@ public class TaskService {
 						taskImageId = ze.getName().substring(0, zeIndex);
 					}
 					TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(taskImageId);
+					logger.info("aecUpload ing...");
 					if (imagesVO != null) {
 						TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
 						ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());

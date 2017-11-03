@@ -1,7 +1,5 @@
 package com.tunicorn.marketing.bo;
 
-import java.io.File;
-
 public class AecBO {
 
 	private String image;

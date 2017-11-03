@@ -906,7 +906,9 @@ public class TaskService {
 			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
 			ZipEntry ze;
 			while ((ze = zin.getNextEntry()) != null) {
+				logger.info("aecUpload unzip start...");
 				if (!ze.isDirectory()) {
+					logger.info("aecUpload xml name:" + ze.getName());
 					File xmlFile = new File(basePath + File.separator + ze.getName());
 					if (!xmlFile.exists()) {
 						xmlFile.createNewFile();
@@ -937,6 +939,7 @@ public class TaskService {
 				}
 			}
 			zin.closeEntry();
+			logger.info("updateTaskGoodInfoAndRectify end");
 			return new ServiceResponseBO(ajaxResponse);
 		} catch (IOException e) {
 			return new ServiceResponseBO(false, "marketing_save_upload_file_error");

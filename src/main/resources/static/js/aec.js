@@ -20,7 +20,7 @@ aec = (function(){
 	 		 var _file = $(this)[0];
 	 		 var files = _file.files;
 	 		 var total = files.length;
-	 		 var url = m_url + '/aec/upload';
+	 		 var url = marketing_url + '/aec/upload';
 
 	 		 var formData = new FormData();
 	 		 

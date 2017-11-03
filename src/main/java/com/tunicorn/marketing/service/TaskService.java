@@ -887,7 +887,7 @@ public class TaskService {
 							aecBO.setAnnotationXML(xmlFilePath);
 							aecBOs.add(aecBO);
 						} catch (IOException e) {
-							logger.error("getAecsByTaskIds method 获取指定任务的标记信息失败, "+ e.getMessage());
+							logger.error("getAecsByTaskIds method 获取指定任务的标记信息失败, " + e.getMessage());
 						}
 					}
 				}
@@ -897,10 +897,14 @@ public class TaskService {
 	}
 
 	public ServiceResponseBO aecUpload(MultipartFile zipFile) {
-/*		String basePath = String.format("%s%s%s%s%s%s",
-				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
-				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
-				MarketingConstants.AEC_PATH, File.separator, MarketingConstants.UPLOAD_PATH);*/
+		/*
+		 * String basePath = String.format("%s%s%s%s%s%s",
+		 * com.tunicorn.util.ConfigUtils.getInstance().getConfigValue(
+		 * "storage.private.basePath"),
+		 * ConfigUtils.getInstance().getConfigValue("marketing.image.root.path")
+		 * , File.separator, MarketingConstants.AEC_PATH, File.separator,
+		 * MarketingConstants.UPLOAD_PATH);
+		 */
 		String basePath = "D:\\aec";
 		CommonAjaxResponse ajaxResponse = null;
 		try {
@@ -921,16 +925,18 @@ public class TaskService {
 					}
 					fos.close();
 
-					int zeIndex = ze.getName().indexOf("/");
+					int zeIndex = ze.getName().lastIndexOf(MarketingConstants.POINT);
 					String taskImageId = "";
 					if (zeIndex > 0) {
-						taskImageId = ze.getName().substring(zeIndex + 1);
+						taskImageId = ze.getName().substring(0, zeIndex);
 					}
 					TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(taskImageId);
-					TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
-					ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
-					ajaxResponse = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
-					//xmlFile.delete();
+					if (imagesVO != null) {
+						TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
+						ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
+						ajaxResponse = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
+						// xmlFile.delete();
+					}
 				}
 			}
 			zin.closeEntry();
@@ -954,13 +960,13 @@ public class TaskService {
 			List<Element> objectList = root.elements("object");
 			if (objectList != null && objectList.size() > 0) {
 				for (Element element : objectList) {
-					String name = element.attributeValue("name");
+					String name = element.elementText("name");
 
 					Element bndboxElement = element.element("bndbox");
-					String xmin = bndboxElement.attributeValue("xmin");
-					String ymin = bndboxElement.attributeValue("ymin");
-					String xmax = bndboxElement.attributeValue("xmax");
-					String ymax = bndboxElement.attributeValue("ymax");
+					String xmin = bndboxElement.elementText("xmin");
+					String ymin = bndboxElement.elementText("ymin");
+					String xmax = bndboxElement.elementText("xmax");
+					String ymax = bndboxElement.elementText("ymax");
 
 					ObjectNode node = mapper.createObjectNode();
 
@@ -971,6 +977,8 @@ public class TaskService {
 					List<GoodsSkuVO> goodsSkuVOs = goodsSkuMapper.getGoodsSkuListByBO(goodsSkuBO);
 					if (goodsSkuVOs != null && goodsSkuVOs.size() > 0) {
 						node.put("label", goodsSkuVOs.get(0).getOrder() + 1);
+					}else{
+						node.put("label", 0);
 					}
 
 					node.put("x", xmin);
@@ -986,7 +994,7 @@ public class TaskService {
 			}
 
 		} catch (DocumentException e) {
-			e.printStackTrace();
+			logger.info("parseXml fail: " + e.getMessage());
 		}
 		return arrayNode;
 	}

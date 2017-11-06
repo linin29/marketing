@@ -382,7 +382,7 @@ newList=(function(){
                     }else if(task_status=='identify_success'){
             			$.ajax({
          	      		 type: 'GET',
-         	      		 url: m_url + taskId,
+         	      		 url: m_url + 'taskResult/' + taskId,
          	      		 success: function(data) {
                            var results = data.data.goodResults;
                            var crops = data.data.crops;

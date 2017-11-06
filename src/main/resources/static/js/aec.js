@@ -51,8 +51,13 @@ aec = (function(){
 	 		 });
 	 	});
 		$("#download").click(function(){
-			 $("#downloadForm").find("#taskIds").val(checkedIds.toString());
-			 $('#downloadForm').submit();
+			if(checkedIds && checkedIds.length > 0){
+				$("#downloadForm").find("#taskIds").val(checkedIds.toString());
+				$('#downloadForm').submit();
+			}else{
+				noty({text: '请选择任务进行下载', layout: "topCenter", type: "warning", timeout: 2000});
+		 		return;
+			}
 		}); 
 	};
 	function initDate() {

@@ -588,7 +588,7 @@
                          	  majorType = $("#taskMajorType").val();
                            }
                            showCropList(results);
-                           $('#stitched').attr('src', '/pic/marketing/' + data.data.stitchImagePath + '/results.jpg?random='+ $.now()).css('height', '400px');
+                           $('#stitched').attr('src', '/pic/marketing/' + data.data.stitchImagePath + '?random='+ $.now()).css('height', '400px');
                            $('#image_default a').attr('href', '/pic/marketing' + data.data.resultsBorder);
          	          	},
          	          	error: function(data) {

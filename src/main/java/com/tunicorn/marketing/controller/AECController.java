@@ -85,34 +85,34 @@ public class AECController extends BaseController {
 	}
 
 	@RequestMapping(value = "/aec/download", method = RequestMethod.GET)
-	public void download(HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		SimpleDateFormat dfs = new SimpleDateFormat("yyyyMMddHHmmss");
 		Date time = new Date();
 		String formatTime = dfs.format(time);
 		String zipName = "aec_" + formatTime + ".zip";
-		
+
 		String taskIdStr = request.getParameter("taskIds");
 		String[] taskIds = taskIdStr.split(",");
 		List<AecBO> fileList = taskService.getAecsByTaskIds(taskIds);
-		
+
 		response.setHeader("contentType", "text/html; charset=utf-8");
 		response.setHeader("Content-Disposition", "attachment; filename=" + zipName);
-		
+
 		response.setContentType("application/octet-stream");
-		
+
 		ZipOutputStream out = new ZipOutputStream(response.getOutputStream());
 		try {
 			for (AecBO aecBO : fileList) {
 				ZipUtils.doCompress(aecBO.getImage(), out);
 				ZipUtils.doCompress(aecBO.getAnnotationXML(), out);
-				
-				/*File imageFile = new File(aecBO.getImage());
-				File xmlFile = new File(aecBO.getAnnotationXML());
-				
-				imageFile.delete();
-				xmlFile.delete();*/
-				
+
+				/*
+				 * File imageFile = new File(aecBO.getImage()); File xmlFile =
+				 * new File(aecBO.getAnnotationXML());
+				 * 
+				 * imageFile.delete(); xmlFile.delete();
+				 */
+
 				response.flushBuffer();
 			}
 		} catch (Exception e) {

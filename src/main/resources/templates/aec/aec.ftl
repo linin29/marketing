@@ -38,8 +38,11 @@
 		       	 	</div>
 		       	 	<div style="padding-top: 22px;"><button class='btn btn-success' id="query">查询</button></div>
 	    		</div>
-		         <div class=" text-right" style="padding-bottom: 10px;margin-top: -34px;padding-right: 0px;">		            
-		             <button class='btn btn-success' id="download" style="margin-left: 20px;">下载</button>
+		         <div class=" text-right" style="padding-bottom: 10px;margin-top: -34px;padding-right: 0px;">
+		         	 <form id="downloadForm" action='${springMacroRequestContext.contextPath}/aec/download' method="get">
+       					 <input type="hidden" id="taskIds" name="taskIds" />
+					 </form>		            
+		             <button type="submit" class='btn btn-success' id="download" style="margin-left: 20px;">下载</button>
 		             <input type="button" class="btn btn-success" id="zip_import" value="上传文件" />
 					 <input type="file" id="file_select" style="display:none;"/>
 		         </div>

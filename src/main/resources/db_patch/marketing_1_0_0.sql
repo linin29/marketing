@@ -176,6 +176,11 @@ BEGIN
           `identify_success_times` int(11) DEFAULT '0',
 		  PRIMARY KEY (`id`),
 		  KEY `user_task_fk_idx` (`user_id`),
+		  KEY `task_status_task_fk_idx` (`task_status`),
+		  KEY `host_task_fk_idx` (`host`),
+		  KEY `create_time_task_fk_idx` (`create_time`),
+		  KEY `status_task_fk_idx` (`status`),
+		  KEY `idx_last_update` (`last_update`),
 		  KEY `idx_task_name` (`name`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

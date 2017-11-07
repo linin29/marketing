@@ -35,4 +35,8 @@ public interface TaskMapper {
 	public List<TaskVO> getTempTaskList(TaskBO taskBO);
 
 	public int getTempTaskCount(TaskBO taskBO);
+	
+	@Select("select id, major_type as majorType, need_stitch as needStitch "
+			+ "from task where task_status='pending' and host is null and status = 'active' limit 200")
+	public List<TaskVO> getPendingWithoutHostTasks ();
 }

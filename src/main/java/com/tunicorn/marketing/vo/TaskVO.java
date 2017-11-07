@@ -25,6 +25,7 @@ public class TaskVO extends PaginationBO {
 	private String goodsInfo;
 	private long identifySuccessTimes;
 	private String majorTypeName;
+	private int needStitch;
 
 	public String getAuthor() {
 		return author;
@@ -186,4 +187,11 @@ public class TaskVO extends PaginationBO {
 		this.majorTypeName = majorTypeName;
 	}
 
+	public int getNeedStitch() {
+		return needStitch;
+	}
+
+	public void setNeedStitch(int needStitch) {
+		this.needStitch = needStitch;
+	}
 }

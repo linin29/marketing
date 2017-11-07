@@ -1559,4 +1559,8 @@ public class TaskService {
 		Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
 		return pattern.matcher(str).matches();
 	}
+	
+	public List<TaskVO> getPendingWithoutHost () {
+		return taskMapper.getPendingWithoutHostTasks();
+	}
 }

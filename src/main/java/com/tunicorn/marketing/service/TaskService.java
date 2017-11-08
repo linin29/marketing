@@ -1008,6 +1008,7 @@ public class TaskService {
 				if (nodeResult.findValue("goodInfo") != null) {
 					ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodInfo");
 					ObjectNode jsonNode = (ObjectNode) jsonNodes.get(imageOrder - 1);
+					//JsonNode rectJsonNode = jsonNode.get("rect");
 					jsonNode.set("rect", arrayNode);
 					taskVO.setResult(nodeResult.toString());
 					int updateResult = taskMapper.updateTask(taskVO);
@@ -1015,6 +1016,10 @@ public class TaskService {
 						CommonAjaxResponse ajaxResponse = rectify(taskVO.getId());
 						if (ajaxResponse != null && ajaxResponse.getSuccess()) {
 							rectifyResult = true;
+						}else{
+							//jsonNode.set("rect", rectJsonNode);
+							//taskVO.setResult(nodeResult.toString());
+							//taskMapper.updateTask(taskVO);
 						}
 					}
 					logger.info("taskId:" + taskVO.getId() + ", aecUpload result: " + updateResult);

@@ -41,7 +41,7 @@ aec = (function(){
 	 				 if(resp && resp.success){
 	 					noty({text: "纠错成功", layout: "topCenter", type: "success", timeout: 1000}); 
 	 				 }else{
-	 					noty({text: "纠错失败", layout: "topCenter", type: "error", timeout: 1000}); 
+	 					noty({text: "纠错失败", layout: "topCenter", type: "warning", timeout: 1000}); 
 	 				 }
 	 			},
 	 			error: function (message) {

@@ -39,7 +39,7 @@
 		       	 	<div style="padding-top: 22px;"><button class='btn btn-success' id="query">查询</button></div>
 	    		</div>
 		         <div class=" text-right" style="padding-bottom: 10px;margin-top: -34px;padding-right: 0px;">
-		         	 <form id="downloadForm" action='${springMacroRequestContext.contextPath}/aec/download' method="get">
+		         	 <form id="downloadForm" action='' method="get">
        					 <input type="hidden" id="taskIds" name="taskIds" />
 					 </form>		            
 		             <button type="submit" class='btn btn-success' id="download" style="margin-left: 20px;">下载</button>
@@ -96,6 +96,7 @@
        </div>
    </div>
 </div>
+<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/aec.js"></script>
 <script type="text/javascript">
 	var currentPage = "${currentPage}";

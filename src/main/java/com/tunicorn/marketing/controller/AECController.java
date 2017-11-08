@@ -116,10 +116,11 @@ public class AECController extends BaseController {
 				response.flushBuffer();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		} finally {
 			out.close();
 		}
+		
 	}
 
 	@RequestMapping(value = "/aec/upload", method = RequestMethod.POST)

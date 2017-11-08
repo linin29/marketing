@@ -53,7 +53,16 @@ aec = (function(){
 		$("#download").click(function(){
 			if(checkedIds && checkedIds.length > 0){
 				$("#downloadForm").find("#taskIds").val(checkedIds.toString());
-				$('#downloadForm').submit();
+				 $('#downloadForm').form('submit', {
+	                 type:'get',
+	                 url: marketing_url  + '/aec/download',
+	                 success:function(result){
+	        	 		noty({text: "下载成功", layout: "topCenter", type: "success", timeout: 1000});
+	                 },
+	                 error:function(message){
+	                	 noty({text: "下载失败", layout: "topCenter", type: "error", timeout: 1000});
+	                 }
+	             }); 
 			}else{
 				noty({text: '请选择任务进行下载', layout: "topCenter", type: "warning", timeout: 2000});
 		 		return;

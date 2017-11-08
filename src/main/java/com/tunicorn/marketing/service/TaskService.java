@@ -856,12 +856,19 @@ public class TaskService {
 							bufferedImage = ImageIO.read(new File(taskImagesVO.getFullPath()));
 							int width = bufferedImage.getWidth();
 							int height = bufferedImage.getHeight();
+							
+							String imageExt = ".jpg";
+							String imageFullPath = taskImagesVO.getFullPath();
+							if(StringUtils.isNotBlank(imageFullPath)){
+								int index = imageFullPath.lastIndexOf(MarketingConstants.POINT);
+								imageExt = imageFullPath.substring(index);
+							}
 							String imageFilePath = String.format("%s%s%s%s%s%s%s%s",
 									com.tunicorn.util.ConfigUtils.getInstance()
 											.getConfigValue("storage.private.basePath"),
 									ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"),
 									File.separator, taskVO.getMajorType(), File.separator, MarketingConstants.AEC_PATH,
-									File.separator, taskImagesVO.getId() + ".jpg");
+									File.separator, taskImagesVO.getId() + imageExt);
 
 							FileUtils.copyFile(new File(taskImagesVO.getFullPath()), new File(imageFilePath));
 							String xmlFilePath = String.format("%s%s%s%s%s%s%s%s",
@@ -904,7 +911,7 @@ public class TaskService {
 			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
 			ZipEntry ze;
 			while ((ze = zin.getNextEntry()) != null) {
-				if (!ze.isDirectory()) {
+				if (!ze.isDirectory() && ze.getName().contains(".xml")) {
 					File xmlFile = new File(basePath + File.separator + ze.getName());
 					xmlFile.setWritable(true, false);
 					FileUtils.writeStringToFile(xmlFile, StringUtils.EMPTY);

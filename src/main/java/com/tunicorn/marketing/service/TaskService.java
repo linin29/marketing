@@ -898,8 +898,8 @@ public class TaskService {
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
 				MarketingConstants.AEC_PATH, File.separator, MarketingConstants.UPLOAD_PATH);
-
-		//String basePath1 = "D:\\aecq";
+		boolean rectifyResult = false;
+		// String basePath1 = "D:\\aecq";
 		try {
 			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
 			ZipEntry ze;
@@ -927,14 +927,18 @@ public class TaskService {
 					if (imagesVO != null) {
 						TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
 						ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
-						updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
+						rectifyResult = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
 						// xmlFile.delete();
 					}
 				}
 			}
 			zin.closeEntry();
 			logger.info("updateTaskGoodInfoAndRectify end");
-			return new ServiceResponseBO(true);
+			if(rectifyResult){
+				return new ServiceResponseBO(true);
+			}else{
+				return new ServiceResponseBO(false, "marketing_save_upload_file_error");
+			}
 		} catch (IOException e) {
 			return new ServiceResponseBO(false, "marketing_save_upload_file_error");
 		}
@@ -975,8 +979,6 @@ public class TaskService {
 						node.put("label", 0);
 					}
 
-					
-					
 					if (StringUtils.isNotBlank(xmin) && StringUtils.isNotBlank(xmax)) {
 						node.put("x", Integer.valueOf(xmin));
 						node.put("width", Integer.valueOf(xmax) - Integer.valueOf(xmin));
@@ -995,9 +997,9 @@ public class TaskService {
 		return arrayNode;
 	}
 
-	private int updateTaskGoodInfoAndRectify(ArrayNode arrayNode, TaskVO taskVO, int imageOrder) {
+	private boolean updateTaskGoodInfoAndRectify(ArrayNode arrayNode, TaskVO taskVO, int imageOrder) {
 		String result = (String) taskVO.getResult();
-		int updateResult = 0;
+		boolean rectifyResult = false;
 		if (StringUtils.isNotBlank(result)) {
 			ObjectMapper mapper = new ObjectMapper();
 			ObjectNode nodeResult;
@@ -1008,9 +1010,12 @@ public class TaskService {
 					ObjectNode jsonNode = (ObjectNode) jsonNodes.get(imageOrder - 1);
 					jsonNode.set("rect", arrayNode);
 					taskVO.setResult(nodeResult.toString());
-					 updateResult = taskMapper.updateTask(taskVO);
+					int updateResult = taskMapper.updateTask(taskVO);
 					if (updateResult > 0) {
-						rectify(taskVO.getId());
+						CommonAjaxResponse ajaxResponse = rectify(taskVO.getId());
+						if (ajaxResponse != null && ajaxResponse.getSuccess()) {
+							rectifyResult = true;
+						}
 					}
 					logger.info("taskId:" + taskVO.getId() + ", aecUpload result: " + updateResult);
 				}
@@ -1019,14 +1024,14 @@ public class TaskService {
 				logger.error("taskId:" + taskVO.getId() + ", aecUpload fail, " + e.getMessage());
 			}
 		}
-		return updateResult;
+		return rectifyResult;
 	}
 
 	private static ArrayNode getImageCrops(TaskVO taskVO, int imageOrder) {
 		ObjectMapper mapper = new ObjectMapper();
 		if (taskVO != null) {
 			String result = (String) taskVO.getResult();
-			if (StringUtils.isNotBlank(result) ) {
+			if (StringUtils.isNotBlank(result)) {
 				ObjectNode nodeResult;
 				try {
 					nodeResult = (ObjectNode) mapper.readTree(result);
@@ -1034,7 +1039,8 @@ public class TaskService {
 						ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodInfo");
 						JsonNode tempNode = jsonNodes.get(imageOrder - 1);
 						ArrayNode tempArrayNode = (ArrayNode) tempNode.get("rect");
-						logger.error("taskId:" + taskVO.getId() + ", getImageCrops method, imageCrops size :" + tempArrayNode.size());
+						logger.error("taskId:" + taskVO.getId() + ", getImageCrops method, imageCrops size :"
+								+ tempArrayNode.size());
 						return tempArrayNode;
 					}
 

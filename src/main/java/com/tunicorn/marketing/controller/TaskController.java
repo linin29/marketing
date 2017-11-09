@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -613,14 +612,6 @@ public class TaskController extends BaseController {
 		UserVO user = getCurrentUser(request);
 		TaskVO result = taskService.getNextTask(taskId, user.getId());
 		return result;
-	}
-
-	private Date getBefore2Day(Date date) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		calendar.add(Calendar.DAY_OF_MONTH, -2);
-		date = calendar.getTime();
-		return date;
 	}
 
 	@RequestMapping(value = "/download", method = RequestMethod.GET)

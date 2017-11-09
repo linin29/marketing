@@ -1,5 +1,8 @@
 package com.tunicorn.marketing.controller;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -18,9 +21,17 @@ public class BaseController {
 		Object obj = request.getSession().getAttribute(Constant.SESSION_USER);
 		return obj == null ? null : (UserVO) obj;
 	}
-	
+
 	public AdminUserVO getCurrentAdminUser(HttpServletRequest request) {
 		Object obj = request.getSession().getAttribute(MarketingConstants.SESSION_ADMIN_USER);
 		return obj == null ? null : (AdminUserVO) obj;
+	}
+
+	public Date getBefore2Day(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DAY_OF_MONTH, -2);
+		date = calendar.getTime();
+		return date;
 	}
 }

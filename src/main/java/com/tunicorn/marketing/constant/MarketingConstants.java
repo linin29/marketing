@@ -120,4 +120,6 @@ public class MarketingConstants {
 	public static final String REMOTE_SSH_RETURN = "tunicorn ret success";
 
 	public static final String DATE_PATTERN = "yyyyMMdd";
+	
+	public static final String AEC_PATH = "aec";
 }

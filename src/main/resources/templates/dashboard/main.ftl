@@ -135,7 +135,7 @@
 		   </div>
 		</nav>
 	  </header>
-	  <aside class="main-sidebar" style="width: 230px;">
+	  <aside class="main-sidebar" style="width: 160px;">
 		<section class="sidebar">
 		<ul class="sidebar-menu">
 			<#list menus as item>

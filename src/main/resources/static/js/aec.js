@@ -152,7 +152,8 @@ aec = (function(){
 						$('table thead tr').find("input").prop('checked', false);
 						$('table thead tr').find("input").unbind("click");
 						initTableCheckbox();
-						setChecked();
+						checkedIds = [];
+						//setChecked();
 						initPagination(pageNum || 1, totalCount);
 					}
 	    	},

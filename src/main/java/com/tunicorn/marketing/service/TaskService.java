@@ -1757,6 +1757,7 @@ class XMLGeneratorThread implements Runnable {
 		this.taskId = taskId;
 		this.taskMapper = taskMapper;
 		this.taskImagesMapper = taskImagesMapper;
+		this.goodsSkuMapper = goodsSkuMapper;
 	}
 	public void run() {
 		List<TaskImagesVO> imagesVOs = taskImagesMapper.getTaskImagesListByTaskId(taskId);

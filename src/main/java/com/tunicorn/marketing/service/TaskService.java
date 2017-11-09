@@ -850,56 +850,6 @@ public class TaskService {
 			for (int i = 0; i < taskIds.length; i++) {
 				String taskId = taskIds[i];
 				generateExecutorPool.execute(new XMLGeneratorThread(latch, aecBOs, taskId, taskMapper, taskImagesMapper, goodsSkuMapper));
-				/*List<TaskImagesVO> imagesVOs = taskImagesMapper.getTaskImagesListByTaskId(taskId);
-				TaskVO taskVO = taskMapper.getTaskById(taskId);
-
-				if (imagesVOs != null && imagesVOs.size() > 0) {
-					for (TaskImagesVO taskImagesVO : imagesVOs) {
-						AecBO aecBO = new AecBO();
-
-						BufferedImage bufferedImage;
-						try {
-							bufferedImage = ImageIO.read(new File(taskImagesVO.getFullPath()));
-							int width = bufferedImage.getWidth();
-							int height = bufferedImage.getHeight();
-							
-							String imageExt = ".jpg";
-							String imageFullPath = taskImagesVO.getFullPath();
-							if(StringUtils.isNotBlank(imageFullPath)){
-								int index = imageFullPath.lastIndexOf(MarketingConstants.POINT);
-								imageExt = imageFullPath.substring(index);
-							}
-							String imageFilePath = String.format("%s%s%s%s%s%s%s%s",
-									com.tunicorn.util.ConfigUtils.getInstance()
-											.getConfigValue("storage.private.basePath"),
-									ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"),
-									File.separator, taskVO.getMajorType(), File.separator, MarketingConstants.AEC_PATH,
-									File.separator, taskImagesVO.getId() + imageExt);
-
-							FileUtils.copyFile(new File(taskImagesVO.getFullPath()), new File(imageFilePath));
-							String xmlFilePath = String.format("%s%s%s%s%s%s%s%s",
-									com.tunicorn.util.ConfigUtils.getInstance()
-											.getConfigValue("storage.private.basePath"),
-									ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"),
-									File.separator, taskVO.getMajorType(), File.separator, MarketingConstants.AEC_PATH,
-									File.separator, taskImagesVO.getId() + ".xml");
-
-							ImageCropBO cropBO = new ImageCropBO();
-							cropBO.setTaskId(taskId);
-							cropBO.setImageId(taskImagesVO.getId());
-							cropBO.setMajorType(taskVO.getMajorType());
-							cropBO.setOrder(taskImagesVO.getOrderNo());
-							cropBO.setImageCrop(getImageCrops(taskVO, taskImagesVO.getOrderNo()));
-							generateXmlFile(cropBO, xmlFilePath, width, height);
-
-							aecBO.setImage(imageFilePath);
-							aecBO.setAnnotationXML(xmlFilePath);
-							aecBOs.add(aecBO);
-						} catch (IOException e) {
-							logger.error("getAecsByTaskIds method 获取指定任务的标记信息失败, " + e.getMessage());
-						}
-					}
-				}*/
 			}
 			try {
 				latch.await();
@@ -1901,7 +1851,7 @@ class XMLGeneratorThread implements Runnable {
 						ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodInfo");
 						JsonNode tempNode = jsonNodes.get(imageOrder - 1);
 						ArrayNode tempArrayNode = (ArrayNode) tempNode.get("rect");
-						logger.error("taskId:" + taskVO.getId() + ", getImageCrops method, imageCrops size :"
+						logger.info("taskId:" + taskVO.getId() + ", getImageCrops method, imageCrops size :"
 								+ tempArrayNode.size());
 						return tempArrayNode;
 					}

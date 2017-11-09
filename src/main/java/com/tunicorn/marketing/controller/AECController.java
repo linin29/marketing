@@ -68,8 +68,10 @@ public class AECController extends BaseController {
 	@RequestMapping(value = "/aec/search", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse searchTask(HttpServletRequest request, @RequestBody TaskBO taskBO) {
+		UserVO user = getCurrentUser(request);
 		Map<String, Object> results = new HashMap<String, Object>();
 
+		taskBO.setUserId(user.getId());
 		taskBO.setTaskStatus(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
 
 		List<TaskVO> tasks = new ArrayList<TaskVO>();

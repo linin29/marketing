@@ -135,7 +135,7 @@ aec = (function(){
 									'<td><input id="' + item.id + '" type="checkbox" name="checkItem" /></td>'+
             						'<td>' + item.name + '</td>'+
             						'<td>' + item.id + '</td>'+
-            						'<td>' + item.majorType + '</td>'+
+            						'<td>' + item.majorTypeName + '</td>'+
             						'<td>' + item.lastUpdateTimeStr + '</td>'+
             						'<td>'+
             							'<a href="javascript:void(0);" onclick="getTaskDetail(\'' + item.id + '\')" class="ajax-link">查看</a>'+

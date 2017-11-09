@@ -64,7 +64,7 @@
 	                    			<td><input id="${task.id}" type="checkbox" name="checkItem" /></td>
 	                    			<td>${task.name!""}</td>
                        				<td>${task.id!""}</td>
-                      				<td>${task.majorType!""}</td>
+                      				<td>${task.majorTypeName!""}</td>
                       				<td>${task.lastUpdateTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
 	                    			<td>
 	                    				<a href="javascript:void(0);" onclick="getTaskDetail('${task.id}')" class="ajax-link">查看</a>

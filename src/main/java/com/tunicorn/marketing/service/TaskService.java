@@ -897,6 +897,9 @@ public class TaskService {
 						TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
 						ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
 						rectifyResult = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
+						if(!rectifyResult){
+							return new ServiceResponseBO(false, "marketing_save_upload_file_error");
+						}
 						// xmlFile.delete();
 					}
 				}

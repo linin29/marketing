@@ -67,7 +67,12 @@ aec = (function(){
 				noty({text: '请选择任务进行下载', layout: "topCenter", type: "warning", timeout: 2000});
 		 		return;
 			}
-		}); 
+		});
+		
+		$(".taskDetail").click(function(){
+			var taskId = $(this).attr("taskid");
+			getTaskDetail(taskId);
+		});
 	};
 	function initDate() {
 		var current = moment();
@@ -138,7 +143,7 @@ aec = (function(){
             						'<td>' + item.majorTypeName + '</td>'+
             						'<td>' + item.lastUpdateTimeStr + '</td>'+
             						'<td>'+
-            							'<a href="javascript:void(0);" onclick="getTaskDetail(\'' + item.id + '\')" class="ajax-link">查看</a>'+
+            							'<a taskid="'+ item.id +'" href="javascript:void(0);" class="ajax-link taskDetail">查看</a>'+
             						'</td>'+
             					'</tr>';
 					});
@@ -155,6 +160,10 @@ aec = (function(){
 						checkedIds = [];
 						//setChecked();
 						initPagination(pageNum || 1, totalCount);
+						$(".taskDetail").click(function(){
+							var taskId = $(this).attr("taskid");
+							getTaskDetail(taskId);
+						});
 					}
 	    	},
 	    	error: function(data) {
@@ -230,6 +239,19 @@ aec = (function(){
               }
           }
        };
+	  function getTaskDetail(taskId) {
+			$.ajax({
+				type: 'GET',
+				url: marketing_url + '/showTask/' + taskId,
+				success: function(data) {
+					$("#content").html(data);
+			    },
+			    error: function(data) {
+			    	//返回500错误页面
+			    	$("html").html(data.responseText);
+			    }
+			});
+		};
 	return {
 		_init:init
 	}

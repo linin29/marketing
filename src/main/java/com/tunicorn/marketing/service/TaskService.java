@@ -16,6 +16,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -105,7 +108,8 @@ public class TaskService {
 	private MajorTypeMapper majorTypeMapper;
 	@Autowired
 	private GoodsSkuMapper goodsSkuMapper;
-
+	
+	private static ExecutorService generateExecutorPool = Executors.newFixedThreadPool(20);
 	@Transactional
 	public ServiceResponseBO createTask(String userId, String taskName, List<MultipartFile> images) {
 		logger.info("params of createTask: taskName: " + taskName + ", userId:" + userId);
@@ -842,9 +846,11 @@ public class TaskService {
 	public List<AecBO> getAecsByTaskIds(String[] taskIds) {
 		List<AecBO> aecBOs = new ArrayList<AecBO>();
 		if (taskIds != null && taskIds.length > 0) {
+			CountDownLatch latch = new CountDownLatch(taskIds.length);
 			for (int i = 0; i < taskIds.length; i++) {
 				String taskId = taskIds[i];
-				List<TaskImagesVO> imagesVOs = taskImagesMapper.getTaskImagesListByTaskId(taskId);
+				generateExecutorPool.execute(new XMLGeneratorThread(latch, aecBOs, taskId, taskMapper, taskImagesMapper, goodsSkuMapper));
+				/*List<TaskImagesVO> imagesVOs = taskImagesMapper.getTaskImagesListByTaskId(taskId);
 				TaskVO taskVO = taskMapper.getTaskById(taskId);
 
 				if (imagesVOs != null && imagesVOs.size() > 0) {
@@ -893,9 +899,15 @@ public class TaskService {
 							logger.error("getAecsByTaskIds method 获取指定任务的标记信息失败, " + e.getMessage());
 						}
 					}
-				}
+				}*/
 			}
+			try {
+				latch.await();
+			} catch (InterruptedException e) {
+				logger.error("Thread interrupte exception, caused by:" + e.getMessage());
+			} 
 		}
+		logger.info("total download size:" + aecBOs.size());
 		return aecBOs;
 	}
 
@@ -1037,31 +1049,6 @@ public class TaskService {
 			}
 		}
 		return rectifyResult;
-	}
-
-	private static ArrayNode getImageCrops(TaskVO taskVO, int imageOrder) {
-		ObjectMapper mapper = new ObjectMapper();
-		if (taskVO != null) {
-			String result = (String) taskVO.getResult();
-			if (StringUtils.isNotBlank(result)) {
-				ObjectNode nodeResult;
-				try {
-					nodeResult = (ObjectNode) mapper.readTree(result);
-					if (nodeResult.findValue("goodInfo") != null) {
-						ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodInfo");
-						JsonNode tempNode = jsonNodes.get(imageOrder - 1);
-						ArrayNode tempArrayNode = (ArrayNode) tempNode.get("rect");
-						logger.error("taskId:" + taskVO.getId() + ", getImageCrops method, imageCrops size :"
-								+ tempArrayNode.size());
-						return tempArrayNode;
-					}
-
-				} catch (IOException e) {
-					logger.error("taskId:" + taskVO.getId() + ", getImageCrops fail, " + e.getMessage());
-				}
-			}
-		}
-		return mapper.createArrayNode();
 	}
 
 	private int updateTaskStatusByStitcher(StitcherUpdateParamBO updateParam) {
@@ -1752,5 +1739,177 @@ public class TaskService {
 
 		return result.append(ratioBuffer).append(numBuffer).append(oriAreaBuffer).append(rowsBuffer).append(",")
 				.append(totalArea).append(",").append(rows).toString();
+	}
+}
+
+class XMLGeneratorThread implements Runnable {
+	private static Logger logger = Logger.getLogger(XMLGeneratorThread.class);
+	private CountDownLatch latch;
+	List<AecBO> aecBOs;
+	String taskId;
+	private TaskMapper taskMapper;
+	private TaskImagesMapper taskImagesMapper;
+	private GoodsSkuMapper goodsSkuMapper;
+	public XMLGeneratorThread (CountDownLatch count, List<AecBO> total, String taskId, 
+			TaskMapper taskMapper, TaskImagesMapper taskImagesMapper, GoodsSkuMapper goodsSkuMapper) {
+		this.latch = count;
+		this.aecBOs = total;
+		this.taskId = taskId;
+		this.taskMapper = taskMapper;
+		this.taskImagesMapper = taskImagesMapper;
+	}
+	public void run() {
+		List<TaskImagesVO> imagesVOs = taskImagesMapper.getTaskImagesListByTaskId(taskId);
+		TaskVO taskVO = taskMapper.getTaskById(taskId);
+		try{
+			if (imagesVOs != null && imagesVOs.size() > 0) {
+				for (TaskImagesVO taskImagesVO : imagesVOs) {
+					AecBO aecBO = new AecBO();
+
+					BufferedImage bufferedImage;
+					bufferedImage = ImageIO.read(new File(taskImagesVO.getFullPath()));
+					int width = bufferedImage.getWidth();
+					int height = bufferedImage.getHeight();
+					
+					String imageExt = ".jpg";
+					String imageFullPath = taskImagesVO.getFullPath();
+					if(StringUtils.isNotBlank(imageFullPath)){
+						int index = imageFullPath.lastIndexOf(MarketingConstants.POINT);
+						imageExt = imageFullPath.substring(index);
+					}
+					String imageFilePath = String.format("%s%s%s%s%s%s%s%s",
+							com.tunicorn.util.ConfigUtils.getInstance()
+									.getConfigValue("storage.private.basePath"),
+							ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"),
+							File.separator, taskVO.getMajorType(), File.separator, MarketingConstants.AEC_PATH,
+							File.separator, taskImagesVO.getId() + imageExt);
+
+					FileUtils.copyFile(new File(taskImagesVO.getFullPath()), new File(imageFilePath));
+					String xmlFilePath = String.format("%s%s%s%s%s%s%s%s",
+							com.tunicorn.util.ConfigUtils.getInstance()
+									.getConfigValue("storage.private.basePath"),
+							ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"),
+							File.separator, taskVO.getMajorType(), File.separator, MarketingConstants.AEC_PATH,
+							File.separator, taskImagesVO.getId() + ".xml");
+
+					ImageCropBO cropBO = new ImageCropBO();
+					cropBO.setTaskId(taskId);
+					cropBO.setImageId(taskImagesVO.getId());
+					cropBO.setMajorType(taskVO.getMajorType());
+					cropBO.setOrder(taskImagesVO.getOrderNo());
+					cropBO.setImageCrop(getImageCrops(taskVO, taskImagesVO.getOrderNo()));
+					generateXmlFile(cropBO, xmlFilePath, width, height);
+
+					aecBO.setImage(imageFilePath);
+					aecBO.setAnnotationXML(xmlFilePath);
+					synchronized(latch) {
+						aecBOs.add(aecBO);
+					}
+				}
+			} 
+		}catch (IOException e) {
+			logger.error("getAecsByTaskIds method 获取指定任务的标记信息失败, " + e.getMessage());
+		} finally {
+			latch.countDown();
+		}
+	}
+	
+	private void generateXmlFile(ImageCropBO cropBO, String xmlFilePath, int width, int height) {
+		Element root = DocumentHelper.createElement("annotation");
+		Document document = DocumentHelper.createDocument(root);
+
+		// 给根节点添加孩子节点
+		root.addElement("foder").addText("newdata");
+		root.addElement("filename").addText(cropBO.getImageId());
+		root.addElement("path").addText(xmlFilePath);
+
+		Element sourceElement = root.addElement("source");
+		sourceElement.addElement("database").addText("mysql");
+
+		Element sizeElement = root.addElement("size");
+		sizeElement.addElement("width").addText(String.valueOf(width));
+		sizeElement.addElement("height").addText(String.valueOf(height));
+		sizeElement.addElement("depth").addText("3");
+
+		root.addElement("segmented").addText("0");
+		if (cropBO != null && cropBO.getImageCrop() != null && cropBO.getImageCrop().size() > 0) {
+			ArrayNode arrayNode = cropBO.getImageCrop();
+			for (int j = 0; j < arrayNode.size(); j++) {
+				Element objectElement = root.addElement("object");
+
+				ObjectNode nodeResult = (ObjectNode) arrayNode.get(j);
+				String labelName = "Others";
+				GoodsSkuBO goodsSkuBO = new GoodsSkuBO();
+				if (nodeResult.get("label") != null) {
+					goodsSkuBO.setOrder(nodeResult.get("label").asInt() - 1);
+				}
+				goodsSkuBO.setMajorType(cropBO.getMajorType());
+				List<GoodsSkuVO> goodsSkuVOs = goodsSkuMapper.getGoodsSkuListByBO(goodsSkuBO);
+				if (goodsSkuVOs != null && goodsSkuVOs.size() > 0) {
+					labelName = goodsSkuVOs.get(0).getName();
+				}
+				objectElement.addElement("name").addText(labelName);
+				objectElement.addElement("pose").addText("Unspecified");
+				objectElement.addElement("truncated").addText("0");
+				objectElement.addElement("difficult").addText("0");
+				Element bndboxElement = objectElement.addElement("bndbox");
+				int x = 0;
+				int y = 0;
+				if (nodeResult.get("x") != null) {
+					bndboxElement.addElement("xmin").addText(nodeResult.get("x").toString());
+					x = nodeResult.get("x").asInt();
+				}
+				if (nodeResult.get("y") != null) {
+					bndboxElement.addElement("ymin").addText(nodeResult.get("y").toString());
+					y = nodeResult.get("y").asInt();
+				}
+				if (nodeResult.get("width") != null) {
+					bndboxElement.addElement("xmax").addText(String.valueOf(x + nodeResult.get("width").asInt()));
+				}
+				if (nodeResult.get("height") != null) {
+					bndboxElement.addElement("ymax").addText(String.valueOf(y + nodeResult.get("height").asInt()));
+				}
+			}
+		}
+		try {
+			OutputFormat format = OutputFormat.createPrettyPrint();
+			format.setEncoding("UTF-8");
+			// 设置在声明之后不换行
+			format.setNewLineAfterDeclaration(false);
+			File file = new File(xmlFilePath);
+			file.setWritable(true, false);
+			FileUtils.writeStringToFile(file, StringUtils.EMPTY);
+			XMLWriter xmlWriter = new XMLWriter(new FileOutputStream(file), format);
+			xmlWriter.write(document);
+			xmlWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	private static ArrayNode getImageCrops(TaskVO taskVO, int imageOrder) {
+		ObjectMapper mapper = new ObjectMapper();
+		if (taskVO != null) {
+			String result = (String) taskVO.getResult();
+			if (StringUtils.isNotBlank(result)) {
+				ObjectNode nodeResult;
+				try {
+					nodeResult = (ObjectNode) mapper.readTree(result);
+					if (nodeResult.findValue("goodInfo") != null) {
+						ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodInfo");
+						JsonNode tempNode = jsonNodes.get(imageOrder - 1);
+						ArrayNode tempArrayNode = (ArrayNode) tempNode.get("rect");
+						logger.error("taskId:" + taskVO.getId() + ", getImageCrops method, imageCrops size :"
+								+ tempArrayNode.size());
+						return tempArrayNode;
+					}
+
+				} catch (IOException e) {
+					logger.error("taskId:" + taskVO.getId() + ", getImageCrops fail, " + e.getMessage());
+				}
+			}
+		}
+		return mapper.createArrayNode();
 	}
 }

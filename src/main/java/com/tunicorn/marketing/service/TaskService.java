@@ -957,7 +957,7 @@ public class TaskService {
 					goodsSkuBO.setName(name);
 					goodsSkuBO.setMajorType(majorType);
 
-					List<GoodsSkuVO> goodsSkuVOs = goodsSkuMapper.getGoodsSkuListByBO(goodsSkuBO);
+					List<GoodsSkuVO> goodsSkuVOs = goodsSkuMapper.getNewGoodsSkuListByBO(goodsSkuBO);
 					if (goodsSkuVOs != null && goodsSkuVOs.size() > 0) {
 						node.put("label", goodsSkuVOs.get(0).getOrder() + 1);
 					} else {

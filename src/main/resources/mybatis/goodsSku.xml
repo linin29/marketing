@@ -102,6 +102,25 @@
 		order by create_time desc
 		limit #{startNum}, #{perPage}
 	</select>
+	<select id="getNewGoodsSkuListByBO" resultMap="GoodsSkuMap" parameterType="com.tunicorn.marketing.bo.GoodsSkuBO">
+		select id, `name`, description, major_type, `order`, is_show, create_time, last_update, status
+		from goods_sku
+		where `status` = 'active'
+		<if test="order != null">
+			and `order` = #{order}
+		</if>
+		<if test="majorType != null and majorType != ''">
+			and major_type = #{majorType}
+		</if>
+		<if test="isShow != null">
+			and is_show = #{isShow}
+		</if>
+		<if test="name != null and name != ''">
+			and `name` = #{name}
+		</if>
+		order by create_time desc
+		limit #{startNum}, #{perPage}
+	</select>
 	<select id="getGoodsSkuCount" resultType="int" parameterType="com.tunicorn.marketing.bo.GoodsSkuBO">
 		select count(*)
 		from goods_sku

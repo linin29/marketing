@@ -45,4 +45,6 @@ public interface GoodsSkuMapper {
 	public GoodsSkuVO getGoodsSkuById(@Param("goodsSkuId") long goodsSkuId);
 
 	public List<GoodsSkuVO> getGoodsSkuListByMajorTypeAndName(GoodsSkuVO goodsSkuVO);
+	
+	public List<GoodsSkuVO> getNewGoodsSkuListByBO(GoodsSkuBO goodsSkuBO);
 }

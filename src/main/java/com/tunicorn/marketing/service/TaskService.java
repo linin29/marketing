@@ -15,7 +15,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -109,8 +111,9 @@ public class TaskService {
 	private MajorTypeMapper majorTypeMapper;
 	@Autowired
 	private GoodsSkuMapper goodsSkuMapper;
-	
+
 	private static ExecutorService generateExecutorPool = Executors.newFixedThreadPool(20);
+
 	@Transactional
 	public ServiceResponseBO createTask(String userId, String taskName, List<MultipartFile> images) {
 		logger.info("params of createTask: taskName: " + taskName + ", userId:" + userId);
@@ -861,29 +864,34 @@ public class TaskService {
 			CountDownLatch latch = new CountDownLatch(taskIds.length);
 			for (int i = 0; i < taskIds.length; i++) {
 				String taskId = taskIds[i];
-				generateExecutorPool.execute(new XMLGeneratorThread(latch, aecBOs, taskId, taskMapper, taskImagesMapper, goodsSkuMapper));
+				generateExecutorPool.execute(
+						new XMLGeneratorThread(latch, aecBOs, taskId, taskMapper, taskImagesMapper, goodsSkuMapper));
 			}
 			try {
 				latch.await();
 			} catch (InterruptedException e) {
 				logger.error("Thread interrupte exception, caused by:" + e.getMessage());
-			} 
+			}
 		}
 		logger.info("total download size:" + aecBOs.size());
 		return aecBOs;
 	}
 
-	public ServiceResponseBO aecUpload(MultipartFile zipFile) {
+	public Map<String, List<String>> aecUpload(MultipartFile zipFile) {
 
 		String basePath = String.format("%s%s%s%s%s%s",
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
 				MarketingConstants.AEC_PATH, File.separator, MarketingConstants.UPLOAD_PATH);
 		boolean rectifyResult = false;
-		// String basePath1 = "D:\\aecq";
+		Map<String, List<String>> failMap = new HashMap<String, List<String>>();
+		List<String> rectifyFailedList = new ArrayList<String>();
+		List<String> syncFailedList = new ArrayList<String>();
+		//String basePath1 = "D:\\aecq";
 		try {
 			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
 			ZipEntry ze;
+
 			while ((ze = zin.getNextEntry()) != null) {
 				if (!ze.isDirectory() && ze.getName().contains(".xml")) {
 					File xmlFile = new File(basePath + File.separator + ze.getName());
@@ -909,24 +917,29 @@ public class TaskService {
 						TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
 						ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
 						rectifyResult = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
-						if(!rectifyResult){
-							return new ServiceResponseBO(false, "marketing_save_upload_file_error");
+						if (rectifyResult) {
+							CommonAjaxResponse response = getStore(imagesVO.getTaskId());
+							if (response != null && !response.getSuccess()) {
+								syncFailedList.add(imagesVO.getTaskId());
+							}
+
+						} else {
+							rectifyFailedList.add(imagesVO.getTaskId());
 						}
-						getStore(imagesVO.getTaskId());
 						// xmlFile.delete();
 					}
 				}
 			}
 			zin.closeEntry();
 			logger.info("updateTaskGoodInfoAndRectify end");
-			if(rectifyResult){
-				return new ServiceResponseBO(true);
-			}else{
-				return new ServiceResponseBO(false, "marketing_save_upload_file_error");
-			}
+			
+			failMap.put("syncFailed", syncFailedList);
+			failMap.put("rectifyFailed", rectifyFailedList);
+			
 		} catch (IOException e) {
-			return new ServiceResponseBO(false, "marketing_save_upload_file_error");
+			logger.info("unzip fail, " + e.getMessage());;
 		}
+		return failMap;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -993,7 +1006,7 @@ public class TaskService {
 				if (nodeResult.findValue("goodInfo") != null) {
 					ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodInfo");
 					ObjectNode jsonNode = (ObjectNode) jsonNodes.get(imageOrder - 1);
-					//JsonNode rectJsonNode = jsonNode.get("rect");
+					// JsonNode rectJsonNode = jsonNode.get("rect");
 					jsonNode.set("rect", arrayNode);
 					taskVO.setResult(nodeResult.toString());
 					int updateResult = taskMapper.updateTask(taskVO);
@@ -1001,10 +1014,10 @@ public class TaskService {
 						CommonAjaxResponse ajaxResponse = rectify(taskVO.getId());
 						if (ajaxResponse != null && ajaxResponse.getSuccess()) {
 							rectifyResult = true;
-						}else{
-							//jsonNode.set("rect", rectJsonNode);
-							//taskVO.setResult(nodeResult.toString());
-							//taskMapper.updateTask(taskVO);
+						} else {
+							// jsonNode.set("rect", rectJsonNode);
+							// taskVO.setResult(nodeResult.toString());
+							// taskMapper.updateTask(taskVO);
 						}
 					}
 					logger.info("taskId:" + taskVO.getId() + ", aecUpload result: " + updateResult);
@@ -1729,8 +1742,8 @@ public class TaskService {
 		Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
 		return pattern.matcher(str).matches();
 	}
-	
-	public List<TaskVO> getPendingWithoutHost () {
+
+	public List<TaskVO> getPendingWithoutHost() {
 		return taskMapper.getPendingWithoutHostTasks();
 	}
 }
@@ -1743,8 +1756,9 @@ class XMLGeneratorThread implements Runnable {
 	private TaskMapper taskMapper;
 	private TaskImagesMapper taskImagesMapper;
 	private GoodsSkuMapper goodsSkuMapper;
-	public XMLGeneratorThread (CountDownLatch count, List<AecBO> total, String taskId, 
-			TaskMapper taskMapper, TaskImagesMapper taskImagesMapper, GoodsSkuMapper goodsSkuMapper) {
+
+	public XMLGeneratorThread(CountDownLatch count, List<AecBO> total, String taskId, TaskMapper taskMapper,
+			TaskImagesMapper taskImagesMapper, GoodsSkuMapper goodsSkuMapper) {
 		this.latch = count;
 		this.aecBOs = total;
 		this.taskId = taskId;
@@ -1752,10 +1766,11 @@ class XMLGeneratorThread implements Runnable {
 		this.taskImagesMapper = taskImagesMapper;
 		this.goodsSkuMapper = goodsSkuMapper;
 	}
+
 	public void run() {
 		List<TaskImagesVO> imagesVOs = taskImagesMapper.getTaskImagesListByTaskId(taskId);
 		TaskVO taskVO = taskMapper.getTaskById(taskId);
-		try{
+		try {
 			if (imagesVOs != null && imagesVOs.size() > 0) {
 				for (TaskImagesVO taskImagesVO : imagesVOs) {
 					AecBO aecBO = new AecBO();
@@ -1764,27 +1779,25 @@ class XMLGeneratorThread implements Runnable {
 					bufferedImage = ImageIO.read(new File(taskImagesVO.getFullPath()));
 					int width = bufferedImage.getWidth();
 					int height = bufferedImage.getHeight();
-					
+
 					String imageExt = ".jpg";
 					String imageFullPath = taskImagesVO.getFullPath();
-					if(StringUtils.isNotBlank(imageFullPath)){
+					if (StringUtils.isNotBlank(imageFullPath)) {
 						int index = imageFullPath.lastIndexOf(MarketingConstants.POINT);
 						imageExt = imageFullPath.substring(index);
 					}
 					String imageFilePath = String.format("%s%s%s%s%s%s%s%s",
-							com.tunicorn.util.ConfigUtils.getInstance()
-									.getConfigValue("storage.private.basePath"),
-							ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"),
-							File.separator, taskVO.getMajorType(), File.separator, MarketingConstants.AEC_PATH,
-							File.separator, taskImagesVO.getId() + imageExt);
+							com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
+							ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
+							taskVO.getMajorType(), File.separator, MarketingConstants.AEC_PATH, File.separator,
+							taskImagesVO.getId() + imageExt);
 
 					FileUtils.copyFile(new File(taskImagesVO.getFullPath()), new File(imageFilePath));
 					String xmlFilePath = String.format("%s%s%s%s%s%s%s%s",
-							com.tunicorn.util.ConfigUtils.getInstance()
-									.getConfigValue("storage.private.basePath"),
-							ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"),
-							File.separator, taskVO.getMajorType(), File.separator, MarketingConstants.AEC_PATH,
-							File.separator, taskImagesVO.getId() + ".xml");
+							com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
+							ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
+							taskVO.getMajorType(), File.separator, MarketingConstants.AEC_PATH, File.separator,
+							taskImagesVO.getId() + ".xml");
 
 					ImageCropBO cropBO = new ImageCropBO();
 					cropBO.setTaskId(taskId);
@@ -1796,18 +1809,18 @@ class XMLGeneratorThread implements Runnable {
 
 					aecBO.setImage(imageFilePath);
 					aecBO.setAnnotationXML(xmlFilePath);
-					synchronized(latch) {
+					synchronized (latch) {
 						aecBOs.add(aecBO);
 					}
 				}
-			} 
-		}catch (IOException e) {
+			}
+		} catch (IOException e) {
 			logger.error("getAecsByTaskIds method 获取指定任务的标记信息失败, " + e.getMessage());
 		} finally {
 			latch.countDown();
 		}
 	}
-	
+
 	private void generateXmlFile(ImageCropBO cropBO, String xmlFilePath, int width, int height) {
 		Element root = DocumentHelper.createElement("annotation");
 		Document document = DocumentHelper.createDocument(root);
@@ -1881,7 +1894,7 @@ class XMLGeneratorThread implements Runnable {
 		}
 
 	}
-	
+
 	private static ArrayNode getImageCrops(TaskVO taskVO, int imageOrder) {
 		ObjectMapper mapper = new ObjectMapper();
 		if (taskVO != null) {

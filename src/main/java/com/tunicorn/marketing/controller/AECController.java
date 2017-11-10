@@ -22,17 +22,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.tunicorn.common.api.Message;
 import com.tunicorn.marketing.api.CommonAjaxResponse;
 import com.tunicorn.marketing.bo.AecBO;
-import com.tunicorn.marketing.bo.ServiceResponseBO;
 import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.TaskService;
 import com.tunicorn.marketing.utils.ZipUtils;
 import com.tunicorn.marketing.vo.TaskVO;
 import com.tunicorn.marketing.vo.UserVO;
-import com.tunicorn.util.MessageUtils;
 
 @Controller
 @EnableAutoConfiguration
@@ -118,23 +115,46 @@ public class AECController extends BaseController {
 				response.flushBuffer();
 			}
 		} catch (Exception e) {
-			
+
 		} finally {
 			out.close();
 		}
-		
+
 	}
 
 	@RequestMapping(value = "/aec/upload", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse upload(HttpServletRequest request,
-			@RequestParam(value = "zipFile", required = false) MultipartFile zipFile) {
-		ServiceResponseBO response = taskService.aecUpload(zipFile);
-		if (response.isSuccess()) {
-			return CommonAjaxResponse.toSuccess(response.getResult());
+			@RequestParam(value = "zipFile", required = false) MultipartFile zipFile, HttpServletResponse response) {
+		Map<String, List<String>> failMap = taskService.aecUpload(zipFile);
+		List<String> syncFailedList = failMap.get("syncFailed");
+		List<String> rectifyFailedList = failMap.get("rectifyFailed");
+
+		StringBuffer buffer = new StringBuffer();
+		if (syncFailedList.size() == 0 && rectifyFailedList.size() == 0) {
+			buffer.append("所有任务已成功纠错并拉取数据");
 		} else {
-			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
-			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
+			if (rectifyFailedList.size() > 0) {
+				buffer.append("纠错失败：");
+				for (int i = 0; i < rectifyFailedList.size(); i++) {
+					buffer.append(rectifyFailedList.get(i));
+					if (i < (rectifyFailedList.size() - 1)) {
+						buffer.append(",");
+					} else {
+						buffer.append("\n");
+					}
+				}
+			}
+			if (syncFailedList.size() > 0) {
+				buffer.append("拉去数据失败：");
+				for (int i = 0; i < syncFailedList.size(); i++) {
+					buffer.append(syncFailedList.get(i));
+					if (i < (syncFailedList.size() - 1)) {
+						buffer.append(",");
+					}
+				}
+			}
 		}
+		return CommonAjaxResponse.toSuccess(buffer);
 	}
 }

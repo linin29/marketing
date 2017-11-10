@@ -1,12 +1,12 @@
 package com.tunicorn.marketing.bo;
 
 public class GoodsSkuBO extends PaginationBO {
-	private String name; 
+	private String name;
 	private long majorTypeId;
-	private int order;
+	private Integer order;
 	private Boolean isShow;
 	private String majorType;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -23,11 +23,11 @@ public class GoodsSkuBO extends PaginationBO {
 		this.majorTypeId = majorTypeId;
 	}
 
-	public int getOrder() {
+	public Integer getOrder() {
 		return order;
 	}
 
-	public void setOrder(int order) {
+	public void setOrder(Integer order) {
 		this.order = order;
 	}
 

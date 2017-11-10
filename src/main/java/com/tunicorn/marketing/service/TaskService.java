@@ -222,8 +222,9 @@ public class TaskService {
 					FileOutputStream fos = new FileOutputStream(imageFile);
 
 					int len = 0;
-					while ((len = zin.read()) != -1) {
-						fos.write(len);
+					byte b[] = new byte[1024];
+					while ((len = zin.read(b)) != -1) {
+						fos.write(b, 0, len);
 					}
 					fos.close();
 					TaskImagesVO taskImagesVO = new TaskImagesVO();
@@ -911,6 +912,7 @@ public class TaskService {
 						if(!rectifyResult){
 							return new ServiceResponseBO(false, "marketing_save_upload_file_error");
 						}
+						getStore(imagesVO.getTaskId());
 						// xmlFile.delete();
 					}
 				}

@@ -87,7 +87,7 @@
 		select id, `name`, description, major_type, `order`, is_show, create_time, last_update, status
 		from goods_sku
 		where `status` = 'active'
-		<if test="order != null and order != ''">
+		<if test="order != null">
 			and `order` = #{order}
 		</if>
 		<if test="majorType != null and majorType != ''">
@@ -106,9 +106,7 @@
 		select count(*)
 		from goods_sku
 		where `status` = 'active'
-		<if test="order != null and order != ''">
 			and `order` = #{order}
-		</if>
 		<if test="majorType != null and majorType != ''">
 			and major_type = #{majorType}
 		</if>

@@ -146,7 +146,7 @@ public class AECController extends BaseController {
 				}
 			}
 			if (syncFailedList.size() > 0) {
-				buffer.append("拉去数据失败：");
+				buffer.append("拉取数据失败：");
 				for (int i = 0; i < syncFailedList.size(); i++) {
 					buffer.append(syncFailedList.get(i));
 					if (i < (syncFailedList.size() - 1)) {

@@ -10,7 +10,7 @@
 			  <section class="content_list" style="margin-top:-13px;">
 				  <div class="data_list_header">
 		       	 	<div class="col-sm-9" style="margin-top:21px;margin-bottom:10px;padding-left:0px;">
-		       	 		<span style="width:8%;float:left;line-height:34px;">品类：</span>
+		       	 		<span style="width:8%;float:left;line-height:34px;">品&nbsp;&nbsp;类：</span>
 		                <div style="width:25%;float:left;">
 		                 	<select id="majorType" style="height: 34px;width: 96%;">
 		                      	<option value="">请选择</option>

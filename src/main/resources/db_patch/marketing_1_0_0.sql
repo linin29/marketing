@@ -172,7 +172,7 @@ BEGIN
           `major_type` varchar(20) DEFAULT NULL,
           `host` VARCHAR(50) DEFAULT NULL,
           `need_stitch` INT(11) DEFAULT '1' COMMENT '是否去重,默认为去重',
-          `goods_info` text,
+          `goods_info` mediumtext,
           `identify_success_times` int(11) DEFAULT '0',
 		  PRIMARY KEY (`id`),
 		  KEY `user_task_fk_idx` (`user_id`),

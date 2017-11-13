@@ -142,7 +142,7 @@
 		</section>
 	  </aside>
 	 <section class="content-wrapper" >
-	   	<div id="content" style="margin-left: -11px;padding-top: 1px;"></div>		
+	   	<div id="content" style="margin-left: 65px;padding-top: 1px;"></div>		
 	 </section>
  </div>
 <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/admin-main-login.js"></script>

@@ -16,8 +16,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -877,16 +879,17 @@ public class TaskService {
 		return aecBOs;
 	}
 
-	public Map<String, List<String>> aecUpload(MultipartFile zipFile) {
+	public String aecUpload(MultipartFile zipFile) {
 
 		String basePath = String.format("%s%s%s%s%s%s",
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
 				MarketingConstants.AEC_PATH, File.separator, MarketingConstants.UPLOAD_PATH);
 		boolean rectifyResult = false;
-		Map<String, List<String>> failMap = new HashMap<String, List<String>>();
-		List<String> rectifyFailedList = new ArrayList<String>();
-		List<String> syncFailedList = new ArrayList<String>();
+		Map<String, Set<String>> failMap = new HashMap<String, Set<String>>();
+		Set<String> rectifyFailedList = new HashSet<String>();
+		Set<String> syncFailedList = new HashSet<String>();
+		Set<String> imageNotExistList = new HashSet<String>();
 		//String basePath1 = "D:\\aecq";
 		try {
 			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
@@ -927,19 +930,85 @@ public class TaskService {
 							rectifyFailedList.add(imagesVO.getTaskId());
 						}
 						// xmlFile.delete();
+					} else {
+						imageNotExistList.add(taskImageId);
 					}
 				}
 			}
 			zin.closeEntry();
 			logger.info("updateTaskGoodInfoAndRectify end");
-			
+
 			failMap.put("syncFailed", syncFailedList);
 			failMap.put("rectifyFailed", rectifyFailedList);
-			
+			failMap.put("imageNotExist", imageNotExistList);
+
 		} catch (IOException e) {
-			logger.info("unzip fail, " + e.getMessage());;
+			logger.info("unzip fail, " + e.getMessage());
+			return StringUtils.EMPTY;
 		}
-		return failMap;
+		String filePath = getFailMapFilePath(failMap);
+		return filePath;
+	}
+
+	private String getFailMapFilePath(Map<String, Set<String>> failMap) {
+		List<String> syncFailedList = new ArrayList<String>(failMap.get("syncFailed"));
+		List<String> rectifyFailedList = new ArrayList<String>(failMap.get("rectifyFailed"));
+		List<String> imageNotExistList = new ArrayList<String>(failMap.get("imageNotExist"));
+		StringBuffer buffer = new StringBuffer();
+
+		if (syncFailedList.size() == 0 && rectifyFailedList.size() == 0 && imageNotExistList.size() == 0) {
+			buffer.append("所有任务已成功纠错并拉取数据");
+		} else {
+			if (imageNotExistList.size() > 0) {
+				buffer.append("图片不存在：");
+				for (int i = 0; i < imageNotExistList.size(); i++) {
+					buffer.append(imageNotExistList.get(i));
+					if (i < (imageNotExistList.size() - 1)) {
+						buffer.append(",");
+					} else {
+						buffer.append("\n");
+					}
+				}
+			}
+			if (rectifyFailedList.size() > 0) {
+				buffer.append("纠错失败：");
+				for (int i = 0; i < rectifyFailedList.size(); i++) {
+					buffer.append(rectifyFailedList.get(i));
+					if (i < (rectifyFailedList.size() - 1)) {
+						buffer.append(",");
+					} else {
+						buffer.append("\n");
+					}
+				}
+			}
+			if (syncFailedList.size() > 0) {
+				buffer.append("拉取数据失败：");
+				for (int i = 0; i < syncFailedList.size(); i++) {
+					buffer.append(syncFailedList.get(i));
+					if (i < (syncFailedList.size() - 1)) {
+						buffer.append(",");
+					}
+				}
+			}
+		}
+		SimpleDateFormat dfs = new SimpleDateFormat("yyyyMMddHHmmss");
+		Date time = new Date();
+		String formatTime = dfs.format(time);
+
+		String filePath = String.format("%s%s%s%s%s%s",
+				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
+				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
+				MarketingConstants.AEC_PATH, File.separator, "result_" + formatTime + ".txt");
+		//String filePath1 = "D:\\aecq\\download\\" + "result_" + formatTime + ".txt";
+		File file = new File(filePath);
+		file.setWritable(true, false);
+		try {
+			FileUtils.writeStringToFile(file, buffer.toString());
+		} catch (IOException e) {
+			logger.error("aec 线下纠错生成纠错结果文件失败， " + e.getMessage());
+			return StringUtils.EMPTY;
+		}
+		return filePath;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -1,5 +1,9 @@
 package com.tunicorn.marketing.controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,6 +15,7 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -124,37 +129,42 @@ public class AECController extends BaseController {
 
 	@RequestMapping(value = "/aec/upload", method = RequestMethod.POST)
 	@ResponseBody
-	public CommonAjaxResponse upload(HttpServletRequest request,
+	public String upload(HttpServletRequest request,
 			@RequestParam(value = "zipFile", required = false) MultipartFile zipFile, HttpServletResponse response) {
-		Map<String, List<String>> failMap = taskService.aecUpload(zipFile);
-		List<String> syncFailedList = failMap.get("syncFailed");
-		List<String> rectifyFailedList = failMap.get("rectifyFailed");
+		String failFilePath = taskService.aecUpload(zipFile);
+		return failFilePath;
+	}
 
-		StringBuffer buffer = new StringBuffer();
-		if (syncFailedList.size() == 0 && rectifyFailedList.size() == 0) {
-			buffer.append("所有任务已成功纠错并拉取数据");
-		} else {
-			if (rectifyFailedList.size() > 0) {
-				buffer.append("纠错失败：");
-				for (int i = 0; i < rectifyFailedList.size(); i++) {
-					buffer.append(rectifyFailedList.get(i));
-					if (i < (rectifyFailedList.size() - 1)) {
-						buffer.append(",");
-					} else {
-						buffer.append("\n");
-					}
+	@RequestMapping(value = "/aec/uploadResult/download", method = RequestMethod.GET)
+	public void uploadResultdownload(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String filePath = request.getParameter("filePath");
+		if (StringUtils.isNotBlank(filePath)) {
+			int index = filePath.lastIndexOf(File.separator);
+			response.setHeader("contentType", "text/html; charset=utf-8");
+			response.setHeader("Content-Disposition", "attachment; filename=" + filePath.substring(index + 1));
+
+			response.setContentType("application/octet-stream");
+			BufferedInputStream in = null;
+			BufferedOutputStream out = null;
+			try {
+				File file = new File(filePath);
+				in = new BufferedInputStream(new FileInputStream(file));
+				out = new BufferedOutputStream(response.getOutputStream());
+				byte[] data = new byte[1024];
+				int len = 0;
+				while ((len = in.read(data)) != -1) {
+					out.write(data, 0, len);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (in != null) {
+					in.close();
+				}
+				if (out != null) {
+					out.close();
 				}
 			}
-			if (syncFailedList.size() > 0) {
-				buffer.append("拉取数据失败：");
-				for (int i = 0; i < syncFailedList.size(); i++) {
-					buffer.append(syncFailedList.get(i));
-					if (i < (syncFailedList.size() - 1)) {
-						buffer.append(",");
-					}
-				}
-			}
-		} 
-		return CommonAjaxResponse.toSuccess(buffer);
+		}
 	}
 }

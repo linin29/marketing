@@ -38,11 +38,16 @@ aec = (function(){
 	 			contentType : false,
 	 			success: function (resp) {
 	 				 $('#waiting').modal('hide');
-	 				 noty({text: resp.data, layout: "topCenter", type: "success", timeout: 1000});
+	 				 if(resp){
+	 					noty({text: "线下纠错完成，通过下载的文件查看结果", layout: "topCenter", type: "success", timeout: 3000});
+	 					downloadUploadResult(resp);
+	 				 }else{
+	 					noty({text: "线下纠错生成纠错结果文件失败", layout: "topCenter", type: "warning", timeout: 2000});
+	 				 }
 	 			},
 	 			error: function (message) {
 	 				 $('#waiting').modal('hide');
-	 				 noty({text: "上传失败", layout: "topCenter", type: "error", timeout: 1000});
+	 				 noty({text: "上传失败", layout: "topCenter", type: "error", timeout: 2000});
 	 			}
 	 		 });
 	 	});
@@ -53,10 +58,10 @@ aec = (function(){
 	                 type:'get',
 	                 url: marketing_url  + '/aec/download',
 	                 success:function(result){
-	        	 		noty({text: "下载成功", layout: "topCenter", type: "success", timeout: 1000});
+	        	 		noty({text: "下载成功", layout: "topCenter", type: "success", timeout: 2000});
 	                 },
 	                 error:function(message){
-	                	 noty({text: "下载失败", layout: "topCenter", type: "error", timeout: 1000});
+	                	 noty({text: "下载失败", layout: "topCenter", type: "error", timeout: 2000});
 	                 }
 	             }); 
 			}else{
@@ -187,67 +192,70 @@ aec = (function(){
 		queryTask(pageNum);
 	};
 	
-	  function initTableCheckbox() {  
-          var thr = $('table thead tr'); 
-          var tbr = $('table tbody tr'); 
-          var checkAll = thr.find('input');  
-          checkAll.click(function(event){
-              tbr.find('input').prop('checked', $(this).prop('checked'));
-              if($(this).is(":checked")){
-                  for(var i = 0; i < tbr.find('input').length; i++){
-                	 checkedIds.push(tbr.find('input').eq(i).attr("id"));
-      	         }  
-              }else{
-                  for(var i = 0; i < tbr.find('input').length; i++){
-                	  for(var j = 0; j < checkedIds.length; j++){
-            	          if(tbr.find('input').eq(i).attr("id") == checkedIds[j]){
-            	             checkedIds.splice(j, 1);  
-            	          }
-            	      }
-       	         }  
-              }
-              event.stopPropagation();  
-          });  
-          tbr.find('input').click(function(event){
-        	  if($(this).is(":checked")){
-        	         checkedIds.push($(this).attr("id"));
-        	   }else{
-        	         for(var i = 0; i < tbr.find('input').length; i++){
-        	             if($(this).attr("id") == checkedIds[i]){
-        	             checkedIds.splice(i, 1);  
-        	             }
-        	         }
-        	  }
-              checkAll.prop('checked', tbr.find('input:checked').length == tbr.length ? true : false);
-              console.log(checkedIds.length);
-              event.stopPropagation(); 
-          });  
-      };
+	function initTableCheckbox() {  
+        var thr = $('table thead tr'); 
+        var tbr = $('table tbody tr'); 
+        var checkAll = thr.find('input');  
+        checkAll.click(function(event){
+           tbr.find('input').prop('checked', $(this).prop('checked'));
+           if($(this).is(":checked")){
+              for(var i = 0; i < tbr.find('input').length; i++){
+                checkedIds.push(tbr.find('input').eq(i).attr("id"));
+      	      }  
+           }else{
+              for(var i = 0; i < tbr.find('input').length; i++){
+                for(var j = 0; j < checkedIds.length; j++){
+            	   if(tbr.find('input').eq(i).attr("id") == checkedIds[j]){
+            	      checkedIds.splice(j, 1);  
+            	   }
+            	}
+       	      }  
+           }
+           event.stopPropagation();  
+        });  
+        tbr.find('input').click(function(event){
+        	if($(this).is(":checked")){
+        	    checkedIds.push($(this).attr("id"));
+        	}else{
+        	    for(var i = 0; i < tbr.find('input').length; i++){
+        	       if($(this).attr("id") == checkedIds[i]){
+        	          checkedIds.splice(i, 1);  
+        	       }
+        	    }
+        	}
+            checkAll.prop('checked', tbr.find('input:checked').length == tbr.length ? true : false);
+            console.log(checkedIds.length);
+            event.stopPropagation(); 
+        });  
+    };
       
-      function setChecked(){
-          var boxes = $('table tbody tr').find("input");
-          for(var i = 0; i < boxes.length; i++){
-              var id = boxes[i].id;
-              if(checkedIds.indexOf(id, 0) != -1){
-                  boxes[i].checked = true;
-              }else{
-                  boxes[i].checked = false;
-              }
+  function setChecked(){
+      var boxes = $('table tbody tr').find("input");
+      for(var i = 0; i < boxes.length; i++){
+          var id = boxes[i].id;
+          if(checkedIds.indexOf(id, 0) != -1){
+              boxes[i].checked = true;
+          }else{
+              boxes[i].checked = false;
           }
-       };
-	  function getTaskDetail(taskId) {
-			$.ajax({
-				type: 'GET',
-				url: marketing_url + '/showTask/' + taskId,
-				success: function(data) {
-					$("#content").html(data);
-			    },
-			    error: function(data) {
-			    	//返回500错误页面
-			    	$("html").html(data.responseText);
-			    }
-			});
-		};
+      }
+   };
+  function getTaskDetail(taskId) {
+		$.ajax({
+			type: 'GET',
+			url: marketing_url + '/showTask/' + taskId,
+			success: function(data) {
+				$("#content").html(data);
+		    },
+		    error: function(data) {
+		    	//返回500错误页面
+		    	$("html").html(data.responseText);
+		    }
+		});
+	};
+  function downloadUploadResult(filePath){
+	  window.open(marketing_url + "/aec/uploadResult/download?filePath=" + filePath);
+  }
 	return {
 		_init:init
 	}

@@ -941,7 +941,7 @@ public class TaskService {
 			zin.closeEntry();
 			
 			int totalSize = xmlFileList.size();
-			int threadSize = 20;
+			int threadSize = 15;
 			int size = totalSize / threadSize;
 			int mod = totalSize % threadSize;
 			if (mod > 0) {

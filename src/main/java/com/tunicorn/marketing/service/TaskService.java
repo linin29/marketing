@@ -890,7 +890,9 @@ public class TaskService {
 		Set<String> rectifyFailedList = new HashSet<String>();
 		Set<String> syncFailedList = new HashSet<String>();
 		Set<String> imageNotExistList = new HashSet<String>();
-		//String basePath1 = "D:\\aecq";
+
+		List<File> xmlFileList = new ArrayList<File>();
+		// String basePath1 = "D:\\aecq";
 		try {
 			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
 			ZipEntry ze;
@@ -910,7 +912,8 @@ public class TaskService {
 					}
 					fos.close();
 
-					int zeIndex = ze.getName().lastIndexOf(MarketingConstants.POINT);
+					xmlFileList.add(xmlFile);
+					/*int zeIndex = ze.getName().lastIndexOf(MarketingConstants.POINT);
 					String taskImageId = "";
 					if (zeIndex > 0) {
 						taskImageId = ze.getName().substring(0, zeIndex);
@@ -932,10 +935,37 @@ public class TaskService {
 						// xmlFile.delete();
 					} else {
 						imageNotExistList.add(taskImageId);
-					}
+					}*/
 				}
 			}
 			zin.closeEntry();
+			
+			int totalSize = xmlFileList.size();
+			int threadSize = 20;
+			int size = totalSize / threadSize;
+			int mod = totalSize % threadSize;
+			if (mod > 0) {
+				threadSize++;
+			}
+			CountDownLatch latch = new CountDownLatch(totalSize);
+			for (int i = 1; i <= threadSize; i++) {
+				List<File> subXmlFiles = new ArrayList<File>();
+				if (i < threadSize) {
+					subXmlFiles = xmlFileList.subList((i - 1) * size, i * size);
+				} else {
+					subXmlFiles = xmlFileList.subList((i - 1) * size, totalSize);
+				}
+				generateExecutorPool.execute(
+						new AecUploadThread(latch, subXmlFiles, syncFailedList, rectifyFailedList, 
+								imageNotExistList, taskMapper, taskImagesMapper, goodsSkuMapper));
+			}
+			
+			try {
+				latch.await();
+			} catch (InterruptedException e) {
+				logger.error("Thread interrupte exception, caused by:" + e.getMessage());
+			}
+			
 			logger.info("updateTaskGoodInfoAndRectify end");
 
 			failMap.put("syncFailed", syncFailedList);
@@ -999,7 +1029,8 @@ public class TaskService {
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
 				MarketingConstants.AEC_PATH, File.separator, "result_" + formatTime + ".txt");
-		//String filePath1 = "D:\\aecq\\download\\" + "result_" + formatTime + ".txt";
+		// String filePath1 = "D:\\aecq\\download\\" + "result_" + formatTime +
+		// ".txt";
 		File file = new File(filePath);
 		file.setWritable(true, false);
 		try {
@@ -1987,5 +2018,177 @@ class XMLGeneratorThread implements Runnable {
 			}
 		}
 		return mapper.createArrayNode();
+	}
+}
+
+class AecUploadThread implements Runnable {
+	private static Logger logger = Logger.getLogger(AecUploadThread.class);
+	private CountDownLatch latch;
+	List<File> subXmlFiles;
+	Set<String> rectifyFailedList;
+	Set<String> syncFailedList;
+	Set<String> imageNotExistList;
+	private TaskMapper taskMapper;
+	private TaskImagesMapper taskImagesMapper;
+	private GoodsSkuMapper goodsSkuMapper;
+
+	public AecUploadThread(CountDownLatch count, List<File> subXmlFiles, Set<String> syncFailedList,
+			Set<String> rectifyFailedList, Set<String> imageNotExistList, TaskMapper taskMapper,
+			TaskImagesMapper taskImagesMapper, GoodsSkuMapper goodsSkuMapper) {
+		this.latch = count;
+		this.subXmlFiles = subXmlFiles;
+		this.rectifyFailedList = rectifyFailedList;
+		this.syncFailedList = syncFailedList;
+		this.imageNotExistList = imageNotExistList;
+		this.taskMapper = taskMapper;
+		this.taskImagesMapper = taskImagesMapper;
+		this.goodsSkuMapper = goodsSkuMapper;
+	}
+
+	public void run() {
+		if (subXmlFiles != null && subXmlFiles.size() > 0) {
+			for (int i = 0; i < subXmlFiles.size(); i++) {
+				boolean rectifyResult = false;
+
+				File xmlFile = subXmlFiles.get(i);
+				String xmlFileName = xmlFile.getName();
+				int zeIndex = xmlFileName.lastIndexOf(MarketingConstants.POINT);
+
+				String taskImageId = "";
+				if (zeIndex > 0) {
+					taskImageId = xmlFileName.substring(0, zeIndex);
+				}
+				TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(taskImageId);
+				if (imagesVO != null) {
+					TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
+					ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
+					rectifyResult = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
+					if (rectifyResult) {
+						CommonAjaxResponse response = getStore(imagesVO.getTaskId());
+						if (response != null && !response.getSuccess()) {
+							syncFailedList.add(imagesVO.getTaskId());
+						}
+					} else {
+						rectifyFailedList.add(imagesVO.getTaskId());
+					}
+					// xmlFile.delete();
+				} else {
+					imageNotExistList.add(taskImageId);
+				}
+				latch.countDown();
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private ArrayNode parseXml(File xmlFile, String majorType) {
+
+		SAXReader saxReader = new SAXReader();
+		ObjectMapper mapper = new ObjectMapper();
+		ArrayNode arrayNode = mapper.createArrayNode();
+		Document document;
+		try {
+			document = saxReader.read(xmlFile);
+
+			Element root = document.getRootElement();
+			List<Element> objectList = root.elements("object");
+			if (objectList != null && objectList.size() > 0) {
+				for (Element element : objectList) {
+					String name = element.elementText("name");
+
+					Element bndboxElement = element.element("bndbox");
+					String xmin = bndboxElement.elementText("xmin");
+					String ymin = bndboxElement.elementText("ymin");
+					String xmax = bndboxElement.elementText("xmax");
+					String ymax = bndboxElement.elementText("ymax");
+
+					ObjectNode node = mapper.createObjectNode();
+
+					GoodsSkuBO goodsSkuBO = new GoodsSkuBO();
+					goodsSkuBO.setName(name);
+					goodsSkuBO.setMajorType(majorType);
+
+					List<GoodsSkuVO> goodsSkuVOs = goodsSkuMapper.getNewGoodsSkuListByBO(goodsSkuBO);
+					if (goodsSkuVOs != null && goodsSkuVOs.size() > 0) {
+						node.put("label", goodsSkuVOs.get(0).getOrder() + 1);
+					} else {
+						node.put("label", 0);
+					}
+
+					if (StringUtils.isNotBlank(xmin) && StringUtils.isNotBlank(xmax)) {
+						node.put("x", Integer.valueOf(xmin));
+						node.put("width", Integer.valueOf(xmax) - Integer.valueOf(xmin));
+					}
+					if (StringUtils.isNotBlank(ymin) && StringUtils.isNotBlank(ymax)) {
+						node.put("y", Integer.valueOf(ymin));
+						node.put("height", Integer.valueOf(ymax) - Integer.valueOf(ymin));
+					}
+					arrayNode.add(node);
+				}
+			}
+
+		} catch (DocumentException e) {
+			logger.info("parseXml fail: " + e.getMessage());
+		}
+		return arrayNode;
+	}
+
+	private boolean updateTaskGoodInfoAndRectify(ArrayNode arrayNode, TaskVO taskVO, int imageOrder) {
+		String result = (String) taskVO.getResult();
+		boolean rectifyResult = false;
+		if (StringUtils.isNotBlank(result)) {
+			ObjectMapper mapper = new ObjectMapper();
+			ObjectNode nodeResult;
+			try {
+				nodeResult = (ObjectNode) mapper.readTree(result);
+				if (nodeResult.findValue("goodInfo") != null) {
+					ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("goodInfo");
+					ObjectNode jsonNode = (ObjectNode) jsonNodes.get(imageOrder - 1);
+					// JsonNode rectJsonNode = jsonNode.get("rect");
+					jsonNode.set("rect", arrayNode);
+					taskVO.setResult(nodeResult.toString());
+					int updateResult = taskMapper.updateTask(taskVO);
+					if (updateResult > 0) {
+						CommonAjaxResponse ajaxResponse = rectify(taskVO.getId());
+						if (ajaxResponse != null && ajaxResponse.getSuccess()) {
+							rectifyResult = true;
+						} else {
+							// jsonNode.set("rect", rectJsonNode);
+							// taskVO.setResult(nodeResult.toString());
+							// taskMapper.updateTask(taskVO);
+						}
+					}
+					logger.info("taskId:" + taskVO.getId() + ", aecUpload result: " + updateResult);
+				}
+
+			} catch (IOException e) {
+				logger.error("taskId:" + taskVO.getId() + ", aecUpload fail, " + e.getMessage());
+			}
+		}
+		return rectifyResult;
+	}
+
+	private CommonAjaxResponse getStore(String taskId) {
+		MarketingGetStoreRequestParam param = new MarketingGetStoreRequestParam();
+		param.setTaskId(taskId);
+		String tokenStr = taskId + MarketingConstants.INNOVISION;
+		try {
+			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+			messageDigest.update(tokenStr.getBytes());
+			param.setToken(new BigInteger(1, messageDigest.digest()).toString(16));
+		} catch (NoSuchAlgorithmException e) {
+			logger.info("taskId:" + taskId + ", getStore method token MD5 fail " + e.getMessage());
+		}
+		CommonAjaxResponse result = MarketingAPI.getStore(param);
+		return result;
+	}
+
+	private CommonAjaxResponse rectify(String taskId) {
+		TaskVO taskVO = taskMapper.getTaskById(taskId);
+		MarketingRectifyRequestParam param = new MarketingRectifyRequestParam();
+		param.setTaskId(taskId);
+		param.setMajorType(taskVO.getMajorType());
+		CommonAjaxResponse result = MarketingAPI.rectify(param);
+		return result;
 	}
 }

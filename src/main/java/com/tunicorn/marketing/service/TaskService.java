@@ -116,6 +116,8 @@ public class TaskService {
 
 	private static ExecutorService generateExecutorPool = Executors.newFixedThreadPool(20);
 
+	private static ExecutorService aecUploadExecutorPool = Executors.newFixedThreadPool(50);
+
 	@Transactional
 	public ServiceResponseBO createTask(String userId, String taskName, List<MultipartFile> images) {
 		logger.info("params of createTask: taskName: " + taskName + ", userId:" + userId);
@@ -385,7 +387,7 @@ public class TaskService {
 					}
 				}
 			}
-			logger.info("taskId:" + taskId + ", result of taskStatus method:" + newNode.toString());
+			//logger.info("taskId:" + taskId + ", result of taskStatus method:" + newNode.toString());
 			return new ServiceResponseBO(newNode);
 		} else {
 			return new ServiceResponseBO(false, "marketing_task_not_existed");
@@ -885,7 +887,7 @@ public class TaskService {
 				com.tunicorn.util.ConfigUtils.getInstance().getConfigValue("storage.private.basePath"),
 				ConfigUtils.getInstance().getConfigValue("marketing.image.root.path"), File.separator,
 				MarketingConstants.AEC_PATH, File.separator, MarketingConstants.UPLOAD_PATH);
-		boolean rectifyResult = false;
+		// boolean rectifyResult = false;
 		Map<String, Set<String>> failMap = new HashMap<String, Set<String>>();
 		Set<String> rectifyFailedList = new HashSet<String>();
 		Set<String> syncFailedList = new HashSet<String>();
@@ -913,33 +915,31 @@ public class TaskService {
 					fos.close();
 
 					xmlFileList.add(xmlFile);
-					/*int zeIndex = ze.getName().lastIndexOf(MarketingConstants.POINT);
-					String taskImageId = "";
-					if (zeIndex > 0) {
-						taskImageId = ze.getName().substring(0, zeIndex);
-					}
-					TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(taskImageId);
-					if (imagesVO != null) {
-						TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
-						ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
-						rectifyResult = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
-						if (rectifyResult) {
-							CommonAjaxResponse response = getStore(imagesVO.getTaskId());
-							if (response != null && !response.getSuccess()) {
-								syncFailedList.add(imagesVO.getTaskId());
-							}
-
-						} else {
-							rectifyFailedList.add(imagesVO.getTaskId());
-						}
-						// xmlFile.delete();
-					} else {
-						imageNotExistList.add(taskImageId);
-					}*/
+					/*
+					 * int zeIndex =
+					 * ze.getName().lastIndexOf(MarketingConstants.POINT);
+					 * String taskImageId = ""; if (zeIndex > 0) { taskImageId =
+					 * ze.getName().substring(0, zeIndex); } TaskImagesVO
+					 * imagesVO =
+					 * taskImagesMapper.getTaskImagesById(taskImageId); if
+					 * (imagesVO != null) { TaskVO taskVO =
+					 * taskMapper.getTaskById(imagesVO.getTaskId()); ArrayNode
+					 * arrayNode = parseXml(xmlFile, taskVO.getMajorType());
+					 * rectifyResult = updateTaskGoodInfoAndRectify(arrayNode,
+					 * taskVO, imagesVO.getOrderNo()); if (rectifyResult) {
+					 * CommonAjaxResponse response =
+					 * getStore(imagesVO.getTaskId()); if (response != null &&
+					 * !response.getSuccess()) {
+					 * syncFailedList.add(imagesVO.getTaskId()); }
+					 * 
+					 * } else { rectifyFailedList.add(imagesVO.getTaskId()); }
+					 * // xmlFile.delete(); } else {
+					 * imageNotExistList.add(taskImageId); }
+					 */
 				}
 			}
 			zin.closeEntry();
-			
+
 			int totalSize = xmlFileList.size();
 			int threadSize = 15;
 			int size = totalSize / threadSize;
@@ -955,17 +955,16 @@ public class TaskService {
 				} else {
 					subXmlFiles = xmlFileList.subList((i - 1) * size, totalSize);
 				}
-				generateExecutorPool.execute(
-						new AecUploadThread(latch, subXmlFiles, syncFailedList, rectifyFailedList, 
-								imageNotExistList, taskMapper, taskImagesMapper, goodsSkuMapper));
+				aecUploadExecutorPool.execute(new AecUploadThread(latch, subXmlFiles, syncFailedList, rectifyFailedList,
+						imageNotExistList, taskMapper, taskImagesMapper, goodsSkuMapper));
 			}
-			
+
 			try {
 				latch.await();
 			} catch (InterruptedException e) {
 				logger.error("Thread interrupte exception, caused by:" + e.getMessage());
 			}
-			
+
 			logger.info("updateTaskGoodInfoAndRectify end");
 
 			failMap.put("syncFailed", syncFailedList);
@@ -1042,7 +1041,7 @@ public class TaskService {
 		return filePath;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "unused" })
 	private ArrayNode parseXml(File xmlFile, String majorType) {
 
 		SAXReader saxReader = new SAXReader();
@@ -1095,6 +1094,7 @@ public class TaskService {
 		return arrayNode;
 	}
 
+	@SuppressWarnings("unused")
 	private boolean updateTaskGoodInfoAndRectify(ArrayNode arrayNode, TaskVO taskVO, int imageOrder) {
 		String result = (String) taskVO.getResult();
 		boolean rectifyResult = false;
@@ -2048,34 +2048,45 @@ class AecUploadThread implements Runnable {
 	public void run() {
 		if (subXmlFiles != null && subXmlFiles.size() > 0) {
 			for (int i = 0; i < subXmlFiles.size(); i++) {
-				boolean rectifyResult = false;
+				try {
+					boolean rectifyResult = false;
 
-				File xmlFile = subXmlFiles.get(i);
-				String xmlFileName = xmlFile.getName();
-				int zeIndex = xmlFileName.lastIndexOf(MarketingConstants.POINT);
+					File xmlFile = subXmlFiles.get(i);
+					String xmlFileName = xmlFile.getName();
+					int zeIndex = xmlFileName.lastIndexOf(MarketingConstants.POINT);
 
-				String taskImageId = "";
-				if (zeIndex > 0) {
-					taskImageId = xmlFileName.substring(0, zeIndex);
-				}
-				TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(taskImageId);
-				if (imagesVO != null) {
-					TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
-					ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
-					rectifyResult = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
-					if (rectifyResult) {
-						CommonAjaxResponse response = getStore(imagesVO.getTaskId());
-						if (response != null && !response.getSuccess()) {
-							syncFailedList.add(imagesVO.getTaskId());
-						}
-					} else {
-						rectifyFailedList.add(imagesVO.getTaskId());
+					String taskImageId = "";
+					if (zeIndex > 0) {
+						taskImageId = xmlFileName.substring(0, zeIndex);
 					}
-					// xmlFile.delete();
-				} else {
-					imageNotExistList.add(taskImageId);
+					TaskImagesVO imagesVO = taskImagesMapper.getTaskImagesById(taskImageId);
+					if (imagesVO != null) {
+						TaskVO taskVO = taskMapper.getTaskById(imagesVO.getTaskId());
+						ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
+						rectifyResult = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
+						if (rectifyResult) {
+							CommonAjaxResponse response = getStore(imagesVO.getTaskId());
+							if (response == null || !response.getSuccess()) {
+								synchronized (latch) {
+									syncFailedList.add(imagesVO.getTaskId());
+								}
+							}
+						} else {
+							synchronized (latch) {
+								rectifyFailedList.add(imagesVO.getTaskId());
+							}
+						}
+						// xmlFile.delete();
+					} else {
+						synchronized (latch) {
+							imageNotExistList.add(taskImageId);
+						}
+					}
+				} catch (Exception e) {
+					logger.error("AecUploadThread 多线程上传纠错文件失败, " + e.getMessage());
+				} finally {
+					latch.countDown();
 				}
-				latch.countDown();
 			}
 		}
 	}

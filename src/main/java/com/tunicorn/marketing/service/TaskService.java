@@ -113,10 +113,11 @@ public class TaskService {
 	private MajorTypeMapper majorTypeMapper;
 	@Autowired
 	private GoodsSkuMapper goodsSkuMapper;
-
+	
+	private final static int THREAD_UPLOAD_MAX_SIZE = 50;
 	private static ExecutorService generateExecutorPool = Executors.newFixedThreadPool(20);
 
-	private static ExecutorService aecUploadExecutorPool = Executors.newFixedThreadPool(50);
+	private static ExecutorService aecUploadExecutorPool = Executors.newFixedThreadPool(THREAD_UPLOAD_MAX_SIZE);
 
 	@Transactional
 	public ServiceResponseBO createTask(String userId, String taskName, List<MultipartFile> images) {
@@ -915,39 +916,18 @@ public class TaskService {
 					fos.close();
 
 					xmlFileList.add(xmlFile);
-					/*
-					 * int zeIndex =
-					 * ze.getName().lastIndexOf(MarketingConstants.POINT);
-					 * String taskImageId = ""; if (zeIndex > 0) { taskImageId =
-					 * ze.getName().substring(0, zeIndex); } TaskImagesVO
-					 * imagesVO =
-					 * taskImagesMapper.getTaskImagesById(taskImageId); if
-					 * (imagesVO != null) { TaskVO taskVO =
-					 * taskMapper.getTaskById(imagesVO.getTaskId()); ArrayNode
-					 * arrayNode = parseXml(xmlFile, taskVO.getMajorType());
-					 * rectifyResult = updateTaskGoodInfoAndRectify(arrayNode,
-					 * taskVO, imagesVO.getOrderNo()); if (rectifyResult) {
-					 * CommonAjaxResponse response =
-					 * getStore(imagesVO.getTaskId()); if (response != null &&
-					 * !response.getSuccess()) {
-					 * syncFailedList.add(imagesVO.getTaskId()); }
-					 * 
-					 * } else { rectifyFailedList.add(imagesVO.getTaskId()); }
-					 * // xmlFile.delete(); } else {
-					 * imageNotExistList.add(taskImageId); }
-					 */
 				}
 			}
 			zin.closeEntry();
 
 			int totalSize = xmlFileList.size();
-			int threadSize = 15;
+			int threadSize = THREAD_UPLOAD_MAX_SIZE - 1;
 			int size = totalSize / threadSize;
 			int mod = totalSize % threadSize;
 			if (mod > 0) {
 				threadSize++;
 			}
-			CountDownLatch latch = new CountDownLatch(totalSize);
+			CountDownLatch latch = new CountDownLatch(threadSize);
 			for (int i = 1; i <= threadSize; i++) {
 				List<File> subXmlFiles = new ArrayList<File>();
 				if (i < threadSize) {
@@ -989,7 +969,7 @@ public class TaskService {
 			buffer.append("所有任务已成功纠错并拉取数据");
 		} else {
 			if (imageNotExistList.size() > 0) {
-				buffer.append("图片不存在：");
+				buffer.append("图片不存在:");
 				for (int i = 0; i < imageNotExistList.size(); i++) {
 					buffer.append(imageNotExistList.get(i));
 					if (i < (imageNotExistList.size() - 1)) {
@@ -1011,7 +991,7 @@ public class TaskService {
 				}
 			}
 			if (syncFailedList.size() > 0) {
-				buffer.append("拉取数据失败：");
+				buffer.append("拉取数据失败:");
 				for (int i = 0; i < syncFailedList.size(); i++) {
 					buffer.append(syncFailedList.get(i));
 					if (i < (syncFailedList.size() - 1)) {
@@ -2047,10 +2027,9 @@ class AecUploadThread implements Runnable {
 
 	public void run() {
 		if (subXmlFiles != null && subXmlFiles.size() > 0) {
-			for (int i = 0; i < subXmlFiles.size(); i++) {
-				try {
+			try {
+				for (int i = 0; i < subXmlFiles.size(); i++) {
 					boolean rectifyResult = false;
-
 					File xmlFile = subXmlFiles.get(i);
 					String xmlFileName = xmlFile.getName();
 					int zeIndex = xmlFileName.lastIndexOf(MarketingConstants.POINT);
@@ -2065,7 +2044,8 @@ class AecUploadThread implements Runnable {
 						ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
 						rectifyResult = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
 						if (rectifyResult) {
-							CommonAjaxResponse response = getStore(imagesVO.getTaskId());
+							//CommonAjaxResponse response = getStore(imagesVO.getTaskId());
+							CommonAjaxResponse response = CommonAjaxResponse.toSuccess(null);
 							if (response == null || !response.getSuccess()) {
 								synchronized (latch) {
 									syncFailedList.add(imagesVO.getTaskId());
@@ -2082,18 +2062,16 @@ class AecUploadThread implements Runnable {
 							imageNotExistList.add(taskImageId);
 						}
 					}
-				} catch (Exception e) {
-					logger.error("AecUploadThread 多线程上传纠错文件失败, " + e.getMessage());
-				} finally {
-					latch.countDown();
-				}
+				} 
+			} finally {
+				latch.countDown();
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private ArrayNode parseXml(File xmlFile, String majorType) {
-
+		long xmlStart = System.currentTimeMillis();
 		SAXReader saxReader = new SAXReader();
 		ObjectMapper mapper = new ObjectMapper();
 		ArrayNode arrayNode = mapper.createArrayNode();
@@ -2141,6 +2119,8 @@ class AecUploadThread implements Runnable {
 		} catch (DocumentException e) {
 			logger.info("parseXml fail: " + e.getMessage());
 		}
+		long xmlEnd = System.currentTimeMillis();
+		logger.info("It takes " + (xmlEnd - xmlStart) + "ms to Parse xml:" + xmlFile.getName());
 		return arrayNode;
 	}
 

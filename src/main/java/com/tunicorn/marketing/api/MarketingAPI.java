@@ -125,7 +125,7 @@ public class MarketingAPI {
 			Message message = MessageUtils.getInstance().getMessage("marketing_call_service_failure");
 			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
-		logger.info("The response from backend marketing server:" + retValue);
+		logger.info("The response from backend marketing get store server:" + retValue);
 
 		ObjectNode node = JsonUtil.toObjectNode(retValue);
 		if (node == null) {

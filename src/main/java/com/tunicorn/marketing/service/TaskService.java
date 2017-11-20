@@ -1578,8 +1578,6 @@ public class TaskService {
 		} else {
 			node = null;
 		}
-		logger.info("taskId:" + tempTaskVO.getId() + ", result of get task result: " + node == null ? null
-				: node.toString());
 		return node;
 	}
 
@@ -1615,7 +1613,7 @@ public class TaskService {
 				logger.error("taskId:" + tempTaskVO.getId() + ", get task result fail, " + e.getMessage());
 			}
 		}
-		logger.info("taskId:" + tempTaskVO.getId() + ", result of get task result: " + node.toString());
+		//logger.info("taskId:" + tempTaskVO.getId() + ", result of get task result: " + node.toString());
 		return node;
 	}
 

@@ -1613,7 +1613,8 @@ public class TaskService {
 				logger.error("taskId:" + tempTaskVO.getId() + ", get task result fail, " + e.getMessage());
 			}
 		}
-		//logger.info("taskId:" + tempTaskVO.getId() + ", result of get task result: " + node.toString());
+		// logger.info("taskId:" + tempTaskVO.getId() + ", result of get task
+		// result: " + node.toString());
 		return node;
 	}
 
@@ -2176,13 +2177,13 @@ class AecUploadThread implements Runnable {
 		MarketingGetStoreRequestParam param = new MarketingGetStoreRequestParam();
 		param.setTaskId(taskId);
 		String tokenStr = taskId + MarketingConstants.INNOVISION;
-		try {
-			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-			messageDigest.update(tokenStr.getBytes());
-			param.setToken(new BigInteger(1, messageDigest.digest()).toString(16));
-		} catch (NoSuchAlgorithmException e) {
-			logger.info("taskId:" + taskId + ", getStore method token MD5 fail " + e.getMessage());
-		}
+		// MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+		// messageDigest.update(tokenStr.getBytes());
+		// param.setToken(new BigInteger(1,
+		// messageDigest.digest()).toString(16));
+
+		param.setToken(encryptionStr(tokenStr, "MD5"));
+
 		CommonAjaxResponse result = MarketingAPI.getStore(param);
 		return result;
 	}
@@ -2194,5 +2195,36 @@ class AecUploadThread implements Runnable {
 		param.setMajorType(taskVO.getMajorType());
 		CommonAjaxResponse result = MarketingAPI.rectify(param);
 		return result;
+	}
+
+	private String bytesConvertToHexString(byte[] bytes) {
+		StringBuffer sb = new StringBuffer();
+		for (byte aByte : bytes) {
+			String s = Integer.toHexString(0xff & aByte);
+			if (s.length() == 1) {
+				sb.append("0" + s);
+			} else {
+				sb.append(s);
+			}
+		}
+		return sb.toString();
+	}
+
+	private byte[] encryptionStrBytes(String str, String algorithm) {
+		byte[] bytes = null;
+		try {
+			MessageDigest md = MessageDigest.getInstance(algorithm);
+			md.update(str.getBytes());
+			bytes = md.digest();
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println("加密算法: " + algorithm + " 不存在: ");
+		}
+		return null == bytes ? null : bytes;
+	}
+
+	private String encryptionStr(String str, String algorithm) {
+		// 加密之后所得字节数组
+		byte[] bytes = encryptionStrBytes(str, algorithm);
+		return bytesConvertToHexString(bytes);
 	}
 }

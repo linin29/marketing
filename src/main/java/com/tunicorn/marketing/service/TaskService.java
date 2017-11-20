@@ -2046,9 +2046,7 @@ class AecUploadThread implements Runnable {
 						ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
 						rectifyResult = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
 						if (rectifyResult) {
-							// CommonAjaxResponse response =
-							// getStore(imagesVO.getTaskId());
-							CommonAjaxResponse response = CommonAjaxResponse.toSuccess(null);
+							CommonAjaxResponse response = getStore(imagesVO.getTaskId());
 							if (response == null || !response.getSuccess()) {
 								synchronized (latch) {
 									syncFailedList.add(imagesVO.getTaskId());
@@ -2171,8 +2169,8 @@ class AecUploadThread implements Runnable {
 			}
 		}
 		long totalEnd = System.currentTimeMillis();
-		logger.info("updateTaskGoodInfoAndRectify method, task id is " + taskVO.getId()
-		+ " total use " + (totalEnd - totalStart));
+		logger.info("updateTaskGoodInfoAndRectify method, task id is " + taskVO.getId() + " total use "
+				+ (totalEnd - totalStart));
 		return rectifyResult;
 	}
 

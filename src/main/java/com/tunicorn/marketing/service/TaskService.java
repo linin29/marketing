@@ -113,7 +113,7 @@ public class TaskService {
 	private MajorTypeMapper majorTypeMapper;
 	@Autowired
 	private GoodsSkuMapper goodsSkuMapper;
-	
+
 	private final static int THREAD_UPLOAD_MAX_SIZE = 50;
 	private static ExecutorService generateExecutorPool = Executors.newFixedThreadPool(20);
 
@@ -388,7 +388,8 @@ public class TaskService {
 					}
 				}
 			}
-			//logger.info("taskId:" + taskId + ", result of taskStatus method:" + newNode.toString());
+			// logger.info("taskId:" + taskId + ", result of taskStatus method:"
+			// + newNode.toString());
 			return new ServiceResponseBO(newNode);
 		} else {
 			return new ServiceResponseBO(false, "marketing_task_not_existed");
@@ -899,7 +900,7 @@ public class TaskService {
 		try {
 			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
 			ZipEntry ze;
-
+			long uploadXmlFileStart = System.currentTimeMillis();
 			while ((ze = zin.getNextEntry()) != null) {
 				if (!ze.isDirectory() && ze.getName().contains(".xml")) {
 					File xmlFile = new File(basePath + File.separator + ze.getName());
@@ -919,7 +920,8 @@ public class TaskService {
 				}
 			}
 			zin.closeEntry();
-
+			long uploadXmlFileEnd = System.currentTimeMillis();
+			logger.info("aec upload xml and put in list use " + (uploadXmlFileEnd - uploadXmlFileStart));
 			int totalSize = xmlFileList.size();
 			int threadSize = THREAD_UPLOAD_MAX_SIZE - 1;
 			int size = totalSize / threadSize;
@@ -2044,7 +2046,8 @@ class AecUploadThread implements Runnable {
 						ArrayNode arrayNode = parseXml(xmlFile, taskVO.getMajorType());
 						rectifyResult = updateTaskGoodInfoAndRectify(arrayNode, taskVO, imagesVO.getOrderNo());
 						if (rectifyResult) {
-							//CommonAjaxResponse response = getStore(imagesVO.getTaskId());
+							// CommonAjaxResponse response =
+							// getStore(imagesVO.getTaskId());
 							CommonAjaxResponse response = CommonAjaxResponse.toSuccess(null);
 							if (response == null || !response.getSuccess()) {
 								synchronized (latch) {
@@ -2062,7 +2065,7 @@ class AecUploadThread implements Runnable {
 							imageNotExistList.add(taskImageId);
 						}
 					}
-				} 
+				}
 			} finally {
 				latch.countDown();
 			}
@@ -2125,6 +2128,7 @@ class AecUploadThread implements Runnable {
 	}
 
 	private boolean updateTaskGoodInfoAndRectify(ArrayNode arrayNode, TaskVO taskVO, int imageOrder) {
+		long totalStart = System.currentTimeMillis();
 		String result = (String) taskVO.getResult();
 		boolean rectifyResult = false;
 		if (StringUtils.isNotBlank(result)) {
@@ -2138,9 +2142,19 @@ class AecUploadThread implements Runnable {
 					// JsonNode rectJsonNode = jsonNode.get("rect");
 					jsonNode.set("rect", arrayNode);
 					taskVO.setResult(nodeResult.toString());
+					long updateTaskStart = System.currentTimeMillis();
 					int updateResult = taskMapper.updateTask(taskVO);
+					long updateTaskEnd = System.currentTimeMillis();
+					logger.info("updateTaskGoodInfoAndRectify method update task, task id is " + taskVO.getId()
+							+ " use " + (updateTaskEnd - updateTaskStart));
+
 					if (updateResult > 0) {
+						long rectifyStart = System.currentTimeMillis();
 						CommonAjaxResponse ajaxResponse = rectify(taskVO.getId());
+						long rectifyEnd = System.currentTimeMillis();
+						logger.info("updateTaskGoodInfoAndRectify method rectify task, task id is " + taskVO.getId()
+								+ " use " + (rectifyEnd - rectifyStart));
+
 						if (ajaxResponse != null && ajaxResponse.getSuccess()) {
 							rectifyResult = true;
 						} else {
@@ -2156,6 +2170,9 @@ class AecUploadThread implements Runnable {
 				logger.error("taskId:" + taskVO.getId() + ", aecUpload fail, " + e.getMessage());
 			}
 		}
+		long totalEnd = System.currentTimeMillis();
+		logger.info("updateTaskGoodInfoAndRectify method, task id is " + taskVO.getId()
+		+ " total use " + (totalEnd - totalStart));
 		return rectifyResult;
 	}
 

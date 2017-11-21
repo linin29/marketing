@@ -33,10 +33,10 @@
 			    	<tr class='th_center'>
 			    		<th style="width:20%">名称</th> 
 			    		<th style="width:15%">类型</th>
-			    		<th style="width:14%">描述</th>
-			    		<th style="width:15%">是否显示</th>
-			    		<th style="width:13%">创建时间</th>
-			    		<th style="width:20%">操作</th>
+			    		<th style="width:19%">描述</th>
+			    		<th style="width:10%">是否显示</th>
+			    		<th style="width:16%">创建时间</th>
+			    		<th style="width:17%">操作</th>
 			    	</tr>
 			    	<#if goodsSkus?? && (goodsSkus?size > 0)>
 			    		<#list goodsSkus as goodsSku>

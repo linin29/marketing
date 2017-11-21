@@ -12,9 +12,9 @@
 		    		<tr style="background-color:#ddd;">
 			    		<th style="text-align:center;width:25%">名称</th>
 			    		<th style="text-align:center;width:25%">描述</th>
-			    		<th style="text-align:center;width:7%">版本</th>
-			    		<th style="text-align:center;width:18%">创建时间</th>
-			    		<th style="text-align:center;width:25%">操作</th>
+			    		<th style="text-align:center;width:9%">版本</th>
+			    		<th style="text-align:center;width:20%">创建时间</th>
+			    		<th style="text-align:center;width:20%">操作</th>
 		    		</tr>
 		    		<#if majorTypes?? && (majorTypes?size > 0)>
 		    			<#list majorTypes as majorType>

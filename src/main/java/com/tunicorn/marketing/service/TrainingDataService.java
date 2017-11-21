@@ -105,7 +105,7 @@ public class TrainingDataService {
 				}
 				batchInsertTrainingData(trainingDataVOs);
 				long endTime = System.currentTimeMillis();
-				logger.info("time consuming : " + (endTime - startTime));
+				logger.info("time consuming : " + (endTime - startTime) + " ms");
 			}
 
 		} catch (IOException e) {

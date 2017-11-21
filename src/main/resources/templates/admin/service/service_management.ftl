@@ -55,7 +55,7 @@
 					    		<td><a href="javascript:void(0)" applyid="${adminServiceApply.id}" class="showAgreementModel">查看</a></td>
 					    		<td>${adminServiceApply.creator.name}</td>
 					    		<td id="service_${adminServiceApply.id}">${adminServiceApply.statusStr}</td>
-					    		<td>${adminServiceApply.createTime}</td>
+					    		<td>${adminServiceApply.createTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
 					    		<td>
 					    			<button class="info btn btn-success" applyid="${adminServiceApply.id}">详情</button>
 					    			<#if adminServiceApply.applyStatus == 'created'>

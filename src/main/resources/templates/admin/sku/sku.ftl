@@ -45,7 +45,7 @@
 			    				<td class='type' >${goodsSku.majorType!}</td>
 			    				<td style="width: 150px;" title="${goodsSku.description!}"><p class="newline description">${goodsSku.description!}</p></td>
 			    				<td class='showOrNot' isshow="${goodsSku.isShow?string('true','false')}">${goodsSku.isShow?string("是","否")}</td>
-			    				<td >${goodsSku.createTime!}</td>
+			    				<td >${goodsSku.createTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
 			    				<td>
 			    					<button class="btn btn-success" id="modify_${goodsSku.id!}" onclick="sku.edit(this, ${goodsSku.id});">修改</button>
 			    					<button class="btn btn-danger deleteSkuModel" skuid="${goodsSku.id}">删除</button>

@@ -22,7 +22,7 @@
 			    				<td class="name">${majorType.name!""}</td>
 			    				<td class="description" style="width: 80px;"><p class="newline">${majorType.description!""}</p></td>
 			    				<td class="version"><p class="newline">${majorType.version!""}</p></td>
-			    				<td>${majorType.createTime}</td>
+			    				<td>${majorType.createTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
 			    				<td>
 			    					<button class="btn btn-success" id="modify_${majorType.id!}" onclick="majorType.edit(this, ${majorType.id});">修改</button>
 			    					<button class="btn btn-danger deleteMajorType" majortypeid="${majorType.id}">删除</button>

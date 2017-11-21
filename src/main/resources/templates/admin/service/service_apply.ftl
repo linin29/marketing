@@ -59,7 +59,7 @@
 					    		<td><a href="javascript:void(0)"  applyid="${adminServiceApply.id}" class="showAgreementModel">图片管理</a></td>
 					    		<td>${adminServiceApply.creator.name}</td>
 					    		<td>${adminServiceApply.statusStr}</td>
-					    		<td>${adminServiceApply.createTime}</td>
+					    		<td>${adminServiceApply.createTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
 					    		<td>
 					    			<button class="info btn btn-success" applyid="${adminServiceApply.id}">详情</button>
 					    			<#if adminServiceApply.applyStatus == 'created' || adminServiceApply.applyStatus == 'rejected'>

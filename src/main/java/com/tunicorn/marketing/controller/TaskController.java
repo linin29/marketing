@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.core.io.ClassPathResource;
@@ -58,6 +59,8 @@ import com.tunicorn.util.MessageUtils;
 @Controller
 @EnableAutoConfiguration
 public class TaskController extends BaseController {
+
+	private static Logger logger = Logger.getLogger(TaskController.class);
 
 	@Autowired
 	private TaskService taskService;
@@ -206,6 +209,7 @@ public class TaskController extends BaseController {
 				out.write(buff, 0, bytesRead);
 			}
 		} catch (IOException e) {
+			logger.info("export data fail, cause by " + e.getMessage());
 			throw e;
 		} finally {
 			try {
@@ -217,6 +221,7 @@ public class TaskController extends BaseController {
 					out.close();
 				}
 			} catch (IOException e) {
+				logger.info("stream close fail, cause by " + e.getMessage());
 				throw e;
 			}
 		}
@@ -276,7 +281,8 @@ public class TaskController extends BaseController {
 							model.addAttribute("totalArea", jsonNode.asText());
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
+						logger.info(
+								"show task read taskResult fail, task is " + taskId + " cause by " + e.getMessage());
 					}
 				}
 			}
@@ -324,7 +330,8 @@ public class TaskController extends BaseController {
 							model.addAttribute("totalArea", jsonNode.asText());
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
+						logger.info(
+								"show view read taskResult fail, task is " + taskId + " cause by " + e.getMessage());
 					}
 				}
 			}
@@ -622,9 +629,9 @@ public class TaskController extends BaseController {
 	@RequestMapping(value = "/showView/tasks", method = RequestMethod.GET)
 	public String Temptasks(HttpServletRequest request, Model model) {
 
-		TaskBO taskBO = new TaskBO();		
+		TaskBO taskBO = new TaskBO();
 		String majorType = ConfigUtils.getInstance().getConfigValue("marketing.temp.major.type");
-		if(StringUtils.isNotBlank(majorType)){
+		if (StringUtils.isNotBlank(majorType)) {
 			String[] majorTypeArray = majorType.split(",");
 			taskBO.setMajorTypeArray(majorTypeArray);
 		}
@@ -645,8 +652,8 @@ public class TaskController extends BaseController {
 	public String tempSearchTask(HttpServletRequest request, Model model) {
 		TaskBO taskBO = new TaskBO();
 		String majorType = ConfigUtils.getInstance().getConfigValue("marketing.temp.major.type");
-		
-		if (StringUtils.isNotBlank(majorType)){
+
+		if (StringUtils.isNotBlank(majorType)) {
 			String[] majorTypeArray = majorType.split(",");
 			taskBO.setMajorTypeArray(majorTypeArray);
 		}
@@ -675,12 +682,12 @@ public class TaskController extends BaseController {
 		model.addAttribute("currentPage", taskBO.getPageNum() + 1);
 		return "list/task_list_temp";
 	}
-	
+
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.GET)
 	public String fileUpload(HttpServletRequest request, Model model) {
 		return "list/file_upload";
 	}
-	
+
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse zipUpload(HttpServletRequest request,
@@ -696,7 +703,7 @@ public class TaskController extends BaseController {
 			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(value = "/showMarkPage/{taskId}", method = RequestMethod.GET)
 	public String showMarkPage(@PathVariable("taskId") String taskId, Model model, HttpServletRequest request) {
 		UserVO user = getCurrentUser(request);
@@ -730,7 +737,7 @@ public class TaskController extends BaseController {
 		PriceIdentifyBO identifyBOs = taskService.priceIdentify(image, user.getId());
 		return identifyBOs;
 	}
-	
+
 	private void rendFile(HttpServletRequest request, HttpServletResponse response, String filePath, String name) {
 		InputStream inStream = null;
 		try {
@@ -753,6 +760,7 @@ public class TaskController extends BaseController {
 			}
 			inStream.close();
 		} catch (IOException e) {
+			logger.info("download file fail, cause by " + e.getMessage());
 		}
 	}
 

@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -267,7 +266,7 @@ public class TaskService {
 			}
 			zin.closeEntry();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.info(" parse zip fail, cause by " + e.getMessage());
 		}
 		if (taskImagesVOs != null && taskImagesVOs.size() > MarketingConstants.IMAGE_MAX_COUNT) {
 			return new ServiceResponseBO(false, "marketing_image_max_count");
@@ -584,17 +583,15 @@ public class TaskService {
 		imagesVO.setName(file.getName());
 		imagesVO.setId(taskImageId);
 		int updateResult = taskImagesMapper.updateTaskImage(imagesVO);
-		logger.info("taskId:" + taskId + ", result of updateTaskImage for replace method: " + updateResult
-				+ ", taskId: " + taskId);
+		logger.info("taskId:" + taskId + ", result of updateTaskImage for replace method: " + updateResult);
 
 		result = taskMapper.updateTaskStatus(taskId, MarketingConstants.TASK_STATUS_IMAGE_UPLOADED, 0);
-		logger.info("taskId:" + taskId + ", result of updateTaskStatus for repalce method: " + result + ", taskId: "
-				+ taskId);
+		logger.info("taskId:" + taskId + ", result of updateTaskStatus for repalce method: " + result);
 		if (result > 0) {
 			ObjectMapper mapper = new ObjectMapper();
 			ObjectNode node = mapper.createObjectNode();
 			node.put("resourceId", taskImageId);
-			logger.info("taskId:" + taskId + ", result of repalce method: " + node.toString() + ", taskId: " + taskId);
+			logger.info("taskId:" + taskId + ", result of repalce method: " + node.toString());
 			return new ServiceResponseBO(node);
 		} else {
 			return new ServiceResponseBO(false, "marketing_image_delete_failure");
@@ -649,7 +646,6 @@ public class TaskService {
 			} catch (Exception e) {
 				logger.error("taskId:" + taskVO.getId() + ", parse json fail, " + e.getMessage());
 			}
-			logger.info("taskId:" + taskVO.getId() + ", result of getBorderImagePath: " + resultStr);
 		}
 		return "";
 	}
@@ -921,7 +917,7 @@ public class TaskService {
 			}
 			zin.closeEntry();
 			long uploadXmlFileEnd = System.currentTimeMillis();
-			logger.info("aec upload xml and put in list use " + (uploadXmlFileEnd - uploadXmlFileStart));
+			logger.info("aec upload xml and put in list use " + (uploadXmlFileEnd - uploadXmlFileStart) + " ms");
 			int totalSize = xmlFileList.size();
 			int threadSize = THREAD_UPLOAD_MAX_SIZE - 1;
 			int size = totalSize / threadSize;
@@ -1260,13 +1256,8 @@ public class TaskService {
 		MarketingGetStoreRequestParam param = new MarketingGetStoreRequestParam();
 		param.setTaskId(taskId);
 		String tokenStr = taskId + MarketingConstants.INNOVISION;
-		try {
-			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-			messageDigest.update(tokenStr.getBytes());
-			param.setToken(new BigInteger(1, messageDigest.digest()).toString(16));
-		} catch (NoSuchAlgorithmException e) {
-			logger.info("taskId:" + taskId + ", getStore method token MD5 fail " + e.getMessage());
-		}
+		param.setToken(encryptionStr(tokenStr, MarketingConstants.MD5));
+		
 		CommonAjaxResponse result = MarketingAPI.getStore(param);
 		return result;
 	}
@@ -1349,7 +1340,6 @@ public class TaskService {
 				}
 			}
 		}
-		logger.info("taskId:" + taskId + ", result of getTaskResult method: " + node.toString());
 		return node;
 	}
 
@@ -1504,7 +1494,7 @@ public class TaskService {
 			xmlWriter.write(document);
 			xmlWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.info("generate xml file fail, cause by " + e.getMessage());
 		}
 
 	}
@@ -1827,6 +1817,38 @@ public class TaskService {
 	public List<TaskVO> getPendingWithoutHost() {
 		return taskMapper.getPendingWithoutHostTasks();
 	}
+
+	private String bytesConvertToHexString(byte[] bytes) {
+		StringBuffer buffer = new StringBuffer();
+		if (bytes != null) {
+			for (byte aByte : bytes) {
+				String hexString = Integer.toHexString(0xff & aByte);
+				if (hexString.length() == 1) {
+					buffer.append("0" + hexString);
+				} else {
+					buffer.append(hexString);
+				}
+			}
+		}
+		return buffer.toString();
+	}
+
+	private byte[] encryptionStrBytes(String str, String algorithm) {
+		byte[] bytes = null;
+		try {
+			MessageDigest md = MessageDigest.getInstance(algorithm);
+			md.update(str.getBytes());
+			bytes = md.digest();
+		} catch (NoSuchAlgorithmException e) {
+			logger.info("no such algorithm: " + algorithm);
+		}
+		return bytes == null ? null : bytes;
+	}
+
+	private String encryptionStr(String str, String algorithm) {
+		byte[] bytes = encryptionStrBytes(str, algorithm);
+		return bytesConvertToHexString(bytes);
+	}
 }
 
 class XMLGeneratorThread implements Runnable {
@@ -1971,9 +1993,8 @@ class XMLGeneratorThread implements Runnable {
 			xmlWriter.write(document);
 			xmlWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.info("generate xml file fail, cause by " + e.getMessage());
 		}
-
 	}
 
 	private static ArrayNode getImageCrops(TaskVO taskVO, int imageOrder) {
@@ -2143,14 +2164,14 @@ class AecUploadThread implements Runnable {
 					int updateResult = taskMapper.updateTask(taskVO);
 					long updateTaskEnd = System.currentTimeMillis();
 					logger.info("updateTaskGoodInfoAndRectify method update task, task id is " + taskVO.getId()
-							+ " use " + (updateTaskEnd - updateTaskStart));
+							+ " use " + (updateTaskEnd - updateTaskStart) + " ms");
 
 					if (updateResult > 0) {
 						long rectifyStart = System.currentTimeMillis();
 						CommonAjaxResponse ajaxResponse = rectify(taskVO.getId());
 						long rectifyEnd = System.currentTimeMillis();
 						logger.info("updateTaskGoodInfoAndRectify method rectify task, task id is " + taskVO.getId()
-								+ " use " + (rectifyEnd - rectifyStart));
+								+ " use " + (rectifyEnd - rectifyStart) + " ms");
 
 						if (ajaxResponse != null && ajaxResponse.getSuccess()) {
 							rectifyResult = true;
@@ -2169,7 +2190,7 @@ class AecUploadThread implements Runnable {
 		}
 		long totalEnd = System.currentTimeMillis();
 		logger.info("updateTaskGoodInfoAndRectify method, task id is " + taskVO.getId() + " total use "
-				+ (totalEnd - totalStart));
+				+ (totalEnd - totalStart) + " ms");
 		return rectifyResult;
 	}
 
@@ -2177,12 +2198,7 @@ class AecUploadThread implements Runnable {
 		MarketingGetStoreRequestParam param = new MarketingGetStoreRequestParam();
 		param.setTaskId(taskId);
 		String tokenStr = taskId + MarketingConstants.INNOVISION;
-		// MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-		// messageDigest.update(tokenStr.getBytes());
-		// param.setToken(new BigInteger(1,
-		// messageDigest.digest()).toString(16));
-
-		param.setToken(encryptionStr(tokenStr, "MD5"));
+		param.setToken(encryptionStr(tokenStr, MarketingConstants.MD5));
 
 		CommonAjaxResponse result = MarketingAPI.getStore(param);
 		return result;

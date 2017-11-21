@@ -122,4 +122,6 @@ public class MarketingConstants {
 	public static final String DATE_PATTERN = "yyyyMMdd";
 	
 	public static final String AEC_PATH = "aec";
+	
+	public static final String MD5 = "MD5";
 }

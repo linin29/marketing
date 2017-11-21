@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -40,6 +41,8 @@ import com.tunicorn.marketing.vo.UserVO;
 @EnableAutoConfiguration
 public class AECController extends BaseController {
 
+	private static Logger logger = Logger.getLogger(AECController.class);
+	
 	@Autowired
 	private TaskService taskService;
 
@@ -120,7 +123,7 @@ public class AECController extends BaseController {
 				response.flushBuffer();
 			}
 		} catch (Exception e) {
-
+			logger.info("aec download file zip fail, cause by " + e.getMessage());
 		} finally {
 			out.close();
 		}
@@ -156,7 +159,7 @@ public class AECController extends BaseController {
 					out.write(data, 0, len);
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.info("download aec upload result fail, cause by " + e.getMessage());
 			} finally {
 				if (in != null) {
 					in.close();

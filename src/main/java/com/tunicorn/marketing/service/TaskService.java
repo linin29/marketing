@@ -2027,8 +2027,8 @@ class AecUploadThread implements Runnable {
 	}
 
 	public void run() {
-		if (subXmlFiles != null && subXmlFiles.size() > 0) {
-			try {
+		try {
+			if (subXmlFiles != null && subXmlFiles.size() > 0) {
 				for (int i = 0; i < subXmlFiles.size(); i++) {
 					boolean rectifyResult = false;
 					File xmlFile = subXmlFiles.get(i);
@@ -2063,9 +2063,9 @@ class AecUploadThread implements Runnable {
 						}
 					}
 				}
-			} finally {
-				latch.countDown();
 			}
+		} finally {
+			latch.countDown();
 		}
 	}
 

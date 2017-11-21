@@ -30,7 +30,7 @@ public class AdminLoginInterceptor extends HandlerInterceptorAdapter {
 			if (tokenCookie != null) {
 				JsonNode json = SecurityUtils.vefifyAuthToken(tokenCookie);
 				if (json != null) {
-					String userID = json.get("userID").toString();
+					String userID = json.get("userID").asText();
 					BeanFactory factory = WebApplicationContextUtils
 							.getRequiredWebApplicationContext(request.getServletContext());
 

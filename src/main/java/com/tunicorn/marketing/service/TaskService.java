@@ -2198,16 +2198,18 @@ class AecUploadThread implements Runnable {
 	}
 
 	private String bytesConvertToHexString(byte[] bytes) {
-		StringBuffer sb = new StringBuffer();
-		for (byte aByte : bytes) {
-			String s = Integer.toHexString(0xff & aByte);
-			if (s.length() == 1) {
-				sb.append("0" + s);
-			} else {
-				sb.append(s);
+		StringBuffer buffer = new StringBuffer();
+		if (bytes != null) {
+			for (byte aByte : bytes) {
+				String hexString = Integer.toHexString(0xff & aByte);
+				if (hexString.length() == 1) {
+					buffer.append("0" + hexString);
+				} else {
+					buffer.append(hexString);
+				}
 			}
 		}
-		return sb.toString();
+		return buffer.toString();
 	}
 
 	private byte[] encryptionStrBytes(String str, String algorithm) {
@@ -2217,13 +2219,12 @@ class AecUploadThread implements Runnable {
 			md.update(str.getBytes());
 			bytes = md.digest();
 		} catch (NoSuchAlgorithmException e) {
-			System.out.println("加密算法: " + algorithm + " 不存在: ");
+			logger.info("no such algorithm: " + algorithm);
 		}
-		return null == bytes ? null : bytes;
+		return bytes == null ? null : bytes;
 	}
 
 	private String encryptionStr(String str, String algorithm) {
-		// 加密之后所得字节数组
 		byte[] bytes = encryptionStrBytes(str, algorithm);
 		return bytesConvertToHexString(bytes);
 	}

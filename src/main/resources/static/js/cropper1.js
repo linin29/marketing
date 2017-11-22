@@ -1353,7 +1353,8 @@ var handlers = {
     var cropBox = {};
     $.extend(true, cropBox, self.cropBox);
     var $target = $(e.target);
-
+    console.log("end:"+action);
+    console.log("end:"+cropBox);
     if(action === 'crop'){  //new
         var $cropBox = $target.parent();
         name = $cropBox.attr('name');

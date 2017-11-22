@@ -1369,15 +1369,15 @@ var handlers = {
     }else if(action === 'all'){ //move crop box
         name = self.$target.parent().attr('name');
     }else{ //resize
+      console.log($target.hasClass('cropper-drag-box'));
       if($target.hasClass('cropper-drag-box')){  //resize old rect
         $target = self.$target;
       }
+      console.log($target);
       name = $target.parent().attr('name');
     }
     console.log(name);
-    console.log(cropBox);
     cropBoxs[name] = cropBox;
-    console.log(cropBoxs);
 
     e.preventDefault();
 

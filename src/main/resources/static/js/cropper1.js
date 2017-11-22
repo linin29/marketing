@@ -1212,6 +1212,7 @@ var handlers = {
 
     self.$target = $(e.target);
     action = $(e.target).data('action');
+    console.log(action);
     if(action === 'crop'){   //新创建crop
       self.$cropBox = $cropBox = $(CROP_BOX_TEMPLATE);
       $cropBox.find('.cropper-face').addClass('cropper-move').data('action', 'all');

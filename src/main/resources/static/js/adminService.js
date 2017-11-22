@@ -60,10 +60,12 @@ adminService = (function(){
 		});
 		
 		$('#server-type').selectpicker({
-        	width:"100%"
+        	width:"343px",
+        	liveSearch:true
         });
         $('#admin-type').selectpicker({
-        	width:"100%"
+        	width:"343px",
+        	liveSearch:true
         });
         $("#new-server-model").on("hidden.bs.modal", function() {
         	$("#new-server-model").find("input").val("");
@@ -95,10 +97,12 @@ adminService = (function(){
 			$("#errorMsg").html("");
 		});
 		$('#server-type').selectpicker({
-        	width:"100%"
+			width:"343px",
+        	liveSearch:true
         });
         $('#admin-type').selectpicker({
-        	width:"100%"
+        	width:"343px",
+        	liveSearch:true
         });
 		$("#query").click(function(){
 			queryService(serviceManageUrl);

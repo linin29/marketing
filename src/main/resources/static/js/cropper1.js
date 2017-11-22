@@ -1377,6 +1377,7 @@ var handlers = {
     console.log(name);
     console.log(cropBox);
     cropBoxs[name] = cropBox;
+    console.log(cropBoxs);
 
     e.preventDefault();
 

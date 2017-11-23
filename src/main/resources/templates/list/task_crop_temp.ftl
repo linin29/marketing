@@ -180,7 +180,7 @@
 <script type="text/javascript">
 	$(function() {	
 		//taskCrop._init('${springMacroRequestContext.contextPath}/image/3.jpeg');
-		taskCrop._init('${springMacroRequestContext.contextPath}/pic/marketing${image.imagePath}');
+		taskCrop._init('/pic/marketing${image.imagePath}');
 	});
 </script>
 </body>

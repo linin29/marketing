@@ -581,7 +581,7 @@ public class TaskController extends BaseController {
 		model.addAttribute("task", taskVO);
 		model.addAttribute("imageId", imageId);
 		model.addAttribute("goodResults", taskService.getResultList(taskVO));
-		return "list/task_crop";
+		return "list/task_crop_temp";
 	}
 
 	@RequestMapping(value = "/taskImageCrop/save/{taskId}", method = RequestMethod.POST)

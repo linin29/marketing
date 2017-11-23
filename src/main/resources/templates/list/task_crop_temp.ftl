@@ -133,7 +133,8 @@
                				</h4>
                				<div id="show_area" min_width="700" min_height="600" style="width: 700px;  height: 600px; display:inline-block; float:left; background-color: #f0f0f0; overflow: auto;">
 					            <canvas id="canvas" width="700" height="600"></canvas>
-					        </div>            				                			               			 
+					        </div>
+					        <input imageid="${image.id}" id="imageCrop" type="hidden" />           				                			               			 
 							 <!-- <div id="image_default" align="center" class="col-sm-7">
 			                   	  <img id="imageCrop" src="/pic/marketing${image.imagePath}" imageid="${image.id}"  class="img-thumbnail"> 
 				                  <img id="imageCrop"  src="${springMacroRequestContext.contextPath}/image/3.jpeg"  class="img-thumbnail">

@@ -11,10 +11,11 @@
 		<result column="pictures" property="pictures" jdbcType="INTEGER" />
 		<result column="last_update" property="lastUpdateTime"  javaType="java.sql.Date" jdbcType="TIMESTAMP" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="major_type" property="majorType" jdbcType="VARCHAR" />
 	 </resultMap>
     
     <select id="getApiCallingDetail" resultMap="ApiCallingDetailResultMap" parameterType="com.tunicorn.marketing.vo.ApiCallingDetailVO">
-    	select id, api_method, api_name, user_name, calling_status, create_time, pictures, last_update, status
+    	select id, api_method, api_name, user_name, calling_status, create_time, pictures, last_update, status, major_type
     	from api_calling_detail
     	where `status` = 'active'
     	<if test="apiMethod != null and apiMethod != ''">
@@ -22,6 +23,9 @@
     	</if>
     	<if test="apiName != null and apiName != ''">
     		and api_name = #{apiName}
+    	</if>
+    	<if test="majorType != null and majorType != ''">
+    		and major_type = #{majorType}
     	</if>
     </select>
 </mapper>

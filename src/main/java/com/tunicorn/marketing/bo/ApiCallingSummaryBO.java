@@ -13,7 +13,7 @@ public class ApiCallingSummaryBO extends PaginationBO {
 	private String status;
 	private String startDate;
 	private String endDate;
-	
+	private String majorType;
 
 	public long getId() {
 		return id;
@@ -93,6 +93,14 @@ public class ApiCallingSummaryBO extends PaginationBO {
 
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getMajorType() {
+		return majorType;
+	}
+
+	public void setMajorType(String majorType) {
+		this.majorType = majorType;
 	}
 
 }

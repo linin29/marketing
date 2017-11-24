@@ -105,8 +105,8 @@
 			                   <span>识别照片</span>
 		               		</h4>
 		               		<div class="col-sm-7">
-		               			<!-- <img id="initCropImage" style="height:600px;" src="<#if initCropImagePath??>/pic/marketing${initCropImagePath}</#if>" class="img-thumbnail"> -->
-				 				<img id="initCropImage" style="height:600px;" src="${springMacroRequestContext.contextPath}/image/3.jpeg" class="img-thumbnail">
+		               			<img id="initCropImage" style="height:600px;" src="<#if initCropImagePath??>/pic/marketing${initCropImagePath}</#if>" class="img-thumbnail">
+				 				<!-- <img id="initCropImage" style="height:600px;" src="${springMacroRequestContext.contextPath}/image/3.jpeg" class="img-thumbnail"> -->
 							</div>
 							<div class='col-sm-5' style="width:36%">
 								<p id="brandListp" style="font-size:14px;"><strong>品牌列表</strong></p>

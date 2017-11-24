@@ -35,13 +35,10 @@
 						</select> 
 					</div>
 					<div style="float:left;width:15%;margin-right:1%;">
-						<select id="skuType" style="width:70%;height: 34px;">
-							<option value="">请选择类型</option>
-							<#if majorTypes?? && (majorTypes?size > 0)>
-			       			  <#list majorTypes as majorType>
-			     		 		<option value='${majorType.name}' <#if initMajorType??&&  majorType.name=='${initMajorType}'> selected </#if>>${majorType.description}</option>
-			    			  </#list>
-		   					</#if>
+						<select id="apiMethod" style="width:100%;height: 34px;">
+							<option value="" >请选择调用方法</option>
+					     	<option value='POST' <#if apiMethod?? && apiMethod=='POST'> selected </#if>>POST</option>
+					     	<option value='GET' <#if apiMethod?? && apiMethod=='GET'> selected </#if>>GET</option>
 						</select> 
 					</div>
 					<div style="float:left;width:15%;margin-right:1%;">
@@ -56,12 +53,11 @@
 		        <table class="table table-bordered table-hover">
 		            <thead>
 		                <tr class='thCenter' style='background-color:#ddd;'>
-		                    <th style='width:17%;'>调用API</th>
-		                    <th style='width:17%;'>调用方法</th>
-		                    <th style='width:17%;'>用户</th>
-		                    <th style='width:15%;'>类型</th>
-		                    <th style='width:15%;'>调用日期</th>
-		                    <th style='width:16%;'>调用次数</th>
+		                    <th style='width:20%;'>调用API</th>
+		                    <th style='width:20%;'>调用方法</th>
+		                    <th style='width:20%;'>用户</th>
+		                    <th style='width:20%;'>调用日期</th>
+		                    <th style='width:20%;'>调用次数</th>
 		                </tr>
 		            </thead>
 		            <tbody>
@@ -71,7 +67,6 @@
 		                    <td>${calling.apiName!""}</td>
 		                    <td>${calling.apiMethod!""}</td>
 		                    <td>${calling.userName!""}</td>
-		                    <td>${calling.majorType!""}</td>
 		                    <td>${calling.callingDay!""}</td>
 		                    <td>${calling.callingTimes!""}</td>
 		                </tr>

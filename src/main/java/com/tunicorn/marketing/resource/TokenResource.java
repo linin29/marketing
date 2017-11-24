@@ -55,7 +55,7 @@ public class TokenResource extends BaseResource {
 		
 		if(tokenVO==null || tokenVO.getExpiresTime()-5000<currentTime){
 			if(tokenVO != null){
-				tokenService.deleteToekn(tokenVO.getAccessToken());
+				tokenService.deleteToken(tokenVO.getAccessToken());
 			}
 			tokenVO = new TokenVO();
 			token = RandomStringUtils.randomAlphanumeric(64);

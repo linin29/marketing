@@ -23,7 +23,7 @@ public class TokenService {
 		tokenMapper.insertToken(tokenVO);
 	}
 	
-	public void deleteToekn(String token) {
-		tokenMapper.deleteToekn(token);
+	public void deleteToken(String token) {
+		tokenMapper.deleteToken(token);
 	}
 }

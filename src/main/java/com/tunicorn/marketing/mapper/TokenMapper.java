@@ -27,7 +27,7 @@ public interface TokenMapper {
 	public TokenVO getTokenByInfo(@Param("appId") int appId, @Param("userId") String userId, @Param("clientId") String clientId);
 	
 	@Update("update token set status = 'deleted' where access_token = #{token}") 
-	public void deleteToekn(@Param("token") String token);
+	public void deleteToken(@Param("token") String token);
 	
 	@Insert("insert into token(app_id, user_id, client_id, access_token, expires_time, create_time) "
 			+ "values(#{appId}, #{userId}, #{clientId}, #{accessToken}, #{expiresTime}, now())")

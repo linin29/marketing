@@ -16,7 +16,7 @@ public interface ApiCallingSummaryMapper {
 	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
 	public long insertApiCallingSummary(ApiCallingSummaryVO apiCallingSummaryVO);
 
-	@Update("update api_calling_count set calling_times= #{callingTimes} where id = #{id} and major_type=#{majorType} and status='active'")
+	@Update("update api_calling_count set calling_times= #{callingTimes} where id = #{id} and status='active'")
 	public int updateApiCallingSummary(ApiCallingSummaryVO apiCallingSummaryVO);
 
 	public List<ApiCallingSummaryVO> getApiCallingSummaryList(ApiCallingSummaryBO apiCallingSummaryBO);

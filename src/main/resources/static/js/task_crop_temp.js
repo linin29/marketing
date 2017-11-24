@@ -4,11 +4,12 @@ taskCrop=(function(){
 	 var picPath = '/pic/marketing';
 	 var isCrop = true;
 	 var imageIds = [];
-     function init(){
+     function init(imagePath){
+    	 Annotation.init();
  		$("#skuType").select2();
 		var order = $("#order").val();
-		var imagePath = $("#imageCrop").attr("src");
-		initCropper();
+		//var imagePath = $("#imageCrop").attr("src");
+		//initCropper();
 		getPictureCrop(imagePath);
         $('#labelBtn').click(function(){
             var skuType = $('#skuType').val();
@@ -22,8 +23,9 @@ taskCrop=(function(){
         });
         $('#cancelBtn').click(function(){
         	isCrop = true;
-            $('#imageCrop').cropper('deleteCrop');		//No.1
-            $('#imageCrop').cropper('enable');			//No.2
+            //$('#imageCrop').cropper('deleteCrop');		//No.1
+        	Annotation.deleteCrop();
+            //$('#imageCrop').cropper('enable');			//No.2
             $('#labelPanel').hide();
         });
     	$('#taskRectify').click(function() {
@@ -50,7 +52,8 @@ taskCrop=(function(){
         		noty({text: '请先进行标注或删除标注', layout: "topCenter", type: "warning", timeout: 1000});
         		return;
         	}
-            var cropDatas = $('#imageCrop').cropper('getAllData');		//No.3
+            //var cropDatas = $('#imageCrop').cropper('getAllData');		//No.3
+        	var cropDatas = Annotation.getAllData();
             var taskId = $('#taskId').val();
             var order = $("#order").val();
             if(cropDatas.length == 0){
@@ -78,11 +81,12 @@ taskCrop=(function(){
                 }
             });
         });
+        
      };
      
      
      
-     function initCropper(){		//No.4
+/*     function initCropper(){		//No.4
          $('#imageCrop').cropper({
              responsive : false,
              data : {x: 300, y:400, width:100, height:100, rotate:0},
@@ -108,7 +112,7 @@ taskCrop=(function(){
              crop: function (e) {
              }
          });
-     };
+     };*/
      
  	function getPre(){
  		if(!isCrop){
@@ -128,7 +132,7 @@ taskCrop=(function(){
         				var index  = stitchImagePath.lastIndexOf("/");
          				$("#initCropImage").attr("src", picPath + stitchImagePath.substring(0, index) + "/results_" + (order - 2) + ".jpg?random=" + new Date().getTime());
      				}
-      				$('#imageCrop').attr("imageid", data.id);
+      				//$('#imageCrop').attr("imageid", data.id);
       				$("#order").val(data.orderNo);
       				getPictureCrop(picPath + data.imagePath);
       			 }else{
@@ -160,7 +164,7 @@ taskCrop=(function(){
         				var index  = stitchImagePath.lastIndexOf("/");
          				$("#initCropImage").attr("src", picPath + stitchImagePath.substring(0, index) + "/results_" + order + ".jpg?random=" + new Date().getTime());
      				}
-      				$('#imageCrop').attr("imageid", data.id);
+      				//$('#imageCrop').attr("imageid", data.id);
       				$("#order").val(data.orderNo);
       				getPictureCrop(picPath + data.imagePath);
       			 }else{
@@ -176,7 +180,8 @@ taskCrop=(function(){
  	
  	function generateFile(){
  		var imageId = $('#imageCrop').attr("imageid");
- 		var cropDatas = $('#imageCrop').cropper('getAllData');			//No.5
+ 		//var cropDatas = $('#imageCrop').cropper('getAllData');			//No.5
+ 		var cropDatas = Annotation.getAllData();
  		var majorType = $("#majorType").val();
  		var taskId = $('#taskId').val();
  		var data ={imageId:imageId, imageCrop:cropDatas, majorType:majorType, taskId:taskId};
@@ -203,12 +208,13 @@ taskCrop=(function(){
      		 url: m_url + 'taskImageCrops/' + taskId + '/' + order,
      		 success: function(data) {
      			 if(data){
-     	     	      $('#imageCrop').off("ready");
+     	     	     /* $('#imageCrop').off("ready");
      	     	      $('#imageCrop').cropper('replace', imagePath).on("ready", function(){		//No.6
      	     	        if(data && data.length > 0){
      	     	           $('#imageCrop').cropper('setAllData', data);		//No.7
      	     	        }
-     	     	      });
+     	     	      });*/
+     				Annotation.setAllData(imagePath, data);
      			 }
          	},
          	error: function(data) {
@@ -222,7 +228,8 @@ taskCrop=(function(){
      	isCrop = false;
      	$(".cropper-view-box").css("cssText", "outline: 2px solid #ea230a !important; outline-color: #ea230a !important;")
          clearLabel();
-         var data = $(this).cropper('getCropBoxData');	//No.11
+         //var data = $(this).cropper('getCropBoxData');	//No.11
+     	 var data = Annotation.getCropBoxData();
          $('#skuType').val($("#skuType option[skuorder=" + (parseInt(data.label) - 1) + "]").val()).select2();
          var cropBox = $('.cropper-crop-box[name=' + data.annotationId + ']');
          cropBox.find(".cropper-view-box").css("cssText", "outline: 2px solid #0aeadd !important; outline-color: #0aeadd !important;");
@@ -250,9 +257,10 @@ taskCrop=(function(){
      function saveLabelLocally(){
          getOpenedLabelItem(function(){
              var label = $('#skuType option:checked').attr("skuorder");
-             $('#imageCrop').cropper('setLabel', parseInt(label) + 1); 			//No.8
+             //$('#imageCrop').cropper('setLabel', parseInt(label) + 1); 			//No.8
+             Annotation.setLabel(parseInt(label) + 1);
              $('#labelPanel').hide();
-             $('#imageCrop').cropper('enable');				//No.9
+             //$('#imageCrop').cropper('enable');				//No.9
          });
      };
      

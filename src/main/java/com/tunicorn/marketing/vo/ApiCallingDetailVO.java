@@ -13,7 +13,6 @@ public class ApiCallingDetailVO {
 	private Date lastUpdateTime;
 	private String status;
 
-
 	public long getId() {
 		return id;
 	}
@@ -70,7 +69,6 @@ public class ApiCallingDetailVO {
 		this.createTime = createTime;
 	}
 
-
 	public Date getLastUpdateTime() {
 		return lastUpdateTime;
 	}
@@ -86,5 +84,4 @@ public class ApiCallingDetailVO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
 }

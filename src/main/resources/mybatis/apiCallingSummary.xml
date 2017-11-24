@@ -14,7 +14,7 @@
 	 </resultMap>
     
     <select id="getApiCallingSummaryList" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
-    	select id, api_method, api_name, calling_day, user_name, calling_times, create_time ,last_update,status
+    	select id, api_method, api_name, calling_day, user_name, calling_times, create_time, last_update, status
     	from api_calling_count 
     	where `status` = 'active'
     	<if test="apiMethod != null and apiMethod != ''">
@@ -36,7 +36,7 @@
     	limit #{startNum}, #{perPage}
     </select>
     <select id="getApiCallingSummaryListByVO" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.vo.ApiCallingSummaryVO">
-    	select id, api_method, api_name, calling_day, user_name, calling_times, create_time ,last_update,status
+    	select id, api_method, api_name, calling_day, user_name, calling_times, create_time, last_update, status
     	from api_calling_count 
     	where `status` = 'active'
     	<if test="apiMethod != null and apiMethod != ''">

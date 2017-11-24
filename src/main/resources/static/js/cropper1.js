@@ -1212,7 +1212,6 @@ var handlers = {
 
     self.$target = $(e.target);
     action = $(e.target).data('action');
-    console.log(action);
     if(action === 'crop'){   //新创建crop
       self.$cropBox = $cropBox = $(CROP_BOX_TEMPLATE);
       $cropBox.find('.cropper-face').addClass('cropper-move').data('action', 'all');
@@ -1353,7 +1352,6 @@ var handlers = {
     var cropBox = {};
     $.extend(true, cropBox, self.cropBox);
     var $target = $(e.target);
-    console.log("end:"+action);
     if(action === 'crop'){  //new
         var $cropBox = $target.parent();
         name = $cropBox.attr('name');
@@ -1369,14 +1367,11 @@ var handlers = {
     }else if(action === 'all'){ //move crop box
         name = self.$target.parent().attr('name');
     }else{ //resize
-      console.log($target.hasClass('cropper-drag-box'));
       if($target.hasClass('cropper-drag-box')){  //resize old rect
         $target = self.$target;
       }
-      console.log($target);
       name = $target.parent().attr('name');
     }
-    console.log(name);
     cropBoxs[name] = cropBox;
 
     e.preventDefault();
@@ -2045,7 +2040,6 @@ var methods = {
     if (!self.ready || self.disabled){
       return;
     }
-    //console.log($cropBox.attr('label'))
     return $cropBox.attr('label');
   },
 
@@ -2076,7 +2070,6 @@ var methods = {
 
       var cropBox = {label : item.label};
       $.extend(cropBox, self.cropBox);
-      //console.log(JSON.stringify(cropBox))
       cropBoxs[item.id] = cropBox;
     };
     return ;

@@ -56,11 +56,12 @@
 		        <table class="table table-bordered table-hover">
 		            <thead>
 		                <tr class='thCenter' style='background-color:#ddd;'>
-		                    <th style='width:20%;'>调用API</th>
-		                    <th style='width:20%;'>调用方法</th>
-		                    <th style='width:20%;'>用户</th>
-		                    <th style='width:20%;'>调用日期</th>
-		                    <th style='width:20%;'>调用次数</th>
+		                    <th style='width:17%;'>调用API</th>
+		                    <th style='width:17%;'>调用方法</th>
+		                    <th style='width:17%;'>用户</th>
+		                    <th style='width:15%;'>类型</th>
+		                    <th style='width:15%;'>调用日期</th>
+		                    <th style='width:16%;'>调用次数</th>
 		                </tr>
 		            </thead>
 		            <tbody>
@@ -70,6 +71,7 @@
 		                    <td>${calling.apiName!""}</td>
 		                    <td>${calling.apiMethod!""}</td>
 		                    <td>${calling.userName!""}</td>
+		                    <td>${calling.majorType!""}</td>
 		                    <td>${calling.callingDay!""}</td>
 		                    <td>${calling.callingTimes!""}</td>
 		                </tr>

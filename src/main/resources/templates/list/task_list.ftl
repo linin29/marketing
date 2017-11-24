@@ -53,7 +53,7 @@
 	               </#list>
 	          </tbody>
 	    </table>
-    	<div id="table_paginator" style="margin-top: -10px; margin-bottom: -10px; text-align:center; display:block;"></div>
+    	<div id="table_paginator" style="margin-top: -20px; margin-bottom: -10px; text-align:center; display:block;"></div>
     </div>
 </div>
 

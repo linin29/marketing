@@ -28,7 +28,7 @@ var tunicorn =  tunicorn || {};
 	};
 	
 	dface.constants = {
-		PAGINATION_ITEMS_PER_PAGE: 12
+		PAGINATION_ITEMS_PER_PAGE: 20
 	};
 	
 	window.dface = dface;

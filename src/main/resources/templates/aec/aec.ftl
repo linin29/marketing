@@ -10,7 +10,7 @@
 				  <div class="data_list_header" style=''>
 		       	 	<div class="col-sm-9" style="margin-top:21px;margin-bottom:10px;padding-left:0px;">
 		       	 		<span style="width:8%;float:left;line-height:34px;text-align: left;margin-right: -1%;">品类：</span>
-		                <div style="width:25%;float:left;">
+		                <div style="width:25%;float:left;margin-left: -1%;">
 		                 	<select id="majorType" style="height: 34px;width: 96%;">
 		                      	<option value="">请选择</option>
 		                      	<#if majorTypes?? && (majorTypes?size > 0)>
@@ -47,7 +47,7 @@
 		         </div>
                 <table id="track-table" class="table table-hover table-bordered" style="margin-top: 5px">
               		<thead>
-                    	<tr style="background-color:#edfbe8;">
+                    	<tr class='tableColorSet'>
                     		<th><input type="checkbox" id="checkAll" name="checkAll" /></th>
 	                    	<th style='width:20%;'>任务名</th>	                
 	                    	<th style='width:20%;'>任务ID</th>

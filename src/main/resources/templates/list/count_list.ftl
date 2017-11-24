@@ -20,7 +20,7 @@
 	    </div>
         <table class="table table-bordered table-hover">
             <thead>
-                <tr style='background-color:#edfbe8;'>
+                <tr class='tableColorSet'>
                     <th>调用API</th>
                     <th>调用方法</th>
                     <th>用户</th>

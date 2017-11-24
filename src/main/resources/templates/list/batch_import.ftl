@@ -1,22 +1,26 @@
 <div class="count_list">
     <div class="content_list">
        	<div class='clearfix'>
-		    <div class="task_list_header" style='float:left;width:15%;'>
+		    <div class="task_list_header" style='float:left;width:13%;'>
 		        <h3>批量创建任务</h3> 
 		    </div>
-	    	<select id="majorType"  class="form-control" style="width:23%;;float:left;margin-top: 10px;">
-	           <option value="">请选择一个主类型</option>
-	            <#if majorTypes?? && (majorTypes?size > 0)>
-	             <#list majorTypes as majorType>
-	                <option value="${majorType.name}">${majorType.description}${majorType.version!""}</option>
-	             </#list>
-	             </#if>
-			</select>
-			<div style='float:left;width:62%;text-align:right;margin-top: 10px;'>
-				<input type="checkbox" id="is_need_stitch"><span>勾选取消去重
-				<input type="button" class="btn btn-success" id="barch_import" style='margin-left: 10px;' value="选择批量导入的图片" />
-				<input type="file" id="file_select" style="display:none;" multiple />
-				<span style='margin-left: 10px;'>注：目前支持单张图片和ZIP包文件创建任务，<a href="${springMacroRequestContext.contextPath}/download">点击下载打包工具</a></span>
+		    <div style='float:left;width:87%;text-align:right;margin-top: 10px;'>
+		    	<div style="width:25%;;margin-top: 10px;float:left;margin-left: 5%;">
+			    	<select id="majorType"  class="form-control" >
+			           <option value="">请选择一个主类型</option>
+			            <#if majorTypes?? && (majorTypes?size > 0)>
+			             <#list majorTypes as majorType>
+			                <option value="${majorType.name}">${majorType.description}${majorType.version!""}</option>
+			             </#list>
+			             </#if>
+					</select>
+				</div>
+				<div style='float:left;width:70%;line-height: 56px;'>
+					<input type="checkbox" id="is_need_stitch"><span>勾选取消去重
+					<input type="button" class="btn btn-success" id="barch_import" style='margin-left: 10px;' value="选择批量导入的图片" />
+					<input type="file" id="file_select" style="display:none;" multiple />
+					<span >注：目前支持单张图片和ZIP包文件创建任务，<a href="${springMacroRequestContext.contextPath}/download">点击下载打包工具</a></span>
+	    		</div>
 	    	</div>
     	  </div>
 	    <div class="content_list2">

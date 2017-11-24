@@ -1,10 +1,10 @@
 <div class="task_list">
     <div class="content_list">
     	<div class="task_list_header clearfix" >
-	       <h3 class="col-sm-3" style="padding:0px;width:25%;">任务列表
+	       <h3 class="col-sm-3" style="padding:0px;width:20%;">任务列表
 	           <small>共<span id="number">${totalCount}</span>个任务</small>
 	        </h3>
-	        <div  class="col-sm-8" style="margin-top:10px;padding-right:0px;width:75%;text-align: right;">
+	        <div  class="col-sm-8" style="margin-top:10px;padding-right:0px;width:80%;text-align: right;">
 	            <input id="searchTaskflg" type="hidden" value="0">
 	            <input id="taskId" style="width:25%;" onkeyup="if(event.keyCode==13){taskList.searchTaskWithId();}"  class="form-control task_list_input" <#if taskId??> value="${taskId}"</#if> type="text" placeholder="请输入任务ID">
 	            <button id="searchTaskById" onclick="taskList.searchTaskWithId(0)" type="button" class="btn btn-success btn_style1">检索任务</button>
@@ -23,7 +23,7 @@
     	</div>
 	    <table class="table table-bordered table-hover ">
 	          <thead>
-	                <tr style="background-color:#edfbe8;">
+	                <tr class='tableColorSet'>
 	                    <th style="width:25%">任务名</th>
 	                    <th style="width:20%">任务Id</th>
 	                    <th style="width:15%">类型</th>

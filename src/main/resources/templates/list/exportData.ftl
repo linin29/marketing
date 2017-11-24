@@ -46,7 +46,7 @@
 			<div class="leftTable " style="margin-top: 15px;">
                 <table id="track-table" class="table table-hover table-bordered" style="margin-top: 5px">
                     <tbody>
-	                    <tr class='tabelCenter' style="background-color:#edfbe8;">
+	                    <tr class='tabelCenter tableColorSet'>
 	                    	<th style='width:20%;'>任务名</th>	                
 	                    	<th style='width:20%;'>任务ID</th>
 	                    	<th style='width:20%;'>创建时间</th>

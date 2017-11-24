@@ -20,8 +20,8 @@ countList=(function(){
 	 		var options = {
 	 			alignment: 'center',
 	 	        currentPage: currentPage,
-	 	        totalPages: Math.ceil(totalCount / PAGINATION_ITEMS_PER_PAGE),
-	 	        numberOfPages: PAGINATION_ITEMS_PER_PAGE,
+	 	        totalPages: Math.ceil(totalCount / dface.constants.PAGINATION_ITEMS_PER_PAGE),
+	 	        numberOfPages: dface.constants.PAGINATION_ITEMS_PER_PAGE,
 	 	        onPageClicked: function (event, originalEvent, type, page) {
 	 	        	searchApiCalling(page);
 	 	        }
@@ -77,7 +77,7 @@ countList=(function(){
  		var startDate = $('#startDate').val();
  		var endDate = $('#endDate').val();
  		var data = {
- 			perPage: PAGINATION_ITEMS_PER_PAGE,
+ 			perPage: dface.constants.PAGINATION_ITEMS_PER_PAGE,
  			pageNum: pageNum,
  			startDate: startDate,
  			endDate: endDate

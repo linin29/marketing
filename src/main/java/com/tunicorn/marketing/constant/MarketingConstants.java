@@ -37,7 +37,7 @@ public class MarketingConstants {
 	public static final String TASK_STATUS_IDENTIFY_FAILURE = "identify_failure";
 	public static final String TASK_STATUS_IDENTIFY_SUCCESS = "identify_success";
 
-	public static final int PAGINATION_ITEMS_PER_PAGE = 20;
+	public static final int PAGINATION_ITEMS_PER_PAGE = 12;
 
 	public static final String STATUS_ACTIVE = "active";
 	public static final String STATUS_DELETED = "deleted";

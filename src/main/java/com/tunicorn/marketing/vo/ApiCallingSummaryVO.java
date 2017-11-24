@@ -12,7 +12,6 @@ public class ApiCallingSummaryVO {
 	private Date createTime;
 	private Date lastUpdateTime;
 	private String status;
-	private String majorType;
 
 	public long getId() {
 		return id;
@@ -85,13 +84,4 @@ public class ApiCallingSummaryVO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-	public String getMajorType() {
-		return majorType;
-	}
-
-	public void setMajorType(String majorType) {
-		this.majorType = majorType;
-	}
-
 }

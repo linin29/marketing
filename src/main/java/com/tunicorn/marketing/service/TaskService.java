@@ -1166,7 +1166,6 @@ public class TaskService {
 		callingTimes *= 2; // stitch and identify
 		ApiCallingSummaryVO apiCallingSummaryVO = new ApiCallingSummaryVO();
 		apiCallingSummaryVO.setApiMethod(updateParam.getApiMethod());
-		apiCallingSummaryVO.setMajorType(updateParam.getMajorType());
 		String newApiName = "";
 		if (StringUtils.isNotBlank(updateParam.getApiName())) {
 			String apiName = updateParam.getApiName();
@@ -1201,7 +1200,6 @@ public class TaskService {
 		apiCallingDetailVO.setCallingStatus(callingStatus);
 		apiCallingDetailVO.setPictures((int) taskImagesCount);
 		apiCallingDetailVO.setUserName(userName);
-		apiCallingDetailVO.setMajorType(updateParam.getMajorType());
 		int insertDetailResult = apiCallingDetailMapper.insertApiCallingDetail(apiCallingDetailVO);
 		logger.info("result of insertApiCallingDetail: " + insertDetailResult);
 		ObjectMapper mapper = new ObjectMapper();

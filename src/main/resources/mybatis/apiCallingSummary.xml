@@ -11,11 +11,10 @@
 		<result column="create_time" property="createTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
 		<result column="last_update" property="lastUpdateTime"  javaType="java.sql.Date" jdbcType="TIMESTAMP" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
-		<result column="major_type" property="majorType" jdbcType="VARCHAR" />
 	 </resultMap>
     
     <select id="getApiCallingSummaryList" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
-    	select id, api_method, api_name, calling_day, user_name, calling_times, create_time, last_update, status, major_type
+    	select id, api_method, api_name, calling_day, user_name, calling_times, create_time, last_update, status
     	from api_calling_count 
     	where `status` = 'active'
     	<if test="apiMethod != null and apiMethod != ''">
@@ -33,14 +32,11 @@
     	<if test="userName != null and userName != ''">
     		and `user_name` like concat(concat('%',#{userName}),'%')
     	</if>
-    	<if test="majorType != null and majorType != ''">
-    		and major_type = #{majorType}
-    	</if>
     	order by calling_day DESC
     	limit #{startNum}, #{perPage}
     </select>
     <select id="getApiCallingSummaryListByVO" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.vo.ApiCallingSummaryVO">
-    	select id, api_method, api_name, calling_day, user_name, calling_times, create_time, last_update, status, major_type
+    	select id, api_method, api_name, calling_day, user_name, calling_times, create_time, last_update, status
     	from api_calling_count 
     	where `status` = 'active'
     	<if test="apiMethod != null and apiMethod != ''">
@@ -57,9 +53,6 @@
     	</if>
     	<if test="callingTimes != null and callingTimes != ''">
     		and calling_times = #{callingTimes}
-    	</if>
-    	<if test="majorType != null and majorType != ''">
-    		and major_type = #{majorType}
     	</if>
     </select>
     <select id="getApiCallingSummary" resultType="int" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
@@ -80,9 +73,6 @@
     	</if>
     	<if test="userName != null and userName != ''">
     		and `user_name` like concat(concat('%',#{userName}),'%')
-    	</if>
-    	<if test="majorType != null and majorType != ''">
-    		and major_type = #{majorType}
     	</if>
     </select>
     <select id="getApiCallingSum" resultType="int" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">

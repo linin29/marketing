@@ -41,7 +41,7 @@
                    <span>识别数据</span>
                    <table id="countInfo" class="table table-bordered table-hover table-condensed count_table">
                        <thead>
-                            <tr>
+                            <tr style="background-color:#edfbe8;">
                             	<th colspan="2">商品名称</th>
                             	<th colspan="2">商品价格</th>
                             </tr>

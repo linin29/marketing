@@ -3,12 +3,12 @@
     .newline{width:200px; white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 </style>
 <div class="exportDataContainer">
-    <div class="panel-default" style="margin-bottom:0px">
-         <div class="data_list_header" >
+    <div class="panel-default" style="margin-bottom:0px;margin:4px 0px 20px 10px;">
+         <div class="data_list_header clearfix" >
        	 	<h3 class="col-sm-3">数据导出<small>本次查询共<span id="number">${totalCount!0}</span>数据</small></h3>
-       	 	<div class="col-sm-9" style="margin-top:10px;margin-bottom:10px;">
-       	 		<span style="width:8%;float:left;line-height:34px;">品&nbsp;&nbsp;类：</span>
-                <div style="width:23%;float:left;">
+       	 	<div class="col-sm-9" style="margin-top:10px;margin-bottom:10px;padding-right:0px;">
+       	 		<span style="width:8%;float:left;line-height:34px;text-align: center;">品类：</span>
+                <div style="width:27%;float:left;">
                  	<select id="majorType" style="height: 34px;width: 96%;">
                       	<option value="">请选择</option>
                       	<#if majorTypes?? && (majorTypes?size > 0)>
@@ -34,10 +34,10 @@
                </div>
        	 	</div>
     	</div>
-         <div class="text-right" style="margin-right:15px;">
-             <button class='btn btn-success' id="query">查询</button>
-             <button class='btn btn-success' id="export">导出</button>
-         </div>
+        <div class="text-right" style="margin-right:15px;">
+           <button class='btn btn-success' id="query">查询</button>
+           <button class='btn btn-success' id="export">导出</button>
+        </div>
         <div class="panel-body">  
         	<div style="height:20px;margin-top: -44px;">
             	<span style="font-size:14px;">状态：</span>
@@ -46,7 +46,7 @@
 			<div class="leftTable " style="margin-top: 15px;">
                 <table id="track-table" class="table table-hover table-bordered" style="margin-top: 5px">
                     <tbody>
-	                    <tr class='tabelCenter' style="background-color: #ccc">
+	                    <tr class='tabelCenter' style="background-color:#edfbe8;">
 	                    	<th style='width:20%;'>任务名</th>	                
 	                    	<th style='width:20%;'>任务ID</th>
 	                    	<th style='width:20%;'>创建时间</th>

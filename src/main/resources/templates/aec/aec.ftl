@@ -3,14 +3,13 @@
     .newline{width:200px; white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 </style>
 <div class="exportDataContainer">
-    <div class="panel-default" style="margin-bottom:0px">
-         
+    <div class="panel-default" style="margin-bottom:0px">      
         <div class="panel-body" style="padding:0px;">  
 			<div class="leftTable " style="margin-top: 15px;">
-			  <section class="content_list" style="margin-top:-13px;">
-				  <div class="data_list_header">
+			  <div class="content_list" style="margin: -14px 12px 20px 24px;">
+				  <div class="data_list_header" style=''>
 		       	 	<div class="col-sm-9" style="margin-top:21px;margin-bottom:10px;padding-left:0px;">
-		       	 		<span style="width:8%;float:left;line-height:34px;">品&nbsp;&nbsp;类：</span>
+		       	 		<span style="width:8%;float:left;line-height:34px;text-align: left;margin-right: -1%;">品类：</span>
 		                <div style="width:25%;float:left;">
 		                 	<select id="majorType" style="height: 34px;width: 96%;">
 		                      	<option value="">请选择</option>
@@ -48,7 +47,7 @@
 		         </div>
                 <table id="track-table" class="table table-hover table-bordered" style="margin-top: 5px">
               		<thead>
-                    	<tr style="background-color:#ddd;">
+                    	<tr style="background-color:#edfbe8;">
                     		<th><input type="checkbox" id="checkAll" name="checkAll" /></th>
 	                    	<th style='width:20%;'>任务名</th>	                
 	                    	<th style='width:20%;'>任务ID</th>
@@ -75,7 +74,7 @@
                     </tbody>
                 </table>               
                <div id="table_paginator" style="margin-top: -10px; margin-bottom: -10px; text-align:center; display:block;"></div>
-              </section>
+              </div>
             </div>
         </div>
     </div>

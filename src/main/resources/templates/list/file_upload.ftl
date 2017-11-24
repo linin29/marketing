@@ -1,8 +1,5 @@
 <div class="count_list">
-    <section class="task_list_header">
-        <h3>上传文件</h3>
-    </section>
-    <div class="content_list" style="margin: 20px;">
+    <div class="content_list" style="margin:8px 0px 20px 10px;">
 <!--         <select id="majorType"  class="form-control" style="width:170px;display: inline-block;">
            <option value="">请选择一个主类型</option>
             <#if majorTypes?? && (majorTypes?size > 0)>
@@ -11,9 +8,14 @@
              </#list>
              </#if>
 		</select> -->
-		<input type="button" class="btn btn-success" id="zip_import" value="选择上传的文件" />
-		<input type="file" id="file_select" style="display:none;"/>
-		<span>注：目前支持ZIP包文件上传</span>
+		<div class="task_list_header" style='display:inline-block;'>
+        	<h3>上传文件</h3>
+    	</div>
+    	<div style='display:inline-block;margin-left:30px;'>
+			<input type="button" class="btn btn-success" id="zip_import" value="选择上传的文件" />
+			<input type="file" id="file_select" style="display:none;"/>
+			<span>注：目前支持ZIP包文件上传</span>
+		</div>
     </div>  
 </div>
 

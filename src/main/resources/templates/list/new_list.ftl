@@ -116,14 +116,14 @@
                    <table id="countInfo" class="table table-bordered table-hover table-condensed count_table">
                        <thead>
                             <tr>
-                            	<th colspan="2">货架总层数</th><td colspan="1"><#if rows??>${rows}<#else>0</#if></td>
-                            	<th colspan="2">货架总面积</th><td colspan="1"><#if totalArea??>${totalArea}<#else>0</#if></td>
+                            	<th style='background-color:#edfbe8;' colspan="2">货架总层数</th><td colspan="1"><#if rows??>${rows}<#else>0</#if></td>
+                            	<th style='background-color:#edfbe8;' colspan="2">货架总面积</th><td colspan="1"><#if totalArea??>${totalArea}<#else>0</#if></td>
                             </tr>
                        </thead>
                        <tbody>
                          <#if goodResults?? && (goodResults?size > 0)>
-                            <tr>
-                              <th colspan="2">产品名称</th>
+                            <tr style='background-color:#edfbe8;'>
+                              <th colspan="2">产a品名称</th>
                               <th>占比</th>
                               <th>牌面数</th>
                               <th>货架位置</th>

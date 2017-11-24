@@ -2,6 +2,32 @@
 .table th ,.table td{text-align: center;}
 ul li{list-style-type: none;}
 
+a {
+  color:#67947c;
+}
+a:hover,
+a:focus {
+  color:#007d3b;
+}
+
+.table>tbody>tr:hover {  
+    background-color: #f6fff3;  
+}  
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+/* Hides from IE-mac \*/
+
+* html .clearfix {height: 1%;}
+
+/* End hide from IE-mac */
+
 /*任务列表*/
 .task_list{margin: 0px 15px;}
 .content_list{margin: 30px 40px 20px 40px;}
@@ -9,9 +35,19 @@ ul li{list-style-type: none;}
 .btn_style1{margin:0 10px;}
 .pages{margin: 5px auto;text-align: right;}
 
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    background-color: #007d3b;
+    border-color: #007d3b;
+}.pagination > li {
+    display: inline;
+    cursor: pointer;
+}
+
+
+
 /*统计列表*/
 .count_list{margin: 0px 15px;}
-.content_list{margin: 30px 40px 20px 40px;}
+.content_list{margin: 8px 0px 20px 10px;}
 
 
 /*新建任务页面css*/

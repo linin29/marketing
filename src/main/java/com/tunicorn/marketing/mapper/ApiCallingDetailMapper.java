@@ -7,7 +7,7 @@ import com.tunicorn.marketing.vo.ApiCallingDetailVO;
 
 public interface ApiCallingDetailMapper {
 
-	@Insert("Insert into api_calling_detail (api_method, api_name, user_name, calling_status, pictures, create_time)"
+	@Insert("Insert into api_calling_detail (api_method, api_name, user_name, calling_status, pictures, major_type, create_time)"
 			+ " values (#{apiMethod}, #{apiName}, #{userName}, #{callingStatus}, #{pictures}, #{majorType}, now())")
 	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
 	public int insertApiCallingDetail(ApiCallingDetailVO apiCallingDetailVO);

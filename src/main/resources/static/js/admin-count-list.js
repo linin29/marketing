@@ -40,7 +40,7 @@ adminCountList=(function(){
   		var endDate = $('#endDate').val();
   		var userName = $('#userName').val();
   		var apiName = $('#apiName').val();
-  		var apiMethod = $('#apiMethod').val();
+  		var majorType = $('#skuType').val();
   		var data = {
   			perPage: PAGINATION_ITEMS_PER_PAGE,
   			pageNum: pageNum,
@@ -48,7 +48,7 @@ adminCountList=(function(){
   			endDate: endDate,
   			userName:userName,
   			apiName:apiName,
-  			apiMethod:apiMethod
+  			majorType:majorType
   		}
   		$.ajax({
   			 type: 'GET',

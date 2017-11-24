@@ -35,10 +35,13 @@
 						</select> 
 					</div>
 					<div style="float:left;width:15%;margin-right:1%;">
-						<select id="apiMethod" style="width:100%;height: 34px;">
-							<option value="" >请选择调用方法</option>
-					     	<option value='POST' <#if apiMethod?? && apiMethod=='POST'> selected </#if>>POST</option>
-					     	<option value='GET' <#if apiMethod?? && apiMethod=='GET'> selected </#if>>GET</option>
+						<select id="skuType" style="width:70%;height: 34px;">
+							<option value="">请选择类型</option>
+							<#if majorTypes?? && (majorTypes?size > 0)>
+			       			  <#list majorTypes as majorType>
+			     		 		<option value='${majorType.name}' <#if initMajorType??&&  majorType.name=='${initMajorType}'> selected </#if>>${majorType.description}</option>
+			    			  </#list>
+		   					</#if>
 						</select> 
 					</div>
 					<div style="float:left;width:15%;margin-right:1%;">

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tunicorn.marketing.bo.ApiCallingSummaryBO;
+import com.tunicorn.marketing.service.MajorTypeService;
 import com.tunicorn.marketing.service.TaskService;
 import com.tunicorn.marketing.vo.ApiCallingSummaryVO;
 import com.tunicorn.marketing.vo.UserVO;
@@ -25,6 +26,8 @@ public class CallingController extends BaseController{
 
 	@Autowired
 	private TaskService taskService;
+	@Autowired
+	private MajorTypeService majorTypeService;
 	
 	@RequestMapping(value = "/calling", method = RequestMethod.GET)
 	public String calling(HttpServletRequest request, ApiCallingSummaryBO apiCallingSummaryBO, Model model) {
@@ -71,6 +74,10 @@ public class CallingController extends BaseController{
 		if(StringUtils.isNotBlank(apiCallingSummaryBO.getUserName())){
 			model.addAttribute("userName", apiCallingSummaryBO.getUserName());
 		}
+		if(StringUtils.isNotBlank(apiCallingSummaryBO.getMajorType())){
+			model.addAttribute("majorType", apiCallingSummaryBO.getMajorType());
+		}
+		model.addAttribute("majorTypes", majorTypeService.getAllMajorTypeList());
 		model.addAttribute("callingCount", callingCount);
 		model.addAttribute("callings", apiCallingCounts);
 		model.addAttribute("totalCount", totalCount);

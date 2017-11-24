@@ -244,7 +244,7 @@ var Annotation = (function(){
             if(options.target) {
                 $showContainer.data('drawRect', false);
                 
-                //TODO:click event
+                // click event
                 $('#labelPanel').show();
                 $('#skuType').val($("#skuType option[skuorder=" + (parseInt(options.target.label) - 1) + "]").val()).select2();
                 return;
@@ -285,7 +285,7 @@ var Annotation = (function(){
                 return;
             }
 
-            //TODO:show label select
+            // show label select
             $('#labelPanel').show();
             $('#skuType').val("").select2();
             var offsetX = getOffsetX(options.e), offsetY = getOffsetY(options.e);

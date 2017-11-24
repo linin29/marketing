@@ -1,28 +1,28 @@
 <div class="personCenter">
 	<form role="form" id="profileForm" action="${springMacroRequestContext.contextPath}/user/personcenter/password" method="post">
    <div class="panel panel-default">
-       <div class="panel-heading">个人中心 |</div>
+       <div class="panel-heading">个人中心</div>
        <div class="panel-body">
-           <div class="form-group">
+           <div class="form-group" style="margin-bottom: 15px;">
                <div class="input-group ">
                		<input name="id" type="hidden" value="${user.id}">
                    <span class="input-group-addon">用户名</span>
                    <input type="text" class="form-control" placeholder="${user.name}" readonly="readonly" style="width: 196px">
                </div>
            </div>
-           <div class="form-group">
+           <div class="form-group" style="margin-bottom: 15px;">
                <div class="input-group ">
                    <span class="input-group-addon" style="width:68px">邮箱</span>
                    <input type="email" class="form-control" readonly="readonly" style="width: 196px" placeholder="${user.email}">
                </div>
            </div>
-           <div class="form-group">
+           <div class="form-group" style="margin-bottom: 15px;">
                <div class="input-group ">
                    <span class="input-group-addon" style="width:68px">密码</span>
                    <input type="password" class="form-control" readonly="readonly" placeholder="******" style="width: 196px">
                </div>
            </div>
-           <div class="form-group">
+           <div class="form-group" style="margin-bottom: 15px;">
                <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bs-example-modal-sm">修改</button>
                		<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="modelUpdate">
                   		 <div class="modal-dialog modal-sm">
@@ -30,20 +30,20 @@
                                <div class="panel panel-default">
                                <div class="panel-heading">修改密码</div>
                                <div class="panel-body">
-                                   <div class="form-group">
+                                   <div class="form-group" style="margin-bottom: 15px;">
                                        <p>原始密码</p>
                                        <input class="form-control required" id="password" name="password" placeholder="原始密码" required="" type="password">
                                    </div>
-                                   <div class="form-group">
+                                   <div class="form-group" style="margin-bottom: 15px;">
                                        <p>新密码</p>
                                        <input class="form-control required" id="newPassword" name="newPassword" placeholder="新密码" required="" type="password">
                                    </div>
-                                   <div class="form-group">
+                                   <div class="form-group" style="margin-bottom: 15px;">
                                        <p>确认密码</p>
                                        <input class="form-control required" id="confirmPassword" placeholder="确认密码" required="" type="password">
                                    </div>
                                    <div id="errorMsg" style="color:red; margin-bottom: 5px"></div>
-                                   <div class="form-group">
+                                   <div class="form-group" style="margin-bottom: 15px;">
                                        <button type="button" class="btn btn-success" id="submitProfile" onclick="revise()">确认修改</button>
                                        <button type="button" data-dismiss="modal" class="btn btn-default pull-right">取消</button>
                                    </div>

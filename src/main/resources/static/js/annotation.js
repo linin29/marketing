@@ -367,8 +367,6 @@ var Annotation = (function(){
 
     return {
         init : init,
-        set : _set_options,
-        initCanvasContainerCoords : initCanvasContainerCoords,
         deleteCrop : deleteCrop,
         setAllData : setAllData,
         getAllData : getAllData,

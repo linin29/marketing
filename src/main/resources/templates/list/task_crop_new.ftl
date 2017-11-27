@@ -177,7 +177,7 @@
 	</section>
 </div>
 <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/annotation.js" ></script>
-<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/task_crop_temp.js"></script>
+<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/task_crop_new.js"></script>
 <script type="text/javascript">
 	$(function() {	
 		//taskCrop._init('${springMacroRequestContext.contextPath}/image/3.jpeg');

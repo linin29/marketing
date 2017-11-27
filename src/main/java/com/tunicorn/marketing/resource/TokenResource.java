@@ -1,6 +1,5 @@
 package com.tunicorn.marketing.resource;
 
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -33,28 +32,27 @@ public class TokenResource extends BaseResource {
 	private ApplicationService applicationService;
 	@Autowired
 	private TokenService tokenService;
-	
+
 	@RequestMapping(value = "/token", method = RequestMethod.POST)
 	@ResponseBody
-	public synchronized String  createTask(HttpServletRequest request,
-			@RequestParam(value = "grant_type") String grantType,
-			@RequestParam(value = "client_id") String clientId,
+	public synchronized String createTask(HttpServletRequest request,
+			@RequestParam(value = "grant_type") String grantType, @RequestParam(value = "client_id") String clientId,
 			@RequestParam(value = "client_secret") String clientSecret) {
 		logger.info("key: " + clientId + ", Secret: " + clientSecret);
 		ApplicationVO app = applicationService.getApplicationByKeyAndSecret(clientId, clientSecret);
-		if (app==null) {
+		if (app == null) {
 			Message message = MessageUtils.getInstance().getMessage("key_secret_invalid");
 			MarketingRestAPIResponse rsp = new MarketingRestAPIResponse(message.getCode(), message.getMessage());
 			logger.info("request_id:" + rsp.getRequestId() + ";App-Key:" + clientId + ",app-key或app-secret不合法");
 			return rsp.toString();
 		}
-		
-		TokenVO tokenVO = tokenService.getToken(app.getId(), app.getUserId(), clientId); 
+
+		TokenVO tokenVO = tokenService.getToken(app.getId(), app.getUserId(), clientId);
 		long currentTime = System.currentTimeMillis();
 		String token = null;
-		
-		if(tokenVO==null || tokenVO.getExpiresTime()-5000<currentTime){
-			if(tokenVO != null){
+
+		if (tokenVO == null || tokenVO.getExpiresTime() - 5000 < currentTime) {
+			if (tokenVO != null) {
 				tokenService.deleteToken(tokenVO.getAccessToken());
 			}
 			tokenVO = new TokenVO();
@@ -65,9 +63,9 @@ public class TokenResource extends BaseResource {
 			tokenVO.setUserId(app.getUserId());
 			tokenVO.setClientId(clientId);
 			String expiresTime = ConfigUtils.getInstance().getConfigValue("token.expires.time");
-			tokenVO.setExpiresTime(currentTime + Long.parseLong(expiresTime)*1000);
+			tokenVO.setExpiresTime(currentTime + Long.parseLong(expiresTime) * 1000);
 			tokenService.insertToken(tokenVO);
-		}else{
+		} else {
 			token = tokenVO.getAccessToken();
 		}
 		MarketingRestAPIResponse rsp = new MarketingRestAPIResponse();

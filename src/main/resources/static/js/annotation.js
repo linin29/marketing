@@ -4,15 +4,13 @@ var Annotation = (function(){
     var tempRect = void(0);
     var canvasContainerCoords = void(0);
     var canvas = void(0);
-    var top = 0, left = 0, bottom = 0, right = 0, base_ratio = 0, ratio = 1, scale = 1, mouseWheelFlag = false, mouseMoveFlag = false, scalingObjFlag = false;
+    var top = 0, left = 0, bottom = 0, right = 0, base_ratio = 0, ratio = 1, scale = 1, mouseWheelFlag = false, mouseMoveFlag = false;
     var $canvas = $('#canvas');
     var $showContainer = $('#show_area');
     var base_width = $showContainer.width(), base_height = $showContainer.height();
     var min_width = $showContainer.attr('min_width'), min_height = $showContainer.attr('min_height');
-    var originResData = [];
     var current_action = void(0);
     var mouseNotDown = void(0);
-    var ImageLoading = void(0);
     var color = '#f00';
 
     var ACTION = {
@@ -128,7 +126,6 @@ var Annotation = (function(){
             annotations.push(annotation);
         });
 
-        modified_rect_set = {};
         return annotations;
     }
 

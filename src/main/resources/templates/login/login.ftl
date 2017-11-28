@@ -23,7 +23,7 @@
   </style>
   <body class="hold-transition login-page" >
     <div class="login-box" style='margin:15% 52%;width:420px;'>   
-      <div class="login-box-body" style='border-radius: 33px;background-color:#ffffff57;'>
+      <div class="login-box-body" style='border-radius: 33px;background-color:rgba(208, 213, 246, 0.6);'>
         <p class="login-box-msg" style='color:#eeeeee;font-size:17px;'>请登录海量图像/视频搜索识别开放平台</p>
           <div class="form-group has-feedback">
             <input type="text" id="userName" name="userName" placeholder="用户名" class="form-control"><span class="iconfont icon-user form-control-feedback"></span>

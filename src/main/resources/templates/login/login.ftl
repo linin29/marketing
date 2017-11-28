@@ -7,11 +7,24 @@
     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/bootstrap.css">
     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/AdminLTE.css">
   </head>
-  <body class="hold-transition login-page">
-    <div class="login-box">
-      <div class="login-logo"><!-- <img src="${springMacroRequestContext.contextPath}/image/logo-green.png"> --></div>
-      <div class="login-box-body">
-        <p class="login-box-msg">请登录海量图像/视频搜索识别开放平台</p>
+  <style type='text/css'>
+  	.form-control{
+  		border-radius: 17px;
+  	}
+  	.login-page{
+  		background-image:url(/marketing/image/background.jpg);
+  		background-position:center;
+  		background-repeat:no-repeat;
+  		background-size: 100% auto;
+  	}
+  	.form-group{
+  		margin-bottom:25px;
+  	}
+  </style>
+  <body class="hold-transition login-page" >
+    <div class="login-box" style='margin:15% 52%;width:420px;'>   
+      <div class="login-box-body" style='border-radius: 33px;background-color:#ffffff57;'>
+        <p class="login-box-msg" style='color:#eeeeee;font-size:17px;'>请登录海量图像/视频搜索识别开放平台</p>
           <div class="form-group has-feedback">
             <input type="text" id="userName" name="userName" placeholder="用户名" class="form-control"><span class="iconfont icon-user form-control-feedback"></span>
           </div>
@@ -61,7 +74,7 @@
         } else if ($("#password").val().trim()==""){
         	$('#errorMsg').text('请输入密码');
     		return false;
-        　　　　} else {
+        } else {
         	login();
        }
 	}

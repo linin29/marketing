@@ -182,6 +182,7 @@ BEGIN
 		  KEY `host_task_fk_idx` (`host`),
 		  KEY `create_time_task_fk_idx` (`create_time`),
 		  KEY `status_task_fk_idx` (`status`),
+		  KEY `major_type_task_fk_idx` (`major_type`),
 		  KEY `idx_last_update` (`last_update`),
 		  KEY `idx_task_name` (`name`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8;

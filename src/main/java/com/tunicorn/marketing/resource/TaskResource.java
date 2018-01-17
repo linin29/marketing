@@ -325,4 +325,17 @@ public class TaskResource extends BaseResource {
 		List<GoodsSkuVO> skuList = taskService.getGoods(majorType);
 		return CommonAjaxResponse.toSuccess(skuList);
 	}
+	
+	@RequestMapping(value = "/showView/{taskId}", method = RequestMethod.GET)
+	@ResponseBody
+	public CommonAjaxResponse showView(HttpServletRequest request, @PathVariable("taskId") String taskId) {
+
+		AjaxResponse tokenStatus = checkToken(request);
+		if (!tokenStatus.getSuccess()) {
+			return CommonAjaxResponse.toFailure(tokenStatus.getErrorCode(), tokenStatus.getErrorMessage());
+		}
+
+		ServiceResponseBO response = taskService.showViewByTaskId(taskId);
+		return CommonAjaxResponse.toSuccess(response.getResult());
+	}
 }

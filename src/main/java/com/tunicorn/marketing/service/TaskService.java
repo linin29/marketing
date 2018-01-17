@@ -1257,7 +1257,7 @@ public class TaskService {
 		param.setTaskId(taskId);
 		String tokenStr = taskId + MarketingConstants.INNOVISION;
 		param.setToken(encryptionStr(tokenStr, MarketingConstants.MD5));
-		
+
 		CommonAjaxResponse result = MarketingAPI.getStore(param);
 		return result;
 	}
@@ -1423,6 +1423,22 @@ public class TaskService {
 			}
 		}
 		return priceIdentifyBO;
+	}
+
+	public ServiceResponseBO showViewByTaskId(String taskId) {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode node = mapper.createObjectNode();
+
+		TaskVO taskVO = taskMapper.getTaskById(taskId);
+
+		if (taskVO != null) {
+			if (StringUtils.equals(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())) {
+				node.put("stitchBorderImagePath", getBorderImagePath(taskVO));
+				node.putPOJO("goodResults", getResultList(taskVO));
+				node.putPOJO("goodsSkus", getGoods(taskVO.getMajorType()));
+			}
+		}
+		return new ServiceResponseBO(node);
 	}
 
 	private void generateXmlFile(ImageCropBO cropBO, String xmlFilePath, int width, int height) {

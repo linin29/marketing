@@ -32,6 +32,7 @@ import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.MajorTypeService;
 import com.tunicorn.marketing.service.TaskService;
+import com.tunicorn.marketing.vo.GoodsSkuVO;
 import com.tunicorn.marketing.vo.MajorTypeApiVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
 import com.tunicorn.marketing.vo.TaskVO;
@@ -44,11 +45,11 @@ import com.tunicorn.util.MessageUtils;
 @Validated
 public class TaskResource extends BaseResource {
 	private static Logger logger = Logger.getLogger(TaskResource.class);
- 
+
 	@Autowired
 	private TaskService taskService;
 	@Autowired
-	private MajorTypeService majorTypeService; 
+	private MajorTypeService majorTypeService;
 
 	@RequestMapping(value = "/tasks", method = RequestMethod.POST)
 	@ResponseBody
@@ -75,8 +76,8 @@ public class TaskResource extends BaseResource {
 
 	@RequestMapping(value = "/taskimages", method = RequestMethod.POST)
 	@ResponseBody
-	public CommonAjaxResponse taskImages(HttpServletRequest request,
-			@RequestParam("images") List<MultipartFile> images, @RequestParam("taskId") String taskId) {
+	public CommonAjaxResponse taskImages(HttpServletRequest request, @RequestParam("images") List<MultipartFile> images,
+			@RequestParam("taskId") String taskId) {
 
 		AjaxResponse tokenStatus = checkToken(request);
 		if (!tokenStatus.getSuccess()) {
@@ -116,29 +117,37 @@ public class TaskResource extends BaseResource {
 		}
 	}
 
-//	@RequestMapping(value = "/{taskId}/identify", method = RequestMethod.POST)
-//	@ResponseBody
-//	public IdentifyAjaxResponse identify(HttpServletRequest request, @PathVariable("taskId") String taskId) {
-//
-//		AjaxResponse tokenStatus = checkToken(request);
-//		if (!tokenStatus.getSuccess()) {
-//			return IdentifyAjaxResponse.toFailure(tokenStatus.getErrorCode(), tokenStatus.getErrorMessage());
-//		}
-//
-//		TokenVO token = (TokenVO) tokenStatus.getData();
-//
-//		ServiceResponseBO response = taskService.taskIdentify(taskId, token.getUserId());
-//		if (response.isSuccess()) {
-//			return IdentifyAjaxResponse.toSuccess(((ObjectNode) response.getResult()).get("data"),
-//					((ObjectNode) response.getResult()).get("rows"), (ArrayNode)(((ObjectNode) response.getResult()).get("crops")),
-//					(ArrayNode)(((ObjectNode) response.getResult()).get("rows_length")),
-//					((ObjectNode) response.getResult()).get("results_border").asText(),
-//					((ObjectNode) response.getResult()).get("total_area").asLong());
-//		} else {
-//			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
-//			return IdentifyAjaxResponse.toFailure(message.getCode(), message.getMessage());
-//		}
-//	}
+	// @RequestMapping(value = "/{taskId}/identify", method =
+	// RequestMethod.POST)
+	// @ResponseBody
+	// public IdentifyAjaxResponse identify(HttpServletRequest request,
+	// @PathVariable("taskId") String taskId) {
+	//
+	// AjaxResponse tokenStatus = checkToken(request);
+	// if (!tokenStatus.getSuccess()) {
+	// return IdentifyAjaxResponse.toFailure(tokenStatus.getErrorCode(),
+	// tokenStatus.getErrorMessage());
+	// }
+	//
+	// TokenVO token = (TokenVO) tokenStatus.getData();
+	//
+	// ServiceResponseBO response = taskService.taskIdentify(taskId,
+	// token.getUserId());
+	// if (response.isSuccess()) {
+	// return IdentifyAjaxResponse.toSuccess(((ObjectNode)
+	// response.getResult()).get("data"),
+	// ((ObjectNode) response.getResult()).get("rows"),
+	// (ArrayNode)(((ObjectNode) response.getResult()).get("crops")),
+	// (ArrayNode)(((ObjectNode) response.getResult()).get("rows_length")),
+	// ((ObjectNode) response.getResult()).get("results_border").asText(),
+	// ((ObjectNode) response.getResult()).get("total_area").asLong());
+	// } else {
+	// Message message =
+	// MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
+	// return IdentifyAjaxResponse.toFailure(message.getCode(),
+	// message.getMessage());
+	// }
+	// }
 
 	@RequestMapping(value = "/{taskId}/status", method = RequestMethod.GET)
 	@ResponseBody
@@ -223,8 +232,7 @@ public class TaskResource extends BaseResource {
 	@RequestMapping(value = "/{taskId}/replace", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse replace(HttpServletRequest request, @PathVariable("taskId") String taskId,
-			@RequestParam("resourceId") String taskImageId,
-			@RequestParam("image") MultipartFile image) {
+			@RequestParam("resourceId") String taskImageId, @RequestParam("image") MultipartFile image) {
 
 		AjaxResponse tokenStatus = checkToken(request);
 		if (!tokenStatus.getSuccess()) {
@@ -233,7 +241,8 @@ public class TaskResource extends BaseResource {
 
 		TokenVO token = (TokenVO) tokenStatus.getData();
 
-		ServiceResponseBO response = taskService.replace(taskId, taskImageId, image, token.getAppId(), token.getUserId());
+		ServiceResponseBO response = taskService.replace(taskId, taskImageId, image, token.getAppId(),
+				token.getUserId());
 		if (response.isSuccess()) {
 			return CommonAjaxResponse.toSuccess(response.getResult());
 		} else {
@@ -273,13 +282,13 @@ public class TaskResource extends BaseResource {
 			Message message = MessageUtils.getInstance().getMessage("marketing_db_error");
 			return TaskListAjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
-		
+
 		for (TaskVO taskVO : taskVOs) {
 			if (taskVO.getResult() != null) {
 				ObjectMapper mapper = new ObjectMapper();
 				JsonNode nodeResult;
 				try {
-					nodeResult = mapper.readTree((String)taskVO.getResult());
+					nodeResult = mapper.readTree((String) taskVO.getResult());
 					taskVO.setResult(nodeResult);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -290,7 +299,7 @@ public class TaskResource extends BaseResource {
 		int pages = (int) Math.ceil((float) totalCount / MarketingConstants.PAGINATION_ITEMS_PER_PAGE);
 		return TaskListAjaxResponse.toSuccess(taskVOs, totalCount, currentPage == 0 ? 1 : currentPage, pages);
 	}
-	
+
 	@RequestMapping(value = "/majorTypes", method = RequestMethod.GET)
 	@ResponseBody
 	public CommonAjaxResponse majorTypeList(HttpServletRequest request) {
@@ -302,5 +311,18 @@ public class TaskResource extends BaseResource {
 
 		List<MajorTypeApiVO> majorTypes = majorTypeService.getMajorTypeListForApi();
 		return CommonAjaxResponse.toSuccess(majorTypes);
+	}
+
+	@RequestMapping(value = "/skues/{majorType}", method = RequestMethod.GET)
+	@ResponseBody
+	public CommonAjaxResponse skuList(HttpServletRequest request, @PathVariable("majorType") String majorType) {
+
+		AjaxResponse tokenStatus = checkToken(request);
+		if (!tokenStatus.getSuccess()) {
+			return CommonAjaxResponse.toFailure(tokenStatus.getErrorCode(), tokenStatus.getErrorMessage());
+		}
+
+		List<GoodsSkuVO> skuList = taskService.getGoods(majorType);
+		return CommonAjaxResponse.toSuccess(skuList);
 	}
 }

@@ -1436,6 +1436,18 @@ public class TaskService {
 				node.put("stitchBorderImagePath", getBorderImagePath(taskVO));
 				node.putPOJO("goodResults", getResultList(taskVO));
 				node.putPOJO("goodsSkus", getGoods(taskVO.getMajorType()));
+
+				String result = (String) taskVO.getResult();
+				if (StringUtils.isNotBlank(result)) {
+					ObjectNode nodeResult;
+					try {
+						nodeResult = (ObjectNode) mapper.readTree(result);
+						ArrayNode jsonNodes = (ArrayNode) nodeResult.findValue("crops");
+						node.set("crops", jsonNodes);
+					} catch (IOException e) {
+						logger.error("taskId:" + taskId + ", show view task fail, " + e.getMessage());
+					}
+				}
 			}
 		}
 		return new ServiceResponseBO(node);

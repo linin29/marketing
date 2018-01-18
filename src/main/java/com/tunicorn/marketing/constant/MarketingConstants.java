@@ -25,6 +25,7 @@ public class MarketingConstants {
 	public static final String CORE_SERVER_MARKETING_IDENTIFY_URL = "/statistics";
 	public static final String CORE_SERVER_MARKETING_IDENTIFY_MOCK_URL = "/statistics_mock";
 	public static final String CORE_SERVER_MARKETING_RECTIFY_MOCK_URL = "/rectify";
+	public static final String CORE_SERVER_MARKETING_SYNCHRO_STITCHER_URL = "/online_montage";		//2018-01-19 10:16 weixiaokai 同步创建task业务
 
 	public static final String MARKETING_STITCHER_API_NAME = "stitcher";
 	public static final String MARKETING_IDENTIFY_API_NAME = "identify";
@@ -58,6 +59,7 @@ public class MarketingConstants {
 	public static final String MARKETING_PULL_DATA_SERVICE = "marketing_pull_data_service";
 	public static final String MARKETING_GET_STORE_SERVICE = "marketing_get_store_service";
 	public static final String MARKETING_PRICE_IDENTIFY_SERVICE = "marketing_price_identify_service";
+	public static final String MARKETING_SYNCHRO_STITCHER_SERVICE = "marketing_synchro_stitcher_service";
 
 	public static final String API_MARKETING = "/api/marketing/";
 	public static final String PIC_MARKETING = "/pic/marketing";

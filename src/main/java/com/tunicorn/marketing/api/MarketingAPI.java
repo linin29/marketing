@@ -59,6 +59,11 @@ public class MarketingAPI {
 		return callPriceIdentifyService(MarketingConstants.CORE_SERVER_MARKETING_PRICE_IDENTIFY_URL, params,
 				MarketingConstants.MARKETING_PRICE_IDENTIFY_SERVICE);
 	}
+	
+	public static CommonAjaxResponse synchroStitcher(MarketingStitcherRequestParam params) {
+		return callCoreService(MarketingConstants.CORE_SERVER_MARKETING_SYNCHRO_STITCHER_URL, params,
+				MarketingConstants.MARKETING_SYNCHRO_STITCHER_SERVICE);
+	}
 
 	private static CommonAjaxResponse callCoreService(String uri, IRequestParam params, String apiErrMsgTag) {
 		String url = ConfigUtils.getInstance().getConfigValue("marketing.service.url") + uri;
@@ -81,6 +86,12 @@ public class MarketingAPI {
 			MarketingRectifyRequestParam requestParams = (MarketingRectifyRequestParam) params;
 			if (StringUtils.isNotBlank(requestParams.getMajorType())) {
 				headers.put(MarketingConstants.MAJOR_TYPE, requestParams.getMajorType());
+			}
+		}else if (StringUtils.endsWith(MarketingConstants.MARKETING_SYNCHRO_STITCHER_SERVICE, apiErrMsgTag)) {
+			url = ConfigUtils.getInstance().getConfigValue("marketing.service.synchro.url") + uri;
+			MarketingStitcherRequestParam requestParams = (MarketingStitcherRequestParam) params;
+			if (StringUtils.isNotBlank(requestParams.getMajor_type())) {
+				headers.put(MarketingConstants.MAJOR_TYPE, requestParams.getMajor_type());
 			}
 		}
 

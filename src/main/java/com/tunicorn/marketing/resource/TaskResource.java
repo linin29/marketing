@@ -21,11 +21,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tunicorn.common.api.Message;
 import com.tunicorn.common.entity.AjaxResponse;
 import com.tunicorn.marketing.api.CommonAjaxResponse;
 import com.tunicorn.marketing.api.ImageListAjaxResponse;
 import com.tunicorn.marketing.api.TaskListAjaxResponse;
+import com.tunicorn.marketing.api.MarketingAPI;
+import com.tunicorn.marketing.api.param.MarketingStitcherRequestParam;
 import com.tunicorn.marketing.bo.OrderBO;
 import com.tunicorn.marketing.bo.ServiceResponseBO;
 import com.tunicorn.marketing.bo.TaskBO;
@@ -300,7 +303,7 @@ public class TaskResource extends BaseResource {
 		return TaskListAjaxResponse.toSuccess(taskVOs, totalCount, currentPage == 0 ? 1 : currentPage, pages);
 	}
 
-	@RequestMapping(value = "/majorTypes", method = RequestMethod.GET)
+	@RequestMapping(value = "/majorTypes", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse majorTypeList(HttpServletRequest request) {
 
@@ -313,7 +316,7 @@ public class TaskResource extends BaseResource {
 		return CommonAjaxResponse.toSuccess(majorTypes);
 	}
 
-	@RequestMapping(value = "/skues/{majorType}", method = RequestMethod.GET)
+	@RequestMapping(value = "/skues/{majorType}", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse skuList(HttpServletRequest request, @PathVariable("majorType") String majorType) {
 
@@ -326,7 +329,7 @@ public class TaskResource extends BaseResource {
 		return CommonAjaxResponse.toSuccess(skuList);
 	}
 	
-	@RequestMapping(value = "/showView/{taskId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/showView/{taskId}", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse showView(HttpServletRequest request, @PathVariable("taskId") String taskId) {
 
@@ -337,5 +340,45 @@ public class TaskResource extends BaseResource {
 
 		ServiceResponseBO response = taskService.showViewByTaskId(taskId);
 		return CommonAjaxResponse.toSuccess(response.getResult());
+	}
+	
+	/**
+	 * @Description 创建在线比对任务
+	 * @auther weixiaokai
+	 * @date 2018年1月18日 下午3:38:26
+	 * @param request
+	 * @param images 上传图片最多不能超过20个
+	 * @param taskName 任务名称
+	 * @return
+	 */
+	@RequestMapping(value = "/synchro/tasks", method = RequestMethod.POST)
+	@ResponseBody
+	public CommonAjaxResponse synchroTasks(HttpServletRequest request,
+			@RequestParam(value = "images", required = false) List<MultipartFile> images,
+			@RequestParam(value = "taskLabel") String taskName, @RequestParam("majorType") String majorType) {
+
+		AjaxResponse tokenStatus = checkToken(request);
+		if (!tokenStatus.getSuccess()) {
+			logger.info(tokenStatus.getErrorMessage());
+			return CommonAjaxResponse.toFailure(tokenStatus.getErrorCode(), tokenStatus.getErrorMessage());
+		}
+
+		TokenVO token = (TokenVO) tokenStatus.getData();
+
+		ServiceResponseBO response = taskService.createTask(token.getUserId(), taskName, images);	//创建task任务
+		if (response.isSuccess()) {
+			ObjectNode node = (ObjectNode) response.getResult();
+			MarketingStitcherRequestParam param = new MarketingStitcherRequestParam();
+			param.setNeed_stitch(true);
+			param.setMajor_type(majorType);
+			param.setTask_id(node.get(MarketingConstants.TASK_ID).asText());
+			logger.info("taskId:" + param.getTask_id() + ", params of stitcher server: " + param.convertToJSON());
+			CommonAjaxResponse result = MarketingAPI.synchroStitcher(param);
+			
+			return result;
+		}else {
+			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
+			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
 	}
 }

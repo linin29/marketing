@@ -300,7 +300,7 @@ public class TaskResource extends BaseResource {
 		return TaskListAjaxResponse.toSuccess(taskVOs, totalCount, currentPage == 0 ? 1 : currentPage, pages);
 	}
 
-	@RequestMapping(value = "/majorTypes", method = RequestMethod.GET)
+	@RequestMapping(value = "/majorTypes", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse majorTypeList(HttpServletRequest request) {
 
@@ -313,7 +313,7 @@ public class TaskResource extends BaseResource {
 		return CommonAjaxResponse.toSuccess(majorTypes);
 	}
 
-	@RequestMapping(value = "/skues/{majorType}", method = RequestMethod.GET)
+	@RequestMapping(value = "/skues/{majorType}", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse skuList(HttpServletRequest request, @PathVariable("majorType") String majorType) {
 
@@ -326,7 +326,7 @@ public class TaskResource extends BaseResource {
 		return CommonAjaxResponse.toSuccess(skuList);
 	}
 	
-	@RequestMapping(value = "/showView/{taskId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/showView/{taskId}", method = RequestMethod.POST)
 	@ResponseBody
 	public CommonAjaxResponse showView(HttpServletRequest request, @PathVariable("taskId") String taskId) {
 

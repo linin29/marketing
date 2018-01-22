@@ -1433,7 +1433,7 @@ public class TaskService {
 
 		if (taskVO != null) {
 			if (StringUtils.equals(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS, taskVO.getTaskStatus())) {
-				node.put("stitchBorderImagePath", getBorderImagePath(taskVO));
+				node.put("stitchImagePath", taskVO.getStitchImagePath());
 				node.putPOJO("goodResults", getResultList(taskVO));
 				node.putPOJO("goodsSkus", getGoods(taskVO.getMajorType()));
 

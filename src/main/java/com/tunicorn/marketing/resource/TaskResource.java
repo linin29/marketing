@@ -40,7 +40,10 @@ import com.tunicorn.marketing.vo.MajorTypeApiVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
 import com.tunicorn.marketing.vo.TaskVO;
 import com.tunicorn.marketing.vo.TokenVO;
+import com.tunicorn.util.JsonUtil;
 import com.tunicorn.util.MessageUtils;
+
+import net.sf.json.JSONObject;
 
 @RestController
 @EnableAutoConfiguration
@@ -374,7 +377,11 @@ public class TaskResource extends BaseResource {
 			param.setTask_id(node.get(MarketingConstants.TASK_ID).asText());
 			logger.info("taskId:" + param.getTask_id() + ", params of stitcher server: " + param.convertToJSON());
 			CommonAjaxResponse result = MarketingAPI.synchroStitcher(param);
-			
+			if (result.getSuccess()) {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("taskId",  param.getTask_id());
+				result.setData(jsonObject);
+			}
 			return result;
 		}else {
 			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));

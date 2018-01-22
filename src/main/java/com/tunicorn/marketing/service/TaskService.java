@@ -447,6 +447,58 @@ public class TaskService {
 			}
 		}
 	}
+	public ServiceResponseBO taskStitcherSync(String taskId, Boolean needStitch, String majorType, String userId) {
+		logger.info("params of taskStitcher: taskId:" + taskId + ", needStitch:" + needStitch + ", majorType:"
+				+ majorType + ", userId:" + userId);
+		TaskVO taskVO = taskMapper.getTaskById(taskId);
+		UserVO userVO = userMapper.getUserByID(userId);
+		if (taskVO == null) {
+			return new ServiceResponseBO(false, "marketing_task_not_existed");
+		}
+		if (!StringUtils.endsWith(taskVO.getTaskStatus(), MarketingConstants.TASK_STATUS_IMAGE_UPLOADED)) {
+			return new ServiceResponseBO(false, "marketing_status_invalid");
+		}
+		List<TaskImagesVO> imagesVOs = taskImagesMapper.getTaskImagesListByTaskId(taskId);
+		if (imagesVOs == null || imagesVOs.size() == 0) {
+			return new ServiceResponseBO(false, "marketing_db_not_found");
+		}
+		MarketingStitcherRequestParam param = new MarketingStitcherRequestParam();
+		if (needStitch == null) {
+			needStitch = true;
+		}
+		if (!this.getMajorTypeList(userVO.getUserName()).contains(majorType)) {
+			return new ServiceResponseBO(false, "marketing_type_invalid");
+		}
+		String apiName = MarketingConstants.API_MARKETING + taskId + "/stitcher";
+		String apiMethod = MarketingConstants.POST;
+		String status = MarketingConstants.TASK_STATUS_PENDING;
+
+		StitcherUpdateParamBO updateParam = new StitcherUpdateParamBO();
+		updateParam.setApiMethod(apiMethod);
+		updateParam.setApiName(apiName);
+		updateParam.setMajorType(majorType);
+		updateParam.setStatus(status);
+		updateParam.setTaskId(taskId);
+		updateParam.setUserId(userId);
+		this.updateTaskStatusByStitcher(updateParam);
+
+		param.setNeed_stitch(needStitch);
+		param.setMajor_type(majorType);
+		param.setTask_id(taskId);
+		logger.info("taskId:" + taskId + ", params of stitcher server: " + param.convertToJSON());
+		CommonAjaxResponse result = MarketingAPI.synchroStitcher(param);
+
+		if (!result.getSuccess()) {
+			return new ServiceResponseBO(false, "marketing_call_service_failure");
+		} else {
+			ObjectNode fResults = this.updateApiCalling(updateParam);
+			if (fResults != null) {
+				return new ServiceResponseBO(fResults);
+			} else {
+				return new ServiceResponseBO(false, "marketing_stitch_failure");
+			}
+		}
+	}
 
 	@Transactional
 	public ServiceResponseBO taskIdentify(String taskId, String userId) {

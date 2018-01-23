@@ -447,6 +447,17 @@ public class TaskService {
 			}
 		}
 	}
+	
+	/**
+	 * 同步拼接图片业务
+	 * @auther weixiaokai
+	 * @date 2018年1月18日 下午9:00:53
+	 * @param taskId
+	 * @param needStitch
+	 * @param majorType
+	 * @param userId
+	 * @return
+	 */
 	public ServiceResponseBO taskStitcherSync(String taskId, Boolean needStitch, String majorType, String userId) {
 		logger.info("params of taskStitcher: taskId:" + taskId + ", needStitch:" + needStitch + ", majorType:"
 				+ majorType + ", userId:" + userId);

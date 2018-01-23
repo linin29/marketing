@@ -368,18 +368,7 @@ public class TaskResource extends BaseResource {
 		ServiceResponseBO response = taskService.createTask(token.getUserId(), taskName, images);	//创建task任务
 		if (response.isSuccess()) {
 			ObjectNode node = (ObjectNode) response.getResult();
-			/*MarketingStitcherRequestParam param = new MarketingStitcherRequestParam();
-			param.setNeed_stitch(true);
-			param.setMajor_type(majorType);
-			param.setTask_id(node.get(MarketingConstants.TASK_ID).asText());
-			logger.info("taskId:" + param.getTask_id() + ", params of stitcher server: " + param.convertToJSON());
-			CommonAjaxResponse result = MarketingAPI.synchroStitcher(param);*/
 			ServiceResponseBO serviceResponseBO = taskService.taskStitcherSync(node.get(MarketingConstants.TASK_ID).asText(), true, majorType, token.getUserId());
-			/*if (result.getSuccess()) {
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("taskId",  param.getTask_id());
-				result.setData(jsonObject);
-			}*/
 			JSONObject jsonObject = new JSONObject();
 			if (serviceResponseBO.isSuccess()) {
 				jsonObject.put("taskId", node.get(MarketingConstants.TASK_ID).asText());

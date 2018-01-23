@@ -27,8 +27,6 @@ import com.tunicorn.common.entity.AjaxResponse;
 import com.tunicorn.marketing.api.CommonAjaxResponse;
 import com.tunicorn.marketing.api.ImageListAjaxResponse;
 import com.tunicorn.marketing.api.TaskListAjaxResponse;
-import com.tunicorn.marketing.api.MarketingAPI;
-import com.tunicorn.marketing.api.param.MarketingStitcherRequestParam;
 import com.tunicorn.marketing.bo.OrderBO;
 import com.tunicorn.marketing.bo.ServiceResponseBO;
 import com.tunicorn.marketing.bo.TaskBO;
@@ -40,7 +38,6 @@ import com.tunicorn.marketing.vo.MajorTypeApiVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
 import com.tunicorn.marketing.vo.TaskVO;
 import com.tunicorn.marketing.vo.TokenVO;
-import com.tunicorn.util.JsonUtil;
 import com.tunicorn.util.MessageUtils;
 
 import net.sf.json.JSONObject;
@@ -319,9 +316,9 @@ public class TaskResource extends BaseResource {
 		return CommonAjaxResponse.toSuccess(majorTypes);
 	}
 
-	@RequestMapping(value = "/skues/{majorType}", method = RequestMethod.POST)
+	@RequestMapping(value = "/skues", method = RequestMethod.POST)
 	@ResponseBody
-	public CommonAjaxResponse skuList(HttpServletRequest request, @PathVariable("majorType") String majorType) {
+	public CommonAjaxResponse skuList(HttpServletRequest request, @RequestParam("majorType") String majorType) {
 
 		AjaxResponse tokenStatus = checkToken(request);
 		if (!tokenStatus.getSuccess()) {

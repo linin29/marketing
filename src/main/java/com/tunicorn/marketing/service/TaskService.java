@@ -447,9 +447,16 @@ public class TaskService {
 			}
 		}
 	}
+<<<<<<< HEAD
 	
 	/**
 	 * 同步拼接图片业务
+=======
+
+	/**
+	 * 同步拼接图片业务
+	 * 
+>>>>>>> branch 'official-demo' of weixiaokai@172.16.58.42:Tunicorn_Application/web-marketing.git
 	 * @auther weixiaokai
 	 * @date 2018年1月18日 下午9:00:53
 	 * @param taskId
@@ -1278,6 +1285,19 @@ public class TaskService {
 
 	public List<GoodsSkuVO> getGoodsSkuListByMajorTypeWithShow(String majorType) {
 		return goodsSkuMapper.getGoodsSkuListByMajorTypeWithShow(majorType);
+	}
+
+	public ServiceResponseBO getStitchImageByTaskId(String taskId) {
+		TaskVO taskVO = taskMapper.getTaskById(taskId);
+		if (taskVO == null) {
+			return new ServiceResponseBO(false, "marketing_task_not_existed");
+		}
+		String stitchImage = StringUtils.EMPTY;
+		if (StringUtils.isNotBlank(taskVO.getStitchImagePath())) {
+			stitchImage = ConfigUtils.getInstance().getConfigValue("api.marketing.baseurl")
+					+ MarketingConstants.PIC_MARKETING + taskVO.getStitchImagePath();
+		}
+		return new ServiceResponseBO(stitchImage);
 	}
 
 	@Transactional

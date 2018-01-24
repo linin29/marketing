@@ -381,4 +381,22 @@ public class TaskResource extends BaseResource {
 			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
 	}
+	
+	@RequestMapping(value = "/{taskId}/stitchImage", method = RequestMethod.GET)
+	@ResponseBody
+	public CommonAjaxResponse stitchImage(HttpServletRequest request, @PathVariable("taskId") String taskId) {
+
+		AjaxResponse tokenStatus = checkToken(request);
+		if (!tokenStatus.getSuccess()) {
+			return CommonAjaxResponse.toFailure(tokenStatus.getErrorCode(), tokenStatus.getErrorMessage());
+		}
+
+		ServiceResponseBO response = taskService.getStitchImageByTaskId(taskId);
+		if (response.isSuccess()) {
+			return CommonAjaxResponse.toSuccess(response.getResult());
+		} else {
+			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
+			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
+		}
+	}
 }

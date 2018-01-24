@@ -70,7 +70,7 @@ public class TokenResource extends BaseResource {
 		}
 		MarketingRestAPIResponse rsp = new MarketingRestAPIResponse();
 		rsp.setData("access_token", token);
-		rsp.setData("expires_in", ConfigUtils.getInstance().getConfigValue("token.expires.time"));
+		rsp.setData("expires_in", tokenVO.getExpiresTime() - System.currentTimeMillis());
 		rsp.setData("token_type", "Bearer");
 		return rsp.toString();
 	}

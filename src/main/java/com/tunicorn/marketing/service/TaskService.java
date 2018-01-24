@@ -447,7 +447,7 @@ public class TaskService {
 			}
 		}
 	}
-	
+
 	/**
 	 * 同步拼接图片业务
 	 * @auther weixiaokai
@@ -1278,6 +1278,19 @@ public class TaskService {
 
 	public List<GoodsSkuVO> getGoodsSkuListByMajorTypeWithShow(String majorType) {
 		return goodsSkuMapper.getGoodsSkuListByMajorTypeWithShow(majorType);
+	}
+
+	public ServiceResponseBO getStitchImageByTaskId(String taskId) {
+		TaskVO taskVO = taskMapper.getTaskById(taskId);
+		if (taskVO == null) {
+			return new ServiceResponseBO(false, "marketing_task_not_existed");
+		}
+		String stitchImage = StringUtils.EMPTY;
+		if (StringUtils.isNotBlank(taskVO.getStitchImagePath())) {
+			stitchImage = ConfigUtils.getInstance().getConfigValue("api.marketing.baseurl")
+					+ MarketingConstants.PIC_MARKETING + taskVO.getStitchImagePath();
+		}
+		return new ServiceResponseBO(stitchImage);
 	}
 
 	@Transactional

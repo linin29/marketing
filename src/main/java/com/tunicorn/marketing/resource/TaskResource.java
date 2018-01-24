@@ -374,7 +374,8 @@ public class TaskResource extends BaseResource {
 				jsonObject.put("taskId", node.get(MarketingConstants.TASK_ID).asText());
 				return CommonAjaxResponse.toSuccess(jsonObject);
 			}else{
-				return CommonAjaxResponse.toFailure(1, "失败");
+				Message mess = MessageUtils.getInstance().getMessage(String.valueOf(serviceResponseBO.getResult()));
+				return CommonAjaxResponse.toFailure(mess.getCode(), mess.getMessage());
 			}
 		}else {
 			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));

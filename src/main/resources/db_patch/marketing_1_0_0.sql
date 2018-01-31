@@ -136,6 +136,8 @@ BEGIN
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `api_method` varchar(255) NOT NULL,
 		  `api_name` varchar(255) NOT NULL,
+		  `project_id` varchar(40) DEFAULT NULL,
+		  `store_code` varchar(40) DEFAULT NULL,
 		  `major_type` varchar(20) DEFAULT NULL,
 		  `calling_day` date NOT NULL,
 		  `user_name` varchar(255) NOT NULL,
@@ -143,7 +145,12 @@ BEGIN
 		  `create_time` datetime DEFAULT NULL,
 		  `last_update` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		  `status` enum('active','deleted','inactive') DEFAULT 'active',
-		  PRIMARY KEY (`id`)
+		  PRIMARY KEY (`id`),
+		  KEY `user_api_calling_fk_idx` (`user_name`),
+		  KEY `day_api_calling_fk_idx` (`calling_day`),
+		  KEY `project_api_calling_fk_idx` (`project_id`),
+		  KEY `store_api_calling_fk_idx` (`store_code`),
+		  KEY `major_api_calling_fk_idx` (`major_type`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 		CREATE TABLE IF NOT EXISTS `api_calling_detail` (
@@ -172,6 +179,7 @@ BEGIN
           `result` mediumtext,
           `rows` varchar(100) DEFAULT NULL,
           `major_type` varchar(20) DEFAULT NULL,
+          `project_id` varchar(40) DEFAULT NULL,
           `host` VARCHAR(50) DEFAULT NULL,
           `need_stitch` INT(11) DEFAULT '1' COMMENT '是否去重,默认为去重',
           `goods_info` mediumtext,
@@ -184,7 +192,8 @@ BEGIN
 		  KEY `status_task_fk_idx` (`status`),
 		  KEY `major_type_task_fk_idx` (`major_type`),
 		  KEY `idx_last_update` (`last_update`),
-		  KEY `idx_task_name` (`name`)
+		  KEY `idx_task_name` (`name`),
+		  KEY `project_task_fk_idx` (`project_id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 		CREATE TABLE IF NOT EXISTS `task_images` (
@@ -359,6 +368,9 @@ BEGIN
 		`app_business_contacts` varchar(128) NOT NULL,
 		`max_call_number` INT(20) NOT NULL,
 		`creator_id` INT(11) NOT NULL,
+		`project_id` varchar(40) DEFAULT NULL,
+		`start_time` datetime DEFAULT NULL,
+		`end_time` datetime DEFAULT NULL,
 		`create_time` DATETIME DEFAULT NULL,
 		`reject_reason` varchar(255) DEFAULT NULL,
 		`apply_status` ENUM('created','opened','rejected') NOT NULL DEFAULT 'created',
@@ -366,6 +378,7 @@ BEGIN
 		`status` ENUM('active','deleted','inactive') NOT NULL DEFAULT 'active',
 		PRIMARY KEY (`id`),
 		INDEX `application_business_name_idx` (`app_business_name`),
+		INDEX `project_service_apply_fk_idx` (`project_id`),
 		INDEX `apply_status_idx` (`apply_status`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	
@@ -432,6 +445,30 @@ BEGIN
  		 `md5` varchar(255) DEFAULT NULL,
   		PRIMARY KEY (`id`)
 	) ENGINE=InnoDB AUTO_INCREMENT=4116 DEFAULT CHARSET=utf8;
+	
+	CREATE TABLE IF NOT EXISTS `project` (
+	  	`id` varchar(40) NOT NULL,
+	  	`name` varchar(40) NOT NULL unique,
+	  	`type` enum('free','paid','official') NOT NULL DEFAULT 'official',
+	  	`store_number` int(10) default NULL,
+	  	`call_number` int(10) default NULL,
+	  	`image_number` int(10) default NULL,
+	  	`threshhold` float(3,2) default NULL,
+	  	`create_time` datetime DEFAULT NULL,
+	  	`last_update` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	  	`status` enum('active','deleted','inactive') NOT NULL DEFAULT 'active',
+	  	PRIMARY KEY (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	
+	CREATE TABLE IF NOT EXISTS `store` (
+	  	`id` int(11) NOT NULL AUTO_INCREMENT,
+	  	`code` varchar(40) NOT NULL,
+	  	`project_id` varchar(40) NOT NULL,
+	  	PRIMARY KEY (`id`),
+	  	KEY `code_store_fk_idx` (`code`),
+	  	KEY `project_store_fk_idx` (`project_id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		
 	END IF;
 END//
 

@@ -8,6 +8,9 @@ public class ApiCallingSummaryVO {
 	private String apiName;
 	private String callingDay;
 	private String userName;
+	private String projectId;
+	private String storeCode;
+	private String majorType;
 	private int callingTimes;
 	private Date createTime;
 	private Date lastUpdateTime;
@@ -51,6 +54,30 @@ public class ApiCallingSummaryVO {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getStoreCode() {
+		return storeCode;
+	}
+
+	public void setStoreCode(String storeCode) {
+		this.storeCode = storeCode;
+	}
+
+	public String getMajorType() {
+		return majorType;
+	}
+
+	public void setMajorType(String majorType) {
+		this.majorType = majorType;
 	}
 
 	public int getCallingTimes() {

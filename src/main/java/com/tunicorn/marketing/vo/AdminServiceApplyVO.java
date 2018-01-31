@@ -16,6 +16,9 @@ public class AdminServiceApplyVO {
 	private String appBusinessContacts;
 	private long maxCallNumber;
 	private int creatorId;
+	private String projectId;
+	private Date startTime;
+	private Date endTime;
 	private String applyStatus;
 	private Date createTime;
 	private Date lastUpdate;
@@ -179,6 +182,30 @@ public class AdminServiceApplyVO {
 
 	public void setAppSecret(String appSecret) {
 		this.appSecret = appSecret;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
 
 	public String getStatusStr() {

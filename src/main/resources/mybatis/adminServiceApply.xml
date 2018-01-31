@@ -7,10 +7,6 @@
 		<result column="username" property="username" jdbcType="VARCHAR" />
 		<result column="email" property="email" jdbcType="VARCHAR" />
 		<result column="reject_reason" property="rejectReason" jdbcType="VARCHAR" />
-		<result column="app_business_name" property="appBusinessName" jdbcType="VARCHAR" />
-		<result column="app_business_address" property="appBusinessAddress" jdbcType="VARCHAR" />
-		<result column="app_business_mobile" property="appBusinessMobile" jdbcType="VARCHAR" />
-		<result column="app_business_contacts" property="appBusinessContacts" jdbcType="VARCHAR" />
 		<result column="max_call_number" property="maxCallNumber" jdbcType="INTEGER" />
 		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
 		<result column="project_id" property="projectId" jdbcType="VARCHAR" />
@@ -44,18 +40,6 @@
       </if>
        <if test="email != null" >
         email,
-      </if>
-      <if test="appBusinessName != null" >
-        app_business_name,
-      </if>
-      <if test="appBusinessAddress != null" >
-        app_business_address,
-      </if>
-       <if test="appBusinessMobile != null" >
-        app_business_mobile,
-      </if>
-       <if test="appBusinessContacts != null" >
-        app_business_contacts,
       </if>
       <if test="maxCallNumber != null" >
         max_call_number,
@@ -94,18 +78,6 @@
      <if test="email != null" >
         #{email, jdbcType=INTEGER},
       </if>
-      <if test="appBusinessName != null" >
-        #{appBusinessName,jdbcType=VARCHAR},
-      </if>
-      <if test="appBusinessAddress != null" >
-        #{appBusinessAddress,jdbcType=VARCHAR},
-      </if>
-      <if test="appBusinessMobile != null" >
-        #{appBusinessMobile,jdbcType=VARCHAR},
-      </if>
-      <if test="appBusinessContacts != null" >
-        #{appBusinessContacts,jdbcType=VARCHAR},
-      </if>
       <if test="maxCallNumber != null" >
         #{maxCallNumber,jdbcType=INTEGER},
       </if>
@@ -131,18 +103,15 @@
     </trim>
   </insert>
 	<select id="getAdminServiceApplyList" resultMap="AdminServiceApplyResultMap" parameterType="com.tunicorn.marketing.bo.AdminServiceApplyBO">
-		select asa.id,  asa.user_id, asa.app_business_name, asa.app_business_address, asa.app_business_mobile, asa.app_business_contacts,
+		select asa.id,  asa.user_id,
 		asa.max_call_number, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
 		au.name as creatorName, asa.username, asa.email, asa.reject_reason
 		from 
-		(select id,  user_id, app_business_name, app_business_address, app_business_mobile, app_business_contacts,
+		(select id,  user_id,
 			max_call_number, creator_id, apply_status, create_time, last_update, username, email, reject_reason, `status`
         	from admin_service_apply where `status` = 'active'
         	<if test="applyStatus != null and applyStatus != ''">
 				and apply_status = #{applyStatus}
-			</if>
-			<if test="appBusinessName != null and appBusinessName != ''">
-				and app_business_name like concat(concat('%',#{appBusinessName}),'%')
 			</if>
        	 	order by create_time desc
 			limit #{startNum}, #{perPage}
@@ -159,25 +128,10 @@
 	    <if test="applyStatus != null and applyStatus != ''">
 			and apply_status = #{applyStatus}
 		</if>
-		<if test="appBusinessName != null and appBusinessName != ''">
-			and app_business_name like concat(concat('%',#{appBusinessName}),'%')
-		</if>
 	</select>
 	<update id="updateAdminServiceApply" parameterType="com.tunicorn.marketing.vo.AdminServiceApplyVO">
 		UPDATE admin_service_apply
 		<trim prefix="set" suffixOverrides=",">
-			<if test="appBusinessName != null and appBusinessName !=''">
-				app_business_name=#{appBusinessName},
-			</if>
-			<if test="appBusinessAddress != null and appBusinessAddress !=''">
-				app_business_address=#{appBusinessAddress},
-			</if>
-			<if test="appBusinessMobile != null and appBusinessMobile !=''">
-				app_business_mobile=#{appBusinessMobile},
-			</if>
-			<if test="appBusinessContacts != null and appBusinessContacts !=''">
-				app_business_contacts=#{appBusinessContacts},
-			</if>
 			<if test="maxCallNumber != null and maxCallNumber !=''">
 				max_call_number=#{maxCallNumber},
 			</if>
@@ -219,7 +173,7 @@
 		WHERE id=#{id}
 	</update>
 	<select id="getAdminServiceApplyById" resultMap="AdminServiceApplyResultMap" parameterType="int">
-		select asa.id,  asa.user_id, asa.app_business_name, asa.app_business_address, asa.app_business_mobile, asa.app_business_contacts,
+		select asa.id,  asa.user_id,
 		asa.max_call_number, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
 		asa.username, asa.email, asa.reject_reason
 		from admin_service_apply asa 

@@ -47,7 +47,7 @@
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
 				         		<#list adminServiceApplys as adminServiceApply>
 					    		<tr class='tdCenter'>
-					    		<td>${adminServiceApply.appBusinessName}</td>
+					    		<td>${adminServiceApply.maxCallNumber}</td>
 					    		<td>
 					    		   <#if adminServiceApply.majorTypes?? && (adminServiceApply.majorTypes?size>0)>
 	   								   <#list adminServiceApply.majorTypes as majorType>
@@ -89,12 +89,16 @@
 			      	</div>
 			      	<div class="modal-body">
 			        	<div class="form-group">
-			                <h5><strong>应用商信息</strong></h5>
+			                <h5><strong>项目信息</strong></h5>
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
 			                		<tr>
 			                			<td class="wid">名称：</td>
 			                			<td><input  class="application-name total newline" type="text" id="ser-name" placeholder="输入名称"/></td>
+			                		</tr>
+			                		<tr>
+			                			<td class="wid">项目编码：</td>
+			                			<td><input  class="application-name total newline" type="text" id="project-id" placeholder="输入项目编码"/></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">地址：</td>
@@ -118,6 +122,14 @@
 			                			<td class="wid">上传合同：</td>
 			                			<td><input  class="application-name total" multiple type="file" id="upload-book" /></td>
 			                		</tr>
+			                		<tr id="contracted-value-tr">
+			                			<td class="wid">合同金额：</td>
+			                			<td>¥<input  class="application-name total" type="text" id="contracted-value"  placeholder="输入合同金额"/>元人民币</td>
+			                		</tr>
+			                		<tr id="contracted-no-tr">
+			                			<td class="wid">合同编号：</td>
+			                			<td><input  class="application-name total" type="text" id="contracted-no"  placeholder="输入合同编号"/></td>
+			                		</tr>
 			                	</tbody>
 			                </table>
 			           	</div>	
@@ -138,7 +150,48 @@
 			                			</td>
 			                		</tr>
 			                		<tr>
+			                			<td class="wid">项目类型：</td>
+			                			<td>
+			                				<select id="project-type">
+			                				    <option value=''>选择项目类型</option>
+					      						<option value='free'>免费测试</option>
+					      						<option value='paid'>付费测试</option>
+					      						<option value='official'>正式合同</option>
+											</select>
+			                			</td>
+			                		</tr>
+			                		<tr>
+			                			<td class="wid">项目开始时间：</td>
+			                			<td>
+			                				<select id="project-type">
+			                				    <option value=''>选择项目类型</option>
+					      						<option value='free'>免费测试</option>
+					      						<option value='paid'>付费测试</option>
+					      						<option value='official'>正式合同</option>
+											</select>
+			                			</td>
+			                		</tr>
+			                		<tr>
+			                			<td class="wid">项目结束时间：</td>
+			                			<td>
+			                				<select id="project-type">
+			                				    <option value=''>选择项目类型</option>
+					      						<option value='free'>免费测试</option>
+					      						<option value='paid'>付费测试</option>
+					      						<option value='official'>正式合同</option>
+											</select>
+			                			</td>
+			                		</tr>
+			                		<tr>
+			                			<td class="wid">门店数：</td>
+			                			<td><input  class="application-name total" type="text" id="store-no"  placeholder="输入门店数"/></td>
+			                		</tr>
+			                		<tr>
 			                			<td class="wid">申请次数：</td>
+			                			<td><input  class="application-name total newline" type="text" id="application-number" placeholder="输入申请次数"/></td>
+			                		</tr>
+			                		<tr>
+			                			<td class="wid">调用率提醒：</td>
 			                			<td><input  class="application-name total newline" type="text" id="application-number" placeholder="输入申请次数"/></td>
 			                		</tr>
 			                	</tbody>

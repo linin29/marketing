@@ -10,10 +10,6 @@ import com.tunicorn.marketing.constant.MarketingConstants;
 public class AdminServiceApplyVO {
 	private long id;
 	private int userId;
-	private String appBusinessName;
-	private String appBusinessAddress;
-	private String appBusinessMobile;
-	private String appBusinessContacts;
 	private long maxCallNumber;
 	private int creatorId;
 	private String projectId;
@@ -70,38 +66,6 @@ public class AdminServiceApplyVO {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
-	}
-
-	public String getAppBusinessName() {
-		return appBusinessName;
-	}
-
-	public void setAppBusinessName(String appBusinessName) {
-		this.appBusinessName = appBusinessName;
-	}
-
-	public String getAppBusinessAddress() {
-		return appBusinessAddress;
-	}
-
-	public void setAppBusinessAddress(String appBusinessAddress) {
-		this.appBusinessAddress = appBusinessAddress;
-	}
-
-	public String getAppBusinessMobile() {
-		return appBusinessMobile;
-	}
-
-	public void setAppBusinessMobile(String appBusinessMobile) {
-		this.appBusinessMobile = appBusinessMobile;
-	}
-
-	public String getAppBusinessContacts() {
-		return appBusinessContacts;
-	}
-
-	public void setAppBusinessContacts(String appBusinessContacts) {
-		this.appBusinessContacts = appBusinessContacts;
 	}
 
 	public long getMaxCallNumber() {

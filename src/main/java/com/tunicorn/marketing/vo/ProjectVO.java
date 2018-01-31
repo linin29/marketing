@@ -6,6 +6,9 @@ public class ProjectVO {
 
 	private String id;
 	private String name;
+	private String address;
+	private String mobile;
+	private String contacts;
 	private String type;
 	private int storeNumber;
 	private int callNumber;
@@ -29,6 +32,30 @@ public class ProjectVO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(String contacts) {
+		this.contacts = contacts;
 	}
 
 	public String getType() {

@@ -90,6 +90,9 @@ BEGIN
 		CREATE TABLE IF NOT EXISTS `project` (
 		  `id` varchar(40) NOT NULL,
 		  `name` varchar(40) NOT NULL unique,
+		  `address` varchar(255) NOT NULL,
+	      `mobile` varchar(20) NOT NULL,
+		  `contacts` varchar(128) NOT NULL,
 		  `type` enum('free','paid','official') NOT NULL DEFAULT 'official',
 		  `store_number` int(10) default NULL,
 		  `call_number` int(10) default NULL,
@@ -121,6 +124,13 @@ BEGIN
 		alter table `admin_service_apply` Add column `project_id` varchar(40) DEFAULT NULL AFTER `creator_id`;
 		alter table `admin_service_apply` Add column `start_time` datetime DEFAULT NULL AFTER `project_id`;
 		alter table `admin_service_apply` Add column `end_time` datetime DEFAULT NULL AFTER `start_time`;
+		alter table `admin_service_apply` Add column `contracted_value` float DEFAULT NULL AFTER `end_time`;
+		alter table `admin_service_apply` Add column `contracted_no`  varchar(20) DEFAULT NULL AFTER `contracted_value`;
+		
+		alter table `admin_service_apply` drop column `app_business_name`;
+		alter table `admin_service_apply` drop column `app_business_address`;
+		alter table `admin_service_apply` drop column `app_business_mobile`;
+		alter table `admin_service_apply` drop column `app_business_contacts`;
 		
 		alter table `task` Add column `project_id` varchar(40) DEFAULT NULL AFTER `user_id`;
 		

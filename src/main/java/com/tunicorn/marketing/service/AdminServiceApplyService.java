@@ -71,7 +71,7 @@ public class AdminServiceApplyService {
 
 	public void sendApplyEmail(AdminServiceApplyVO adminServiceApplyVO) {
 		StringBuffer text = new StringBuffer();
-		text.append("<h3>应用商：").append(adminServiceApplyVO.getAppBusinessName()).append("</h3>").append("<p>申请服务：");
+		//text.append("<h3>应用商：").append(adminServiceApplyVO.getAppBusinessName()).append("</h3>").append("<p>申请服务：");
 		List<MajorTypeVO> majorTypeVOs = adminServiceApplyVO.getMajorTypes();
 		if (majorTypeVOs != null && majorTypeVOs.size() > 0) {
 			for (MajorTypeVO majorTypeVO : majorTypeVOs) {

@@ -13,6 +13,9 @@
 		<result column="app_business_contacts" property="appBusinessContacts" jdbcType="VARCHAR" />
 		<result column="max_call_number" property="maxCallNumber" jdbcType="INTEGER" />
 		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="project_id" property="projectId" jdbcType="VARCHAR" />
+		<result column="start_time" property="startTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+		<result column="end_time" property="endTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
 		<result column="apply_status" property="applyStatus" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
 		<result column="last_update" property="lastUpdate" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
@@ -60,6 +63,15 @@
       <if test="creatorId != null" >
         creator_id,
       </if>
+       <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
        <if test="applyStatus != null" >
         apply_status,
       </if>
@@ -99,6 +111,15 @@
       </if>
       <if test="creatorId != null" >
         #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{projectId,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
       </if>
        <if test="applyStatus != null" >
         #{applyStatus,jdbcType=VARCHAR},
@@ -171,6 +192,12 @@
 			</if>
 			<if test="email != null and email !=''">
 				`email` = #{email},
+			</if>
+			<if test="startTime != null and startTime !=''">
+				`start_time` = #{startTime},
+			</if>
+			<if test="endTime != null and endTime !=''">
+				`end_time` = #{endTime},
 			</if>
 				reject_reason = #{rejectReason},
 		</trim>

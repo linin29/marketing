@@ -100,7 +100,7 @@ public class AdminServiceController extends BaseController {
 		AdminUserVO user = getCurrentAdminUser(request);
 
 		AdminServiceApplyVO adminServiceApplyVO = new AdminServiceApplyVO();
-		if (StringUtils.isNotBlank(request.getParameter("appBusinessName"))) {
+/*		if (StringUtils.isNotBlank(request.getParameter("appBusinessName"))) {
 			adminServiceApplyVO.setAppBusinessName(request.getParameter("appBusinessName"));
 		}
 		if (StringUtils.isNotBlank(request.getParameter("appBusinessAddress"))) {
@@ -111,7 +111,7 @@ public class AdminServiceController extends BaseController {
 		}
 		if (StringUtils.isNotBlank(request.getParameter("appBusinessMobile"))) {
 			adminServiceApplyVO.setAppBusinessMobile(request.getParameter("appBusinessMobile"));
-		}
+		}*/
 		if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
 			adminServiceApplyVO.setMaxCallNumber(Long.valueOf(request.getParameter("maxCallNumber")));
 		}
@@ -144,7 +144,7 @@ public class AdminServiceController extends BaseController {
 	@ResponseBody
 	public AjaxResponse updateService(HttpServletRequest request, @PathVariable("applyId") long applyId) {
 		AdminServiceApplyVO adminServiceApplyVO = new AdminServiceApplyVO();
-		if (StringUtils.isNotBlank(request.getParameter("appBusinessName"))) {
+/*		if (StringUtils.isNotBlank(request.getParameter("appBusinessName"))) {
 			adminServiceApplyVO.setAppBusinessName(request.getParameter("appBusinessName"));
 		}
 		if (StringUtils.isNotBlank(request.getParameter("appBusinessAddress"))) {
@@ -158,7 +158,7 @@ public class AdminServiceController extends BaseController {
 		}
 		if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
 			adminServiceApplyVO.setMaxCallNumber(Long.valueOf(request.getParameter("maxCallNumber")));
-		}
+		}*/
 		if (StringUtils.isNotBlank(request.getParameter("majorTypes"))) {
 			List<MajorTypeVO> majorTypes = new ArrayList<MajorTypeVO>();
 			String[] majortypeArray = request.getParameter("majorTypes").split(",");
@@ -302,7 +302,7 @@ public class AdminServiceController extends BaseController {
 
 	private void sendApplyEmail(HttpServletRequest request) {
 		AdminServiceApplyVO adminServiceApplyVO = new AdminServiceApplyVO();
-		if (StringUtils.isNotBlank(request.getParameter("appBusinessName"))) {
+/*		if (StringUtils.isNotBlank(request.getParameter("appBusinessName"))) {
 			adminServiceApplyVO.setAppBusinessName(request.getParameter("appBusinessName"));
 		}
 		if (StringUtils.isNotBlank(request.getParameter("appBusinessAddress"))) {
@@ -313,7 +313,7 @@ public class AdminServiceController extends BaseController {
 		}
 		if (StringUtils.isNotBlank(request.getParameter("appBusinessMobile"))) {
 			adminServiceApplyVO.setAppBusinessMobile(request.getParameter("appBusinessMobile"));
-		}
+		}*/
 		if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
 			adminServiceApplyVO.setMaxCallNumber(Long.valueOf(request.getParameter("maxCallNumber")));
 		}

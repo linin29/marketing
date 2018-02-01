@@ -5,7 +5,8 @@ adminService = (function(){
 		var serviceApplyUrl =  '/admin/service/apply/search';
 		if(totalCount != "0"){
 			initPagination(currentPage, totalCount, serviceApplyUrl);
-		} 
+		}
+		initDate();
 		$("#query").click(function(){
 			queryService(serviceApplyUrl);
 		});
@@ -221,10 +222,10 @@ adminService = (function(){
 	  			formData.append('images', file, file.name);
 			}
 		}
-		formData.append('appBusinessName', appBusinessName);
-		formData.append('appBusinessAddress', appBusinessAddress);
-		formData.append('appBusinessContacts', appBusinessContacts);
-		formData.append('appBusinessMobile', appBusinessMobile);
+		formData.append('name', appBusinessName);
+		formData.append('address', appBusinessAddress);
+		formData.append('contacts', appBusinessContacts);
+		formData.append('mobile', appBusinessMobile);
 		formData.append('maxCallNumber', maxCallNumber);
 		formData.append('majorTypes', majorTypes);
 		formData.append('username', username);
@@ -551,6 +552,69 @@ adminService = (function(){
 	
 	function doPaginationClicked(url, pageNum) {
 		queryService(url, pageNum);
+	};
+	function getInitDate() {
+		var current = moment();
+		return {'startDate': current.format('YYYY-MM-DD HH:mm:ss'), 'endDate': current.add(1, 'M').format('YYYY-MM-DD HH:mm:ss')};
+	};
+	
+	function initDate() {
+		$('.datetimepicker').remove();
+		var dateData = getInitDate();
+		$("#toDate").val(dateData['endDate']);
+		$("#fromDate").val(dateData['startDate']);
+		
+		
+		//时间段显示
+		$('.form_datetime1').datetimepicker({
+			container:"#new-server-model .modal-content",
+			format: 'yyyy-mm-dd hh:ii:00',
+			language: 'zh-CN',
+		    todayBtn : "linked",
+		    pickerPosition: "top-right",
+		    autoclose:true ,
+		    startDate : new Date()
+		}).on('changeDate',function(e){
+		    var startTime = e.date;
+		    $('.form_datetime2').datetimepicker('setStartDate',startTime);
+		});
+		
+		$('.form_datetime2').datetimepicker({
+			container:"#new-server-model .modal-content",
+			language: 'zh-CN',
+		    format: 'yyyy-mm-dd hh:ii:59',
+		    todayBtn : "linked",
+		    pickerPosition: "top-right",
+		    autoclose:true, //选择日期后自动关闭
+		    startDate : new Date()
+		}).on('changeDate',function(e){
+		    var endTime = e.date;
+		    $('.form_datetime1').datetimepicker('setEndDate',endTime);
+		});
+		$('.form_datetime3').datetimepicker({
+			format: 'hh:ii:00',
+			language: 'zh-CN',
+		    todayBtn : "linked",
+		    startView:1,
+		    autoclose:true ,
+		    pickerPosition: "top-right",
+		}).on('changeDate',function(e){
+		    var startTime = e.date;
+		    $('.form_datetime4').datetimepicker('setStartDate',startTime);
+		});
+		
+		$('.form_datetime4').datetimepicker({
+		    language: 'zh-CN',
+		    format: 'hh:ii:59',
+		    todayBtn : "linked",
+		    startView: 1,
+		    pickerPosition: "top-right",
+		    autoclose:true, //选择日期后自动关闭
+		    startDate : $(".startTime").val()
+		}).on('changeDate',function(e){
+		    var endTime = e.date;
+		    $('.form_datetime3').datetimepicker('setEndDate',endTime);
+		});
 	};
 	return {
 		serviceApplyInit:serviceApplyInit,

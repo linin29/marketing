@@ -112,9 +112,9 @@ public class AdminServiceController extends BaseController {
 		if (StringUtils.isNotBlank(request.getParameter("appBusinessMobile"))) {
 			adminServiceApplyVO.setAppBusinessMobile(request.getParameter("appBusinessMobile"));
 		}*/
-		if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
+		/*if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
 			adminServiceApplyVO.setMaxCallNumber(Long.valueOf(request.getParameter("maxCallNumber")));
-		}
+		}*/
 		if (StringUtils.isNotBlank(request.getParameter("majorTypes"))) {
 			List<MajorTypeVO> majorTypes = new ArrayList<MajorTypeVO>();
 			String[] majortypeArray = request.getParameter("majorTypes").split(",");
@@ -314,9 +314,9 @@ public class AdminServiceController extends BaseController {
 		if (StringUtils.isNotBlank(request.getParameter("appBusinessMobile"))) {
 			adminServiceApplyVO.setAppBusinessMobile(request.getParameter("appBusinessMobile"));
 		}*/
-		if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
+		/*if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
 			adminServiceApplyVO.setMaxCallNumber(Long.valueOf(request.getParameter("maxCallNumber")));
-		}
+		}*/
 		if (StringUtils.isNotBlank(request.getParameter("email"))) {
 			adminServiceApplyVO.setEmail(request.getParameter("email"));
 		}

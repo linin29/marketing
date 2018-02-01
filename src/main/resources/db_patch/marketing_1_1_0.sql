@@ -131,6 +131,7 @@ BEGIN
 		alter table `admin_service_apply` drop column `app_business_address`;
 		alter table `admin_service_apply` drop column `app_business_mobile`;
 		alter table `admin_service_apply` drop column `app_business_contacts`;
+		alter table `admin_service_apply` drop column `max_call_number`;
 		
 		alter table `task` Add column `project_id` varchar(40) DEFAULT NULL AFTER `user_id`;
 		

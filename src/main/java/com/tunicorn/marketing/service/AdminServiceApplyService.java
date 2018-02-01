@@ -82,7 +82,7 @@ public class AdminServiceApplyService {
 			}
 			text.deleteCharAt(text.length() - 1);
 		}
-		text.append("</p>").append("<p>调用次数：").append(adminServiceApplyVO.getMaxCallNumber()).append("</p>");
+		//text.append("</p>").append("<p>调用次数：").append(adminServiceApplyVO.getMaxCallNumber()).append("</p>");
 		String from = ConfigUtils.getInstance().getConfigValue("spring.mail.from");
 		AdminUserVO adminUserVO = adminUserMapper.getUserByUserName(MarketingConstants.ADMIN_USER_NAME);
 		String password = ConfigUtils.getInstance().getConfigValue("spring.mail.from.password");

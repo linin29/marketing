@@ -362,7 +362,6 @@ BEGIN
 		`user_id` INT(11),
   		`username` varchar(128) NOT NULL,
   		`email` varchar(128) NOT NULL,
-		`max_call_number` INT(20) NOT NULL,
 		`creator_id` INT(11) NOT NULL,
 		`project_id` varchar(40) DEFAULT NULL,
 		`start_time` datetime DEFAULT NULL,

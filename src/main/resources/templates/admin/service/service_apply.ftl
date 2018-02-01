@@ -47,7 +47,7 @@
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
 				         		<#list adminServiceApplys as adminServiceApply>
 					    		<tr class='tdCenter'>
-					    		<td>${adminServiceApply.maxCallNumber}</td>
+					    		<td>${adminServiceApply.statusStr}</td>
 					    		<td>
 					    		   <#if adminServiceApply.majorTypes?? && (adminServiceApply.majorTypes?size>0)>
 	   								   <#list adminServiceApply.majorTypes as majorType>
@@ -55,7 +55,7 @@
 	   		                           </#list>
    								    </#if>
 									</td>
-					    		<td>${adminServiceApply.maxCallNumber}</td>
+					    		<td>${adminServiceApply.statusStr}</td>
 					    		<td><a href="javascript:void(0)"  applyid="${adminServiceApply.id}" class="showAgreementModel">图片管理</a></td>
 					    		<td>${adminServiceApply.creator.name}</td>
 					    		<td>${adminServiceApply.statusStr}</td>

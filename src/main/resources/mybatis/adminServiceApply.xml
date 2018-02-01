@@ -7,7 +7,6 @@
 		<result column="username" property="username" jdbcType="VARCHAR" />
 		<result column="email" property="email" jdbcType="VARCHAR" />
 		<result column="reject_reason" property="rejectReason" jdbcType="VARCHAR" />
-		<result column="max_call_number" property="maxCallNumber" jdbcType="INTEGER" />
 		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
 		<result column="project_id" property="projectId" jdbcType="VARCHAR" />
 		<result column="start_time" property="startTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
@@ -40,9 +39,6 @@
       </if>
        <if test="email != null" >
         email,
-      </if>
-      <if test="maxCallNumber != null" >
-        max_call_number,
       </if>
       <if test="creatorId != null" >
         creator_id,
@@ -78,9 +74,6 @@
      <if test="email != null" >
         #{email, jdbcType=INTEGER},
       </if>
-      <if test="maxCallNumber != null" >
-        #{maxCallNumber,jdbcType=INTEGER},
-      </if>
       <if test="creatorId != null" >
         #{creatorId,jdbcType=INTEGER},
       </if>
@@ -103,12 +96,10 @@
     </trim>
   </insert>
 	<select id="getAdminServiceApplyList" resultMap="AdminServiceApplyResultMap" parameterType="com.tunicorn.marketing.bo.AdminServiceApplyBO">
-		select asa.id,  asa.user_id,
-		asa.max_call_number, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
+		select asa.id,  asa.user_id, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
 		au.name as creatorName, asa.username, asa.email, asa.reject_reason
 		from 
-		(select id,  user_id,
-			max_call_number, creator_id, apply_status, create_time, last_update, username, email, reject_reason, `status`
+		(select id,  user_id, creator_id, apply_status, create_time, last_update, username, email, reject_reason, `status`
         	from admin_service_apply where `status` = 'active'
         	<if test="applyStatus != null and applyStatus != ''">
 				and apply_status = #{applyStatus}
@@ -132,9 +123,6 @@
 	<update id="updateAdminServiceApply" parameterType="com.tunicorn.marketing.vo.AdminServiceApplyVO">
 		UPDATE admin_service_apply
 		<trim prefix="set" suffixOverrides=",">
-			<if test="maxCallNumber != null and maxCallNumber !=''">
-				max_call_number=#{maxCallNumber},
-			</if>
 			<if test="applyStatus != null and applyStatus !=''">
 				apply_status=#{applyStatus},
 			</if>
@@ -160,9 +148,6 @@
 	<update id="updateMajorTypeApplicationMapping" parameterType="com.tunicorn.marketing.vo.MajorTypeApplicationMappingVO">
 		UPDATE major_type_application_mapping
 		<trim prefix="set" suffixOverrides=",">
-			<if test="maxCallNumber != null and maxCallNumber !=''">
-				max_call_number=#{maxCallNumber},
-			</if>
 			<if test="applyStatus != null and applyStatus !=''">
 				apply_status=#{applyStatus},
 			</if>
@@ -173,8 +158,7 @@
 		WHERE id=#{id}
 	</update>
 	<select id="getAdminServiceApplyById" resultMap="AdminServiceApplyResultMap" parameterType="int">
-		select asa.id,  asa.user_id,
-		asa.max_call_number, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
+		select asa.id,  asa.user_id, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
 		asa.username, asa.email, asa.reject_reason
 		from admin_service_apply asa 
 		left join admin_major_type_service_apply_mapping amt on asa.id = amt.service_apply_id

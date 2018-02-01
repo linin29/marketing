@@ -10,7 +10,6 @@ import com.tunicorn.marketing.constant.MarketingConstants;
 public class AdminServiceApplyVO {
 	private long id;
 	private int userId;
-	private long maxCallNumber;
 	private int creatorId;
 	private String projectId;
 	private Date startTime;
@@ -66,14 +65,6 @@ public class AdminServiceApplyVO {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
-	}
-
-	public long getMaxCallNumber() {
-		return maxCallNumber;
-	}
-
-	public void setMaxCallNumber(long maxCallNumber) {
-		this.maxCallNumber = maxCallNumber;
 	}
 
 	public int getCreatorId() {

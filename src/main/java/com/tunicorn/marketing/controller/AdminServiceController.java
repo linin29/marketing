@@ -1,8 +1,6 @@
 package com.tunicorn.marketing.controller;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 

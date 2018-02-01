@@ -319,7 +319,15 @@ public class TaskService {
 			return new ServiceResponseBO(false, "marketing_db_error");
 		}
 	}
-
+	/**
+	 * 获取project下的所有图片数量
+	 * @param projectId
+	 * @return
+	 */
+	public int getImageCountByProjectId (String projectId) {
+		return taskImagesMapper.getImageCountByProjectId(projectId);
+	}
+	
 	@SuppressWarnings("deprecation")
 	public ServiceResponseBO taskStatus(String taskId) {
 		logger.info("params of taskStatus: taskId:" + taskId);
@@ -2125,6 +2133,7 @@ class XMLGeneratorThread implements Runnable {
 		}
 		return mapper.createArrayNode();
 	}
+	
 }
 
 class AecUploadThread implements Runnable {

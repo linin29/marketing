@@ -148,5 +148,9 @@
 			and asa.id = #{id}
 		</if>
 	</select>
+	
+	<select id="getProjectsByUserName" resultMap="java.util.Map">
+		SELECT t.* FROM project t WHERE t.`id` IN (SELECT DISTINCT t1.`project_id` FROM admin_service_apply t1 WHERE t1.`username`=#{userName}) AND t.`status`='active';
+	</select>
 </mapper>
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.tunicorn.marketing.bo.ApiCallingSummaryBO;
@@ -26,4 +27,7 @@ public interface ApiCallingSummaryMapper {
 	public int getApiCallingSummary(ApiCallingSummaryBO apiCallingSummaryBO);
 	
 	public int getApiCallingSum(ApiCallingSummaryBO apiCallingSummaryBO);
+	
+	@Select("select sum(calling_times) as totalCount from api_calling_count where project_id=#{projectId}")
+	public int getAPICallCountByProjectId(String projectId);
 }

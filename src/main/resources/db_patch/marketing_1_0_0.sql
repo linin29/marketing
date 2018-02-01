@@ -457,7 +457,8 @@ BEGIN
 	  	`create_time` datetime DEFAULT NULL,
 	  	`last_update` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	  	`status` enum('active','deleted','inactive') NOT NULL DEFAULT 'active',
-	  	PRIMARY KEY (`id`)
+	  	PRIMARY KEY (`id`),
+	  	KEY `status_project_fk_idx` (`status`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	
 	CREATE TABLE IF NOT EXISTS `store` (

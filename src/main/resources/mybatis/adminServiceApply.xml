@@ -23,6 +23,18 @@
         	<result column="creatorId" property="id" jdbcType="INTEGER"/>
         	<result column="creatorName" property="name" jdbcType="VARCHAR"/>
         </collection>
+        <collection property="project" ofType="com.tunicorn.marketing.vo.ProjectVO">
+        	<result column="project_id" property="id" jdbcType="VARCHAR" />
+			<result column="project_name" property="name" jdbcType="VARCHAR" />
+			<result column="project_address" property="appBusinessAddress" jdbcType="VARCHAR" />
+			<result column="project_mobile" property="appBusinessMobile" jdbcType="VARCHAR" />
+			<result column="project_contacts" property="appBusinessContacts" jdbcType="VARCHAR" />
+			<result column="project_type" property="type" jdbcType="VARCHAR" />
+			<result column="project_store_number" property="storeNumber" jdbcType="INTEGER" />
+			<result column="project_call_number" property="callNumber" jdbcType="INTEGER" />
+			<result column="project_image_number" property="imageNumber" jdbcType="INTEGER" />
+			<result column="project_threshhold" property="threshhold" jdbcType="FLOAT"/>
+        </collection>
 	</resultMap>
  
    <insert id="createAdminServiceApply" parameterType="com.tunicorn.marketing.vo.AdminServiceApplyVO" useGeneratedKeys="true"  keyProperty="id">

@@ -43,7 +43,7 @@
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
 				         	  <#list adminServiceApplys as adminServiceApply>
 					    		<tr class="tableTr tdCenter" applyid="${adminServiceApply.id}">
-					    		<td>${adminServiceApply.appBusinessName}</td>
+					    		<td>${adminServiceApply.creator.name}</td>
 					    		<td>
 					    			<#if adminServiceApply.majorTypes?? && (adminServiceApply.majorTypes?size>0)>
 	   								   <#list adminServiceApply.majorTypes as majorType>
@@ -51,7 +51,7 @@
 	   		                           </#list>
    								    </#if>
 								</td>
-					    		<td>${adminServiceApply.maxCallNumber}</td>
+					    		<td>${adminServiceApply.creator.name}</td>
 					    		<td><a href="javascript:void(0)" applyid="${adminServiceApply.id}" class="showAgreementModel">查看</a></td>
 					    		<td>${adminServiceApply.creator.name}</td>
 					    		<td id="service_${adminServiceApply.id}">${adminServiceApply.statusStr}</td>

@@ -13,4 +13,8 @@ public interface ProjectMapper {
 			+ "where p.id=s.project_id and p.status='active' and s.apply_status='opened'")
 	public List<ProjectVO> getProjectList ();
 	
+	public int createProject(ProjectVO projectVO);
+	
+	public int updateProject(ProjectVO projectVO);
+	
 }

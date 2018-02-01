@@ -23,6 +23,7 @@ import com.tunicorn.marketing.mapper.AdminServiceApplyMapper;
 import com.tunicorn.marketing.mapper.AdminUserMapper;
 import com.tunicorn.marketing.mapper.ApplicationMapper;
 import com.tunicorn.marketing.mapper.MajorTypeMapper;
+import com.tunicorn.marketing.mapper.ProjectMapper;
 import com.tunicorn.marketing.mapper.UserMapper;
 import com.tunicorn.marketing.mapper.UserRoleMapper;
 import com.tunicorn.marketing.utils.ConfigUtils;
@@ -36,6 +37,7 @@ import com.tunicorn.marketing.vo.ApplicationVO;
 import com.tunicorn.marketing.vo.ApproveEmailVO;
 import com.tunicorn.marketing.vo.MajorTypeApplicationMappingVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
+import com.tunicorn.marketing.vo.ProjectVO;
 import com.tunicorn.marketing.vo.UserRoleVO;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.SecurityUtils;
@@ -50,28 +52,32 @@ public class AdminServiceApplyService {
 	@Autowired
 	private AdminMajorTypeServiceApplyMappingMapper adminMajorTypeServiceApplyMappingMapper;
 	@Autowired
-	MajorTypeMapper majorTypeMapper;
+	private MajorTypeMapper majorTypeMapper;
 	@Autowired
-	ApplicationMapper applicationMapper;
+	private ApplicationMapper applicationMapper;
 	@Autowired
-	UserMapper userMapper;
+	private UserMapper userMapper;
 	@Autowired
-	AdminUserMapper adminUserMapper;
+	private AdminUserMapper adminUserMapper;
 	@Autowired
-	UserRoleMapper userRoleMapper;
+	private UserRoleMapper userRoleMapper;
+	@Autowired
+	private ProjectMapper projectMapper;
 
 	@Transactional
-	public int createAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO, List<MultipartFile> images ,int userId) {
+	public int createAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO, ProjectVO projectVO,
+			List<MultipartFile> images, int userId) {
 		int result = adminServiceApplyMapper.createAdminServiceApply(adminServiceApplyVO);
 		addApplyAsset(adminServiceApplyVO.getId(), images, userId);
-		this.createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);
+		createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);
+		createProject(projectVO);
 		logger.info("result of createAdminServiceApply method: " + result);
 		return result;
 	}
 
 	public void sendApplyEmail(AdminServiceApplyVO adminServiceApplyVO) {
 		StringBuffer text = new StringBuffer();
-		//text.append("<h3>应用商：").append(adminServiceApplyVO.getAppBusinessName()).append("</h3>").append("<p>申请服务：");
+		// text.append("<h3>应用商：").append(adminServiceApplyVO.getAppBusinessName()).append("</h3>").append("<p>申请服务：");
 		List<MajorTypeVO> majorTypeVOs = adminServiceApplyVO.getMajorTypes();
 		if (majorTypeVOs != null && majorTypeVOs.size() > 0) {
 			for (MajorTypeVO majorTypeVO : majorTypeVOs) {
@@ -82,11 +88,13 @@ public class AdminServiceApplyService {
 			}
 			text.deleteCharAt(text.length() - 1);
 		}
-		//text.append("</p>").append("<p>调用次数：").append(adminServiceApplyVO.getMaxCallNumber()).append("</p>");
+		// text.append("</p>").append("<p>调用次数：").append(adminServiceApplyVO.getMaxCallNumber()).append("</p>");
 		String from = ConfigUtils.getInstance().getConfigValue("spring.mail.from");
 		AdminUserVO adminUserVO = adminUserMapper.getUserByUserName(MarketingConstants.ADMIN_USER_NAME);
 		String password = ConfigUtils.getInstance().getConfigValue("spring.mail.from.password");
-		SendMailUtils.sendTextWithHtml(from, new String[] {from, adminUserVO.getEmail(), adminServiceApplyVO.getEmail()}, password, "服务申请", text.toString());
+		SendMailUtils.sendTextWithHtml(from,
+				new String[] { from, adminUserVO.getEmail(), adminServiceApplyVO.getEmail() }, password, "服务申请",
+				text.toString());
 	}
 
 	public void sendApproveEmail(ApproveEmailVO approveEmailVO) {
@@ -107,15 +115,18 @@ public class AdminServiceApplyService {
 		String from = ConfigUtils.getInstance().getConfigValue("spring.mail.from");
 		AdminUserVO adminUserVO = adminUserMapper.getUserByUserName(MarketingConstants.ADMIN_USER_NAME);
 		String password = ConfigUtils.getInstance().getConfigValue("spring.mail.from.password");
-		SendMailUtils.sendTextWithHtml(from, new String[] { from, adminUserVO.getEmail(), approveEmailVO.getUserEmail() }, password, subject, text.toString());
+		SendMailUtils.sendTextWithHtml(from,
+				new String[] { from, adminUserVO.getEmail(), approveEmailVO.getUserEmail() }, password, subject,
+				text.toString());
 	}
 
 	@Transactional
-	public int updateAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO) {
+	public int updateAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO, ProjectVO projectVO) {
 		adminServiceApplyVO.setApplyStatus(MarketingConstants.APPLY_CREATED_STATUS);
 		int result = adminServiceApplyMapper.updateAdminServiceApply(adminServiceApplyVO);
 		adminMajorTypeServiceApplyMappingMapper.deleteMajorTypeApplicationMappingByApplyId(adminServiceApplyVO.getId());
-		this.createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);
+		createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);
+		updateProject(projectVO);
 		logger.info("serviceApplyId:" + adminServiceApplyVO.getId() + ", result of updateAdminServiceApply: " + result);
 		return result;
 	}
@@ -152,7 +163,8 @@ public class AdminServiceApplyService {
 			applicationVO.setPrivacy(MarketingConstants.APPLICATION_PRIVACY_PUBLIC);
 			applicationMapper.createApplication(applicationVO);
 		}
-		logger.info("serviceApplyId:" + adminServiceApplyVO.getId() + ", result of approveAdminServiceApply: " + result);
+		logger.info(
+				"serviceApplyId:" + adminServiceApplyVO.getId() + ", result of approveAdminServiceApply: " + result);
 		return result;
 	}
 
@@ -183,6 +195,12 @@ public class AdminServiceApplyService {
 		int result = adminServiceApplyMapper.updateAdminServiceApply(adminServiceApplyVO);
 		adminMajorTypeServiceApplyMappingMapper.deleteMajorTypeApplicationMappingByApplyId(adminServiceApplyVO.getId());
 		adminServiceApplyAssetMapper.deleteAdminServiceApplyAssetByApplyId(adminServiceApplyVO.getId());
+		
+		ProjectVO projectVO = new ProjectVO();
+		projectVO.setId(adminServiceApplyVO.getProjectId());
+		projectVO.setStatus(MarketingConstants.STATUS_DELETED);
+		projectMapper.updateProject(projectVO);
+		
 		logger.info("serviceApplyId:" + adminServiceApplyVO.getId() + ", result of deleteAdminServiceApply: " + result);
 		return result;
 	}
@@ -196,7 +214,8 @@ public class AdminServiceApplyService {
 		if (images != null && images.size() > 0) {
 			for (MultipartFile image : images) {
 				AdminServiceApplyAssetVO asset = new AdminServiceApplyAssetVO();
-				UploadFile file = MarketingStorageUtils.getUploadFile(image,String.valueOf(userId), String.valueOf(applyId),new Date(),
+				UploadFile file = MarketingStorageUtils.getUploadFile(image, String.valueOf(userId),
+						String.valueOf(applyId), new Date(),
 						ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"), false);
 				asset.setServiceApplyId(applyId);
 				asset.setFilePath(file.getPath());
@@ -222,5 +241,14 @@ public class AdminServiceApplyService {
 			}
 		}
 		adminMajorTypeServiceApplyMappingMapper.batchInsertMajorTypeApplicationMapping(applyMappings);
+	}
+
+	private void createProject(ProjectVO projectVO) {
+		projectVO.setId(UUID.randomUUID().toString());
+		projectMapper.createProject(projectVO);
+	}
+	
+	private void updateProject(ProjectVO projectVO) {
+		projectMapper.updateProject(projectVO);
 	}
 }

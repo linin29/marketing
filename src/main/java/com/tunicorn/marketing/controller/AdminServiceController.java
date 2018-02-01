@@ -32,6 +32,7 @@ import com.tunicorn.marketing.vo.AdminServiceApplyVO;
 import com.tunicorn.marketing.vo.AdminUserVO;
 import com.tunicorn.marketing.vo.ApproveEmailVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
+import com.tunicorn.marketing.vo.ProjectVO;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.MessageUtils;
 
@@ -85,7 +86,7 @@ public class AdminServiceController extends BaseController {
 		model.addAttribute("currentPage", adminServiceApplyBO.getPageNum() + 1);
 		return "admin/service/service_apply";
 	}
-	
+
 	@RequestMapping(value = "/detail/{applyId}", method = RequestMethod.GET)
 	@ResponseBody
 	public CommonAjaxResponse detail(HttpServletRequest request, @PathVariable("applyId") Long applyId) {
@@ -100,21 +101,34 @@ public class AdminServiceController extends BaseController {
 		AdminUserVO user = getCurrentAdminUser(request);
 
 		AdminServiceApplyVO adminServiceApplyVO = new AdminServiceApplyVO();
-/*		if (StringUtils.isNotBlank(request.getParameter("appBusinessName"))) {
-			adminServiceApplyVO.setAppBusinessName(request.getParameter("appBusinessName"));
+		ProjectVO projectVO = new ProjectVO();
+		if (StringUtils.isNotBlank(request.getParameter("name"))) {
+			projectVO.setName(request.getParameter("name"));
 		}
-		if (StringUtils.isNotBlank(request.getParameter("appBusinessAddress"))) {
-			adminServiceApplyVO.setAppBusinessAddress(request.getParameter("appBusinessAddress"));
+		if (StringUtils.isNotBlank(request.getParameter("address"))) {
+			projectVO.setAddress(request.getParameter("address"));
 		}
-		if (StringUtils.isNotBlank(request.getParameter("appBusinessContacts"))) {
-			adminServiceApplyVO.setAppBusinessContacts(request.getParameter("appBusinessContacts"));
+		if (StringUtils.isNotBlank(request.getParameter("contacts"))) {
+			projectVO.setContacts(request.getParameter("contacts"));
 		}
-		if (StringUtils.isNotBlank(request.getParameter("appBusinessMobile"))) {
-			adminServiceApplyVO.setAppBusinessMobile(request.getParameter("appBusinessMobile"));
-		}*/
-		/*if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
-			adminServiceApplyVO.setMaxCallNumber(Long.valueOf(request.getParameter("maxCallNumber")));
-		}*/
+		if (StringUtils.isNotBlank(request.getParameter("mobile"))) {
+			projectVO.setMobile(request.getParameter("mobile"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
+			projectVO.setCallNumber(Integer.valueOf(request.getParameter("maxCallNumber")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("storeNumber"))) {
+			projectVO.setStoreNumber(Integer.valueOf(request.getParameter("storeNumber")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("imageNumber"))) {
+			projectVO.setImageNumber(Integer.valueOf(request.getParameter("imageNumber")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("projectType"))) {
+			projectVO.setType(request.getParameter("projectType"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("threshhold"))) {
+			projectVO.setThreshhold(Float.valueOf(request.getParameter("threshhold")));
+		}
 		if (StringUtils.isNotBlank(request.getParameter("majorTypes"))) {
 			List<MajorTypeVO> majorTypes = new ArrayList<MajorTypeVO>();
 			String[] majortypeArray = request.getParameter("majorTypes").split(",");
@@ -132,7 +146,8 @@ public class AdminServiceController extends BaseController {
 			adminServiceApplyVO.setEmail(request.getParameter("email"));
 		}
 		adminServiceApplyVO.setCreatorId(user.getId());
-		int result = adminServiceApplyService.createAdminServiceApply(adminServiceApplyVO, images, user.getId());
+		int result = adminServiceApplyService.createAdminServiceApply(adminServiceApplyVO, projectVO, images,
+				user.getId());
 		if (result == 0) {
 			Message message = MessageUtils.getInstance().getMessage("marketing_major_type_create_failed");
 			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
@@ -144,21 +159,34 @@ public class AdminServiceController extends BaseController {
 	@ResponseBody
 	public AjaxResponse updateService(HttpServletRequest request, @PathVariable("applyId") long applyId) {
 		AdminServiceApplyVO adminServiceApplyVO = new AdminServiceApplyVO();
-/*		if (StringUtils.isNotBlank(request.getParameter("appBusinessName"))) {
-			adminServiceApplyVO.setAppBusinessName(request.getParameter("appBusinessName"));
+		ProjectVO projectVO = new ProjectVO();
+		if (StringUtils.isNotBlank(request.getParameter("name"))) {
+			projectVO.setName(request.getParameter("name"));
 		}
-		if (StringUtils.isNotBlank(request.getParameter("appBusinessAddress"))) {
-			adminServiceApplyVO.setAppBusinessAddress(request.getParameter("appBusinessAddress"));
+		if (StringUtils.isNotBlank(request.getParameter("address"))) {
+			projectVO.setAddress(request.getParameter("address"));
 		}
-		if (StringUtils.isNotBlank(request.getParameter("appBusinessContacts"))) {
-			adminServiceApplyVO.setAppBusinessContacts(request.getParameter("appBusinessContacts"));
+		if (StringUtils.isNotBlank(request.getParameter("contacts"))) {
+			projectVO.setContacts(request.getParameter("contacts"));
 		}
-		if (StringUtils.isNotBlank(request.getParameter("appBusinessMobile"))) {
-			adminServiceApplyVO.setAppBusinessMobile(request.getParameter("appBusinessMobile"));
+		if (StringUtils.isNotBlank(request.getParameter("mobile"))) {
+			projectVO.setMobile(request.getParameter("mobile"));
 		}
 		if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
-			adminServiceApplyVO.setMaxCallNumber(Long.valueOf(request.getParameter("maxCallNumber")));
-		}*/
+			projectVO.setCallNumber(Integer.valueOf(request.getParameter("maxCallNumber")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("storeNumber"))) {
+			projectVO.setStoreNumber(Integer.valueOf(request.getParameter("storeNumber")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("imageNumber"))) {
+			projectVO.setImageNumber(Integer.valueOf(request.getParameter("imageNumber")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("projectType"))) {
+			projectVO.setType(request.getParameter("projectType"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("threshhold"))) {
+			projectVO.setThreshhold(Float.valueOf(request.getParameter("threshhold")));
+		}
 		if (StringUtils.isNotBlank(request.getParameter("majorTypes"))) {
 			List<MajorTypeVO> majorTypes = new ArrayList<MajorTypeVO>();
 			String[] majortypeArray = request.getParameter("majorTypes").split(",");
@@ -181,7 +209,8 @@ public class AdminServiceController extends BaseController {
 			Message message = MessageUtils.getInstance().getMessage("marketing_service_apply_not_existed");
 			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
-		adminServiceApplyService.updateAdminServiceApply(adminServiceApplyVO);
+		projectVO.setId(applyVO.getProjectId());
+		adminServiceApplyService.updateAdminServiceApply(adminServiceApplyVO, projectVO);
 		return AjaxResponse.toSuccess(null);
 	}
 
@@ -216,6 +245,7 @@ public class AdminServiceController extends BaseController {
 			Message message = MessageUtils.getInstance().getMessage("marketing_service_apply_not_existed");
 			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
+		adminServiceApplyVO.setProjectId(applyVO.getProjectId());
 		adminServiceApplyService.deleteAdminServiceApply(adminServiceApplyVO);
 		return AjaxResponse.toSuccess(null);
 	}
@@ -302,21 +332,25 @@ public class AdminServiceController extends BaseController {
 
 	private void sendApplyEmail(HttpServletRequest request) {
 		AdminServiceApplyVO adminServiceApplyVO = new AdminServiceApplyVO();
-/*		if (StringUtils.isNotBlank(request.getParameter("appBusinessName"))) {
-			adminServiceApplyVO.setAppBusinessName(request.getParameter("appBusinessName"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("appBusinessAddress"))) {
-			adminServiceApplyVO.setAppBusinessAddress(request.getParameter("appBusinessAddress"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("appBusinessContacts"))) {
-			adminServiceApplyVO.setAppBusinessContacts(request.getParameter("appBusinessContacts"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("appBusinessMobile"))) {
-			adminServiceApplyVO.setAppBusinessMobile(request.getParameter("appBusinessMobile"));
-		}*/
-		/*if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
-			adminServiceApplyVO.setMaxCallNumber(Long.valueOf(request.getParameter("maxCallNumber")));
-		}*/
+		/*
+		 * if (StringUtils.isNotBlank(request.getParameter("appBusinessName")))
+		 * { adminServiceApplyVO.setAppBusinessName(request.getParameter(
+		 * "appBusinessName")); } if
+		 * (StringUtils.isNotBlank(request.getParameter("appBusinessAddress")))
+		 * { adminServiceApplyVO.setAppBusinessAddress(request.getParameter(
+		 * "appBusinessAddress")); } if
+		 * (StringUtils.isNotBlank(request.getParameter("appBusinessContacts")))
+		 * { adminServiceApplyVO.setAppBusinessContacts(request.getParameter(
+		 * "appBusinessContacts")); } if
+		 * (StringUtils.isNotBlank(request.getParameter("appBusinessMobile"))) {
+		 * adminServiceApplyVO.setAppBusinessMobile(request.getParameter(
+		 * "appBusinessMobile")); }
+		 */
+		/*
+		 * if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
+		 * adminServiceApplyVO.setMaxCallNumber(Long.valueOf(request.
+		 * getParameter("maxCallNumber"))); }
+		 */
 		if (StringUtils.isNotBlank(request.getParameter("email"))) {
 			adminServiceApplyVO.setEmail(request.getParameter("email"));
 		}

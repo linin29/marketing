@@ -6,6 +6,15 @@
 		width:100%;
 	}
 	.newline{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+	.select-style{
+		width: 343px;
+    	height: 34px;
+	}
+	.money-style{
+		border: none;
+	    outline: none;
+	    width: 70px;
+	}
 </style>
 
 	<div class="panel-default clearBottom">
@@ -13,21 +22,37 @@
   			<div class="panel-body">
     			<div id="request-header" class="row" style='margin-left:-14px;'>
 					<div class="col-sm-3">
+  						<select id="applyStatus" style="height: 34px;width:100%;">
+  							<option value="">请选择项目编码</option>
+  							<option value="1" >1</option>
+  							<option value="2">2</option>
+  							<option value="3">3</option>
+  						</select> 
+					</div>
+					<div class="col-sm-2">
   						<input id="appBusinessName" <#if appBusinessName??> value="${appBusinessName}"</#if> type="text" class="form-control" placeholder="请输入应用商名称">
 					</div>
 					<div class="col-sm-3">
-					<input id="initApplyStatus" type="hidden" <#if applyStatus??> value="${applyStatus}"</#if>>
-  						<select id="applyStatus" style="width:70%;height: 34px;">
+  						<select  style="height: 34px;width:100%">
+  							<option value="">请选择项目类型</option>
+  							<option value="1" >免费测试</option>
+  							<option value="2">付费测试</option>
+  							<option value="3">正式合同</option>
+  						</select> 
+					</div>
+					<div class="col-sm-2">
+						<input id="initApplyStatus" type="hidden" <#if applyStatus??> value="${applyStatus}"</#if>>
+  						<select id="applyStatus" style="height: 34px;width:100%">
   							<option value="">请选择状态</option>
   							<option value="created" <#if applyStatus?? && applyStatus=='created'>selected</#if>>已创建</option>
   							<option value="opened" <#if applyStatus?? && applyStatus=='opened'>selected</#if>>已开通</option>
   							<option value="rejected" <#if applyStatus?? && applyStatus=='rejected'>selected</#if>>已驳回</option>
   						</select> 
 					</div>
-					<div class="col-sm-3">
-  						<input id="query" type="button" class=" btn btn-success" value="搜索" style="width:100px;" />
+					<div class="col-sm-1">
+  						<input id="query" type="button" class=" btn btn-success" value="搜索"  />
 					</div>
-					<div class="col-sm-3">
+					<div class="col-sm-1">
   						<input type="button" class=" btn btn-success new-server" id="new-server" value="新建申请" />
 					</div>
 				</div>
@@ -124,7 +149,11 @@
 			                		</tr>
 			                		<tr id="contracted-value-tr">
 			                			<td class="wid">合同金额：</td>
-			                			<td>¥<input  class="application-name total" type="text" id="contracted-value"  placeholder="输入合同金额"/>元人民币</td>
+			                			<td>
+				                			¥
+				                			<input type="text" placeholder="请输入金额" class="money-style" >
+				                			元人民币
+				                		</td>
 			                		</tr>
 			                		<tr id="contracted-no-tr">
 			                			<td class="wid">合同编号：</td>
@@ -152,7 +181,7 @@
 			                		<tr>
 			                			<td class="wid">项目类型：</td>
 			                			<td>
-			                				<select id="project-type">
+			                				<select id="project-type" class="select-style">
 			                				    <option value=''>选择项目类型</option>
 					      						<option value='free'>免费测试</option>
 					      						<option value='paid'>付费测试</option>
@@ -163,23 +192,23 @@
 			                		<tr>
 			                			<td class="wid">项目开始时间：</td>
 			                			<td>
-			                				<select id="project-type">
-			                				    <option value=''>选择项目类型</option>
-					      						<option value='free'>免费测试</option>
-					      						<option value='paid'>付费测试</option>
-					      						<option value='official'>正式合同</option>
-											</select>
+			                				<div class="form-group" id="startTime">							          							                  
+							                    <div style="float: left" class=" input-group date form_datetime1 " data-date="2016-11-1T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii:ss" >
+								                    <input class="form-control" size="16" type="text" value="" id="fromDate" name="fromDate">
+								                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+								                </div>							               
+							                </div>
 			                			</td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">项目结束时间：</td>
 			                			<td>
-			                				<select id="project-type">
-			                				    <option value=''>选择项目类型</option>
-					      						<option value='free'>免费测试</option>
-					      						<option value='paid'>付费测试</option>
-					      						<option value='official'>正式合同</option>
-											</select>
+			                				<div class="form-group" id="endTime">							             							            
+							                    <div style="float: left" class=" input-group date form_datetime2 " data-date="2016-11-1T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii:ss" >
+								                    <input class="form-control" size="16" type="text" value="" id="toDate" name="toDate">
+								                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+								                </div>							                 
+							                </div>
 			                			</td>
 			                		</tr>
 			                		<tr>
@@ -187,12 +216,19 @@
 			                			<td><input  class="application-name total" type="text" id="store-no"  placeholder="输入门店数"/></td>
 			                		</tr>
 			                		<tr>
+			                			<td class="wid">图片数：</td>
+			                			<td><input  class="application-name total newline" type="text" id="pic-number" placeholder="请输入图片数"/></td>
+			                		</tr>
+			                		<tr>
 			                			<td class="wid">申请次数：</td>
 			                			<td><input  class="application-name total newline" type="text" id="application-number" placeholder="输入申请次数"/></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">调用率提醒：</td>
-			                			<td><input  class="application-name total newline" type="text" id="application-number" placeholder="输入申请次数"/></td>
+			                			<td>
+			                				<input type="number" style="width:50px;">%
+			                				<input type="checkbox" style="margin-left:20px;">邮件提醒
+			                			</td>
 			                		</tr>
 			                	</tbody>
 			                </table>

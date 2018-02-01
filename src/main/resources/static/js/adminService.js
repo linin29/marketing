@@ -222,10 +222,10 @@ adminService = (function(){
 	  			formData.append('images', file, file.name);
 			}
 		}
-		formData.append('appBusinessName', appBusinessName);
-		formData.append('appBusinessAddress', appBusinessAddress);
-		formData.append('appBusinessContacts', appBusinessContacts);
-		formData.append('appBusinessMobile', appBusinessMobile);
+		formData.append('name', appBusinessName);
+		formData.append('address', appBusinessAddress);
+		formData.append('contacts', appBusinessContacts);
+		formData.append('mobile', appBusinessMobile);
 		formData.append('maxCallNumber', maxCallNumber);
 		formData.append('majorTypes', majorTypes);
 		formData.append('username', username);

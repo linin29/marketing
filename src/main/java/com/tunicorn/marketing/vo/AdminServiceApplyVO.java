@@ -26,6 +26,7 @@ public class AdminServiceApplyVO {
 	private String rejectReason;
 	private String appKey;
 	private String appSecret;
+	private ProjectVO project;
 
 	public String getUsername() {
 		return username;
@@ -161,6 +162,14 @@ public class AdminServiceApplyVO {
 
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
+	}
+
+	public ProjectVO getProject() {
+		return project;
+	}
+
+	public void setProject(ProjectVO project) {
+		this.project = project;
 	}
 
 	public String getStatusStr() {

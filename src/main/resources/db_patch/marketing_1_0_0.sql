@@ -374,7 +374,6 @@ BEGIN
 		`last_update` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		`status` ENUM('active','deleted','inactive') NOT NULL DEFAULT 'active',
 		PRIMARY KEY (`id`),
-		INDEX `application_business_name_idx` (`app_business_name`),
 		INDEX `project_service_apply_fk_idx` (`project_id`),
 		INDEX `apply_status_idx` (`apply_status`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -469,7 +468,14 @@ BEGIN
 	  	KEY `code_store_fk_idx` (`code`),
 	  	KEY `project_store_fk_idx` (`project_id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-		
+	
+	CREATE TABLE IF NOT EXISTS `project_reminder_update` (
+	  `id` int(11) NOT NULL AUTO_INCREMENT,
+	  `project_id` varchar(40) NOT NULL,
+	  `reminder_day` date NOT NULL,
+	  PRIMARY KEY (`id`),
+	  KEY `project_reminder_fk_idx` (`project_id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	END IF;
 END//
 
@@ -541,9 +547,9 @@ BEGIN
         INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (5, 1, 5, now());
         INSERT INTO `admin_role_privilege_mapping`(`id`, `role_id`, `privilege_id`, `create_time`) VALUES (6, 1, 6, now());
         
-        INSERT INTO `admin_service_apply`(`id`, `user_id`, `username`, `email`, `app_business_name`, `app_business_address`, `app_business_mobile`, `app_business_contacts`, `max_call_number`, `creator_id`, `apply_status`, `create_time`) VALUES (1, 0, 'tiannuo', 'tiannuo@tunicorn.cn', '天诺', 'tiannuo', '15256232154', 'tiannuo', '10000', '1', 'opened', now());
-        INSERT INTO `admin_service_apply`(`id`, `user_id`, `username`, `email`, `app_business_name`, `app_business_address`, `app_business_mobile`, `app_business_contacts`, `max_call_number`, `creator_id`, `apply_status`, `create_time`) VALUES (2, 0, 'tunicorn', 'tunicorn@tunicorn.cn', '天诺', 'tiannuo', '15256232154', 'tiannuo', '10000', '1', 'opened', now());
-        INSERT INTO `admin_service_apply`(`id`, `user_id`, `username`, `email`, `app_business_name`, `app_business_address`, `app_business_mobile`, `app_business_contacts`, `max_call_number`, `creator_id`, `apply_status`, `create_time`) VALUES (3, 0, 'tiannuoapi', 'tiannuo@tunicorn.cn', '天诺', 'tiannuo', '15256232154', 'tiannuo', '10000', '1', 'opened', now());
+        INSERT INTO `admin_service_apply`(`id`, `user_id`, `username`, `email`, `creator_id`, `apply_status`, `create_time`) VALUES (1, 0, 'tiannuo', 'tiannuo@tunicorn.cn', '1', 'opened', now());
+        INSERT INTO `admin_service_apply`(`id`, `user_id`, `username`, `email`, `creator_id`, `apply_status`, `create_time`) VALUES (2, 0, 'tunicorn', 'tunicorn@tunicorn.cn', '1', 'opened', now());
+        INSERT INTO `admin_service_apply`(`id`, `user_id`, `username`, `email`, `creator_id`, `apply_status`, `create_time`) VALUES (3, 0, 'tiannuoapi', 'tiannuo@tunicorn.cn', '1', 'opened', now());
         
         INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (1, 1, now());
 		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (1, 2, now());

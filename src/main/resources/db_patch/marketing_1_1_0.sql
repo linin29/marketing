@@ -118,7 +118,6 @@ BEGIN
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `project_id` varchar(40) NOT NULL,
 		  `reminder_day` date NOT NULL,
-		  `flag` enum('0','1') NOT NULL DEFAULT '0',
 		  PRIMARY KEY (`id`),
 		  KEY `project_reminder_fk_idx` (`project_id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8;

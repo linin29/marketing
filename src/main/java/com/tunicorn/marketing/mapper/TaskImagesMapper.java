@@ -27,6 +27,7 @@ public interface TaskImagesMapper {
 	
 	public TaskImagesVO getNextOrderTaskImage(@Param("taskId") String taskId, @Param("order") int order);
 	
-	@Select("select count(imgs.id) from task t, task_images imgs where t.id=imgs.task_id and t.project_id=#{projectId} and t.status='active' and imgs.status='active'")
+	@Select("select count(imgs.id) from task t, task_images imgs "
+			+ "where t.id=imgs.task_id and t.project_id=#{projectId} and t.status='active' and imgs.status='active'")
 	public int getImageCountByProjectId (String projectId);
 }

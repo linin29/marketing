@@ -1,5 +1,7 @@
 package com.tunicorn.marketing.vo;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -12,8 +14,8 @@ public class AdminServiceApplyVO {
 	private int userId;
 	private int creatorId;
 	private String projectId;
-	private Date startTime;
-	private Date endTime;
+	private Timestamp startTime;
+	private Timestamp endTime;
 	private String applyStatus;
 	private Date createTime;
 	private Date lastUpdate;
@@ -26,7 +28,13 @@ public class AdminServiceApplyVO {
 	private String rejectReason;
 	private String appKey;
 	private String appSecret;
+	private float contractedValue;
+	private String contractedNo;
 	private ProjectVO project;
+	private String startTimeStr;
+	private String endTimeStr;
+	private int taskCount;
+	private int callCount;
 
 	public String getUsername() {
 		return username;
@@ -140,6 +148,22 @@ public class AdminServiceApplyVO {
 		this.appSecret = appSecret;
 	}
 
+	public float getContractedValue() {
+		return contractedValue;
+	}
+
+	public void setContractedValue(float contractedValue) {
+		this.contractedValue = contractedValue;
+	}
+
+	public String getContractedNo() {
+		return contractedNo;
+	}
+
+	public void setContractedNo(String contractedNo) {
+		this.contractedNo = contractedNo;
+	}
+
 	public String getProjectId() {
 		return projectId;
 	}
@@ -148,19 +172,19 @@ public class AdminServiceApplyVO {
 		this.projectId = projectId;
 	}
 
-	public Date getStartTime() {
+	public Timestamp getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(Timestamp startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
+	public Timestamp getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(Timestamp endTime) {
 		this.endTime = endTime;
 	}
 
@@ -172,11 +196,43 @@ public class AdminServiceApplyVO {
 		this.project = project;
 	}
 
+	public int getTaskCount() {
+		return taskCount;
+	}
+
+	public void setTaskCount(int taskCount) {
+		this.taskCount = taskCount;
+	}
+
+	public int getCallCount() {
+		return callCount;
+	}
+
+	public void setCallCount(int callCount) {
+		this.callCount = callCount;
+	}
+
 	public String getStatusStr() {
 		if (StringUtils.isNotBlank(applyStatus)) {
 			statusStr = MarketingConstants.SERVICE_STATUS_NAME_MAPPING.get(applyStatus);
 		}
 
 		return statusStr;
+	}
+
+	public String getStartTimeStr() {
+		if (StringUtils.isBlank(startTimeStr) && startTime != null) {
+			startTimeStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startTime);
+		}
+
+		return startTimeStr;
+	}
+
+	public String getEndTimeStr() {
+		if (StringUtils.isBlank(endTimeStr) && endTime != null) {
+			endTimeStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(endTime);
+		}
+
+		return endTimeStr;
 	}
 }

@@ -11,10 +11,14 @@
 		<result column="project_id" property="projectId" jdbcType="VARCHAR" />
 		<result column="start_time" property="startTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
 		<result column="end_time" property="endTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+		<result column="contracted_value" property="contractedValue" jdbcType="FLOAT" />
+		<result column="contracted_no" property="contractedNo" jdbcType="VARCHAR" />
 		<result column="apply_status" property="applyStatus" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
 		<result column="last_update" property="lastUpdate" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="taskCount" property="taskCount" jdbcType="INTEGER" />
+		<result column="callCount" property="callCount" jdbcType="INTEGER" />
 		<collection property="majorTypes" ofType="com.tunicorn.marketing.vo.MajorTypeVO">
         	<result column="major_type_id" property="id" jdbcType="INTEGER"/>
         	<result column="major_type_name" property="name" jdbcType="VARCHAR"/>
@@ -26,9 +30,9 @@
         <collection property="project" ofType="com.tunicorn.marketing.vo.ProjectVO">
         	<result column="project_id" property="id" jdbcType="VARCHAR" />
 			<result column="project_name" property="name" jdbcType="VARCHAR" />
-			<result column="project_address" property="appBusinessAddress" jdbcType="VARCHAR" />
-			<result column="project_mobile" property="appBusinessMobile" jdbcType="VARCHAR" />
-			<result column="project_contacts" property="appBusinessContacts" jdbcType="VARCHAR" />
+			<result column="project_address" property="address" jdbcType="VARCHAR" />
+			<result column="project_mobile" property="mobile" jdbcType="VARCHAR" />
+			<result column="project_contacts" property="contacts" jdbcType="VARCHAR" />
 			<result column="project_type" property="type" jdbcType="VARCHAR" />
 			<result column="project_store_number" property="storeNumber" jdbcType="INTEGER" />
 			<result column="project_call_number" property="callNumber" jdbcType="INTEGER" />
@@ -64,6 +68,12 @@
       <if test="endTime != null" >
         end_time,
       </if>
+      <if test="contractedValue != null" >
+        contracted_value,
+      </if>
+      <if test="contractedNo != null" >
+        contracted_no,
+      </if>
        <if test="applyStatus != null" >
         apply_status,
       </if>
@@ -93,10 +103,16 @@
         #{projectId,jdbcType=VARCHAR},
       </if>
       <if test="startTime != null" >
-        #{projectId,jdbcType=TIMESTAMP},
+        #{startTime,jdbcType=TIMESTAMP},
       </if>
       <if test="endTime != null" >
         #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractedValue != null" >
+        #{contractedValue,jdbcType=FLOAT},
+      </if>
+      <if test="contractedNo != null" >
+        #{contractedNo,jdbcType=VARCHAR},
       </if>
        <if test="applyStatus != null" >
         #{applyStatus,jdbcType=VARCHAR},
@@ -109,14 +125,29 @@
   </insert>
 	<select id="getAdminServiceApplyList" resultMap="AdminServiceApplyResultMap" parameterType="com.tunicorn.marketing.bo.AdminServiceApplyBO">
 		select asa.id,  asa.user_id, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
-		au.name as creatorName, asa.username, asa.email, asa.reject_reason
+		au.name as creatorName, asa.username, asa.email, asa.reject_reason, asa.project_id, asa.project_name, asa.taskCount, asa.callCount,
+		asa.call_number as project_call_number
 		from 
-		(select id,  user_id, creator_id, apply_status, create_time, last_update, username, email, reject_reason, `status`
-        	from admin_service_apply where `status` = 'active'
+		(select a.id,  a.user_id, a.creator_id, a.apply_status, a.create_time, a.last_update, 
+		 a.username, a.email, a.reject_reason, a.`status`, b.id as project_id, b.name as project_name, b.call_number,
+		 (select count(*) from task where project_id = a.project_id) as taskCount,
+		 (select sum(calling_times) from api_calling_count where project_id=a.project_id) as callCount
+        	from admin_service_apply a, project b 
+        	where a.`status` = 'active' and b.`status` = 'active'
+        	and a.project_id = b.id
         	<if test="applyStatus != null and applyStatus != ''">
-				and apply_status = #{applyStatus}
+				and a.apply_status = #{applyStatus}
 			</if>
-       	 	order by create_time desc
+			<if test="projectId != null and projectId != ''">
+				and b.id like concat(concat('%',#{projectId}),'%')
+			</if>
+			<if test="name != null and name != ''">
+				and b.name like concat(concat('%',#{name}),'%')
+			</if>
+			<if test="projectType != null and projectType != ''">
+				and b.`type` =  #{projectType}
+			</if>
+       	 	order by a.create_time desc
 			limit #{startNum}, #{perPage}
         )asa,admin_major_type_service_apply_mapping am,major_type mt,admin_user au
 		where asa.`status` = 'active'
@@ -126,11 +157,21 @@
 	</select>
 	<select id="getAdminServiceApplyCount" resultType="int" parameterType="com.tunicorn.marketing.bo.AdminServiceApplyBO">
 		select count(*)
-		from admin_service_apply
-		where `status` = 'active'
-	    <if test="applyStatus != null and applyStatus != ''">
-			and apply_status = #{applyStatus}
-		</if>
+		from admin_service_apply a, project b 
+        	where a.`status` = 'active' and b.`status` = 'active'
+        	and a.project_id = b.id
+        	<if test="applyStatus != null and applyStatus != ''">
+				and a.apply_status = #{applyStatus}
+			</if>
+			<if test="projectId != null and projectId != ''">
+				and b.id  like concat(concat('%',#{projectId}),'%')
+			</if>
+			<if test="name != null and name != ''">
+				and b.name like concat(concat('%',#{name}),'%')
+			</if>
+			<if test="projectType != null and projectType != ''">
+				and b.`type` =  #{projectType}
+			</if>
 	</select>
 	<update id="updateAdminServiceApply" parameterType="com.tunicorn.marketing.vo.AdminServiceApplyVO">
 		UPDATE admin_service_apply
@@ -147,11 +188,17 @@
 			<if test="email != null and email !=''">
 				`email` = #{email},
 			</if>
-			<if test="startTime != null and startTime !=''">
+			<if test="startTime != null">
 				`start_time` = #{startTime},
 			</if>
-			<if test="endTime != null and endTime !=''">
+			<if test="endTime != null">
 				`end_time` = #{endTime},
+			</if>
+			<if test="contractedValue != null and contractedValue !=''">
+				`contracted_value` = #{contractedValue},
+			</if>
+			<if test="contractedNo != null and contractedNo !=''">
+				`contracted_no` = #{contractedNo},
 			</if>
 				reject_reason = #{rejectReason},
 		</trim>
@@ -170,11 +217,16 @@
 		WHERE id=#{id}
 	</update>
 	<select id="getAdminServiceApplyById" resultMap="AdminServiceApplyResultMap" parameterType="int">
-		select asa.id,  asa.user_id, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update, mt.name as major_type_name, mt.id as major_type_id,
-		asa.username, asa.email, asa.reject_reason
-		from admin_service_apply asa 
-		left join admin_major_type_service_apply_mapping amt on asa.id = amt.service_apply_id
-		left join major_type mt  on mt.id = amt.major_type_id
+		select asa.id,  asa.user_id, asa.creator_id, asa.apply_status, asa.create_time, asa.last_update,
+		mt.name as major_type_name, mt.id as major_type_id,
+		asa.username, asa.email, asa.reject_reason,asa.start_time, asa.end_time,asa.contracted_value, asa.contracted_no,
+		p.id as project_id, p.name as project_name, p.address as project_address, p.mobile as project_mobile, p.contacts as project_contacts, 
+		p.type as project_type, p.store_number as project_store_number, p.call_number as project_call_number, p.image_number as project_image_number, 
+		p.threshhold as project_threshhold
+		from admin_service_apply asa
+		left join project p on p.id=asa.project_id and p.status = 'active' 
+		left join admin_major_type_service_apply_mapping amt on asa.id = amt.service_apply_id and amt.status='active'
+		left join major_type mt  on mt.id = amt.major_type_id and mt.status = 'active'
 		where asa.`status` = 'active'
 	    <if test="id != null and id != ''">
 			and asa.id = #{id}

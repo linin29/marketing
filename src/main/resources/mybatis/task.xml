@@ -16,6 +16,7 @@
 		<result column="goods_info" property="goodsInfo" jdbcType="VARCHAR" />
 		<result column="identify_success_times" property="identifySuccessTimes" jdbcType="INTEGER" />
 		<result column="majorTypeName" property="majorTypeName" jdbcType="VARCHAR" />
+		<result column="project_id" property="projectId" jdbcType="VARCHAR"/>
 	</resultMap>
 
    <insert id="createTask" parameterType="com.tunicorn.marketing.vo.TaskVO">
@@ -49,6 +50,9 @@
        <if test="majorType != null" >
         major_type,
        </if>
+       <if test="projectId != null" >
+        project_id,
+       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -78,6 +82,9 @@
       </if>
       <if test="majorType != null" >
         #{majorType,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -198,7 +205,7 @@
 	</update>
 	<select id="getTaskById" resultMap="TaskResultMap" parameterType="string">
 		select id, `name`, task_status, user_id, create_time,
-		stitch_image_path, result, rows, major_type,goods_info,identify_success_times
+		stitch_image_path, result, rows, major_type,goods_info,identify_success_times,project_id
 		from task
 		where `status` = 'active'
 		and id = #{taskId}

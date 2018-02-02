@@ -26,6 +26,22 @@
            </li>
            <li>
                <h4>
+               		<img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
+                   	<span>项目</span>
+                   	<div class="modal-body" style="padding-left: 25px;">
+                 	  	<select id="project_id" name="project_id" style="width:20%;" <#if task??>disabled="disabled"</#if>>
+                 	  	   <option value="">请选择项目编码</option>
+                 	  	   <#if projects?? && (projects?size > 0)>
+		                       <#list projects as project>
+		                       		<option value="${project.id}" <#if (task.projectId)?? && project.id==task.projectId>selected</#if>>${project.name}</option>
+		                       </#list>
+		                   </#if>
+                    	</select>
+                   	</div>
+               </h4>
+           </li>
+           <li>
+               <h4>
                    <img class="img_icorn" src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
                    <span>选择货架照片</span>
                    <div class="choose-box-body">
@@ -38,6 +54,7 @@
                                        <input id="image-upload" type="file" name="images" multiple="multiple" accept="image/jpeg,image/png,image/bmp,image/jpg" class="pic-upload">
                                        <input id="taskId" type="hidden" name="taskId" value="<#if task??>${task.id}<#else>-1</#if>">
                                        <input id="taskLabel" type="hidden" name="taskLabel" <#if task??> value="${task.name}"</#if>>
+                                       <input id="projectId" type="hidden" name="projectId" <#if (task.projectId)??> value="${task.projectId}"</#if>>
                                    </form>
                                </span>
                            </div>

@@ -29,6 +29,8 @@ public class TaskVO extends PaginationBO {
 	private long identifySuccessTimes;
 	private String majorTypeName;
 	private int needStitch;
+	/**************2018-02-02 weixiaokai 添加项目id*****************/
+	private String projectId;
 
 	public String getAuthor() {
 		return author;
@@ -221,4 +223,13 @@ public class TaskVO extends PaginationBO {
 		}
 		return timeStr;
 	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+	
 }

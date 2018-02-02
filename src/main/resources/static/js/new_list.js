@@ -112,6 +112,7 @@ newList=(function(){
                 $('#taskId').val(0);
                 var url = m_url+'task/create';
                 $('#taskLabel').val($('#taskName').val());
+                $('#projectId').val($('#project_id').val());
             }else{
                 var url = m_url + 'images/upload';
             }

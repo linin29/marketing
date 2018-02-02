@@ -12,8 +12,8 @@ import com.tunicorn.marketing.vo.ApiCallingSummaryVO;
 
 public interface ApiCallingSummaryMapper {
 
-	@Insert("Insert into api_calling_count (api_method, api_name, calling_day, user_name, calling_times, create_time)"
-			+ " values (#{apiMethod}, #{apiName}, #{callingDay}, #{userName}, #{callingTimes}, now())")
+	@Insert("Insert into api_calling_count (api_method, api_name, calling_day, user_name, calling_times, create_time,project_id)"
+			+ " values (#{apiMethod}, #{apiName}, #{callingDay}, #{userName}, #{callingTimes}, now(), #{projectId})")
 	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
 	public long insertApiCallingSummary(ApiCallingSummaryVO apiCallingSummaryVO);
 

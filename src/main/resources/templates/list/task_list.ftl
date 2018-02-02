@@ -7,7 +7,16 @@
 	        <div  class="col-sm-8" style="margin-top:10px;padding-right:0px;width:80%;text-align: right;">
 	            <input id="searchTaskflg" type="hidden" value="0">
 	            <input id="taskId" style="width:25%;" onkeyup="if(event.keyCode==13){taskList.searchTaskWithId();}"  class="form-control task_list_input" <#if taskId??> value="${taskId}"</#if> type="text" placeholder="请输入任务ID">
+	            
 	            <button id="searchTaskById" onclick="taskList.searchTaskWithId(0)" type="button" class="btn btn-success btn_style1">检索任务</button>
+	            <select id="majorType" style="height: 34px;width:20%;">
+	               	<option value="">请选择项目编码</option>
+		            <#if projects?? && (projects?size > 0)>
+		               <#list projects as project>
+		               	<option value="${project.id}">${project.name}</option>
+		           	   </#list>
+		          	</#if>
+			 	</select>
 	            <select id="majorType" style="height: 34px;width:20%;">
 	               <option value="">请选择品类</option>
 	                 <#if majorTypes?? && (majorTypes?size > 0)>

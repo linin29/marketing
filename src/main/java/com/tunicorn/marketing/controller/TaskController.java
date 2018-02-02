@@ -11,6 +11,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +47,7 @@ import com.tunicorn.marketing.bo.StitcherBO;
 import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.GoodsSkuService;
+import com.tunicorn.marketing.service.ProjectService;
 import com.tunicorn.marketing.service.TaskService;
 import com.tunicorn.marketing.service.TrainingDataService;
 import com.tunicorn.marketing.utils.ConfigUtils;
@@ -68,6 +70,8 @@ public class TaskController extends BaseController {
 	private GoodsSkuService goodsSkuService;
 	@Autowired
 	private TrainingDataService trainingDataService;
+	@Autowired
+	private ProjectService projectService;
 
 	@RequestMapping(value = "/batch_import", method = RequestMethod.GET)
 	public String batch_import(HttpServletRequest request, Model model) {
@@ -239,7 +243,8 @@ public class TaskController extends BaseController {
 
 		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
 		int totalCount = taskService.getTaskCount(taskBO);
-
+		List<Map<String, Object>> pMaps = projectService.getProjectsByUserId(user.getId());
+		model.addAttribute("projects", pMaps);
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
 		model.addAttribute("tasks", taskVOs);
 		model.addAttribute("totalCount", totalCount);
@@ -293,6 +298,8 @@ public class TaskController extends BaseController {
 				model.addAttribute("stitchImagePath", taskVO.getStitchImagePath() + "?random=" + new Date().getTime());
 			}
 		}
+		List<Map<String, Object>> pMaps = projectService.getProjectsByUserId(user.getId());
+		model.addAttribute("projects", pMaps);
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
 		model.addAttribute("task", taskVO);
 		model.addAttribute("images", imagesVOs);
@@ -394,11 +401,12 @@ public class TaskController extends BaseController {
 	@ResponseBody
 	public CommonAjaxResponse createTask(HttpServletRequest request,
 			@RequestParam(value = "images", required = false) List<MultipartFile> images,
-			@RequestParam(value = "taskLabel") String taskName, Model model) {
+			@RequestParam(value = "taskLabel") String taskName, @RequestParam(value="projectId") String projectId, Model model) {
 		UserVO user = getCurrentUser(request);
 		model.addAttribute("user", user);
 
-		ServiceResponseBO response = taskService.createTask(user.getId(), taskName, images);
+//		ServiceResponseBO response = taskService.createTask(user.getId(), taskName, images);
+		ServiceResponseBO response = taskService.createTask(user.getId(), taskName, projectId, images);
 		if (response.isSuccess()) {
 			return CommonAjaxResponse.toSuccess(response.getResult());
 		} else {

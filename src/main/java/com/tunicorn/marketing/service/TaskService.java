@@ -190,6 +190,80 @@ public class TaskService {
 		logger.info("result of createTask method: " + node.toString());
 		return new ServiceResponseBO(node);
 	}
+	
+	@Transactional
+	public ServiceResponseBO createTask(String userId, String taskName,String projectId, List<MultipartFile> images) {
+		logger.info("params of createTask: taskName: " + taskName + ", userId:" + userId +", projectId:" + projectId);
+		TaskVO taskVO = taskMapper.getTaskByNameAndUserId(taskName, userId);
+		if (taskVO != null) {
+			return new ServiceResponseBO(false, "marketing_task_existed");
+		}
+
+		if (StringUtils.isBlank(taskName)) {
+			return new ServiceResponseBO(false, "marketing_task_name_not_null");
+		}
+		if (images != null && images.size() > MarketingConstants.IMAGE_MAX_COUNT) {
+			return new ServiceResponseBO(false, "marketing_image_max_count");
+		}
+		if (images != null && images.size() > 0) {
+			for (int i = 0; i < images.size(); i++) {
+				MultipartFile file = images.get(i);
+				if (StringUtils.isNotBlank(file.getOriginalFilename())) {
+					String fileName = file.getOriginalFilename();
+					int index = fileName.lastIndexOf(MarketingConstants.POINT);
+					if (!this.getImageTypeList().contains(fileName.substring(index + 1))) {
+						return new ServiceResponseBO(false, "marketing_type_invalid");
+					}
+				}
+			}
+		}
+		TaskVO createTaskVO = new TaskVO();
+		createTaskVO.setId(
+				(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
+		createTaskVO.setName(taskName);
+		createTaskVO.setUserId(userId);
+		createTaskVO.setTaskStatus(MarketingConstants.TASK_INIT_STATUS);
+		createTaskVO.setProjectId(projectId);
+		int createResult = taskMapper.createTask(createTaskVO);
+		TaskVO tempTaskVO = taskMapper.getTaskById(createTaskVO.getId());
+		logger.info("create task result: " + createResult);
+		if (images != null && images.size() > 0) {
+			List<TaskImagesVO> taskImagesVOs = new ArrayList<TaskImagesVO>();
+			for (int i = 0; i < images.size(); i++) {
+				TaskImagesVO taskImagesVO = new TaskImagesVO();
+
+				UploadFile file = MarketingStorageUtils.getUploadFile(images.get(i), userId, createTaskVO.getId(),
+						tempTaskVO.getCreateTime(), ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir"),
+						false);
+
+				if (file == null) {
+					return new ServiceResponseBO(false, "marketing_save_upload_file_error");
+				}
+				taskImagesVO.setId((Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13))
+						.toLowerCase());
+				taskImagesVO.setName(file.getName());
+				taskImagesVO.setUserId(createTaskVO.getUserId());
+				taskImagesVO.setTaskId(createTaskVO.getId());
+				int index = file.getPath().indexOf(MarketingConstants.MARKETING);
+				String imagePath = file.getPath().substring(index + MarketingConstants.MARKETING.length());
+				taskImagesVO.setImagePath(imagePath);
+				taskImagesVO.setFullPath(file.getPath());
+				taskImagesVO.setOrderNo(i + 1);
+				taskImagesVOs.add(taskImagesVO);
+			}
+			taskImagesMapper.batchInsertTaskImages(taskImagesVOs);
+			taskMapper.updateTaskStatus(createTaskVO.getId(), MarketingConstants.TASK_STATUS_IMAGE_UPLOADED, 0);
+		}
+
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode node = mapper.createObjectNode();
+		node.put(MarketingConstants.TASK_ID, createTaskVO.getId());
+		if (images != null && images.size() > 0) {
+			node.put("length", images.size());
+		}
+		logger.info("result of createTask method: " + node.toString());
+		return new ServiceResponseBO(node);
+	}
 
 	@Transactional
 	public ServiceResponseBO createZipTask(String userId, String taskName, MultipartFile zipFile) {

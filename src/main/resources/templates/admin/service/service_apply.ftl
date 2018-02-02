@@ -120,28 +120,29 @@
 			        	<h4 class="modal-title" id="myModalLabel">新建申请</h4>
 			      	</div>
 			      	<div class="modal-body">
+			      	 <form id="service-form">
 			        	<div class="form-group">
 			                <h5><strong>项目信息</strong></h5>
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
 			                		<tr>
 			                			<td class="wid">名称：</td>
-			                			<td><input  class="application-name total newline" type="text" id="ser-name" placeholder="输入名称"/></td>
+			                			<td><input name="name" class="application-name total newline" type="text" id="ser-name" placeholder="输入名称"/></td>
 			                		</tr>
 			                		<tr id="project-id-tr">
 			                			<td class="wid">项目编码：</td>
-			                			<td><input  class="application-name total newline" type="text" id="project-id" placeholder="输入项目编码"/></td>
+			                			<td><input class="application-name total newline" type="text" id="project-id" placeholder="输入项目编码"/></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">地址：</td>
-			                			<td><input  class="application-name total newline" type="text" id="ser-address" placeholder="输入地址"/></td>
+			                			<td><input name="address" class="application-name total newline" type="text" id="ser-address" placeholder="输入地址"/></td>
 			                		<tr>
 			                			<td class="wid">联系人：</td>
-			                			<td><input  class="application-name total newline" type="text" id="ser-phone-person" placeholder="输入联系人"/></td>
+			                			<td><input name="contacts" class="application-name total newline" type="text" id="ser-phone-person" placeholder="输入联系人"/></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">联系方式：</td>
-			                			<td><input  class="application-name total newline" type="text" id="ser-phone" placeholder="输入联系方式"/></td>
+			                			<td><input name="mobile" class="application-name total newline" type="text" id="ser-phone" placeholder="输入联系方式"/></td>
 			                		</tr>
 			                	</tbody>
 			                </table>
@@ -158,13 +159,13 @@
 			                			<td class="wid">合同金额：</td>
 			                			<td>
 				                			¥
-				                			<input type="text" placeholder="请输入金额" class="money-style" id="contracted-value">
+				                			<input name="contractedValue" type="text" placeholder="请输入金额" class="money-style" id="contracted-value">
 				                			元人民币
 				                		</td>
 			                		</tr>
 			                		<tr id="contracted-no-tr">
 			                			<td class="wid">合同编号：</td>
-			                			<td><input class="application-name total" type="text" id="contracted-no"  placeholder="输入合同编号"/></td>
+			                			<td><input name="contractedNo" class="application-name total" type="text" id="contracted-no"  placeholder="输入合同编号"/></td>
 			                		</tr>
 			                	</tbody>
 			                </table>
@@ -176,7 +177,7 @@
 			                		<tr>
 			                			<td class="wid">申请服务：</td>
 			                			<td>
-			                				<select class="selectpicker" multiple id="server-type">
+			                				<select name="serverType" class="selectpicker" multiple id="server-type">
 											<#if majorTypes?? && (majorTypes?size > 0)>
 				         						<#list majorTypes as majorType>
 					      							 <option value='${majorType.id}'>${majorType.description}</option>
@@ -188,7 +189,7 @@
 			                		<tr>
 			                			<td class="wid">项目类型：</td>
 			                			<td>
-			                				<select id="project-type" class="select-style">
+			                				<select name="projectType" id="project-type" class="select-style">
 			                				    <option value=''>选择项目类型</option>
 					      						<option value='free'>免费测试</option>
 					      						<option value='paid'>付费测试</option>
@@ -220,20 +221,20 @@
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">门店数：</td>
-			                			<td><input class="application-name total" type="text" id="store-no"  placeholder="输入门店数"/></td>
+			                			<td><input name="storeNumber" class="application-name total" type="text" id="store-no"  placeholder="输入门店数"/></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">图片数：</td>
-			                			<td><input  class="application-name total newline" type="text" id="pic-number" placeholder="请输入图片数"/></td>
+			                			<td><input name="imageNumber" class="application-name total newline" type="text" id="pic-number" placeholder="请输入图片数"/></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">申请次数：</td>
-			                			<td><input  class="application-name total newline" type="text" id="application-number" placeholder="输入申请次数"/></td>
+			                			<td><input name="callNumber" class="application-name total newline" type="text" id="application-number" placeholder="输入申请次数"/></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">调用率提醒：</td>
 			                			<td>
-			                				<input id="threshhold" type="number" min="1" max="100" style="width:50px;">%
+			                				<input name="threshhold" id="threshhold" type="number" min="1" max="100" style="width:50px;">%
 			                				<#-- <input type="checkbox" style="margin-left:20px;">邮件提醒 -->
 			                			</td>
 			                		</tr>
@@ -246,11 +247,11 @@
 			                	<tbody>
 			                		<tr>
 			                			<td class="wid">申请用户名：</td>
-			                			<td><input  class="application-name total newline" type="text" id="ser-user-name" placeholder="输入用户名"/></td>
+			                			<td><input name="username" class="application-name total newline" type="text" id="ser-user-name" placeholder="输入用户名"/></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">邮箱：</td>
-			                			<td><input  class="application-name total newline" type="text" id="ser-email" placeholder="输入邮箱"/></td>
+			                			<td><input name="email" class="application-name total newline" type="text" id="ser-email" placeholder="输入邮箱"/></td>
 			                		</tr>
 			                	</tbody>
 			                </table>
@@ -265,6 +266,7 @@
 			                	</tbody>
 			                </table>
 			           	</div>
+			          </form>
 			      	</div>
 			      	<div class="modal-footer">
 			        	<button id="cancel" type="button" class="btn btn-default" data-dismiss="modal">取消</button>

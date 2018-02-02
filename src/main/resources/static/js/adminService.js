@@ -7,6 +7,7 @@ adminService = (function(){
 			initPagination(currentPage, totalCount, serviceApplyUrl);
 		}
 		initDate();
+		serviceDataValidator();
 		$("#query").click(function(){
 			queryService(serviceApplyUrl);
 		});
@@ -191,7 +192,6 @@ adminService = (function(){
 		var imageNumber =$("#pic-number").val();
 		var threshhold = $("#threshhold").val();
 		var projectType = $("#project-type").val();
-		debugger;
 		if(appBusinessName == "") {
 			$('#errorMsg').text("请输入项目名称");
 			return;
@@ -295,6 +295,9 @@ adminService = (function(){
 		formData.append('imageNumber', imageNumber);
 		formData.append('threshhold', parseFloat(threshhold)/100);
 		formData.append('projectType', projectType);
+		
+		//$("#service-form").data("bootstrapValidator").validate();
+		//if($("#service-form").data('bootstrapValidator').isValid()){
 		tunicorn.utils.postFormData(url, formData, function(err, result){
 			if(err){
 				noty({text: "服务器异常", layout: "topCenter", type: "error", timeout: 2000});
@@ -327,6 +330,7 @@ adminService = (function(){
 				return;
 			}
 		});
+	  //}
 	}
 	function detail(applyId, isRejectReasonShow){
 		$.ajax({
@@ -694,6 +698,75 @@ adminService = (function(){
 		    $('.form_datetime3').datetimepicker('setEndDate',endTime);
 		});
 	};
+	function serviceDataValidator(){
+    	$('#service-form').bootstrapValidator({
+		message: 'This value is not valid',
+		feedbackIcons: {
+			valid: 'glyphicon glyphicon-ok',
+			invalid: 'glyphicon glyphicon-remove',
+			validating: 'glyphicon glyphicon-refresh'
+		},
+		fields: {
+			name: {
+				message: 'The name is not valid',
+				validators: {
+					notEmpty: {
+						message: 'IPC名称不能为空'
+					},
+					stringLength: {
+						min: 1,
+						max: 20,
+						message: 'IPC名称长度在1-20个字符之内'
+					},
+					regexp: {
+						regexp: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/,
+						message: 'IPC名称只能是中文、英文、数字和下划线组合'
+					}
+				}
+			},
+			rtsp:{
+				message: 'The rtsp is not valid',
+				validators: {
+					notEmpty: {
+						message: '视频流地址不能为空'
+					},
+					stringLength: {
+						min: 1,
+						max: 100,
+						message: '视频流地址长度在1-100个字符之内'
+					},
+				}
+			},
+			location: {
+				message: 'The location is not valid',
+				validators: {
+					notEmpty: {
+						message: 'IPC位置不能为空'
+					},
+					stringLength: {
+						min: 1,
+						max: 80,
+						message: 'IPC位置长度在1-80个字符之内'
+					},
+					regexp: {
+						regexp: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/,
+						message: 'IPC位置只能是中文、英文、数字和下划线组合'
+					}
+				}
+			}, 
+			comment: {
+				message: 'The comment is not valid',
+				validators: {
+					stringLength: {
+						min: 0,
+						max: 100,
+						message: '备注长度在0-100个字符之内'
+					}
+				}
+			}
+		}
+	});
+  };
 	return {
 		serviceApplyInit:serviceApplyInit,
 		serviceManageInit:serviceManageInit,

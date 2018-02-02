@@ -55,10 +55,10 @@
   			    	<table class="table table-bordered">
 					    <tbody class="">
 					    	<tr class='thCenter'  style="background-color:#ddd;">
-					    	    <th style="width:7%">项目编码</th>
+					    	    <th style="width:6%">项目编码</th>
 					    		<th style="width:6%">项目名称</th>
-					    		<th style="width:7%">申请服务</th>
-					    		<th style="width:10%">调用总次数</th>
+					    		<th style="width:6%">申请服务</th>
+					    		<th style="width:8%">调用总次数</th>
 					    		<th style="width:7%">任务数</th>
 					    		<th style="width:6%">完成率</th>
 					    		<th style="width:8%">合同图片</th>
@@ -66,7 +66,7 @@
 					    		<th style="width:7%">状态</th>
 					    		<th style="width:9%">创建时间</th>
 					    		<th style="width:10%">统计时间节点</th>
-					    		<th style="width:14%">操作</th>
+					    		<th style="width:18%">操作</th>
 					    	</tr>
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
 				         	  <#list adminServiceApplys as adminServiceApply>
@@ -89,16 +89,16 @@
 					    		<td>${adminServiceApply.createTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
 					    		<td>${.now?string('yyyy-MM-dd HH:mm:ss')!""}</td>
 					    		<td>
-					    			<button class="info btn btn-success" applyid="${adminServiceApply.id}">详情</button>
+					    			<button class="info btn btn-success btn-sm" applyid="${adminServiceApply.id}">详情</button>
 					    			<#if adminServiceApply.applyStatus == 'created'>
-					    			<button id="approve_${adminServiceApply.id}" class="btn btn-success approve" applyid="${adminServiceApply.id}">审批</button>
-					    			<button id="delete_${adminServiceApply.id}" class="btn btn-danger deleteService" applyid="${adminServiceApply.id}">关闭</button>
+					    			<button id="approve_${adminServiceApply.id}" class="btn btn-success btn-sm approve" applyid="${adminServiceApply.id}">审批</button>
+					    			<button id="delete_${adminServiceApply.id}" class="btn btn-danger btn-sm deleteService" applyid="${adminServiceApply.id}">关闭</button>
 					    			<#else>
 					    			<input type="button" class="btn" style="width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none">
 					    			<input type="button" class="btn" style="width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none">
 					    			</#if>
-					    			<input id="approve_hide_${adminServiceApply.id}" class="btn btn-success" style='display:none;width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none'>
-					    			<input id="delete_hide_${adminServiceApply.id}" class="btn btn-success" style='display:none;width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none'>
+					    			<input id="approve_hide_${adminServiceApply.id}" class="btn btn-success btn-sm" style='display:none;width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none'>
+					    			<input id="delete_hide_${adminServiceApply.id}" class="btn btn-success btn-sm" style='display:none;width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none'>
 					    		</td>
 					    		</tr>
 					    	   </#list>

@@ -2,6 +2,16 @@
 	.tdCenter td,.thCenter th{
 		text-align:center;
 	}
+	.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-9{
+		padding-right: 0px;
+   		padding-left: 0px;
+	}
+	.lh{
+		line-height: 34px;
+	}
+	.form-group {
+	    margin-bottom: 6px;
+	}
 </style>
 <div class="count_list">
 	<div class="panel-default">
@@ -12,40 +22,60 @@
 	       	   </h3>
 	   		</section>
 	        <section>
-				<div class='form-group'>			
-					<div style="float:left;width:43%;">
-						<span class="control-label line-height text-center" style="float:left;width:22%;line-height: 34px;" >时间段：</span>
+				<div class='form-group' style="overflow:hidden;">			
+					<div class="col-sm-4">
+						<span class="control-label line-height text-center" style="float:left;line-height: 34px;" >时间段：</span>
 					 	<input id="startTime" type="hidden" <#if startDate??> value="${startDate}"</#if>>
 						<input id="endTime" type="hidden" <#if endDate??> value="${endDate}"</#if>>
-					 	 <div style="float:left;width:36%;"  class="form-group input-group date form_datetime1 " data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
+					 	 <div style="float:left;width:38%;"  class="form-group input-group date form_datetime1 " data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
 					        <input class="form-control" size="16" type="text" value="" id="startDate">
 					        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 					    </div>
 					    <div  style="float:left;line-height: 34px" class="form-group glyphicon glyphicon-minus "></div>
-					     <div style="float:left;width:36%;" class=" input-group date form_datetime2 " data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
+					     <div style="float:left;width:38%;" class=" input-group date form_datetime2 " data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
 					        <input class="form-control" size="16" type="text" value="" id="endDate">
 					        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 					    </div>
 					</div>
-					<div style="float:left;width:15%;margin-right:1%;">
+					<div class="col-sm-2">
 						<select id="apiName" style="width:100%;height: 34px;">
 							<option value="">请选择API</option>
 					     	<option value='stitcher' <#if apiName?? && apiName=='stitcher'> selected </#if>>stitcher</option>
 					     	<option value='identify' <#if apiName?? && apiName=='identify'> selected </#if>>identify</option>
 						</select> 
 					</div>
-					<div style="float:left;width:15%;margin-right:1%;">
-						<select id="apiMethod" style="width:100%;height: 34px;">
-							<option value="" >请选择调用方法</option>
-					     	<option value='POST' <#if apiMethod?? && apiMethod=='POST'> selected </#if>>POST</option>
-					     	<option value='GET' <#if apiMethod?? && apiMethod=='GET'> selected </#if>>GET</option>
-						</select> 
+					<div class="col-sm-2">
+						<span class="col-sm-3 lh text-center">项目：</span>
+			        	<div class="col-sm-9">
+				            <select id="project" style="height: 34px;width: 96%;">
+				                <option value="">请选择</option>
+				                  <#if projects?? && (projects?size > 0)>
+				                   	<#list projects as project>
+				                       <option value="${project.id}" <#if projectId?? && projectId == project.id> selected </#if>>${project.name}</option>
+				                   	</#list>
+				                  </#if>
+							</select>               
+			        	</div>
 					</div>
-					<div style="float:left;width:15%;margin-right:1%;">
+					<div class="col-sm-2">
+						<span class="col-sm-3 lh text-center">品类：</span>
+		                <div class="col-sm-9">
+		                 	<select id="majorType" style="height: 34px;width: 96%;">
+		                      	<option value="">请选择</option>
+		                      	<#if majorTypes?? && (majorTypes?size > 0)>
+		                   	<#list majorTypes as tempMajorType>
+		                       	<option value="${tempMajorType.name}" <#if majorType?? && majorType == tempMajorType.name> selected </#if>>${tempMajorType.description}</option>
+		                   	</#list>
+		                  		</#if>
+							</select>               
+		                </div>
+					</div>
+				
+					<div class="col-sm-2">
 		  				<input id="userName" <#if userName??> value="${userName}"</#if> type="text" class="form-control" placeholder="请输入用户名">
 					</div>
 				</div>
-				<div class="text-right" style='margin-right:35px;margin-right: 0%;'>
+				<div class="text-right" style='margin-bottom: 5px;;margin-right: 0%;'>
 					<button class='btn btn-success' id="query">查询</button>
 				</div>
 			</section>

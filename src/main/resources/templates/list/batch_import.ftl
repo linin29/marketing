@@ -1,10 +1,10 @@
 <div class="count_list">
     <div class="content_list">
        	<div class='clearfix'>
-		    <div class="task_list_header" style='float:left;width:13%;'>
+		    <div class="task_list_header">
 		        <h3>批量创建任务</h3> 
 		    </div>
-		    <div style='float:left;width:87%;text-align:right;margin-top: 10px;'>
+		    <div >
 		    	<span style="width:8%;float:left;line-height:34px;text-align: left;margin-right: -1%;">项目：</span>
 		        <div style="width:25%;float:left;margin-left: -1%;">
 		            <select id="project" style="height: 34px;width: 96%;">
@@ -17,7 +17,7 @@
 					</select>               
 		        </div>
 		        <span style="width:8%;float:left;line-height:34px;text-align: left;margin-right: -1%;">品类：</span>
-		    	<div style="width:25%;;margin-top: 10px;float:left;margin-left: 5%;">
+		    	<div style="width:25%;float:left;">
 			    	<select id="majorType"  class="form-control" >
 			           <option value="">请选择一个主类型</option>
 			            <#if majorTypes?? && (majorTypes?size > 0)>

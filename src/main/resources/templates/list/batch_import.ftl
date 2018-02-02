@@ -5,6 +5,18 @@
 		        <h3>批量创建任务</h3> 
 		    </div>
 		    <div style='float:left;width:87%;text-align:right;margin-top: 10px;'>
+		    	<span style="width:8%;float:left;line-height:34px;text-align: left;margin-right: -1%;">项目：</span>
+		        <div style="width:25%;float:left;margin-left: -1%;">
+		            <select id="project" style="height: 34px;width: 96%;">
+		                <option value="">请选择</option>
+		                  <#if projects?? && (projects?size > 0)>
+		                   	<#list projects as project>
+		                       <option value="${project.id}" <#if projectId?? && projectId == project.id> selected </#if>>${project.name}</option>
+		                   	</#list>
+		                  </#if>
+					</select>               
+		        </div>
+		        <span style="width:8%;float:left;line-height:34px;text-align: left;margin-right: -1%;">品类：</span>
 		    	<div style="width:25%;;margin-top: 10px;float:left;margin-left: 5%;">
 			    	<select id="majorType"  class="form-control" >
 			           <option value="">请选择一个主类型</option>

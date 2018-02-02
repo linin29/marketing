@@ -110,6 +110,9 @@
     			<if test="endTime != null and endTime != ''">
     				and t.last_update <![CDATA[ <= #{endTime}]]> 
     			</if>
+    			<if test="projectId != null and projectId != ''">
+    				and t.project_id  = #{projectId}
+    			</if>
 				order by t.last_update desc
 				limit #{startNum}, #{perPage}
 			) task 
@@ -167,6 +170,9 @@
     	</if>
     	<if test="endTime != null and endTime != ''">
     		and last_update <![CDATA[ <= #{endTime}]]> 
+    	</if>
+    	<if test="projectId != null and projectId != ''">
+    		and project_id  = #{projectId}
     	</if>
 	</select>
 	<update id="updateTask" parameterType="com.tunicorn.marketing.vo.TaskVO">

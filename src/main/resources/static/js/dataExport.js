@@ -10,6 +10,7 @@ dataExport=(function(){
 			queryTask();
 		});
 		$("#export").click(function(){
+			var projectId = $("#project").val();
 			var majorType = $("#majorType").val();
 			var startTime = $("#fromDate").val();
 			var endTime = $("#toDate").val();
@@ -23,7 +24,8 @@ dataExport=(function(){
 				 data:{
 					 startTime:startTime,
 					 endTime:endTime,
-					 majorType:majorType
+					 majorType:majorType,
+					 projectId:projectId
 				 },
 				 success: function(data) {
 				 	if(data && data.success && data.data > 0){
@@ -86,6 +88,7 @@ dataExport=(function(){
 	};
 	
 	function queryTask(pageNum){
+		var projectId = $("#project").val();
 		var majorType = $("#majorType").val();
 		var startTime = $("#fromDate").val();
 		var endTime = $("#toDate").val();
@@ -93,6 +96,10 @@ dataExport=(function(){
 		$('input:checkbox[name=taskStatus]:checked').each(function(i){
 			taskStatus = $(this).val();
 		});
+		if(!projectId){
+			 noty({text: '请选择项目', layout: "topCenter", type: "warning", timeout: 2000});
+			 return;
+		}
 		if(!majorType){
 			 noty({text: '请选择品类', layout: "topCenter", type: "warning", timeout: 2000});
 			 return;
@@ -109,7 +116,8 @@ dataExport=(function(){
 				 startTime:startTime,
 				 endTime:endTime,
 				 taskStatus:taskStatus,
-				 majorType:majorType
+				 majorType:majorType,
+				 projectId:projectId
 			 },
 			 success: function(data) {
 			 	$("#content").html(data);

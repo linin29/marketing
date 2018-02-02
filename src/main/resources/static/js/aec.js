@@ -114,11 +114,12 @@ aec = (function(){
 		var majorType = $("#majorType").val();
 		var startTime = $("#fromDate").val();
 		var endTime = $("#toDate").val();
+		var projectId = $("#project").val();
 		var page = 0;
 		if (pageNum) {
 			page = pageNum -1;
 		}
-		var data = {pageNum:page, startTime:startTime, endTime:endTime, majorType:majorType};
+		var data = {pageNum:page, startTime:startTime, endTime:endTime, majorType:majorType,projectId:projectId};
 		$.ajax({
 			 type: 'POST',
 			 url: marketing_url + '/aec/search',

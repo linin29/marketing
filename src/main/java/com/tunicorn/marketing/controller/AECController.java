@@ -32,6 +32,7 @@ import com.tunicorn.marketing.api.CommonAjaxResponse;
 import com.tunicorn.marketing.bo.AecBO;
 import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
+import com.tunicorn.marketing.service.ProjectService;
 import com.tunicorn.marketing.service.TaskService;
 import com.tunicorn.marketing.utils.ZipUtils;
 import com.tunicorn.marketing.vo.TaskVO;
@@ -45,6 +46,8 @@ public class AECController extends BaseController {
 	
 	@Autowired
 	private TaskService taskService;
+	@Autowired
+	private ProjectService projectService;
 
 	@RequestMapping(value = "/aec", method = RequestMethod.GET)
 	public String aec(HttpServletRequest request, Model model) {
@@ -64,6 +67,7 @@ public class AECController extends BaseController {
 		int totalCount = taskService.getTaskCount(taskBO);
 
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
+		model.addAttribute("projects",  projectService.getProjectsByUserId(user.getId()));
 		model.addAttribute("tasks", taskVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", taskBO.getPageNum() + 1);

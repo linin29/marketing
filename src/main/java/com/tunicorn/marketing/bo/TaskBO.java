@@ -10,6 +10,7 @@ public class TaskBO extends PaginationBO {
 	private String endTime;
 	private String[] majorTypeArray;
 	private String[] taskIds;
+	private String projectId;
 
 	public String getUserId() {
 		return userId;
@@ -82,4 +83,13 @@ public class TaskBO extends PaginationBO {
 	public void setTaskIds(String[] taskIds) {
 		this.taskIds = taskIds;
 	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
 }

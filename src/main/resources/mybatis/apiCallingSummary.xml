@@ -32,6 +32,12 @@
     	<if test="userName != null and userName != ''">
     		and `user_name` like concat(concat('%',#{userName}),'%')
     	</if>
+    	<if test="majorType != null and majorType != ''">
+			and `major_type` = #{majorType}
+		</if>
+    	<if test="projectId != null and projectId != ''">
+    		and project_id  = #{projectId}
+    	</if>
     	order by calling_day DESC
     	limit #{startNum}, #{perPage}
     </select>
@@ -54,6 +60,12 @@
     	<if test="callingTimes != null and callingTimes != ''">
     		and calling_times = #{callingTimes}
     	</if>
+    	<if test="majorType != null and majorType != ''">
+			and `major_type` = #{majorType}
+		</if>
+    	<if test="projectId != null and projectId != ''">
+    		and project_id  = #{projectId}
+    	</if>
     </select>
     <select id="getApiCallingSummary" resultType="int" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
     	select count(*)
@@ -74,6 +86,12 @@
     	<if test="userName != null and userName != ''">
     		and `user_name` like concat(concat('%',#{userName}),'%')
     	</if>
+    	<if test="majorType != null and majorType != ''">
+			and `major_type` = #{majorType}
+		</if>
+    	<if test="projectId != null and projectId != ''">
+    		and project_id  = #{projectId}
+    	</if>
     </select>
     <select id="getApiCallingSum" resultType="int" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
     	select IFNULL(sum(calling_times), 0)
@@ -93,6 +111,12 @@
     	</if>
     	<if test="userName != null and userName != ''">
     		and `user_name` like concat(concat('%',#{userName}),'%')
+    	</if>
+    	<if test="majorType != null and majorType != ''">
+			and `major_type` = #{majorType}
+		</if>
+    	<if test="projectId != null and projectId != ''">
+    		and project_id  = #{projectId}
     	</if>
     </select>
 </mapper>

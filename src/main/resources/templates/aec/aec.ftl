@@ -9,6 +9,17 @@
 			  <div class="content_list" style="margin: -14px 12px 20px 24px;">
 				  <div class="data_list_header" style=''>
 		       	 	<div class="col-sm-9" style="margin-top:21px;margin-bottom:10px;padding-left:0px;">
+		       	 		<span style="width:8%;float:left;line-height:34px;text-align: left;margin-right: -1%;">项目：</span>
+		                <div style="width:25%;float:left;margin-left: -1%;">
+		                 	<select id="project" style="height: 34px;width: 96%;">
+		                      	<option value="">请选择</option>
+		                      	<#if projects?? && (projects?size > 0)>
+		                   			<#list projects as project>
+		                       			<option value="${project.id}" <#if projectId?? && projectId == project.id> selected </#if>>${project.name}</option>
+		                   			</#list>
+		                  		</#if>
+							</select>               
+		                </div>
 		       	 		<span style="width:8%;float:left;line-height:34px;text-align: left;margin-right: -1%;">品类：</span>
 		                <div style="width:25%;float:left;margin-left: -1%;">
 		                 	<select id="majorType" style="height: 34px;width: 96%;">

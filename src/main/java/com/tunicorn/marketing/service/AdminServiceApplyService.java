@@ -91,7 +91,7 @@ public class AdminServiceApplyService {
 		}
 		text.append("</p>").append("<p>调用次数：").append(projectVO.getCallNumber()).append("</p>");
 		AdminUserVO adminUserVO = adminUserMapper.getUserByUserName(MarketingConstants.ADMIN_USER_NAME);
-		EmailUtils.sendHtmlMail(new String[] { /*adminUserVO.getEmail(),*/ adminServiceApplyVO.getEmail() }, "服务申请",
+		EmailUtils.sendHtmlMail(new String[] { /* adminUserVO.getEmail(), */ adminServiceApplyVO.getEmail() }, "服务申请",
 				text.toString());
 	}
 
@@ -111,7 +111,7 @@ public class AdminServiceApplyService {
 			text.append("</p>").append("<p>驳回原因：").append(approveEmailVO.getRejectReason()).append("</p>");
 		}
 		AdminUserVO adminUserVO = adminUserMapper.getUserByUserName(MarketingConstants.ADMIN_USER_NAME);
-		EmailUtils.sendHtmlMail(new String[] { /*adminUserVO.getEmail(),*/ approveEmailVO.getUserEmail() }, subject,
+		EmailUtils.sendHtmlMail(new String[] { /* adminUserVO.getEmail(), */ approveEmailVO.getUserEmail() }, subject,
 				text.toString());
 	}
 
@@ -131,24 +131,32 @@ public class AdminServiceApplyService {
 		int result = adminServiceApplyMapper.updateAdminServiceApply(adminServiceApplyVO);
 		if (StringUtils.equals(MarketingConstants.APPLY_OPENED_STATUS, adminServiceApplyVO.getApplyStatus())) {
 
-			UserVO userVO = new UserVO();
-			userVO.setUserName(adminServiceApplyVO.getUsername());
-			userVO.setEmail(adminServiceApplyVO.getEmail());
-			userVO.setName(adminServiceApplyVO.getUsername());
-			userVO.setId(
-					(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
-			userVO.setPassword(SecurityUtils.generateHashPassword(MarketingConstants.TIANNUO_PASSWORD));
-			userMapper.createUser(userVO);
+			UserVO user = userMapper.getUserByUserName(adminServiceApplyVO.getUsername());
+			String userId = null;
+			if (user == null) {
+				UserVO userVO = new UserVO();
+				userVO.setUserName(adminServiceApplyVO.getUsername());
+				userVO.setEmail(adminServiceApplyVO.getEmail());
+				userVO.setName(adminServiceApplyVO.getUsername());
+				userVO.setId((Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13))
+						.toLowerCase());
+				userVO.setPassword(SecurityUtils.generateHashPassword(MarketingConstants.TIANNUO_PASSWORD));
+				userMapper.createUser(userVO);
 
-			UserRoleVO userRole = new UserRoleVO();
-			userRole.setUserId(userVO.getId());
-			userRole.setRoleId(1);
-			userRoleMapper.createUserRoleMapping(userRole);
+				userId = userVO.getId();
+				UserRoleVO userRole = new UserRoleVO();
+				userRole.setUserId(userVO.getId());
+				userRole.setRoleId(1);
+				userRoleMapper.createUserRoleMapping(userRole);
+			} else {
+				userId = user.getId();
+			}
+
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 			ApplicationVO applicationVO = new ApplicationVO();
-			applicationVO.setUserId(userVO.getId());
-			applicationVO.setName(userVO.getId() + "-" + sdf.format(new Date()));
-			applicationVO.setDescription(userVO.getId() + "-" + sdf.format(new Date()));
+			applicationVO.setUserId(userId);
+			applicationVO.setName(userId + "-" + sdf.format(new Date()));
+			applicationVO.setDescription(userId + "-" + sdf.format(new Date()));
 			UUID uuid = UUID.randomUUID();
 			applicationVO.setAppKey(uuid.toString());
 			adminServiceApplyVO.setAppKey(uuid.toString());
@@ -188,7 +196,8 @@ public class AdminServiceApplyService {
 	public int closeAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO) {
 		adminServiceApplyVO.setApplyStatus(MarketingConstants.APPLY_CLOSED_STATUS);
 		int result = adminServiceApplyMapper.updateAdminServiceApply(adminServiceApplyVO);
-		adminMajorTypeServiceApplyMappingMapper.inactiveMajorTypeApplicationMappingByApplyId(adminServiceApplyVO.getId());
+		adminMajorTypeServiceApplyMappingMapper
+				.inactiveMajorTypeApplicationMappingByApplyId(adminServiceApplyVO.getId());
 		adminServiceApplyAssetMapper.inactiveAdminServiceApplyAssetByApplyId(adminServiceApplyVO.getId());
 
 		ProjectVO projectVO = new ProjectVO();

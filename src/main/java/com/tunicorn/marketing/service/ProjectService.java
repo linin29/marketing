@@ -1,6 +1,7 @@
 package com.tunicorn.marketing.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,9 @@ public class ProjectService {
 	
 	public AdminServiceApplyVO getServiceByProjectId (String projectId) {
 		return serviceApplyMapper.getServiceByProjectId(projectId);
+	}
+	
+	public List<Map<String, Object>> getProjectsByUserId(String userId){
+		return projectMapper.getProjectsByUserId(userId);
 	}
 }

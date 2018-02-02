@@ -128,7 +128,6 @@
 		</trim>
 		WHERE id=#{id}
 	</update>
-<<<<<<< HEAD
 	<update id="updateMajorTypeApplicationMapping" parameterType="com.tunicorn.marketing.vo.MajorTypeApplicationMappingVO">
 		UPDATE major_type_application_mapping
 		<trim prefix="set" suffixOverrides=",">
@@ -157,10 +156,10 @@
 		</if>
 	</select>
 	
-	<select id="getProjectsByUserName" resultMap="java.util.Map">
-		SELECT t.* FROM project t WHERE t.`id` IN (SELECT DISTINCT t1.`project_id` FROM admin_service_apply t1 WHERE t1.`username`=#{userName}) AND t.`status`='active';
+	<select id="getProjectsByUserId"  resultType="java.util.Map">
+		SELECT t.`id`,t.`name` FROM project t 
+		WHERE t.`id` IN (SELECT DISTINCT t1.`project_id` FROM admin_service_apply t1,`user` t2 
+		WHERE t1.`username`=t2.`username` AND t2.`id`=#{userId}) AND t.`status`='active';
 	</select>
-=======
->>>>>>> branch 'v1.1' of weixiaokai@172.16.58.42:Tunicorn_Application/web-marketing.git
 </mapper>
 

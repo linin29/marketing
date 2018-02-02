@@ -36,6 +36,7 @@ batchImport=(function(){
     		var _file = $(this)[0];
     		var files = _file.files;
     		var majorType = $('#majorType').val();
+    		var projectId = $("#project").val();
     		var needStitch = !$('#is_need_stitch').is(':checked');
     		var total = files.length;
     		
@@ -48,7 +49,7 @@ batchImport=(function(){
     				var index = file.name.lastIndexOf(".");
     				var fileExt = fileName.substring(index + 1);
     				if(fileExt.toLowerCase() == 'zip'){
-    					sendZipfile(file.name, file, function(task_id){
+    					sendZipfile(file.name, file, projectId, function(task_id){
     						var url = m_url+task_id+'/stitcher';
     						var data = {
     							majorType : majorType,
@@ -82,7 +83,7 @@ batchImport=(function(){
     					    });
     					});
     				}else{
-    					send_file(file.name, file, function(task_id){
+    					send_file(file.name, file, projectId, function(task_id){
     						var url = m_url+task_id+'/stitcher';
     						var data = {
     							majorType : majorType,
@@ -122,10 +123,11 @@ batchImport=(function(){
     	});
      };
 
-     function send_file(task_label, file, cb){
+     function send_file(task_label, file, projectId, cb){
  		var formData = new FormData();
  		
  		formData.append("images", file);
+ 		formData.append("projectId", projectId);
  		formData.append("taskId", 0);
  		formData.append("taskLabel", task_label);
  		
@@ -172,10 +174,11 @@ batchImport=(function(){
 		$('#stitch_error_num').text('（'+ERROR_STITCH_LIST.length+'）');
 	};
 	
-	function sendZipfile(task_label, file, cb){
+	function sendZipfile(task_label, file, projectId, cb){
 		var formData = new FormData();
 		
 		formData.append("zipFile", file);
+		formData.append("projectId", projectId);
 		formData.append("taskId", 0);
 		formData.append("taskLabel", task_label);
 		

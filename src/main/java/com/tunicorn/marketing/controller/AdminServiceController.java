@@ -265,39 +265,9 @@ public class AdminServiceController extends BaseController {
 
 	private void sendApplyEmail(HttpServletRequest request) {
 		AdminServiceApplyVO adminServiceApplyVO = new AdminServiceApplyVO();
-		/*
-		 * if (StringUtils.isNotBlank(request.getParameter("appBusinessName")))
-		 * { adminServiceApplyVO.setAppBusinessName(request.getParameter(
-		 * "appBusinessName")); } if
-		 * (StringUtils.isNotBlank(request.getParameter("appBusinessAddress")))
-		 * { adminServiceApplyVO.setAppBusinessAddress(request.getParameter(
-		 * "appBusinessAddress")); } if
-		 * (StringUtils.isNotBlank(request.getParameter("appBusinessContacts")))
-		 * { adminServiceApplyVO.setAppBusinessContacts(request.getParameter(
-		 * "appBusinessContacts")); } if
-		 * (StringUtils.isNotBlank(request.getParameter("appBusinessMobile"))) {
-		 * adminServiceApplyVO.setAppBusinessMobile(request.getParameter(
-		 * "appBusinessMobile")); }
-		 */
-		/*
-		 * if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
-		 * adminServiceApplyVO.setMaxCallNumber(Long.valueOf(request.
-		 * getParameter("maxCallNumber"))); }
-		 */
-		if (StringUtils.isNotBlank(request.getParameter("email"))) {
-			adminServiceApplyVO.setEmail(request.getParameter("email"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("majorTypes"))) {
-			List<MajorTypeVO> majorTypes = new ArrayList<MajorTypeVO>();
-			String[] majortypeArray = request.getParameter("majorTypes").split(",");
-			for (String majorTypeId : majortypeArray) {
-				MajorTypeVO majorTypeVO = new MajorTypeVO();
-				majorTypeVO.setId(Long.valueOf(majorTypeId));
-				majorTypes.add(majorTypeVO);
-			}
-			adminServiceApplyVO.setMajorTypes(majorTypes);
-		}
-		adminServiceApplyService.sendApplyEmail(adminServiceApplyVO);
+		ProjectVO projectVO = new ProjectVO();
+		setServiceApplyAndProjectVO(request, adminServiceApplyVO, projectVO);
+		adminServiceApplyService.sendApplyEmail(adminServiceApplyVO, projectVO);
 	}
 
 	private void sendApproveEmail(HttpServletRequest request) {

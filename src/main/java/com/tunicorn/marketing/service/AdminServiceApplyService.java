@@ -28,7 +28,6 @@ import com.tunicorn.marketing.mapper.UserMapper;
 import com.tunicorn.marketing.mapper.UserRoleMapper;
 import com.tunicorn.marketing.utils.ConfigUtils;
 import com.tunicorn.marketing.utils.MarketingStorageUtils;
-import com.tunicorn.marketing.utils.SendMailUtils;
 import com.tunicorn.marketing.vo.AdminMajorTypeServiceApplyMappingVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyAssetVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyVO;
@@ -40,6 +39,7 @@ import com.tunicorn.marketing.vo.MajorTypeVO;
 import com.tunicorn.marketing.vo.ProjectVO;
 import com.tunicorn.marketing.vo.UserRoleVO;
 import com.tunicorn.marketing.vo.UserVO;
+import com.tunicorn.util.EmailUtils;
 import com.tunicorn.util.SecurityUtils;
 
 @Service
@@ -76,9 +76,9 @@ public class AdminServiceApplyService {
 		return result;
 	}
 
-	public void sendApplyEmail(AdminServiceApplyVO adminServiceApplyVO) {
+	public void sendApplyEmail(AdminServiceApplyVO adminServiceApplyVO, ProjectVO projectVO) {
 		StringBuffer text = new StringBuffer();
-		// text.append("<h3>应用商：").append(adminServiceApplyVO.getAppBusinessName()).append("</h3>").append("<p>申请服务：");
+		text.append("<h3>项目名称：").append(projectVO.getName()).append("</h3>").append("<p>申请服务：");
 		List<MajorTypeVO> majorTypeVOs = adminServiceApplyVO.getMajorTypes();
 		if (majorTypeVOs != null && majorTypeVOs.size() > 0) {
 			for (MajorTypeVO majorTypeVO : majorTypeVOs) {
@@ -89,12 +89,9 @@ public class AdminServiceApplyService {
 			}
 			text.deleteCharAt(text.length() - 1);
 		}
-		// text.append("</p>").append("<p>调用次数：").append(adminServiceApplyVO.getMaxCallNumber()).append("</p>");
-		String from = ConfigUtils.getInstance().getConfigValue("spring.mail.from");
+		text.append("</p>").append("<p>调用次数：").append(projectVO.getCallNumber()).append("</p>");
 		AdminUserVO adminUserVO = adminUserMapper.getUserByUserName(MarketingConstants.ADMIN_USER_NAME);
-		String password = ConfigUtils.getInstance().getConfigValue("spring.mail.from.password");
-		SendMailUtils.sendTextWithHtml(from,
-				new String[] { from, adminUserVO.getEmail(), adminServiceApplyVO.getEmail() }, password, "服务申请",
+		EmailUtils.sendHtmlMail(new String[] { adminUserVO.getEmail(), adminServiceApplyVO.getEmail() }, "服务申请",
 				text.toString());
 	}
 
@@ -113,11 +110,8 @@ public class AdminServiceApplyService {
 			subject = "服务已驳回";
 			text.append("</p>").append("<p>驳回原因：").append(approveEmailVO.getRejectReason()).append("</p>");
 		}
-		String from = ConfigUtils.getInstance().getConfigValue("spring.mail.from");
 		AdminUserVO adminUserVO = adminUserMapper.getUserByUserName(MarketingConstants.ADMIN_USER_NAME);
-		String password = ConfigUtils.getInstance().getConfigValue("spring.mail.from.password");
-		SendMailUtils.sendTextWithHtml(from,
-				new String[] { from, adminUserVO.getEmail(), approveEmailVO.getUserEmail() }, password, subject,
+		EmailUtils.sendHtmlMail(new String[] { adminUserVO.getEmail(), approveEmailVO.getUserEmail() }, subject,
 				text.toString());
 	}
 
@@ -196,12 +190,12 @@ public class AdminServiceApplyService {
 		int result = adminServiceApplyMapper.updateAdminServiceApply(adminServiceApplyVO);
 		adminMajorTypeServiceApplyMappingMapper.deleteMajorTypeApplicationMappingByApplyId(adminServiceApplyVO.getId());
 		adminServiceApplyAssetMapper.deleteAdminServiceApplyAssetByApplyId(adminServiceApplyVO.getId());
-		
+
 		ProjectVO projectVO = new ProjectVO();
 		projectVO.setId(adminServiceApplyVO.getProjectId());
 		projectVO.setStatus(MarketingConstants.STATUS_DELETED);
 		projectMapper.updateProject(projectVO);
-		
+
 		logger.info("serviceApplyId:" + adminServiceApplyVO.getId() + ", result of deleteAdminServiceApply: " + result);
 		return result;
 	}
@@ -248,7 +242,7 @@ public class AdminServiceApplyService {
 		projectVO.setId(UUID.randomUUID().toString());
 		projectMapper.createProject(projectVO);
 	}
-	
+
 	private void updateProject(ProjectVO projectVO) {
 		projectMapper.updateProject(projectVO);
 	}

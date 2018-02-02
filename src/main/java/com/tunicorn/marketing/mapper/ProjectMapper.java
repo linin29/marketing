@@ -22,9 +22,4 @@ public interface ProjectMapper {
 
 	public List<Map<String, Object>> getProjectsByUserId(@Param("userId") String userId);
 
-	@Select("select id, name, address, mobile, contacts, type, store_number as storeNumber,call_number as callNumber, "
-			+ "image_number as imageNumber, threshhold, create_time as createTime, last_update as lastUpdateTime, status "
-			+ "from project p where status='active'")
-	public List<ProjectVO> getAllProjects();
-
 }

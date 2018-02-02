@@ -11,6 +11,11 @@ batchImport=(function(){
     function init(){
     	$('#barch_import').click(function(){
     		var majorType = $('#majorType').val();
+    		var projectId = $('#project').val();
+    		if(!projectId || projectId==''){
+    			noty({text: '请选择一个项目', layout: "topCenter", type: "warning", timeout: 1000});
+    			return;
+    		}
     		if(!majorType || majorType==''){
     			noty({text: '请选择一个主类型', layout: "topCenter", type: "warning", timeout: 1000});
     			return;
@@ -21,6 +26,10 @@ batchImport=(function(){
     	$('#waiting .close').click(function(){
     		show_status_text();
     		clear_data();
+    	});
+    	
+    	$('#project').change(function(){
+    		getMajorType($(this).val());
     	});
     	
     	$('#file_select').change(function(){
@@ -233,6 +242,28 @@ batchImport=(function(){
 			clear_data();
 		}
 	};
+	
+	function getMajorType(projectId){
+		$.ajax({ 
+			url : m_url + 'majorType/list?projectId=' + projectId, 
+			type : 'GET', 
+			success : function(resp) { 
+				if(resp.success){
+					if(resp.data && resp.data.length > 0){
+						var html = "<option value=''>请选择一个主类型</option>";
+						for(var i = 0; i < resp.data.length; i++){
+							html += "<option value='"+ resp.data[i].name +"'>"+ resp.data[i].description +"</option>"
+						}
+						$("#majorType").html(html);
+					}
+				}
+			}, 
+			error : function(resp) { 
+				 noty({text: '获取品类列表失败', layout: "topCenter", type: "warning", timeout: 2000});
+				 return;
+			} 
+		});
+	}
 	
      return {
           _init:init

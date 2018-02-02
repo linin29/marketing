@@ -131,7 +131,7 @@
 	<select id="getProjectsByUserId"  resultType="java.util.Map">
 		SELECT t.`id`,t.`name` FROM project t 
 		WHERE t.`id` IN (SELECT DISTINCT t1.`project_id` FROM admin_service_apply t1,`user` t2 
-		WHERE t1.`username`=t2.`username` AND t2.`id`=#{userId}) AND t.`status`='active';
+		WHERE t1.`username`=t2.`username` AND t2.`id`=#{userId} and t1.apply_status='opened') AND t.`status`='active';
 	</select>
 </mapper>
 

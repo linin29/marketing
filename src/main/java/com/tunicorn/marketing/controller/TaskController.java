@@ -46,6 +46,7 @@ import com.tunicorn.marketing.bo.StitcherBO;
 import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.GoodsSkuService;
+import com.tunicorn.marketing.service.MajorTypeService;
 import com.tunicorn.marketing.service.ProjectService;
 import com.tunicorn.marketing.service.TaskService;
 import com.tunicorn.marketing.service.TrainingDataService;
@@ -71,6 +72,8 @@ public class TaskController extends BaseController {
 	private TrainingDataService trainingDataService;
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private MajorTypeService majorTypeService;
 
 	@RequestMapping(value = "/batch_import", method = RequestMethod.GET)
 	public String batch_import(HttpServletRequest request, Model model) {
@@ -100,6 +103,14 @@ public class TaskController extends BaseController {
 		model.addAttribute("totalCount", 0);
 		model.addAttribute("currentPage", 1);
 		return "list/exportData";
+	}
+	
+	@RequestMapping(value = "/majorType/list", method = RequestMethod.GET)
+	@ResponseBody
+	public CommonAjaxResponse getMajorTypeByProjectId(HttpServletRequest request) {
+		String projectId = request.getParameter("projectId");
+		List<MajorTypeVO> majorTypes = majorTypeService.getMajorTypeListByProjectId(projectId);
+		return CommonAjaxResponse.toSuccess(majorTypes);
 	}
 
 	@RequestMapping(value = "/export/search", method = RequestMethod.GET)

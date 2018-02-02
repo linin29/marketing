@@ -38,8 +38,4 @@ public class ProjectService {
 	public List<Map<String, Object>> getProjectsByUserId(String userId) {
 		return projectMapper.getProjectsByUserId(userId);
 	}
-
-	public List<ProjectVO> getAllProjects() {
-		return projectMapper.getAllProjects();
-	}
 }

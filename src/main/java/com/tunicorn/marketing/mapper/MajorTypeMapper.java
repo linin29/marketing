@@ -41,4 +41,11 @@ public interface MajorTypeMapper {
 	 
 	@Select("select id, `name`, `version`, description, create_time from major_type where id=#{majorTypeId} and status='active'")
 	public MajorTypeVO getMajorTypeById(@Param("majorTypeId") long majorTypeId);
+	
+	@Results({ @Result(property = "createTime", column = "create_time") })
+	@Select("select mt.* from admin_major_type_service_apply_mapping am "
+			+ " left join admin_service_apply asa on asa.id=am.service_apply_id and asa.`status`='active'"
+			+ " left join major_type mt on mt.id=am.major_type_id and am.`status`='active'"
+			+ " where asa.project_id=#{projectId} and mt.`status`='active'")
+	public List<MajorTypeVO> getMajorTypeListByProjectId(@Param("projectId") String projectId);
 }

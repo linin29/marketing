@@ -27,14 +27,12 @@ import com.tunicorn.marketing.bo.AdminServiceApplyBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.AdminServiceApplyService;
 import com.tunicorn.marketing.service.MajorTypeService;
-import com.tunicorn.marketing.service.UserService;
 import com.tunicorn.marketing.vo.AdminServiceApplyAssetVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyVO;
 import com.tunicorn.marketing.vo.AdminUserVO;
 import com.tunicorn.marketing.vo.ApproveEmailVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
 import com.tunicorn.marketing.vo.ProjectVO;
-import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.MessageUtils;
 
 @Controller
@@ -46,8 +44,6 @@ public class AdminServiceController extends BaseController {
 	private AdminServiceApplyService adminServiceApplyService;
 	@Autowired
 	private MajorTypeService majorTypeService;
-	@Autowired
-	private UserService userService;
 
 	@RequestMapping(value = "/apply", method = RequestMethod.GET)
 	public String serviceApply(HttpServletRequest request, HttpServletResponse resp, Model model) {
@@ -149,11 +145,7 @@ public class AdminServiceController extends BaseController {
 			Message message = MessageUtils.getInstance().getMessage("marketing_service_apply_not_existed");
 			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
-		UserVO userVO = userService.getUserByUserName(adminServiceApplyVO.getUsername());
-		if (userVO != null) {
-			Message message = MessageUtils.getInstance().getMessage("user_existed");
-			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
-		}
+
 		adminServiceApplyService.approveAdminServiceApply(adminServiceApplyVO);
 		applyVO.setAppKey(adminServiceApplyVO.getAppKey());
 		applyVO.setAppSecret(adminServiceApplyVO.getAppSecret());

@@ -7,6 +7,17 @@
          <div class="data_list_header clearfix" >
        	 	<h3 class="col-sm-3">数据导出<small>本次查询共<span id="number">${totalCount!0}</span>数据</small></h3>
        	 	<div class="col-sm-9" style="margin-top:10px;margin-bottom:10px;padding-right:0px;">
+		        <span style="width:8%;float:left;line-height:34px;text-align: left;margin-right: -1%;">项目：</span>
+		        <div style="width:25%;float:left;margin-left: -1%;">
+		            <select id="project" style="height: 34px;width: 96%;">
+		                <option value="">请选择</option>
+		                  <#if projects?? && (projects?size > 0)>
+		                   	<#list projects as project>
+		                       <option value="${project.id}" <#if projectId?? && projectId == project.id> selected </#if>>${project.name}</option>
+		                   	</#list>
+		                  </#if>
+					</select>               
+		        </div>
        	 		<span style="width:8%;float:left;line-height:34px;text-align: center;">品类：</span>
                 <div style="width:27%;float:left;">
                  	<select id="majorType" style="height: 34px;width: 96%;">

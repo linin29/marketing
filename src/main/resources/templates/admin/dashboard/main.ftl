@@ -31,6 +31,7 @@
     <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/tunicorn-cloud.js" ></script>
     <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/bootstrap-datetimepicker.min.js" ></script>
     <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/bootstrap-datetimepicker.zh-CN1.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/bootstrapValidator.js"></script>
     <link href="${springMacroRequestContext.contextPath}/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="${springMacroRequestContext.contextPath}/css/jquery-fileupload.css" rel="stylesheet">
     <link href="${springMacroRequestContext.contextPath}/css/jquery-fileupload-ui.css" rel="stylesheet">
@@ -38,6 +39,7 @@
     <link href="${springMacroRequestContext.contextPath}/css/bootstrap-select.css" rel="stylesheet">
     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/admin-style.css"  type="text/css">
     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/cropper.css"  type="text/css">
+    <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/css/bootstrapValidator.css"  type="text/css">
 	<style type="text/css">
 		.skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu>li.active>a {
 			color: #fff;

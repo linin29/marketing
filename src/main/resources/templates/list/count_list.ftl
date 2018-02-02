@@ -5,6 +5,28 @@
 	    	<div class="col-sm-8" style="margin-top:10px;padding-right:0px;text-align: right;">
 	    		<input id="startTime" type="hidden" <#if startDate??> value="${startDate}"</#if>>
 				<input id="endTime" type="hidden" <#if endDate??> value="${endDate}"</#if>>
+				<span style="width:8%;float:left;line-height:34px;text-align: left;margin-right: -1%;">项目：</span>
+		        <div style="width:25%;float:left;margin-left: -1%;">
+		            <select id="project" style="height: 34px;width: 96%;">
+		                <option value="">请选择</option>
+		                  <#if projects?? && (projects?size > 0)>
+		                   	<#list projects as project>
+		                       <option value="${project.id}" <#if projectId?? && projectId == project.id> selected </#if>>${project.name}</option>
+		                   	</#list>
+		                  </#if>
+					</select>               
+		        </div>
+       	 		<span style="width:8%;float:left;line-height:34px;text-align: center;">品类：</span>
+                <div style="width:27%;float:left;">
+                 	<select id="majorType" style="height: 34px;width: 96%;">
+                      	<option value="">请选择</option>
+                      	<#if majorTypes?? && (majorTypes?size > 0)>
+                   	<#list majorTypes as tempMajorType>
+                       	<option value="${tempMajorType.name}" <#if majorType?? && majorType == tempMajorType.name> selected </#if>>${tempMajorType.description}</option>
+                   	</#list>
+                  		</#if>
+					</select>               
+                </div>
 			 	<div style="float: left; width: 10%;line-height:34px;">时间段：</div>
 			 	<div style="float: left; width: 35%;" class="form-group input-group date form_datetime1" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
 			        <input class="form-control" size="16" type="text" value="" id="startDate">

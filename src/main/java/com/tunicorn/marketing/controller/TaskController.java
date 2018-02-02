@@ -47,6 +47,7 @@ import com.tunicorn.marketing.bo.StitcherBO;
 import com.tunicorn.marketing.bo.TaskBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.GoodsSkuService;
+import com.tunicorn.marketing.service.MajorTypeService;
 import com.tunicorn.marketing.service.ProjectService;
 import com.tunicorn.marketing.service.TaskService;
 import com.tunicorn.marketing.service.TrainingDataService;
@@ -72,11 +73,14 @@ public class TaskController extends BaseController {
 	private TrainingDataService trainingDataService;
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private MajorTypeService majorTypeService;
 
 	@RequestMapping(value = "/batch_import", method = RequestMethod.GET)
 	public String batch_import(HttpServletRequest request, Model model) {
 		UserVO user = getCurrentUser(request);
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
+		model.addAttribute("projects",  projectService.getProjectsByUserId(user.getId()));
 		return "list/batch_import";
 	}
 
@@ -95,10 +99,19 @@ public class TaskController extends BaseController {
 		taskBO.setTaskStatus(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
 
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
+		model.addAttribute("projects",  projectService.getProjectsByUserId(user.getId()));
 		model.addAttribute("taskStatus", MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
 		model.addAttribute("totalCount", 0);
 		model.addAttribute("currentPage", 1);
 		return "list/exportData";
+	}
+	
+	@RequestMapping(value = "/majorType/list", method = RequestMethod.GET)
+	@ResponseBody
+	public CommonAjaxResponse getMajorTypeByProjectId(HttpServletRequest request) {
+		String projectId = request.getParameter("projectId");
+		List<MajorTypeVO> majorTypes = majorTypeService.getMajorTypeListByProjectId(projectId);
+		return CommonAjaxResponse.toSuccess(majorTypes);
 	}
 
 	@RequestMapping(value = "/export/search", method = RequestMethod.GET)
@@ -110,6 +123,11 @@ public class TaskController extends BaseController {
 		taskBO.setUserId(user.getId());
 		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
 			taskBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("projectId"))) {
+			String projectId = request.getParameter("projectId");
+			taskBO.setProjectId(projectId);
+			model.addAttribute("projectId", projectId);
 		}
 		if (StringUtils.isNotBlank(request.getParameter("majorType"))) {
 			String majorType = request.getParameter("majorType");
@@ -135,6 +153,7 @@ public class TaskController extends BaseController {
 		int totalCount = taskService.getTaskCount(taskBO);
 
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
+		model.addAttribute("projects",  projectService.getProjectsByUserId(user.getId()));
 		model.addAttribute("tasks", taskVOs);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("currentPage", taskBO.getPageNum() + 1);

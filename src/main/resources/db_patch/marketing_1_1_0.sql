@@ -143,6 +143,8 @@ BEGIN
 		alter table `admin_service_apply` drop column `app_business_contacts`;
 		alter table `admin_service_apply` drop column `max_call_number`;
 		
+		alter table `admin_service_apply`  modify column `apply_status` enum('created','opened','rejected', 'closed') DEFAULT 'created';
+		
 		alter table `task` Add column `project_id` varchar(40) DEFAULT NULL AFTER `user_id`;
 		
 		alter table `api_calling_count` Add column `project_id` varchar(40) DEFAULT NULL AFTER `user_name`;

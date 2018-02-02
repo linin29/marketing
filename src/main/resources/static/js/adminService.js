@@ -7,12 +7,14 @@ adminService = (function(){
 			initPagination(currentPage, totalCount, serviceApplyUrl);
 		}
 		initDate();
+		//serviceDataValidator();
 		$("#query").click(function(){
 			queryService(serviceApplyUrl);
 		});
 		$("#new-server").click(function(){
 			$("#sure").hide();
 			$("#saveService").show();
+			$("#cancel").show();
 			$("#upload-book-tr").show();
 			//$("#upload-book-div").show();
 			$("#applyId").val("");
@@ -23,6 +25,7 @@ adminService = (function(){
 			$('#server-type').selectpicker('refresh');
 			$('#server-type').selectpicker('val', "");
 			$("#project-id-tr").hide();
+			$("#project-type").removeAttr("disabled");
 			$("#errorMsg").html("");
 		}); 
 		$("#saveService").click(function(){
@@ -31,6 +34,7 @@ adminService = (function(){
 		$(".modify").click(function(){
 			$("#sure").hide();
 			$("#saveService").show();
+			$("#cancel").show();
 			$("#upload-book-tr").hide();
 			//$("#upload-book-div").hide();
 			$("#rejectReasonDiv").hide();
@@ -42,20 +46,23 @@ adminService = (function(){
 			$("#rejectReason").attr("disabled", "disabled");
 			$("#errorMsg").html("");
 			$("#server-type").removeAttr("disabled");
+			$("#project-type").removeAttr("disabled");
 			$("#project-id-tr").hide();
 		});
 		$(".info").click(function(){
 			$("#upload-book-tr").hide();
 			//$("#upload-book-div").hide();
 			$("#myModalLabel").text("服务申请详情");	
-			$("#sure").show();
+			$("#sure").hide();
 			$("#saveService").hide();
+			$("#cancel").hide();
 			$("#rejectReasonDiv").hide();
 			$("#new-server-model").modal("show");
 			detail($(this).attr("applyid"));
 			$("#new-server-model").find("input").attr("disabled","disabled"); 
 			$("#errorMsg").html("");
 			$("#server-type").attr("disabled", "disabled"); 
+			$("#project-type").attr("disabled", "disabled");
 			$("#project-id-tr").show();
 		});
 		$(".showAgreementModel").click(function(){
@@ -96,6 +103,7 @@ adminService = (function(){
 			$("#server-management-model").modal("show");
 			$("#server-management-model").find("input").attr("disabled","disabled"); 
 			$("#server-type").attr("disabled","disabled");
+			$("#project-type").attr("disabled","disabled");
 			$("#rejectReason").removeAttr("disabled"); 
 			$("#rejectReason").val("");
 			$("#errorMsg").html("");
@@ -116,11 +124,13 @@ adminService = (function(){
 			$("#myModalLabel").text("服务申请详情");	
 			$("#sure").show();
 			$("#openService").hide();
+			$("#sure").hide();
 			$("#rejectService").hide();
 			$("#server-management-model").modal("show");
 			detail($(this).attr("applyid"));
 			$("#server-management-model").find("input").attr("disabled","disabled"); 
 			$("#server-type").attr("disabled","disabled");
+			$("#project-type").attr("disabled","disabled");
 			$("#rejectReason").attr("disabled","disabled");
 			$("#errorMsg").html("");
 		});
@@ -151,9 +161,11 @@ adminService = (function(){
 							noty({text: data.errorMessage, layout: 'topCenter', type: 'error', timeout: 2000});
 							return;
 						}else{
-							noty({text: "删除成功", layout: 'topCenter', type: 'success', timeout: 2000});
+							noty({text: "关闭成功", layout: 'topCenter', type: 'success', timeout: 2000});
 							$("#deleteServiceModal").modal('hide');
-							$('.tableTr[applyid=' + applyId + ']').remove();
+							$("#approve_" + applyId).hide();
+							$("#delete_" + applyId).hide();
+							//$('.tableTr[applyid=' + applyId + ']').remove();
 						} 
 		        	},
 		        	error: function(data) {
@@ -180,7 +192,6 @@ adminService = (function(){
 		var imageNumber =$("#pic-number").val();
 		var threshhold = $("#threshhold").val();
 		var projectType = $("#project-type").val();
-		debugger;
 		if(appBusinessName == "") {
 			$('#errorMsg').text("请输入项目名称");
 			return;
@@ -284,6 +295,9 @@ adminService = (function(){
 		formData.append('imageNumber', imageNumber);
 		formData.append('threshhold', parseFloat(threshhold)/100);
 		formData.append('projectType', projectType);
+		
+		//$("#service-form").data("bootstrapValidator").validate();
+		//if($("#service-form").data('bootstrapValidator').isValid()){
 		tunicorn.utils.postFormData(url, formData, function(err, result){
 			if(err){
 				noty({text: "服务器异常", layout: "topCenter", type: "error", timeout: 2000});
@@ -294,7 +308,7 @@ adminService = (function(){
 		 		$('#new-server-model').modal('hide');
 		 		if(!applyId){
 		 			formData.append('applyStatus', 'created');
-		 			var data ={'applyStatus':'created', 'appBusinessName':appBusinessName,
+		 			var data ={'applyStatus':'created', 'name':appBusinessName,
 		 					   'username':username,'majorTypes':majorTypes,'maxCallNumber':maxCallNumber, 'email':email};
 		 			sendEmail(data);
 		 		}
@@ -316,6 +330,7 @@ adminService = (function(){
 				return;
 			}
 		});
+	  //}
 	}
 	function detail(applyId, isRejectReasonShow){
 		$.ajax({
@@ -587,7 +602,7 @@ adminService = (function(){
 	function sendEmail(data){
 		var formData = new FormData();
 		formData.append('applyStatus', data.applyStatus);
-		formData.append('appBusinessName', data.appBusinessName);
+		formData.append('name', data.name);
 		formData.append('majorTypes', data.majorTypes);
 		formData.append('maxCallNumber', data.maxCallNumber);
 		formData.append('username', data.username);
@@ -683,6 +698,75 @@ adminService = (function(){
 		    $('.form_datetime3').datetimepicker('setEndDate',endTime);
 		});
 	};
+	function serviceDataValidator(){
+    	$('#service-form').bootstrapValidator({
+		message: 'This value is not valid',
+		feedbackIcons: {
+			valid: 'glyphicon glyphicon-ok',
+			invalid: 'glyphicon glyphicon-remove',
+			validating: 'glyphicon glyphicon-refresh'
+		},
+		fields: {
+			name: {
+				message: 'The name is not valid',
+				validators: {
+					notEmpty: {
+						message: 'IPC名称不能为空'
+					},
+					stringLength: {
+						min: 1,
+						max: 20,
+						message: 'IPC名称长度在1-20个字符之内'
+					},
+					regexp: {
+						regexp: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/,
+						message: 'IPC名称只能是中文、英文、数字和下划线组合'
+					}
+				}
+			},
+			rtsp:{
+				message: 'The rtsp is not valid',
+				validators: {
+					notEmpty: {
+						message: '视频流地址不能为空'
+					},
+					stringLength: {
+						min: 1,
+						max: 100,
+						message: '视频流地址长度在1-100个字符之内'
+					},
+				}
+			},
+			location: {
+				message: 'The location is not valid',
+				validators: {
+					notEmpty: {
+						message: 'IPC位置不能为空'
+					},
+					stringLength: {
+						min: 1,
+						max: 80,
+						message: 'IPC位置长度在1-80个字符之内'
+					},
+					regexp: {
+						regexp: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/,
+						message: 'IPC位置只能是中文、英文、数字和下划线组合'
+					}
+				}
+			}, 
+			comment: {
+				message: 'The comment is not valid',
+				validators: {
+					stringLength: {
+						min: 0,
+						max: 100,
+						message: '备注长度在0-100个字符之内'
+					}
+				}
+			}
+		}
+	});
+  };
 	return {
 		serviceApplyInit:serviceApplyInit,
 		serviceManageInit:serviceManageInit,

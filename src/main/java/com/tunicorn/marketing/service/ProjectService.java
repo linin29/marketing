@@ -16,26 +16,26 @@ import com.tunicorn.marketing.vo.ProjectVO;
 public class ProjectService {
 	@Autowired
 	private ProjectMapper projectMapper;
-	
+
 	@Autowired
 	ApiCallingSummaryMapper apiCallingMapper;
-	
+
 	@Autowired
 	AdminServiceApplyMapper serviceApplyMapper;
-	
+
 	public List<ProjectVO> getProjects() {
 		return projectMapper.getProjectList();
 	}
-	
+
 	public int getAPICallCountByProjectId(String projectId) {
 		return apiCallingMapper.getAPICallCountByProjectId(projectId);
 	}
-	
-	public AdminServiceApplyVO getServiceByProjectId (String projectId) {
+
+	public AdminServiceApplyVO getServiceByProjectId(String projectId) {
 		return serviceApplyMapper.getServiceByProjectId(projectId);
 	}
-	
-	public List<Map<String, Object>> getProjectsByUserId(String userId){
+
+	public List<Map<String, Object>> getProjectsByUserId(String userId) {
 		return projectMapper.getProjectsByUserId(userId);
 	}
 }

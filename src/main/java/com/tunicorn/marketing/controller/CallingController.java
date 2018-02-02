@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tunicorn.marketing.bo.ApiCallingSummaryBO;
 import com.tunicorn.marketing.service.MajorTypeService;
+import com.tunicorn.marketing.service.ProjectService;
 import com.tunicorn.marketing.service.TaskService;
 import com.tunicorn.marketing.vo.ApiCallingSummaryVO;
 import com.tunicorn.marketing.vo.UserVO;
@@ -28,6 +29,8 @@ public class CallingController extends BaseController{
 	private TaskService taskService;
 	@Autowired
 	private MajorTypeService majorTypeService;
+	@Autowired
+	private ProjectService projectService;
 	
 	@RequestMapping(value = "/calling", method = RequestMethod.GET)
 	public String calling(HttpServletRequest request, ApiCallingSummaryBO apiCallingSummaryBO, Model model) {
@@ -49,7 +52,12 @@ public class CallingController extends BaseController{
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("startDate", apiCallingSummaryBO.getStartDate());
 		model.addAttribute("endDate", apiCallingSummaryBO.getEndDate());
+		model.addAttribute("projectId", apiCallingSummaryBO.getProjectId());
+		model.addAttribute("majorType", apiCallingSummaryBO.getMajorType());
 		model.addAttribute("currentPage", apiCallingSummaryBO.getPageNum() + 1);
+		
+		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
+		model.addAttribute("projects",  projectService.getProjectsByUserId(user.getId()));
 		return "list/count_list";
 	}
 	
@@ -77,6 +85,9 @@ public class CallingController extends BaseController{
 		if(StringUtils.isNotBlank(apiCallingSummaryBO.getMajorType())){
 			model.addAttribute("majorType", apiCallingSummaryBO.getMajorType());
 		}
+		if(StringUtils.isNotBlank(apiCallingSummaryBO.getProjectId())){
+			model.addAttribute("projectId", apiCallingSummaryBO.getProjectId());
+		}
 		model.addAttribute("majorTypes", majorTypeService.getAllMajorTypeList());
 		model.addAttribute("callingCount", callingCount);
 		model.addAttribute("callings", apiCallingCounts);
@@ -84,6 +95,9 @@ public class CallingController extends BaseController{
 		model.addAttribute("startDate", apiCallingSummaryBO.getStartDate());
 		model.addAttribute("endDate", apiCallingSummaryBO.getEndDate());
 		model.addAttribute("currentPage", apiCallingSummaryBO.getPageNum() + 1);
+		
+		model.addAttribute("majorTypes", majorTypeService.getAllMajorTypeList());
+		model.addAttribute("projects",  projectService.getProjects());
 		return "admin/list/count_list";
 	}
 }

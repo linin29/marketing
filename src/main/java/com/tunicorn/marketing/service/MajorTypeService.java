@@ -13,7 +13,7 @@ import com.tunicorn.marketing.vo.MajorTypeVO;
 
 @Service
 public class MajorTypeService {
- 
+
 	@Autowired
 	private MajorTypeMapper majorTypeMapper;
 
@@ -34,24 +34,28 @@ public class MajorTypeService {
 	public int getMajorTypeCount(MajorTypeBO majorTypeBO) {
 		return majorTypeMapper.getMajorTypeCount(majorTypeBO);
 	}
-	
-	public List<MajorTypeApiVO> getMajorTypeListForApi(){
+
+	public List<MajorTypeApiVO> getMajorTypeListForApi() {
 		return majorTypeMapper.getMajorTypeListForApi();
 	}
-	
-	public int getMajorTypeCountByName(String name){
+
+	public int getMajorTypeCountByName(String name) {
 		return majorTypeMapper.getMajorTypeCountByName(name);
 	}
-	
-	public MajorTypeVO getMajorTypeById(long majorTypeId){
+
+	public MajorTypeVO getMajorTypeById(long majorTypeId) {
 		return majorTypeMapper.getMajorTypeById(majorTypeId);
 	}
-	
-	public List<MajorTypeVO> getMajorTypeList(String username){
+
+	public List<MajorTypeVO> getMajorTypeList(String username) {
 		return majorTypeMapper.getMajorTypeList(username);
 	}
-	
-	public List<MajorTypeVO> getAllMajorTypeList(){
+
+	public List<MajorTypeVO> getAllMajorTypeList() {
 		return majorTypeMapper.getAllMajorTypeList();
+	}
+
+	public List<MajorTypeVO> getMajorTypeListByProjectId(String projectId) {
+		return majorTypeMapper.getMajorTypeListByProjectId(projectId);
 	}
 }

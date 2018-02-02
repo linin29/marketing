@@ -74,13 +74,17 @@ countList=(function(){
  		}else{
  			pageNum = 0;
  		}
+ 		var projectId = $("#project").val();
+ 		var majorType = $("#majorType").val();
  		var startDate = $('#startDate').val();
  		var endDate = $('#endDate').val();
  		var data = {
  			perPage: dface.constants.PAGINATION_ITEMS_PER_PAGE,
  			pageNum: pageNum,
  			startDate: startDate,
- 			endDate: endDate
+ 			endDate: endDate,
+ 			projectId:projectId,
+ 			majorType:majorType
  		}
  		$.ajax({
  			 type: 'GET',

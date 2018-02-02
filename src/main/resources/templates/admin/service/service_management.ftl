@@ -6,6 +6,15 @@
 		width:100%;
 	}
 	.newline{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+	.select-style{
+		width: 343px;
+    	height: 34px;
+	}
+	.money-style{
+		border: none;
+	    outline: none;
+	    width: 70px;
+	}
 </style>
 <div class="panel-default clearBottom">
   			<div class="panel-heading">服务管理</div>
@@ -17,7 +26,7 @@
 					<div class="col-sm-2">
   						<input id="projectName" <#if projectName??> value="${projectName}"</#if> type="text" class="form-control" placeholder="请输入项目名称">
 					</div>
-					<div class="col-sm-3">
+					<div class="col-sm-2">
   						<select id="projectTypeSearch"  style="height: 34px;width:100%">
   							<option value="">请选择项目类型</option>
 					      	<option value='free' <#if projectType?? && projectType=='free'>selected</#if>>免费测试</option>
@@ -25,35 +34,39 @@
 					      	<option value='official' <#if projectType?? && projectType=='official'>selected</#if>>正式合同</option>
   						</select> 
 					</div>
-					<div class="col-sm-3">
+					<div class="col-sm-2">
 					<input id="initApplyStatus" type="hidden" <#if applyStatus??> value="${applyStatus}"</#if>>
   						<select id="applyStatus" style="width:70%;height: 34px;">
   							<option value="">请选择状态</option>
   							<option value="created" <#if applyStatus?? && applyStatus=='created'>selected</#if>>已创建</option>
   							<option value="opened" <#if applyStatus?? && applyStatus=='opened'>selected</#if>>已开通</option>
   							<option value="rejected" <#if applyStatus?? && applyStatus=='rejected'>selected</#if>>已驳回</option>
+  							<option value="closed" <#if applyStatus?? && applyStatus=='closed'>selected</#if>>已关闭</option>
   						</select>
 					</div> 
-					<div class="col-sm-3">
-  						<input id="query" type="button" class=" btn btn-success" value="搜索" style="width:100px;" />
+					<div class="pull-right col-sm-4" style="padding-right: 0px;">
+						<div class="col-sm-3">
+  						   <input id="query" type="button" class=" btn btn-success" value="搜索" style="width:100px;" />
+					   </div>
 					</div>
+
 				</div>
   			    <div id="request-content">
   			    	<table class="table table-bordered">
 					    <tbody class="">
 					    	<tr class='thCenter'  style="background-color:#ddd;">
-					    	    <th style="width:15%">项目编码</th>
-					    		<th style="width:10%">项目名称</th>
-					    		<th style="width:15%">申请服务</th>
-					    		<th style="width:6%">调用总次数</th>
-					    		<th style="width:6%">任务数</th>
-					    		<th style="width:8%">完成率</th>
-					    		<th style="width:12%">合同图片</th>
-					    		<th style="width:10%">创建人</th>
-					    		<th style="width:10%">状态</th>
-					    		<th style="width:15%">创建时间</th>
-					    		<th style="width:15%">统计时间节点</th>
-					    		<th style="width:15%">操作</th>
+					    	    <th style="width:7%">项目编码</th>
+					    		<th style="width:6%">项目名称</th>
+					    		<th style="width:7%">申请服务</th>
+					    		<th style="width:10%">调用总次数</th>
+					    		<th style="width:7%">任务数</th>
+					    		<th style="width:6%">完成率</th>
+					    		<th style="width:8%">合同图片</th>
+					    		<th style="width:9%">创建人</th>
+					    		<th style="width:7%">状态</th>
+					    		<th style="width:9%">创建时间</th>
+					    		<th style="width:10%">统计时间节点</th>
+					    		<th style="width:14%">操作</th>
 					    	</tr>
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
 				         	  <#list adminServiceApplys as adminServiceApply>
@@ -79,7 +92,7 @@
 					    			<button class="info btn btn-success" applyid="${adminServiceApply.id}">详情</button>
 					    			<#if adminServiceApply.applyStatus == 'created'>
 					    			<button id="approve_${adminServiceApply.id}" class="btn btn-success approve" applyid="${adminServiceApply.id}">审批</button>
-					    			<button id="delete_${adminServiceApply.id}" class="btn btn-danger deleteService" applyid="${adminServiceApply.id}">删除</button>
+					    			<button id="delete_${adminServiceApply.id}" class="btn btn-danger deleteService" applyid="${adminServiceApply.id}">关闭</button>
 					    			<#else>
 					    			<input type="button" class="btn" style="width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none">
 					    			<input type="button" class="btn" style="width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none">
@@ -108,7 +121,7 @@
 			      	</div>
 			      	<div class="modal-body">
 			        	<div class="form-group">
-			                <h5><strong>应用商信息</strong></h5>
+			                <h5><strong>项目信息</strong></h5>
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
 			                		<tr>
@@ -125,6 +138,25 @@
 			                		<tr>
 			                			<td class="wid">联系方式：</td>
 			                			<td><input  class="application-name total newline" type="text" id="ser-phone"/></td>
+			                		</tr>
+			                	</tbody>
+			                </table>
+			           	</div>
+			           	<div class="form-group" id="upload-book-div">
+			                <h5><strong>合同信息</strong></h5>
+			                <table class="table table-bordered" style="width: 90%;">
+			                	<tbody>
+			                		<tr id="contracted-value-tr">
+			                			<td class="wid">合同金额：</td>
+			                			<td>
+				                			¥
+				                			<input type="text" placeholder="请输入金额" class="money-style" id="contracted-value">
+				                			元人民币
+				                		</td>
+			                		</tr>
+			                		<tr id="contracted-no-tr">
+			                			<td class="wid">合同编号：</td>
+			                			<td><input class="application-name total" type="text" id="contracted-no"  placeholder="输入合同编号"/></td>
 			                		</tr>
 			                	</tbody>
 			                </table>
@@ -146,8 +178,56 @@
 			                			</td>
 			                		</tr>
 			                		<tr>
+			                			<td class="wid">项目类型：</td>
+			                			<td>
+			                				<select id="project-type" class="select-style">
+			                				    <option value=''>选择项目类型</option>
+					      						<option value='free'>免费测试</option>
+					      						<option value='paid'>付费测试</option>
+					      						<option value='official'>正式合同</option>
+											</select>
+			                			</td>
+			                		</tr>
+			                		<tr>
+			                			<td class="wid">项目开始时间：</td>
+			                			<td>
+			                				<div class="form-group" id="startTime">							          							                  
+							                    <div style="float: left" class=" input-group date form_datetime1 " data-date="2016-11-1T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii:ss" >
+								                    <input class="form-control" size="16" type="text" value="" id="fromDate" name="fromDate">
+								                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+								                </div>							               
+							                </div>
+			                			</td>
+			                		</tr>
+			                		<tr>
+			                			<td class="wid">项目结束时间：</td>
+			                			<td>
+			                				<div class="form-group" id="endTime">							             							            
+							                    <div style="float: left" class=" input-group date form_datetime2 " data-date="2016-11-1T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii:ss" >
+								                    <input class="form-control" size="16" type="text" value="" id="toDate" name="toDate">
+								                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+								                </div>							                 
+							                </div>
+			                			</td>
+			                		</tr>
+			                		<tr>
+			                			<td class="wid">门店数：</td>
+			                			<td><input class="application-name total" type="text" id="store-no"  placeholder="输入门店数"/></td>
+			                		</tr>
+			                		<tr>
+			                			<td class="wid">图片数：</td>
+			                			<td><input  class="application-name total newline" type="text" id="pic-number" placeholder="请输入图片数"/></td>
+			                		</tr>
+			                		<tr>
 			                			<td class="wid">申请次数：</td>
-			                			<td><input  class="application-name total newline" type="text" id="application-number"/></td>
+			                			<td><input  class="application-name total newline" type="text" id="application-number" placeholder="输入申请次数"/></td>
+			                		</tr>
+			                		<tr>
+			                			<td class="wid">调用率提醒：</td>
+			                			<td>
+			                				<input id="threshhold" type="number" min="1" max="100" style="width:50px;">%
+			                				<#-- <input type="checkbox" style="margin-left:20px;">邮件提醒 -->
+			                			</td>
 			                		</tr>
 			                	</tbody>
 			                </table>
@@ -235,10 +315,10 @@
 	     <div class="modal-content">
 	         <div class="modal-header">
 	             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	             <h4 class="modal-title" id="deleteServiceModalLabel">确认删除</h4>
+	             <h4 class="modal-title" id="deleteServiceModalLabel">确认关闭</h4>
 	         </div>
 	         <div class="modal-body">
-	            <p>确认删除吗？<b>(一旦删除将不可恢复，请谨慎操作！)</b></p>  
+	            <p>确认关闭吗？<#-- <b>(一旦删除将不可恢复，请谨慎操作！)</b> --></p>  
 	        </div>
 	        <div class="modal-footer" style="border-top-color: #ffffff">
 	             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

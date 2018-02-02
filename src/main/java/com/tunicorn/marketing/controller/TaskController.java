@@ -406,9 +406,15 @@ public class TaskController extends BaseController {
 			model.addAttribute("majorType", majorType);
 			taskBO.setMajorType(majorType);
 		}
+		if (StringUtils.isNotBlank(request.getParameter("projectId"))) {
+			String projectId = request.getParameter("projectId");
+			model.addAttribute("projectId", projectId);
+			taskBO.setProjectId(projectId);
+		}
 		List<TaskVO> taskVOs = taskService.getTaskList(taskBO);
 		int totalCount = taskService.getTaskCount(taskBO);
-
+		List<Map<String, Object>> pMaps = projectService.getProjectsByUserId(user.getId());
+		model.addAttribute("projects", pMaps);
 		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
 		model.addAttribute("tasks", taskVOs);
 		model.addAttribute("totalCount", totalCount);

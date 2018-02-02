@@ -73,13 +73,14 @@ taskList=(function(){
     		searchTaskFlg = 2;
     		var taskName = $("#taskName").val();
     		var majorType = $("#majorType").val();
+    		var projectId = $("#projectId").val()
     		var page = 0;
     		if (pageNum) {
     			page = pageNum -1;
     		}
     		$.ajax({
     			 type: 'GET',
-    			 url: m_url + 'task/search?pageNum=' + page +"&taskName=" +taskName + "&majorType=" + majorType,
+    			 url: m_url + 'task/search?pageNum=' + page +"&taskName=" +taskName + "&majorType=" + majorType + "&projectId=" + projectId,
     			 success: function(data) {
     			 	$("#content").html(data);
     	    	},

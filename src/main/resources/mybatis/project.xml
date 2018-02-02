@@ -13,7 +13,7 @@
 		<result column="image_number" property="imageNumber" jdbcType="INTEGER" />
 		<result column="threshhold" property="threshhold" jdbcType="FLOAT"/>
 		<result column="create_time" property="createTime" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
-		<result column="last_update" property="lastUpdate" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
+		<result column="last_update" property="lastUpdateTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
 	</resultMap>
  
@@ -51,7 +51,7 @@
         threshhold,
       </if>
         create_time,
-      <if test="lastUpdate != null" >
+      <if test="lastUpdateTime != null" >
         last_update,
       </if>
     </trim>
@@ -87,19 +87,19 @@
         #{threshhold,jdbcType=FLOAT},
       </if>
         now(),
-      <if test="lastUpdate!= null" >
-        #{lastUpdate,jdbcType=TIMESTAMP},
+      <if test="lastUpdateTime != null" >
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
   <update id="updateProject" parameterType="com.tunicorn.marketing.vo.ProjectVO">
-		UPDATE admin_service_apply
+		UPDATE project
 		<trim prefix="set" suffixOverrides=",">
 			<if test="name != null and name !=''">
-				name=#{appBusinessName},
+				name=#{name},
 			</if>
 			<if test="address != null and address !=''">
-				address=#{appBusinessAddress},
+				address=#{address},
 			</if>
 			<if test="mobile != null and mobile !=''">
 				mobile=#{mobile},

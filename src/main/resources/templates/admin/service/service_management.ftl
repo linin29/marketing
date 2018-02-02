@@ -11,8 +11,19 @@
   			<div class="panel-heading">服务管理</div>
   			<div class="panel-body">
     			<div id="request-header" class="row" style='margin-left:-14px;'>
+					<div class="col-sm-2">
+  						<input id="projectId" <#if projectId??> value="${projectId}"</#if> type="text" class="form-control" placeholder="请输入项目编码">
+					</div>
+					<div class="col-sm-2">
+  						<input id="projectName" <#if projectName??> value="${projectName}"</#if> type="text" class="form-control" placeholder="请输入项目名称">
+					</div>
 					<div class="col-sm-3">
-  						<input id="appBusinessName" <#if appBusinessName??> value="${appBusinessName}"</#if> type="text" class="form-control" placeholder="请输入应用商名称">
+  						<select id="projectTypeSearch"  style="height: 34px;width:100%">
+  							<option value="">请选择项目类型</option>
+					      	<option value='free' <#if projectType?? && projectType=='free'>selected</#if>>免费测试</option>
+					      	<option value='paid' <#if projectType?? && projectType=='paid'>selected</#if>>付费测试</option>
+					      	<option value='official' <#if projectType?? && projectType=='official'>selected</#if>>正式合同</option>
+  						</select> 
 					</div>
 					<div class="col-sm-3">
 					<input id="initApplyStatus" type="hidden" <#if applyStatus??> value="${applyStatus}"</#if>>
@@ -31,19 +42,24 @@
   			    	<table class="table table-bordered">
 					    <tbody class="">
 					    	<tr class='thCenter'  style="background-color:#ddd;">
-					    		<th style="width:15%">应用商</th>
+					    	    <th style="width:15%">项目编码</th>
+					    		<th style="width:10%">项目名称</th>
 					    		<th style="width:15%">申请服务</th>
-					    		<th style="width:8%">调用总次数</th>
-					    		<th style="width:7%">合同图片</th>
+					    		<th style="width:6%">调用总次数</th>
+					    		<th style="width:6%">任务数</th>
+					    		<th style="width:8%">完成率</th>
+					    		<th style="width:12%">合同图片</th>
 					    		<th style="width:10%">创建人</th>
-					    		<th style="width:7%">状态</th>
-					    		<th style="width:10%">创建时间</th>
-					    		<th style="width:18%">操作</th>
+					    		<th style="width:10%">状态</th>
+					    		<th style="width:15%">创建时间</th>
+					    		<th style="width:15%">统计时间节点</th>
+					    		<th style="width:15%">操作</th>
 					    	</tr>
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
 				         	  <#list adminServiceApplys as adminServiceApply>
 					    		<tr class="tableTr tdCenter" applyid="${adminServiceApply.id}">
-					    		<td>${adminServiceApply.creator.name}</td>
+					    		<td>${adminServiceApply.projectId}</td>
+					    		<td>${adminServiceApply.project.name}</td>
 					    		<td>
 					    			<#if adminServiceApply.majorTypes?? && (adminServiceApply.majorTypes?size>0)>
 	   								   <#list adminServiceApply.majorTypes as majorType>
@@ -51,11 +67,14 @@
 	   		                           </#list>
    								    </#if>
 								</td>
-					    		<td>${adminServiceApply.creator.name}</td>
+					    		<td>${adminServiceApply.callCount}</td>
+					    		<td>${adminServiceApply.taskCount}</td>
+					    		<td>${adminServiceApply.callCount/adminServiceApply.project.callNumber}%</td>
 					    		<td><a href="javascript:void(0)" applyid="${adminServiceApply.id}" class="showAgreementModel">查看</a></td>
 					    		<td>${adminServiceApply.creator.name}</td>
 					    		<td id="service_${adminServiceApply.id}">${adminServiceApply.statusStr}</td>
 					    		<td>${adminServiceApply.createTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
+					    		<td>${.now?string('yyyy-MM-dd HH:mm:ss')!""}</td>
 					    		<td>
 					    			<button class="info btn btn-success" applyid="${adminServiceApply.id}">详情</button>
 					    			<#if adminServiceApply.applyStatus == 'created'>

@@ -1,12 +1,10 @@
 package com.tunicorn.marketing.vo;
 
-import java.util.Date;
 
 public class ProjectReminderUpdateVO {
 	private String id;
 	private String projectId;
-	private Date remiderDay;
-	private String flag;
+	private String remiderDay;
 	public String getId() {
 		return id;
 	}
@@ -19,16 +17,10 @@ public class ProjectReminderUpdateVO {
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
 	}
-	public Date getRemiderDay() {
+	public String getRemiderDay() {
 		return remiderDay;
 	}
-	public void setRemiderDay(Date remiderDay) {
+	public void setRemiderDay(String remiderDay) {
 		this.remiderDay = remiderDay;
-	}
-	public String getFlag() {
-		return flag;
-	}
-	public void setFlag(String flag) {
-		this.flag = flag;
 	}
 }

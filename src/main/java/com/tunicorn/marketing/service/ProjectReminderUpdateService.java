@@ -1,7 +1,5 @@
 package com.tunicorn.marketing.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +11,15 @@ public class ProjectReminderUpdateService {
 	@Autowired
 	private ProjectReminderUpdateMapper projectReminderMapper;
 	
-	public List<ProjectReminderUpdateVO> getProjectReminders () {
-		return projectReminderMapper.getPrejectReminderUpdatess();
+	public ProjectReminderUpdateVO getProjectReminders (String projectId, String date) {
+		return projectReminderMapper.getPrejectDateReminderByProjectId(projectId, date);
+	}
+	
+	public void insertReminder (ProjectReminderUpdateVO update) {
+		projectReminderMapper.insertProjectReminder(update);
+	}
+	
+	public void deletePreviousReminder (String date) {
+		projectReminderMapper.deletePreviousReminder(date);
 	}
 }

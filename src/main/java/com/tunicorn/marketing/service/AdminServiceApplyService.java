@@ -67,10 +67,11 @@ public class AdminServiceApplyService {
 	@Transactional
 	public int createAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO, ProjectVO projectVO,
 			List<MultipartFile> images, int userId) {
+		createProject(projectVO);
+		adminServiceApplyVO.setProjectId(projectVO.getId());
 		int result = adminServiceApplyMapper.createAdminServiceApply(adminServiceApplyVO);
 		addApplyAsset(adminServiceApplyVO.getId(), images, userId);
 		createAdminMajorTypeServiceApplyMapping(adminServiceApplyVO);
-		createProject(projectVO);
 		logger.info("result of createAdminServiceApply method: " + result);
 		return result;
 	}

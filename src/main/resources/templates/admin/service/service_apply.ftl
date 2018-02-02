@@ -21,23 +21,18 @@
   			<div class="panel-heading">服务申请</div>
   			<div class="panel-body">
     			<div id="request-header" class="row" style='margin-left:-14px;'>
-					<div class="col-sm-3">
-  						<select id="applyStatus" style="height: 34px;width:100%;">
-  							<option value="">请选择项目编码</option>
-  							<option value="1" >1</option>
-  							<option value="2">2</option>
-  							<option value="3">3</option>
-  						</select> 
+					<div class="col-sm-2">
+  						<input id="projectId" <#if projectId??> value="${projectId}"</#if> type="text" class="form-control" placeholder="请输入项目编码">
 					</div>
 					<div class="col-sm-2">
-  						<input id="appBusinessName" <#if appBusinessName??> value="${appBusinessName}"</#if> type="text" class="form-control" placeholder="请输入应用商名称">
+  						<input id="projectName" <#if projectName??> value="${projectName}"</#if> type="text" class="form-control" placeholder="请输入项目名称">
 					</div>
 					<div class="col-sm-3">
-  						<select  style="height: 34px;width:100%">
+  						<select id="projectTypeSearch"  style="height: 34px;width:100%">
   							<option value="">请选择项目类型</option>
-  							<option value="1" >免费测试</option>
-  							<option value="2">付费测试</option>
-  							<option value="3">正式合同</option>
+					      	<option value='free' <#if projectType?? && projectType=='free'>selected</#if>>免费测试</option>
+					      	<option value='paid' <#if projectType?? && projectType=='paid'>selected</#if>>付费测试</option>
+					      	<option value='official' <#if projectType?? && projectType=='official'>selected</#if>>正式合同</option>
   						</select> 
 					</div>
 					<div class="col-sm-2">
@@ -60,19 +55,24 @@
   			    	<table class="table table-bordered">
 					    <tbody class="">
 					    	<tr class='thCenter' style="background-color:#ddd;">
-					    		<th style="width:15%">应用商</th>
+					    	    <th style="width:15%">项目编码</th>
+					    		<th style="width:10%">项目名称</th>
 					    		<th style="width:15%">申请服务</th>
-					    		<th style="width:8%">调用总次数</th>
+					    		<th style="width:6%">调用总次数</th>
+					    		<th style="width:6%">任务数</th>
+					    		<th style="width:8%">完成率</th>
 					    		<th style="width:12%">合同图片</th>
 					    		<th style="width:10%">创建人</th>
 					    		<th style="width:10%">状态</th>
-					    		<th style="width:10%">创建时间</th>
+					    		<th style="width:15%">创建时间</th>
+					    		<th style="width:15%">统计时间节点</th>
 					    		<th style="width:15%">操作</th>
 					    	</tr>
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
 				         		<#list adminServiceApplys as adminServiceApply>
 					    		<tr class='tdCenter'>
-					    		<td>${adminServiceApply.statusStr}</td>
+					    		<td>${adminServiceApply.projectId}</td>
+					    		<td>${adminServiceApply.project.name}</td>
 					    		<td>
 					    		   <#if adminServiceApply.majorTypes?? && (adminServiceApply.majorTypes?size>0)>
 	   								   <#list adminServiceApply.majorTypes as majorType>
@@ -80,11 +80,14 @@
 	   		                           </#list>
    								    </#if>
 									</td>
-					    		<td>${adminServiceApply.statusStr}</td>
+					    		<td>${adminServiceApply.callCount}</td>
+					    		<td>${adminServiceApply.taskCount}</td>
+					    		<td>${adminServiceApply.callCount/adminServiceApply.project.callNumber}%</td>
 					    		<td><a href="javascript:void(0)"  applyid="${adminServiceApply.id}" class="showAgreementModel">图片管理</a></td>
 					    		<td>${adminServiceApply.creator.name}</td>
 					    		<td>${adminServiceApply.statusStr}</td>
 					    		<td>${adminServiceApply.createTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
+					    		<td>${.now?string('yyyy-MM-dd HH:mm:ss')!""}</td>
 					    		<td>
 					    			<button class="info btn btn-success" applyid="${adminServiceApply.id}">详情</button>
 					    			<#if adminServiceApply.applyStatus == 'created' || adminServiceApply.applyStatus == 'rejected'>
@@ -121,7 +124,7 @@
 			                			<td class="wid">名称：</td>
 			                			<td><input  class="application-name total newline" type="text" id="ser-name" placeholder="输入名称"/></td>
 			                		</tr>
-			                		<tr>
+			                		<tr id="project-id-tr">
 			                			<td class="wid">项目编码：</td>
 			                			<td><input  class="application-name total newline" type="text" id="project-id" placeholder="输入项目编码"/></td>
 			                		</tr>
@@ -151,13 +154,13 @@
 			                			<td class="wid">合同金额：</td>
 			                			<td>
 				                			¥
-				                			<input type="text" placeholder="请输入金额" class="money-style" >
+				                			<input type="text" placeholder="请输入金额" class="money-style" id="contracted-value">
 				                			元人民币
 				                		</td>
 			                		</tr>
 			                		<tr id="contracted-no-tr">
 			                			<td class="wid">合同编号：</td>
-			                			<td><input  class="application-name total" type="text" id="contracted-no"  placeholder="输入合同编号"/></td>
+			                			<td><input class="application-name total" type="text" id="contracted-no"  placeholder="输入合同编号"/></td>
 			                		</tr>
 			                	</tbody>
 			                </table>
@@ -213,7 +216,7 @@
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">门店数：</td>
-			                			<td><input  class="application-name total" type="text" id="store-no"  placeholder="输入门店数"/></td>
+			                			<td><input class="application-name total" type="text" id="store-no"  placeholder="输入门店数"/></td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">图片数：</td>
@@ -226,8 +229,8 @@
 			                		<tr>
 			                			<td class="wid">调用率提醒：</td>
 			                			<td>
-			                				<input type="number" style="width:50px;">%
-			                				<input type="checkbox" style="margin-left:20px;">邮件提醒
+			                				<input id="threshhold" type="number" min="1" max="100" style="width:50px;">%
+			                				<#-- <input type="checkbox" style="margin-left:20px;">邮件提醒 -->
 			                			</td>
 			                		</tr>
 			                	</tbody>

@@ -1,5 +1,6 @@
 package com.tunicorn.marketing.controller;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,13 +69,21 @@ public class AdminServiceController extends BaseController {
 		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
 			adminServiceApplyBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
 		}
-		if (StringUtils.isNotBlank(request.getParameter("appBusinessName"))) {
-			adminServiceApplyBO.setAppBusinessName(request.getParameter("appBusinessName"));
-			model.addAttribute("appBusinessName", request.getParameter("appBusinessName"));
+		if (StringUtils.isNotBlank(request.getParameter("projectName"))) {
+			adminServiceApplyBO.setName(request.getParameter("projectName"));
+			model.addAttribute("projectName", request.getParameter("projectName"));
 		}
 		if (StringUtils.isNotBlank(request.getParameter("applyStatus"))) {
 			adminServiceApplyBO.setApplyStatus(request.getParameter("applyStatus"));
 			model.addAttribute("applyStatus", request.getParameter("applyStatus"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("projectId"))) {
+			adminServiceApplyBO.setProjectId(request.getParameter("projectId"));
+			model.addAttribute("projectId", request.getParameter("projectId"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("projectType"))) {
+			adminServiceApplyBO.setProjectType(request.getParameter("projectType"));
+			model.addAttribute("projectType", request.getParameter("projectType"));
 		}
 		List<AdminServiceApplyVO> adminServiceApplyVOs = adminServiceApplyService
 				.getAdminServiceApplyList(adminServiceApplyBO);
@@ -102,49 +111,7 @@ public class AdminServiceController extends BaseController {
 
 		AdminServiceApplyVO adminServiceApplyVO = new AdminServiceApplyVO();
 		ProjectVO projectVO = new ProjectVO();
-		if (StringUtils.isNotBlank(request.getParameter("name"))) {
-			projectVO.setName(request.getParameter("name"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("address"))) {
-			projectVO.setAddress(request.getParameter("address"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("contacts"))) {
-			projectVO.setContacts(request.getParameter("contacts"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("mobile"))) {
-			projectVO.setMobile(request.getParameter("mobile"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
-			projectVO.setCallNumber(Integer.valueOf(request.getParameter("maxCallNumber")));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("storeNumber"))) {
-			projectVO.setStoreNumber(Integer.valueOf(request.getParameter("storeNumber")));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("imageNumber"))) {
-			projectVO.setImageNumber(Integer.valueOf(request.getParameter("imageNumber")));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("projectType"))) {
-			projectVO.setType(request.getParameter("projectType"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("threshhold"))) {
-			projectVO.setThreshhold(Float.valueOf(request.getParameter("threshhold")));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("majorTypes"))) {
-			List<MajorTypeVO> majorTypes = new ArrayList<MajorTypeVO>();
-			String[] majortypeArray = request.getParameter("majorTypes").split(",");
-			for (String majorTypeId : majortypeArray) {
-				MajorTypeVO majorTypeVO = new MajorTypeVO();
-				majorTypeVO.setId(Long.valueOf(majorTypeId));
-				majorTypes.add(majorTypeVO);
-			}
-			adminServiceApplyVO.setMajorTypes(majorTypes);
-		}
-		if (StringUtils.isNotBlank(request.getParameter("username"))) {
-			adminServiceApplyVO.setUsername(request.getParameter("username"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("email"))) {
-			adminServiceApplyVO.setEmail(request.getParameter("email"));
-		}
+		setServiceApplyAndProjectVO(request, adminServiceApplyVO, projectVO);
 		adminServiceApplyVO.setCreatorId(user.getId());
 		int result = adminServiceApplyService.createAdminServiceApply(adminServiceApplyVO, projectVO, images,
 				user.getId());
@@ -160,49 +127,7 @@ public class AdminServiceController extends BaseController {
 	public AjaxResponse updateService(HttpServletRequest request, @PathVariable("applyId") long applyId) {
 		AdminServiceApplyVO adminServiceApplyVO = new AdminServiceApplyVO();
 		ProjectVO projectVO = new ProjectVO();
-		if (StringUtils.isNotBlank(request.getParameter("name"))) {
-			projectVO.setName(request.getParameter("name"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("address"))) {
-			projectVO.setAddress(request.getParameter("address"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("contacts"))) {
-			projectVO.setContacts(request.getParameter("contacts"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("mobile"))) {
-			projectVO.setMobile(request.getParameter("mobile"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
-			projectVO.setCallNumber(Integer.valueOf(request.getParameter("maxCallNumber")));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("storeNumber"))) {
-			projectVO.setStoreNumber(Integer.valueOf(request.getParameter("storeNumber")));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("imageNumber"))) {
-			projectVO.setImageNumber(Integer.valueOf(request.getParameter("imageNumber")));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("projectType"))) {
-			projectVO.setType(request.getParameter("projectType"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("threshhold"))) {
-			projectVO.setThreshhold(Float.valueOf(request.getParameter("threshhold")));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("majorTypes"))) {
-			List<MajorTypeVO> majorTypes = new ArrayList<MajorTypeVO>();
-			String[] majortypeArray = request.getParameter("majorTypes").split(",");
-			for (String majorTypeId : majortypeArray) {
-				MajorTypeVO majorTypeVO = new MajorTypeVO();
-				majorTypeVO.setId(Long.valueOf(majorTypeId));
-				majorTypes.add(majorTypeVO);
-			}
-			adminServiceApplyVO.setMajorTypes(majorTypes);
-		}
-		if (StringUtils.isNotBlank(request.getParameter("username"))) {
-			adminServiceApplyVO.setUsername(request.getParameter("username"));
-		}
-		if (StringUtils.isNotBlank(request.getParameter("email"))) {
-			adminServiceApplyVO.setEmail(request.getParameter("email"));
-		}
+		setServiceApplyAndProjectVO(request, adminServiceApplyVO, projectVO);
 		adminServiceApplyVO.setId(applyId);
 		AdminServiceApplyVO applyVO = adminServiceApplyService.getAdminServiceApplyById(applyId);
 		if (applyVO == null) {
@@ -270,13 +195,21 @@ public class AdminServiceController extends BaseController {
 		if (StringUtils.isNotBlank(request.getParameter("pageNum"))) {
 			adminServiceApplyBO.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
 		}
-		if (StringUtils.isNotBlank(request.getParameter("appBusinessName"))) {
-			adminServiceApplyBO.setAppBusinessName(request.getParameter("appBusinessName"));
-			model.addAttribute("appBusinessName", request.getParameter("appBusinessName"));
+		if (StringUtils.isNotBlank(request.getParameter("projectName"))) {
+			adminServiceApplyBO.setName(request.getParameter("projectName"));
+			model.addAttribute("projectName", request.getParameter("projectName"));
 		}
 		if (StringUtils.isNotBlank(request.getParameter("applyStatus"))) {
 			adminServiceApplyBO.setApplyStatus(request.getParameter("applyStatus"));
 			model.addAttribute("applyStatus", request.getParameter("applyStatus"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("projectId"))) {
+			adminServiceApplyBO.setProjectId(request.getParameter("projectId"));
+			model.addAttribute("projectId", request.getParameter("projectId"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("projectType"))) {
+			adminServiceApplyBO.setProjectType(request.getParameter("projectType"));
+			model.addAttribute("projectType", request.getParameter("projectType"));
 		}
 		List<AdminServiceApplyVO> adminServiceApplyVOs = adminServiceApplyService
 				.getAdminServiceApplyList(adminServiceApplyBO);
@@ -388,5 +321,67 @@ public class AdminServiceController extends BaseController {
 			approveEmailVO.setUserEmail(request.getParameter("email"));
 		}
 		adminServiceApplyService.sendApproveEmail(approveEmailVO);
+	}
+
+	private void setServiceApplyAndProjectVO(HttpServletRequest request, AdminServiceApplyVO adminServiceApplyVO,
+			ProjectVO projectVO) {
+		if (StringUtils.isNotBlank(request.getParameter("name"))) {
+			projectVO.setName(request.getParameter("name"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("address"))) {
+			projectVO.setAddress(request.getParameter("address"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("contacts"))) {
+			projectVO.setContacts(request.getParameter("contacts"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("mobile"))) {
+			projectVO.setMobile(request.getParameter("mobile"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("maxCallNumber"))) {
+			projectVO.setCallNumber(Integer.valueOf(request.getParameter("maxCallNumber")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("storeNumber"))) {
+			projectVO.setStoreNumber(Integer.valueOf(request.getParameter("storeNumber")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("imageNumber"))) {
+			projectVO.setImageNumber(Integer.valueOf(request.getParameter("imageNumber")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("projectType"))) {
+			projectVO.setType(request.getParameter("projectType"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("threshhold"))) {
+			projectVO.setThreshhold(Float.valueOf(request.getParameter("threshhold")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("majorTypes"))) {
+			List<MajorTypeVO> majorTypes = new ArrayList<MajorTypeVO>();
+			String[] majortypeArray = request.getParameter("majorTypes").split(",");
+			for (String majorTypeId : majortypeArray) {
+				MajorTypeVO majorTypeVO = new MajorTypeVO();
+				majorTypeVO.setId(Long.valueOf(majorTypeId));
+				majorTypes.add(majorTypeVO);
+			}
+			adminServiceApplyVO.setMajorTypes(majorTypes);
+		}
+		if (StringUtils.isNotBlank(request.getParameter("startTime"))) {
+			adminServiceApplyVO.setStartTime(Timestamp.valueOf(request.getParameter("startTime")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("endTime"))) {
+			adminServiceApplyVO.setEndTime(Timestamp.valueOf(request.getParameter("endTime")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("contractedValue"))) {
+			adminServiceApplyVO.setContractedValue(Float.valueOf(request.getParameter("contractedValue")));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("contractedNo"))) {
+			adminServiceApplyVO.setContractedNo(request.getParameter("contractedNo"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("username"))) {
+			adminServiceApplyVO.setUsername(request.getParameter("username"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("username"))) {
+			adminServiceApplyVO.setUsername(request.getParameter("username"));
+		}
+		if (StringUtils.isNotBlank(request.getParameter("email"))) {
+			adminServiceApplyVO.setEmail(request.getParameter("email"));
+		}
 	}
 }

@@ -14,6 +14,9 @@ public class AdminServiceApplyBO extends PaginationBO {
 	private Date lastUpdate;
 	private int majorTypeId;
 	private String majorTypeName;
+	private String projectId;
+	private String name;
+	private String projectType;
 
 	public String getMajorTypeName() {
 		return majorTypeName;
@@ -102,4 +105,29 @@ public class AdminServiceApplyBO extends PaginationBO {
 	public void setLastUpdate(Date lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getProjectType() {
+		return projectType;
+	}
+
+	public void setProjectType(String projectType) {
+		this.projectType = projectType;
+	}
+
 }

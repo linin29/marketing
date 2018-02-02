@@ -14,7 +14,7 @@ adminService = (function(){
 			$("#sure").hide();
 			$("#saveService").show();
 			$("#upload-book-tr").show();
-			$("#upload-book-div").show();
+			//$("#upload-book-div").show();
 			$("#applyId").val("");
 			$("#rejectReasonDiv").hide();
 			$("#new-server-model").modal("show");
@@ -22,6 +22,7 @@ adminService = (function(){
 			$("#server-type").removeAttr("disabled");
 			$('#server-type').selectpicker('refresh');
 			$('#server-type').selectpicker('val', "");
+			$("#project-id-tr").hide();
 			$("#errorMsg").html("");
 		}); 
 		$("#saveService").click(function(){
@@ -31,7 +32,7 @@ adminService = (function(){
 			$("#sure").hide();
 			$("#saveService").show();
 			$("#upload-book-tr").hide();
-			$("#upload-book-div").hide();
+			//$("#upload-book-div").hide();
 			$("#rejectReasonDiv").hide();
 			$("#applyId").val($(this).attr("applyid"));
 			detail($(this).attr("applyid"));
@@ -40,11 +41,12 @@ adminService = (function(){
 			$("#new-server-model").find("input").removeAttr("disabled");
 			$("#rejectReason").attr("disabled", "disabled");
 			$("#errorMsg").html("");
-			$("#server-type").removeAttr("disabled"); 
+			$("#server-type").removeAttr("disabled");
+			$("#project-id-tr").hide();
 		});
 		$(".info").click(function(){
 			$("#upload-book-tr").hide();
-			$("#upload-book-div").hide();
+			//$("#upload-book-div").hide();
 			$("#myModalLabel").text("服务申请详情");	
 			$("#sure").show();
 			$("#saveService").hide();
@@ -54,6 +56,7 @@ adminService = (function(){
 			$("#new-server-model").find("input").attr("disabled","disabled"); 
 			$("#errorMsg").html("");
 			$("#server-type").attr("disabled", "disabled"); 
+			$("#project-id-tr").show();
 		});
 		$(".showAgreementModel").click(function(){
 			$("#showagreementModel").modal("show");
@@ -169,12 +172,21 @@ adminService = (function(){
 		var username = $("#ser-user-name").val();
 		var email = $("#ser-email").val();
 		var applyId = $("#applyId").val();
+		var startTime = $("#fromDate").val();
+		var endTime = $("#toDate").val();
+		var contractedValue = $("#contracted-value").val();
+		var contractedNo = $("#contracted-no").val();
+		var storeNumber = $("#store-no").val();
+		var imageNumber =$("#pic-number").val();
+		var threshhold = $("#threshhold").val();
+		var projectType = $("#project-type").val();
+		debugger;
 		if(appBusinessName == "") {
-			$('#errorMsg').text("请输入应用商名称");
+			$('#errorMsg').text("请输入项目名称");
 			return;
 		};
 		if(appBusinessAddress == "") {
-			$('#errorMsg').text("请输入应用商地址");
+			$('#errorMsg').text("请输入项目地址");
 			return;
 		}
 		if(appBusinessContacts == "") {
@@ -188,16 +200,50 @@ adminService = (function(){
 		}
 		var formData = new FormData();
 		var files =  document.getElementById("upload-book").files;
-		if (files.length == 0 && !applyId) {
-			$('#errorMsg').text("请选择合同图片");
-			return;
-		}
 		if(!majorTypes) {
 			$('#errorMsg').text("请选择服务");
 			return;
 		}
+		if(!projectType) {
+			$('#errorMsg').text("请选择项目类型");
+			return;
+		}
+		if(projectType && projectType != 'free'){
+			if (files.length == 0 && !applyId) {
+				$('#errorMsg').text("请选择合同图片");
+				return;
+			}
+			if(!contractedValue) {
+				$('#errorMsg').text("请输入项目金额");
+				return;
+			}
+			if(!contractedNo) {
+				$('#errorMsg').text("请输入项目编号");
+				return;
+			}
+		}
+		if(startTime == "") {
+			$('#errorMsg').text("请输入开始时间");
+			return;
+		}
+		if(endTime == "") {
+			$('#errorMsg').text("请输入结束时间");
+			return;
+		}
+		if(storeNumber == "") {
+			$('#errorMsg').text("请输入门店数");
+			return;
+		}
+		if(imageNumber == "") {
+			$('#errorMsg').text("请输入图片数");
+			return;
+		}
 		if(maxCallNumber == "") {
 			$('#errorMsg').text("请输入申请次数");
+			return;
+		}
+		if(threshhold == "") {
+			$('#errorMsg').text("请输入调用率提醒");
 			return;
 		}
 		if(username == "") {
@@ -230,6 +276,14 @@ adminService = (function(){
 		formData.append('majorTypes', majorTypes);
 		formData.append('username', username);
 		formData.append('email', email);
+		formData.append('startTime', startTime);
+		formData.append('endTime', endTime);
+		formData.append('contractedValue', contractedValue);
+		formData.append('contractedNo', contractedNo);
+		formData.append('storeNumber', storeNumber);
+		formData.append('imageNumber', imageNumber);
+		formData.append('threshhold', parseFloat(threshhold)/100);
+		formData.append('projectType', projectType);
 		tunicorn.utils.postFormData(url, formData, function(err, result){
 			if(err){
 				noty({text: "服务器异常", layout: "topCenter", type: "error", timeout: 2000});
@@ -276,16 +330,25 @@ adminService = (function(){
 			 				majorTypeArray[i] = majorTypes[i].id;
 			 			}
 			 		}
-			 		$("#ser-name").val(data.data.appBusinessName).attr('title',data.data.appBusinessName);
-			 		$("#ser-address").val(data.data.appBusinessAddress).attr('title',data.data.appBusinessAddress);
-			 		$("#ser-phone-person").val(data.data.appBusinessContacts).attr('title',data.data.appBusinessContacts);
-			 		$("#ser-phone").val(data.data.appBusinessMobile).attr('title',data.data.appBusinessMobile);
-			 		$("#application-number").val(data.data.maxCallNumber).attr('title',data.data.maxCallNumber);
+			 		$("#ser-name").val(data.data.project.name).attr('title',data.data.project.name);
+			 		$("#ser-address").val(data.data.project.address).attr('title', data.data.project.address);
+			 		$("#ser-phone-person").val(data.data.project.contacts).attr('title',data.data.project.contacts);
+			 		$("#ser-phone").val(data.data.project.mobile).attr('title',data.data.project.mobile);
+			 		$("#application-number").val(data.data.project.callNumber).attr('title',data.data.project.callNumber);
 			 		$("#ser-user-name").val(data.data.username).attr('title',data.data.username);
 			 		$("#ser-email").val(data.data.email).attr('title',data.data.email);
 			 		$("#server-type").val(majorTypeArray);
 			 		$('#server-type').selectpicker('val', majorTypeArray);
 			 	    $('#server-type').selectpicker('refresh');
+			 	    $("#project-id").val(data.data.project.id);
+			 	    $("#project-type").val(data.data.project.type);
+			 	    $("#fromDate").val(data.data.startTimeStr);
+			 	    $("#toDate").val(data.data.endTimeStr);
+			 	    $("#store-no").val(data.data.project.storeNumber);
+			 	    $("#pic-number").val(data.data.project.imageNumber);
+			 	    $("#contracted-value").val(data.data.contractedValue);
+			 	    $("#contracted-no").val(data.data.contractedNo);
+			 	    $("#threshhold").val(parseFloat(data.data.project.threshhold)*100);
 			 	    if(data.data.rejectReason || isRejectReasonShow || data.data.applyStatus == 'rejected'){
 			 	    	$("#rejectReasonDiv").show();
 			 	    	$("#rejectReason").val(data.data.rejectReason);
@@ -377,8 +440,10 @@ adminService = (function(){
     };
 	function queryService(url, pageNum){
 		var majorType = $("#majorType").val();
-		var appBusinessName = $("#appBusinessName").val();
+		var projectName = $("#projectName").val();
 		var applyStatus = $("#applyStatus").val();
+		var projectType = $("#projectTypeSearch").val();
+		var projectId = $("#projectId").val();
 		var page = 0;
 		if (pageNum) {
 			page = pageNum -1;
@@ -388,8 +453,10 @@ adminService = (function(){
 			 url: marketing_url + url,
 			 data:{
 				 pageNum:page,
-				 appBusinessName:appBusinessName,
-				 applyStatus:applyStatus
+				 projectName:projectName,
+				 applyStatus:applyStatus,
+				 projectType:projectType,
+				 projectId:projectId
 			 },
 			 success: function(data) {
 			 	$("#content").html(data);

@@ -91,7 +91,7 @@ public class AdminServiceApplyService {
 		}
 		text.append("</p>").append("<p>调用次数：").append(projectVO.getCallNumber()).append("</p>");
 		AdminUserVO adminUserVO = adminUserMapper.getUserByUserName(MarketingConstants.ADMIN_USER_NAME);
-		EmailUtils.sendHtmlMail(new String[] { adminUserVO.getEmail(), adminServiceApplyVO.getEmail() }, "服务申请",
+		EmailUtils.sendHtmlMail(new String[] { /*adminUserVO.getEmail(),*/ adminServiceApplyVO.getEmail() }, "服务申请",
 				text.toString());
 	}
 
@@ -111,7 +111,7 @@ public class AdminServiceApplyService {
 			text.append("</p>").append("<p>驳回原因：").append(approveEmailVO.getRejectReason()).append("</p>");
 		}
 		AdminUserVO adminUserVO = adminUserMapper.getUserByUserName(MarketingConstants.ADMIN_USER_NAME);
-		EmailUtils.sendHtmlMail(new String[] { adminUserVO.getEmail(), approveEmailVO.getUserEmail() }, subject,
+		EmailUtils.sendHtmlMail(new String[] { /*adminUserVO.getEmail(),*/ approveEmailVO.getUserEmail() }, subject,
 				text.toString());
 	}
 

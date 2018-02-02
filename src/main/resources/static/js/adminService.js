@@ -7,7 +7,7 @@ adminService = (function(){
 			initPagination(currentPage, totalCount, serviceApplyUrl);
 		}
 		initDate();
-		serviceDataValidator();
+		//serviceDataValidator();
 		$("#query").click(function(){
 			queryService(serviceApplyUrl);
 		});
@@ -308,7 +308,7 @@ adminService = (function(){
 		 		$('#new-server-model').modal('hide');
 		 		if(!applyId){
 		 			formData.append('applyStatus', 'created');
-		 			var data ={'applyStatus':'created', 'appBusinessName':appBusinessName,
+		 			var data ={'applyStatus':'created', 'name':appBusinessName,
 		 					   'username':username,'majorTypes':majorTypes,'maxCallNumber':maxCallNumber, 'email':email};
 		 			sendEmail(data);
 		 		}
@@ -602,7 +602,7 @@ adminService = (function(){
 	function sendEmail(data){
 		var formData = new FormData();
 		formData.append('applyStatus', data.applyStatus);
-		formData.append('appBusinessName', data.appBusinessName);
+		formData.append('name', data.name);
 		formData.append('majorTypes', data.majorTypes);
 		formData.append('maxCallNumber', data.maxCallNumber);
 		formData.append('username', data.username);

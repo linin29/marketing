@@ -133,7 +133,7 @@
 		 (select count(*) from task where project_id = a.project_id) as taskCount,
 		 (select sum(calling_times) from api_calling_count where project_id=a.project_id) as callCount
         	from admin_service_apply a, project b 
-        	where a.`status` = 'active' and b.`status` = 'active'
+        	where a.`status` = 'active'
         	and a.project_id = b.id
         	<if test="applyStatus != null and applyStatus != ''">
 				and a.apply_status = #{applyStatus}
@@ -151,14 +151,14 @@
 			limit #{startNum}, #{perPage}
         )asa,admin_major_type_service_apply_mapping am,major_type mt,admin_user au
 		where asa.`status` = 'active'
-		and asa.id=am.service_apply_id and am.`status`='active'
+		and asa.id=am.service_apply_id
         and mt.id=am.major_type_id and mt.`status`='active'
         and au.id=asa.creator_id and au.`status`='active'
 	</select>
 	<select id="getAdminServiceApplyCount" resultType="int" parameterType="com.tunicorn.marketing.bo.AdminServiceApplyBO">
 		select count(*)
 		from admin_service_apply a, project b 
-        	where a.`status` = 'active' and b.`status` = 'active'
+        	where a.`status` = 'active'
         	and a.project_id = b.id
         	<if test="applyStatus != null and applyStatus != ''">
 				and a.apply_status = #{applyStatus}
@@ -168,7 +168,7 @@
 			</if>
 			<if test="name != null and name != ''">
 				and b.name like concat(concat('%',#{name}),'%')
-			</if>
+			</if>	
 			<if test="projectType != null and projectType != ''">
 				and b.`type` =  #{projectType}
 			</if>
@@ -224,8 +224,8 @@
 		p.type as project_type, p.store_number as project_store_number, p.call_number as project_call_number, p.image_number as project_image_number, 
 		p.threshhold as project_threshhold
 		from admin_service_apply asa
-		left join project p on p.id=asa.project_id and p.status = 'active' 
-		left join admin_major_type_service_apply_mapping amt on asa.id = amt.service_apply_id and amt.status='active'
+		left join project p on p.id=asa.project_id  
+		left join admin_major_type_service_apply_mapping amt on asa.id = amt.service_apply_id
 		left join major_type mt  on mt.id = amt.major_type_id and mt.status = 'active'
 		where asa.`status` = 'active'
 	    <if test="id != null and id != ''">

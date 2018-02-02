@@ -42,6 +42,7 @@ public class MarketingConstants {
 
 	public static final String STATUS_ACTIVE = "active";
 	public static final String STATUS_DELETED = "deleted";
+	public static final String STATUS_INACTIVE = "inactive";
 
 	public static final char COMMA = ',';
 	public static final String POINT = ".";
@@ -73,6 +74,7 @@ public class MarketingConstants {
 		SERVICE_STATUS_NAME_MAPPING.put("created", "已创建");
 		SERVICE_STATUS_NAME_MAPPING.put("opened", "已开通");
 		SERVICE_STATUS_NAME_MAPPING.put("rejected", "已驳回");
+		SERVICE_STATUS_NAME_MAPPING.put("closed", "已关闭");
 	}
 
 	public static final String MARKETING_IMAGE_BASE_PATH = com.tunicorn.util.ConfigUtils.getInstance().getConfigValue(
@@ -86,6 +88,7 @@ public class MarketingConstants {
 	public static final String APPLY_CREATED_STATUS = "created";
 	public static final String APPLY_OPENED_STATUS = "opened";
 	public static final String APPLY_REJECTED_STATUS = "rejected";
+	public static final String APPLY_CLOSED_STATUS = "closed";
 
 	public static final String SESSION_ADMIN_USER = "admin_user";
 

@@ -18,4 +18,7 @@ public interface AdminServiceApplyAssetMapper {
 			AdminServiceApplyAssetVO adminServiceApplyAssetVO);
 	
 	public void deleteAdminServiceApplyAssetByApplyId(@Param("applyId") long applyId);
+	
+	@Update("Update admin_service_apply_asset set status='inactive' where service_apply_id=#{applyId}")
+	public void inactiveAdminServiceApplyAssetByApplyId(@Param("applyId") long applyId);
 }

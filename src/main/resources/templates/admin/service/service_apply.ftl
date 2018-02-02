@@ -42,6 +42,7 @@
   							<option value="created" <#if applyStatus?? && applyStatus=='created'>selected</#if>>已创建</option>
   							<option value="opened" <#if applyStatus?? && applyStatus=='opened'>selected</#if>>已开通</option>
   							<option value="rejected" <#if applyStatus?? && applyStatus=='rejected'>selected</#if>>已驳回</option>
+  							<option value="closed" <#if applyStatus?? && applyStatus=='closed'>selected</#if>>已关闭</option>
   						</select> 
 					</div>
 					<div class="pull-right col-sm-4" style="padding-right: 0px;">
@@ -266,7 +267,7 @@
 			           	</div>
 			      	</div>
 			      	<div class="modal-footer">
-			        	<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+			        	<button id="cancel" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 			        	<button id="saveService" type="button" class="btn btn-success">保存</button>
 			        	<button id="sure" type="button" style="display:none;" class="btn btn-success"  data-dismiss="modal">确定</button>
 			      	</div>

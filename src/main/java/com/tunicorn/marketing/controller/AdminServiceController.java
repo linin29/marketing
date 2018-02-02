@@ -162,7 +162,7 @@ public class AdminServiceController extends BaseController {
 
 	@RequestMapping(value = "/{applyId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public AjaxResponse deleteService(HttpServletRequest request, @PathVariable("applyId") long applyId) {
+	public AjaxResponse closeService(HttpServletRequest request, @PathVariable("applyId") long applyId) {
 		AdminServiceApplyVO adminServiceApplyVO = new AdminServiceApplyVO();
 		adminServiceApplyVO.setId(applyId);
 		AdminServiceApplyVO applyVO = adminServiceApplyService.getAdminServiceApplyById(applyId);
@@ -171,7 +171,7 @@ public class AdminServiceController extends BaseController {
 			return AjaxResponse.toFailure(message.getCode(), message.getMessage());
 		}
 		adminServiceApplyVO.setProjectId(applyVO.getProjectId());
-		adminServiceApplyService.deleteAdminServiceApply(adminServiceApplyVO);
+		adminServiceApplyService.closeAdminServiceApply(adminServiceApplyVO);
 		return AjaxResponse.toSuccess(null);
 	}
 

@@ -185,15 +185,15 @@ public class AdminServiceApplyService {
 	}
 
 	@Transactional
-	public int deleteAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO) {
-		adminServiceApplyVO.setStatus(MarketingConstants.STATUS_DELETED);
+	public int closeAdminServiceApply(AdminServiceApplyVO adminServiceApplyVO) {
+		adminServiceApplyVO.setApplyStatus(MarketingConstants.APPLY_CLOSED_STATUS);
 		int result = adminServiceApplyMapper.updateAdminServiceApply(adminServiceApplyVO);
-		adminMajorTypeServiceApplyMappingMapper.deleteMajorTypeApplicationMappingByApplyId(adminServiceApplyVO.getId());
-		adminServiceApplyAssetMapper.deleteAdminServiceApplyAssetByApplyId(adminServiceApplyVO.getId());
+		adminMajorTypeServiceApplyMappingMapper.inactiveMajorTypeApplicationMappingByApplyId(adminServiceApplyVO.getId());
+		adminServiceApplyAssetMapper.inactiveAdminServiceApplyAssetByApplyId(adminServiceApplyVO.getId());
 
 		ProjectVO projectVO = new ProjectVO();
 		projectVO.setId(adminServiceApplyVO.getProjectId());
-		projectVO.setStatus(MarketingConstants.STATUS_DELETED);
+		projectVO.setStatus(MarketingConstants.STATUS_INACTIVE);
 		projectMapper.updateProject(projectVO);
 
 		logger.info("serviceApplyId:" + adminServiceApplyVO.getId() + ", result of deleteAdminServiceApply: " + result);

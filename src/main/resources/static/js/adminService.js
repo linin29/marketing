@@ -13,6 +13,7 @@ adminService = (function(){
 		$("#new-server").click(function(){
 			$("#sure").hide();
 			$("#saveService").show();
+			$("#cancel").show();
 			$("#upload-book-tr").show();
 			//$("#upload-book-div").show();
 			$("#applyId").val("");
@@ -23,6 +24,7 @@ adminService = (function(){
 			$('#server-type').selectpicker('refresh');
 			$('#server-type').selectpicker('val', "");
 			$("#project-id-tr").hide();
+			$("#project-type").removeAttr("disabled");
 			$("#errorMsg").html("");
 		}); 
 		$("#saveService").click(function(){
@@ -31,6 +33,7 @@ adminService = (function(){
 		$(".modify").click(function(){
 			$("#sure").hide();
 			$("#saveService").show();
+			$("#cancel").show();
 			$("#upload-book-tr").hide();
 			//$("#upload-book-div").hide();
 			$("#rejectReasonDiv").hide();
@@ -42,20 +45,23 @@ adminService = (function(){
 			$("#rejectReason").attr("disabled", "disabled");
 			$("#errorMsg").html("");
 			$("#server-type").removeAttr("disabled");
+			$("#project-type").removeAttr("disabled");
 			$("#project-id-tr").hide();
 		});
 		$(".info").click(function(){
 			$("#upload-book-tr").hide();
 			//$("#upload-book-div").hide();
 			$("#myModalLabel").text("服务申请详情");	
-			$("#sure").show();
+			$("#sure").hide();
 			$("#saveService").hide();
+			$("#cancel").hide();
 			$("#rejectReasonDiv").hide();
 			$("#new-server-model").modal("show");
 			detail($(this).attr("applyid"));
 			$("#new-server-model").find("input").attr("disabled","disabled"); 
 			$("#errorMsg").html("");
 			$("#server-type").attr("disabled", "disabled"); 
+			$("#project-type").attr("disabled", "disabled");
 			$("#project-id-tr").show();
 		});
 		$(".showAgreementModel").click(function(){
@@ -96,6 +102,7 @@ adminService = (function(){
 			$("#server-management-model").modal("show");
 			$("#server-management-model").find("input").attr("disabled","disabled"); 
 			$("#server-type").attr("disabled","disabled");
+			$("#project-type").attr("disabled","disabled");
 			$("#rejectReason").removeAttr("disabled"); 
 			$("#rejectReason").val("");
 			$("#errorMsg").html("");
@@ -116,11 +123,13 @@ adminService = (function(){
 			$("#myModalLabel").text("服务申请详情");	
 			$("#sure").show();
 			$("#openService").hide();
+			$("#sure").hide();
 			$("#rejectService").hide();
 			$("#server-management-model").modal("show");
 			detail($(this).attr("applyid"));
 			$("#server-management-model").find("input").attr("disabled","disabled"); 
 			$("#server-type").attr("disabled","disabled");
+			$("#project-type").attr("disabled","disabled");
 			$("#rejectReason").attr("disabled","disabled");
 			$("#errorMsg").html("");
 		});
@@ -151,9 +160,11 @@ adminService = (function(){
 							noty({text: data.errorMessage, layout: 'topCenter', type: 'error', timeout: 2000});
 							return;
 						}else{
-							noty({text: "删除成功", layout: 'topCenter', type: 'success', timeout: 2000});
+							noty({text: "关闭成功", layout: 'topCenter', type: 'success', timeout: 2000});
 							$("#deleteServiceModal").modal('hide');
-							$('.tableTr[applyid=' + applyId + ']').remove();
+							$("#approve_" + applyId).hide();
+							$("#delete_" + applyId).hide();
+							//$('.tableTr[applyid=' + applyId + ']').remove();
 						} 
 		        	},
 		        	error: function(data) {

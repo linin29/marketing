@@ -27,7 +27,7 @@
 					<div class="col-sm-2">
   						<input id="projectName" <#if projectName??> value="${projectName}"</#if> type="text" class="form-control" placeholder="请输入项目名称">
 					</div>
-					<div class="col-sm-3">
+					<div class="col-sm-2">
   						<select id="projectTypeSearch"  style="height: 34px;width:100%">
   							<option value="">请选择项目类型</option>
 					      	<option value='free' <#if projectType?? && projectType=='free'>selected</#if>>免费测试</option>
@@ -44,29 +44,32 @@
   							<option value="rejected" <#if applyStatus?? && applyStatus=='rejected'>selected</#if>>已驳回</option>
   						</select> 
 					</div>
-					<div class="col-sm-1">
-  						<input id="query" type="button" class=" btn btn-success" value="搜索"  />
+					<div class="pull-right col-sm-4" style="padding-right: 0px;">
+						<div class="col-sm-6">
+  							<input id="query" type="button" class=" btn btn-success" value="搜索"  />
+						</div>
+						<div class="col-sm-6" >
+  							<input type="button" class=" btn btn-success new-server" id="new-server" value="新建申请" />
+						</div>
 					</div>
-					<div class="col-sm-1">
-  						<input type="button" class=" btn btn-success new-server" id="new-server" value="新建申请" />
-					</div>
+					
 				</div>
   			    <div id="request-content">
   			    	<table class="table table-bordered">
 					    <tbody class="">
 					    	<tr class='thCenter' style="background-color:#ddd;">
-					    	    <th style="width:15%">项目编码</th>
-					    		<th style="width:10%">项目名称</th>
-					    		<th style="width:15%">申请服务</th>
-					    		<th style="width:6%">调用总次数</th>
-					    		<th style="width:6%">任务数</th>
-					    		<th style="width:8%">完成率</th>
-					    		<th style="width:12%">合同图片</th>
-					    		<th style="width:10%">创建人</th>
-					    		<th style="width:10%">状态</th>
-					    		<th style="width:15%">创建时间</th>
-					    		<th style="width:15%">统计时间节点</th>
-					    		<th style="width:15%">操作</th>
+					    	    <th style="width:7%">项目编码</th>
+					    		<th style="width:6%">项目名称</th>
+					    		<th style="width:7%">申请服务</th>
+					    		<th style="width:10%">调用总次数</th>
+					    		<th style="width:7%">任务数</th>
+					    		<th style="width:6%">完成率</th>
+					    		<th style="width:8%">合同图片</th>
+					    		<th style="width:9%">创建人</th>
+					    		<th style="width:7%">状态</th>
+					    		<th style="width:9%">创建时间</th>
+					    		<th style="width:10%">统计时间节点</th>
+					    		<th style="width:14%">操作</th>
 					    	</tr>
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
 				         		<#list adminServiceApplys as adminServiceApply>

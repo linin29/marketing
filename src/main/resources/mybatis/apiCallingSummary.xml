@@ -29,9 +29,10 @@
     <select id="getApiCallingSummaryList" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
     	select a.id, a.api_method, a.api_name, a.calling_day, a.user_name, a.calling_times, a.create_time, a.last_update, a.status,
     	a.project_id, b.type as project_type, a.major_type, c.description as majorTypeDesc
-    	from api_calling_count a, project b, major_type c
-    	where a.`status` = 'active' and b.`status` = 'active'
-    	and a.project_id = b.id and c.name=a.major_type
+    	from api_calling_count a
+    	left join project b on a.project_id = b.id and b.`status` = 'active' 
+    	left join major_type c on c.name=a.major_type and c.`status` = 'active'
+    	where a.`status` = 'active'
     	<if test="apiMethod != null and apiMethod != ''">
     		and a.api_method = #{apiMethod}
     	</if>
@@ -58,9 +59,10 @@
     </select>
     <select id="getApiCallingSummaryListByVO" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.vo.ApiCallingSummaryVO">
     	select id, api_method, api_name, calling_day, user_name, calling_times, create_time, last_update, status
-    	from api_calling_count a, project b 
-    	where a.`status` = 'active' and b.`status` = 'active'
-    	and a.project_id = b.id 
+    	from api_calling_count a
+    	left join project b on a.project_id = b.id and b.`status` = 'active' 
+    	left join major_type c on c.name=a.major_type and c.`status` = 'active'
+    	where a.`status` = 'active'
     	<if test="apiMethod != null and apiMethod != ''">
     		and a.api_method = #{apiMethod}
     	</if>
@@ -85,9 +87,10 @@
     </select>
     <select id="getApiCallingSummary" resultType="int" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
     	select count(*)
-    	from api_calling_count a, project b 
-    	where a.`status` = 'active' and b.`status` = 'active'
-    	and a.project_id = b.id 
+    	from api_calling_count a
+    	left join project b on a.project_id = b.id and b.`status` = 'active' 
+    	left join major_type c on c.name=a.major_type and c.`status` = 'active'
+    	where a.`status` = 'active'
     	<if test="apiMethod != null and apiMethod != ''">
     		and a.api_method = #{apiMethod}
     	</if>
@@ -112,9 +115,10 @@
     </select>
     <select id="getApiCallingSum" resultType="int" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
     	select IFNULL(sum(calling_times), 0)
-    	from api_calling_count a, project b  
-    	where a.`status` = 'active' and b.`status` = 'active'
-    	and a.project_id=b.id
+    	from api_calling_count a 
+    	left join project b on a.project_id = b.id and b.`status` = 'active' 
+    	left join major_type c on c.name=a.major_type and c.`status` = 'active'
+    	where a.`status` = 'active'
     	<if test="apiMethod != null and apiMethod != ''">
     		and a.api_method = #{apiMethod}
     	</if>

@@ -83,17 +83,23 @@
 		        <table class="table table-bordered table-hover">
 		            <thead>
 		                <tr class='thCenter' style='background-color:#ddd;'>
-		                    <th style='width:20%;'>调用API</th>
-		                    <th style='width:20%;'>调用方法</th>
-		                    <th style='width:20%;'>用户</th>
-		                    <th style='width:20%;'>调用日期</th>
-		                    <th style='width:20%;'>调用次数</th>
+                    		<th style='width:15%;'>项目编码</th>
+                    		<th style='width:10%;'>项目类型</th>
+                    		<th style='width:10%;'>品类</th>
+                   		 	<th style='width:15%;'>调用API</th>
+                    		<th style='width:10%;'>调用方法</th>
+                    		<th style='width:15%;'>用户</th>
+                    		<th style='width:10%;'>调用日期</th>
+                    		<th style='width:15%;'>调用次数</th>
 		                </tr>
 		            </thead>
 		            <tbody>
 		            <#if callings?? && (callings?size > 0)>
 		              <#list callings as calling>
 		                <tr class='tdCenter'>
+		                    <td>${calling.projectId!""}</td>
+                    		<td><#if calling.project??>${calling.project.typeStr}</#if></td>
+                    		<td>${calling.majorTypeDesc!""}</td>
 		                    <td>${calling.apiName!""}</td>
 		                    <td>${calling.apiMethod!""}</td>
 		                    <td>${calling.userName!""}</td>

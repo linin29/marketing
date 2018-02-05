@@ -229,7 +229,7 @@ adminService = (function(){
 				return;
 			}
 			if(!contractedNo) {
-				$('#errorMsg').text("请输入项目编号");
+				$('#errorMsg').text("请输入合同编号");
 				return;
 			}
 		}
@@ -241,16 +241,16 @@ adminService = (function(){
 			$('#errorMsg').text("请输入结束时间");
 			return;
 		}
-		if(storeNumber == "") {
-			$('#errorMsg').text("请输入门店数");
+		if(storeNumber == "" || !/^\+?[1-9][0-9]*$/.test(storeNumber)) {
+			$('#errorMsg').text("门店数输入正整数");
 			return;
 		}
-		if(imageNumber == "") {
-			$('#errorMsg').text("请输入图片数");
+		if(imageNumber == "" || !/^\+?[1-9][0-9]*$/.test(imageNumber)) {
+			$('#errorMsg').text("图片数输入正整数");
 			return;
 		}
-		if(maxCallNumber == "") {
-			$('#errorMsg').text("请输入申请次数");
+		if(maxCallNumber == "" || !/^\+?[1-9][0-9]*$/.test(maxCallNumber)) {
+			$('#errorMsg').text("申请次数输入正整数");
 			return;
 		}
 		if(threshhold == "") {

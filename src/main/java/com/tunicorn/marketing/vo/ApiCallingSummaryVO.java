@@ -9,6 +9,7 @@ public class ApiCallingSummaryVO {
 	private String callingDay;
 	private String userName;
 	private String projectId;
+	private String projectType;
 	private String storeCode;
 	private String majorType;
 	private int callingTimes;
@@ -62,6 +63,14 @@ public class ApiCallingSummaryVO {
 
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+
+	public String getProjectType() {
+		return projectType;
+	}
+
+	public void setProjectType(String projectType) {
+		this.projectType = projectType;
 	}
 
 	public String getStoreCode() {

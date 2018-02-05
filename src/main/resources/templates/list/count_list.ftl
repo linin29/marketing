@@ -58,6 +58,9 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr class='tableColorSet'>
+                    <th>项目编码</th>
+                    <th>项目类型</th>
+                    <th>品类</th>
                     <th>调用API</th>
                     <th>调用方法</th>
                     <th>用户</th>
@@ -68,6 +71,9 @@
             <tbody>
               <#list callings as calling>
                 <tr>
+                    <td>${calling.projectId!""}</td>
+                    <td>${calling.projectType!""}</td>
+                    <td>${calling.majorType!""}</td>
                     <td>${calling.apiName!""}</td>
                     <td>${calling.apiMethod!""}</td>
                     <td>${calling.userName!""}</td>

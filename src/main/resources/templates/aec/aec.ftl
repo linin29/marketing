@@ -75,10 +75,11 @@
               		<thead>
                     	<tr class='tableColorSet'>
                     		<th style='width:5%;'><input type="checkbox" id="checkAll" name="checkAll" /></th>
-	                    	<th style='width:25%;'>任务名</th>	                
+                    		<th style='width:15%;'>项目编码</th>
+	                    	<th style='width:15%;'>任务名</th>	                
 	                    	<th style='width:20%;'>任务ID</th>
-	                    	<th style='width:20%;'>类型</th>
-	                    	<th style='width:20%;'>更新时间</th>
+	                    	<th style='width:13%;'>类型</th>
+	                    	<th style='width:17%;'>更新时间</th>
 	                    	<th style='width:10%;'>操作</th>
                    	 	</tr>
               		</thead>
@@ -87,6 +88,7 @@
 		                   <#list tasks as task>
 	                    		<tr class='tabelCenter data'>
 	                    			<td><input id="${task.id}" type="checkbox" name="checkItem" /></td>
+	                    			<td>${task.projectId!""}</td>
 	                    			<td>${task.name!""}</td>
                        				<td>${task.id!""}</td>
                       				<td>${task.majorTypeName!""}</td>

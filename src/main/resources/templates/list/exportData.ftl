@@ -70,16 +70,18 @@
                 <table id="track-table" class="table table-hover table-bordered" style="margin-top: 5px">
                     <tbody>
 	                    <tr class='tabelCenter tableColorSet'>
-	                    	<th style='width:25%;'>任务名</th>	                
-	                    	<th style='width:20%;'>任务ID</th>
-	                    	<th style='width:17%;'>创建时间</th>
-	                    	<th style='width:17%;'>更新时间</th>
+	                        <th style='width:15%;'>项目编码</th>
+	                    	<th style='width:15%;'>任务名</th>	                
+	                    	<th style='width:15%;'>任务ID</th>
+	                    	<th style='width:15%;'>创建时间</th>
+	                    	<th style='width:15%;'>更新时间</th>
 	                    	<th style='width:11%;'>状态</th>
 	                    	<th style='width:10%;'>操作</th>
 	                    </tr>
 	                    <#if tasks?? && (tasks?size > 0)>
 		                   <#list tasks as task>
 	                    		<tr class='tabelCenter data'>
+	                    		    <td>${task.projectId!""}</td>
 	                    			<td>${task.name!""}</td>
                        				<td>${task.id!""}</td>
                       				<td>${task.createTime!""}</td>

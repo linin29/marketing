@@ -138,8 +138,10 @@ aec = (function(){
 					}
 					var html = '';
 					$.each(tasks, function(index, item) {
+						var projectId = item.projectId || "";
 						html += '<tr class="tabelCenter data">'+
 									'<td><input id="' + item.id + '" type="checkbox" name="checkItem" /></td>'+
+									'<td>' + projectId + '</td>'+
             						'<td>' + item.name + '</td>'+
             						'<td>' + item.id + '</td>'+
             						'<td>' + item.majorTypeName + '</td>'+

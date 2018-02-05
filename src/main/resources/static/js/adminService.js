@@ -250,7 +250,11 @@ adminService = (function(){
 			return;
 		}
 		if(maxCallNumber == "" || !/^\+?[1-9][0-9]*$/.test(maxCallNumber)) {
-			$('#errorMsg').text("申请次数输入正整数");
+			$('#errorMsg').text("调用次数输入正整数");
+			return;
+		}
+		if(projectType == 'free' && maxCallNumber > 100) {
+			$('#errorMsg').text("免费测试调用次数不能大于100");
 			return;
 		}
 		if(threshhold == "") {

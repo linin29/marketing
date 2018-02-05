@@ -52,7 +52,10 @@
 				        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 				    </div>
        			</div>
-			    <div class="col-sm-1"><button class='btn btn-success' id="query">查询</button></div>
+			    <div class="col-sm-1">
+			    	<button class='btn btn-success' id="query">查询</button>
+			    	<button class='btn btn-success' id="export">导出</button>
+			    </div>
 	    	</div>
 	    </div>
         <table class="table table-bordered table-hover">

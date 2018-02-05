@@ -9,13 +9,14 @@ public class ApiCallingSummaryVO {
 	private String callingDay;
 	private String userName;
 	private String projectId;
-	private String projectType;
 	private String storeCode;
 	private String majorType;
 	private int callingTimes;
 	private Date createTime;
 	private Date lastUpdateTime;
 	private String status;
+	private ProjectVO project;
+	private String majorTypeDesc;
 
 	public long getId() {
 		return id;
@@ -65,14 +66,6 @@ public class ApiCallingSummaryVO {
 		this.projectId = projectId;
 	}
 
-	public String getProjectType() {
-		return projectType;
-	}
-
-	public void setProjectType(String projectType) {
-		this.projectType = projectType;
-	}
-
 	public String getStoreCode() {
 		return storeCode;
 	}
@@ -120,4 +113,21 @@ public class ApiCallingSummaryVO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	public ProjectVO getProject() {
+		return project;
+	}
+
+	public void setProject(ProjectVO project) {
+		this.project = project;
+	}
+
+	public String getMajorTypeDesc() {
+		return majorTypeDesc;
+	}
+
+	public void setMajorTypeDesc(String majorTypeDesc) {
+		this.majorTypeDesc = majorTypeDesc;
+	}
+
 }

@@ -9,18 +9,29 @@
 		<result column="user_name" property="userName" jdbcType="VARCHAR" />
 		<result column="project_id" property="projectId" jdbcType="VARCHAR" />
 		<result column="projectType" property="projectType" jdbcType="VARCHAR" />
+		<result column="major_type" property="majorType" jdbcType="VARCHAR" />
+		<result column="majorTypeDesc" property="majorTypeDesc" jdbcType="VARCHAR" />
 		<result column="calling_times" property="callingTimes" jdbcType="INTEGER" />
 		<result column="create_time" property="createTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
 		<result column="last_update" property="lastUpdateTime"  javaType="java.sql.Date" jdbcType="TIMESTAMP" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
+		<collection property="project" ofType="com.tunicorn.marketing.vo.ProjectVO">
+        	<result column="project_id" property="id" jdbcType="VARCHAR" />
+			<result column="project_name" property="name" jdbcType="VARCHAR" />
+			<result column="project_type" property="type" jdbcType="VARCHAR" />
+			<result column="project_store_number" property="storeNumber" jdbcType="INTEGER" />
+			<result column="project_call_number" property="callNumber" jdbcType="INTEGER" />
+			<result column="project_image_number" property="imageNumber" jdbcType="INTEGER" />
+			<result column="project_threshhold" property="threshhold" jdbcType="FLOAT"/>
+        </collection>
 	 </resultMap>
     
     <select id="getApiCallingSummaryList" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
     	select a.id, a.api_method, a.api_name, a.calling_day, a.user_name, a.calling_times, a.create_time, a.last_update, a.status,
-    	a.project_id, b.type as project_type
-    	from api_calling_count a, project b 
+    	a.project_id, b.type as project_type, a.major_type, c.description as majorTypeDesc
+    	from api_calling_count a, project b, major_type c
     	where a.`status` = 'active' and b.`status` = 'active'
-    	and a.project_id = b.id
+    	and a.project_id = b.id and c.name=a.major_type
     	<if test="apiMethod != null and apiMethod != ''">
     		and a.api_method = #{apiMethod}
     	</if>

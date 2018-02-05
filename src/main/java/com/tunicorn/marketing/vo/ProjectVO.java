@@ -2,6 +2,10 @@ package com.tunicorn.marketing.vo;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.tunicorn.marketing.constant.MarketingConstants;
+
 public class ProjectVO {
 
 	private String id;
@@ -17,6 +21,7 @@ public class ProjectVO {
 	private Date createTime;
 	private Date lastUpdateTime;
 	private String status;
+	private String typeStr;
 
 	public String getId() {
 		return id;
@@ -122,4 +127,11 @@ public class ProjectVO {
 		this.status = status;
 	}
 
+	public String getTypeStr() {
+		if (StringUtils.isNotBlank(type)) {
+			typeStr = MarketingConstants.PROJECT_TYPE_NAME_MAPPING.get(type);
+		}
+
+		return typeStr;
+	}
 }

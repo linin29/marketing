@@ -121,7 +121,9 @@ public class CallingController extends BaseController {
 		UserVO user = getCurrentUser(request);
 
 		ApiCallingSummaryBO apiCallingSummaryBO = new ApiCallingSummaryBO();
-		apiCallingSummaryBO.setUserName(user.getUserName());
+		if (user != null) {
+			apiCallingSummaryBO.setUserName(user.getUserName());
+		}
 		if (StringUtils.isNotBlank(request.getParameter("projectId"))) {
 			String projectId = request.getParameter("projectId");
 			apiCallingSummaryBO.setProjectId(projectId);

@@ -59,7 +59,11 @@
     </select>
     <select id="getApiCallingSummaryListByVO" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.vo.ApiCallingSummaryVO">
     	select a.id, a.api_method, a.api_name, a.calling_day, a.user_name, a.calling_times, a.create_time, a.last_update, a.status,
-    	a.project_id, b.type as project_type, a.major_type, c.description as majorTypeDesc
+    	a.project_id,
+    	<if test="projectId != null and projectId != ''">
+    	 b.type as project_type, 
+    	 </if>
+    	 a.major_type, c.description as majorTypeDesc
     	from api_calling_count a
     	<if test="projectId != null and projectId != ''">
     	left join project b on a.project_id = b.id and b.`status` = 'active' 

@@ -38,8 +38,13 @@ public class CallingService {
 			result.add(goodSkuHead);
 			for (ApiCallingSummaryVO apiCallingSummary : apiCallingSummarys) {
 				StringBuffer taskBodyBuffer = new StringBuffer();
+				String type = "";
+				if (apiCallingSummary.getProject() != null
+						&& StringUtils.isNotBlank(apiCallingSummary.getProject().getTypeStr())) {
+					type = apiCallingSummary.getProject().getTypeStr();
+				}
 				taskBodyBuffer.append(apiCallingSummary.getProjectId()).append(",")
-						.append(apiCallingSummary.getProject().getTypeStr()).append(",")
+						.append(type).append(",")
 						.append(apiCallingSummary.getMajorTypeDesc()).append(",").append(apiCallingSummary.getApiName())
 						.append(",").append(apiCallingSummary.getApiMethod()).append(",")
 						.append(apiCallingSummary.getUserName()).append(",").append(apiCallingSummary.getCallingDay())

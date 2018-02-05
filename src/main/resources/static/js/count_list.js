@@ -16,6 +16,36 @@ countList=(function(){
         	$('#project').change(function(){
         		getMajorType($(this).val());
         	});
+        	
+    		$("#export").click(function(){
+    	 		var projectId = $("#project").val();
+    	 		var majorType = $("#majorType").val();
+    	 		var startDate = $('#startDate').val();
+    	 		var endDate = $('#endDate').val();
+
+    			$.ajax({
+    				 type: 'GET',
+    				 url: m_url + '/calling/count',
+    				 data:{
+    					 startTime:startDate,
+    					 endTime:endDate,
+    					 majorType:majorType,
+    					 projectId:projectId
+    				 },
+    				 success: function(data) {
+    				 	if(data && data.success && data.data > 0){
+    				 		window.open(m_url +"/calling/exportData?majorType=" + majorType+"&startTime=" + startDate + "&endTime=" + endDate + "&projectId=" + projectId);  
+    				 	}else{
+    				 		noty({text: '当前无可导出数据', layout: "topCenter", type: "warning", timeout: 2000});
+    				 		return;
+    				 	}
+    		    	},
+    		    	error: function(data) {
+    		    		//返回500错误页面
+    		    		$("html").html(data.responseText);
+    		    	}
+    			});
+    		}); 
      };
      
      function initPagination(currentPage, totalCount) {

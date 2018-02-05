@@ -58,9 +58,12 @@
     	limit #{startNum}, #{perPage}
     </select>
     <select id="getApiCallingSummaryListByVO" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.vo.ApiCallingSummaryVO">
-    	select a.id, a.api_method, a.api_name, a.calling_day, a.user_name, a.calling_times, a.create_time, a.last_update, a.status
+    	select a.id, a.api_method, a.api_name, a.calling_day, a.user_name, a.calling_times, a.create_time, a.last_update, a.status,
+    	a.project_id, b.type as project_type, a.major_type, c.description as majorTypeDesc
     	from api_calling_count a
+    	<if test="projectId != null and projectId != ''">
     	left join project b on a.project_id = b.id and b.`status` = 'active' 
+    	</if>
     	left join major_type c on c.name=a.major_type and c.`status` = 'active'
     	where a.`status` = 'active'
     	<if test="apiMethod != null and apiMethod != ''">
@@ -68,6 +71,12 @@
     	</if>
     	<if test="apiName != null and apiName != ''">
     		and a.api_name = #{apiName}
+    	</if>
+    	<if test="startDate != null and startDate != ''">
+    		and a.calling_day <![CDATA[ >= #{startDate}]]>
+    	</if>
+    	<if test="endDate != null and endDate != ''">
+    		and a.calling_day <![CDATA[ <= #{endDate}]]>
     	</if>
     	<if test="callingDay != null and callingDay != ''">
     		and a.calling_day = #{callingDay}
@@ -78,12 +87,30 @@
     	<if test="callingTimes != null and callingTimes != ''">
     		and a.calling_times = #{callingTimes}
     	</if>
-    	<if test="majorType != null and majorType != ''">
-			and a.`major_type` = #{majorType}
-		</if>
-    	<if test="projectId != null and projectId != ''">
-    		and a.project_id  = #{projectId}
-    	</if>
+    	<choose> 
+    		<when test="majorType != null and majorType !=''">  
+    			and a.`major_type` = #{majorType}
+    		</when>
+    		<otherwise>
+    			and (a.`major_type` is NULL OR a.`major_type` ='')
+    		</otherwise>
+    	</choose> 
+    	<choose> 
+    		<when test="storeCode != null and storeCode != ''">
+    			and a.store_code = #{storeCode}
+    		</when>
+    		<otherwise>
+    			and (a.`store_code` is NULL OR a.`store_code` ='')
+    		</otherwise>
+    	</choose> 
+    	<choose> 
+    		<when test="projectId != null and projectId != ''">
+    			and a.project_id = #{projectId}
+    		</when>
+    		<otherwise>
+    			and (a.`project_id` is NULL OR a.`project_id` ='')
+    		</otherwise>
+    	</choose> 
     </select>
     <select id="getApiCallingSummary" resultType="int" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
     	select count(*)

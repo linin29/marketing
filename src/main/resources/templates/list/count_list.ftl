@@ -75,7 +75,7 @@
               <#list callings as calling>
                 <tr>
                     <td>${calling.projectId!""}</td>
-                    <td><#if calling.project??>${calling.project.typeStr}</#if></td>
+                    <td><#if calling.project??>${calling.project.typeStr!""}</#if></td>
                     <td>${calling.majorTypeDesc!""}</td>
                     <td>${calling.apiName!""}</td>
                     <td>${calling.apiMethod!""}</td>

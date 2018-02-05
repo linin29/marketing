@@ -133,5 +133,11 @@
 		WHERE t.`id` IN (SELECT DISTINCT t1.`project_id` FROM admin_service_apply t1,`user` t2 
 		WHERE t1.`username`=t2.`username` AND t2.`id`=#{userId} and t1.apply_status='opened') AND t.`status`='active';
 	</select>
+	
+	<select id="getProjectsByUserIdAndProjectId"  resultType="com.tunicorn.marketing.vo.ProjectVO">
+		SELECT t.id, t.`name`, t.address, t.mobile, t.contacts, t.type, t.store_number AS storeNumber,t.call_number AS callNumber,t.image_number AS imageNumber, t.threshhold, t.create_time AS createTime, t.last_update AS lastUpdateTime, t.status FROM project t 
+		WHERE t.`id` IN (SELECT DISTINCT t1.`project_id` FROM admin_service_apply t1,`user` t2 
+		WHERE t1.`username`=t2.`username` AND t2.`id`=#{userId} and t1.apply_status='opened' and t1.`project_id`=#{id}) AND t.`status`='active' ;
+	</select>
 </mapper>
 

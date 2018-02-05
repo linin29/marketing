@@ -7,7 +7,9 @@ public class StitcherUpdateParamBO {
 	private String apiName;
 	private String apiMethod;
 	private String majorType;
-
+	private String projectId;
+	private String storeCode;
+	
 	public String getTaskId() {
 		return taskId;
 	}
@@ -56,5 +58,22 @@ public class StitcherUpdateParamBO {
 	public void setMajorType(String majorType) {
 		this.majorType = majorType;
 	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getStoreCode() {
+		return storeCode;
+	}
+
+	public void setStoreCode(String storeCode) {
+		this.storeCode = storeCode;
+	}
+	
 
 }

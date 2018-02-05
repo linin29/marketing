@@ -87,11 +87,14 @@ import com.tunicorn.marketing.vo.ApiCallingDetailVO;
 import com.tunicorn.marketing.vo.ApiCallingSummaryVO;
 import com.tunicorn.marketing.vo.GoodsSkuVO;
 import com.tunicorn.marketing.vo.MajorTypeVO;
+import com.tunicorn.marketing.vo.ProjectVO;
+import com.tunicorn.marketing.vo.StoreVO;
 import com.tunicorn.marketing.vo.TaskImagesVO;
 import com.tunicorn.marketing.vo.TaskVO;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.JsonUtil;
 import com.tunicorn.util.MessageUtils;
+import com.tunicorn.util.RegexUtil;
 
 @Service
 public class TaskService {
@@ -112,6 +115,10 @@ public class TaskService {
 	private MajorTypeMapper majorTypeMapper;
 	@Autowired
 	private GoodsSkuMapper goodsSkuMapper;
+	@Autowired
+	private ProjectService projectService;
+	@Autowired
+	private StoreService storeService;
 
 	private final static int THREAD_UPLOAD_MAX_SIZE = 50;
 	private static ExecutorService generateExecutorPool = Executors.newFixedThreadPool(20);
@@ -192,8 +199,8 @@ public class TaskService {
 	}
 	
 	@Transactional
-	public ServiceResponseBO createTask(String userId, String taskName,String projectId, List<MultipartFile> images) {
-		logger.info("params of createTask: taskName: " + taskName + ", userId:" + userId +", projectId:" + projectId);
+	public ServiceResponseBO createTask(String userId, String taskName,String projectId, String storeCode, List<MultipartFile> images) {
+		logger.info("params of createTask: taskName: " + taskName + ", userId:" + userId +", projectId:" + projectId + ", storeCode:" + storeCode);
 		TaskVO taskVO = taskMapper.getTaskByNameAndUserId(taskName, userId);
 		if (taskVO != null) {
 			return new ServiceResponseBO(false, "marketing_task_existed");
@@ -217,6 +224,22 @@ public class TaskService {
 				}
 			}
 		}
+		//************新增验证(开始)***********//
+		if(StringUtils.isNotBlank(projectId)){//项目非空，进行验证，项目为空则不验证
+			if(RegexUtil.validStringLength(projectId, 0, 40)){//验证字段长度合法
+				ProjectVO projectVO = projectService.getProjectsByUserIdAndProjectId(userId, projectId);//验证是否有该项目权限
+				if(projectVO==null){//项目不存在
+					return new ServiceResponseBO(false, "marketing_project_not_existed");
+				}
+			}else{
+				return new ServiceResponseBO(false, "marketing_project_id_max_length");
+			}
+		}
+		if(StringUtils.isNotBlank(storeCode) && !RegexUtil.validStringLength(storeCode, 0, 40)){//需要插入数据库
+			return new ServiceResponseBO(false, "marketing_store_code_max_length");
+		}
+		//************新增验证(结束)***********//
+		
 		TaskVO createTaskVO = new TaskVO();
 		createTaskVO.setId(
 				(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
@@ -224,6 +247,7 @@ public class TaskService {
 		createTaskVO.setUserId(userId);
 		createTaskVO.setTaskStatus(MarketingConstants.TASK_INIT_STATUS);
 		createTaskVO.setProjectId(projectId);
+		createTaskVO.setStoreCode(storeCode);
 		int createResult = taskMapper.createTask(createTaskVO);
 		TaskVO tempTaskVO = taskMapper.getTaskById(createTaskVO.getId());
 		logger.info("create task result: " + createResult);
@@ -499,6 +523,21 @@ public class TaskService {
 		if (!this.getMajorTypeList(userVO.getUserName()).contains(majorType)) {
 			return new ServiceResponseBO(false, "marketing_type_invalid");
 		}
+		/*******新增与项目相关的接口调用次数统计,添加时间:2018-02-05********/
+//		ProjectVO projectVO = projectService.getProjectById(taskVO.getProjectId());//获取任务相关的项目信息
+		ProjectVO projectVO = projectService.getProjectsByUserIdAndProjectId(userId, taskVO.getProjectId());//获取任务相关的项目信息
+		if (projectVO!=null) {//项目存在才验证
+			int callNum = projectVO.getCallNumber();//该项目接口允许的调用次数
+			Integer calledNum = projectService.getAPICallCountByProjectId(taskVO.getProjectId());//获取已经调用的接口次数
+			if (calledNum!=null&&calledNum.intValue()>=callNum) {//达到接口调用次数上限,禁止再进行调用
+				return new ServiceResponseBO(false,"marketing_api_max_count");
+			}
+		}
+		StoreVO storeVO = new StoreVO();
+		storeVO.setCode(taskVO.getStoreCode());
+		storeVO.setProjectId(taskVO.getProjectId());
+		storeService.insertStore(storeVO);
+		
 		String apiName = MarketingConstants.API_MARKETING + taskId + "/stitcher";
 		String apiMethod = MarketingConstants.POST;
 		String status = MarketingConstants.TASK_STATUS_PENDING;
@@ -510,6 +549,8 @@ public class TaskService {
 		updateParam.setStatus(status);
 		updateParam.setTaskId(taskId);
 		updateParam.setUserId(userId);
+		updateParam.setProjectId(taskVO.getProjectId());
+		updateParam.setStoreCode(taskVO.getStoreCode());
 		this.updateTaskStatusByStitcher(updateParam);
 
 		param.setNeed_stitch(needStitch);
@@ -1324,6 +1365,9 @@ public class TaskService {
 		String DateStr = sdf.format(date);
 		apiCallingSummaryVO.setCallingDay(DateStr);
 		apiCallingSummaryVO.setUserName(userName);
+		apiCallingSummaryVO.setProjectId(updateParam.getProjectId());
+		apiCallingSummaryVO.setStoreCode(updateParam.getStoreCode());
+		apiCallingSummaryVO.setMajorType(updateParam.getMajorType());
 
 		List<ApiCallingSummaryVO> tempApiCallingSummaryVO = apiCallingSummaryMapper
 				.getApiCallingSummaryListByVO(apiCallingSummaryVO);

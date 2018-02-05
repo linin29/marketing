@@ -27,7 +27,7 @@ public class ProjectService {
 		return projectMapper.getProjectList();
 	}
 
-	public int getAPICallCountByProjectId(String projectId) {
+	public Integer getAPICallCountByProjectId(String projectId) {
 		return apiCallingMapper.getAPICallCountByProjectId(projectId);
 	}
 
@@ -35,7 +35,29 @@ public class ProjectService {
 		return serviceApplyMapper.getServiceByProjectId(projectId);
 	}
 
+	/**
+	 * 通过用户id获取该用户关联的项目信息
+	 * @auther weixiaokai
+	 * @date 2018年2月5日 上午10:40:30
+	 * @param userId
+	 * @return
+	 */
 	public List<Map<String, Object>> getProjectsByUserId(String userId) {
 		return projectMapper.getProjectsByUserId(userId);
+	}
+	
+	/**
+	 * 根据项目ID获取该项目信息
+	 * @auther weixiaokai
+	 * @date 2018年2月5日 上午10:46:20
+	 * @param projectId
+	 * @return
+	 */
+	public ProjectVO getProjectById(String projectId){
+		return projectMapper.getProjectById(projectId);
+	}
+	
+	public ProjectVO getProjectsByUserIdAndProjectId(String userId,String id) {
+		return projectMapper.getProjectsByUserIdAndProjectId(userId,id);
 	}
 }

@@ -21,5 +21,12 @@ public interface ProjectMapper {
 	public int updateProject(ProjectVO projectVO);
 
 	public List<Map<String, Object>> getProjectsByUserId(@Param("userId") String userId);
+	
+	@Select("SELECT p.id, p.name, p.address, p.mobile, p.contacts, p.type, p.store_number AS storeNumber,p.call_number AS callNumber,"
+			+ "p.image_number AS imageNumber, p.threshhold, p.create_time AS createTime, p.last_update AS lastUpdateTime, p.status  "
+			+ "FROM project p WHERE p.id =#{id}")
+	public ProjectVO getProjectById(@Param("id") String id);
+	
+	public ProjectVO getProjectsByUserIdAndProjectId(@Param("userId") String userId,@Param("id") String id);
 
 }

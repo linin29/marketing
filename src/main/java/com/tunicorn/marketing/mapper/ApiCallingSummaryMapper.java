@@ -12,8 +12,8 @@ import com.tunicorn.marketing.vo.ApiCallingSummaryVO;
 
 public interface ApiCallingSummaryMapper {
 
-	@Insert("Insert into api_calling_count (api_method, api_name, calling_day, user_name, calling_times, create_time,project_id)"
-			+ " values (#{apiMethod}, #{apiName}, #{callingDay}, #{userName}, #{callingTimes}, now(), #{projectId})")
+	@Insert("Insert into api_calling_count (api_method, api_name, calling_day, user_name, calling_times, create_time,project_id,store_code,major_type)"
+			+ " values (#{apiMethod}, #{apiName}, #{callingDay}, #{userName}, #{callingTimes}, now(), #{projectId}, #{storeCode}, #{majorType})")
 	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
 	public long insertApiCallingSummary(ApiCallingSummaryVO apiCallingSummaryVO);
 
@@ -29,5 +29,5 @@ public interface ApiCallingSummaryMapper {
 	public int getApiCallingSum(ApiCallingSummaryBO apiCallingSummaryBO);
 	
 	@Select("select sum(calling_times) as totalCount from api_calling_count where project_id=#{projectId}")
-	public int getAPICallCountByProjectId(String projectId);
+	public Integer getAPICallCountByProjectId(String projectId);
 }

@@ -31,6 +31,8 @@ public class TaskVO extends PaginationBO {
 	private int needStitch;
 	/**************2018-02-02 weixiaokai 添加项目id*****************/
 	private String projectId;
+	private String storeCode;
+	private String projectName;
 
 	public String getAuthor() {
 		return author;
@@ -230,6 +232,22 @@ public class TaskVO extends PaginationBO {
 
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+
+	public String getStoreCode() {
+		return storeCode;
+	}
+
+	public void setStoreCode(String storeCode) {
+		this.storeCode = storeCode;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 	
 }

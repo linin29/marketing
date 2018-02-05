@@ -431,7 +431,7 @@ public class TaskController extends BaseController {
 		model.addAttribute("user", user);
 
 //		ServiceResponseBO response = taskService.createTask(user.getId(), taskName, images);
-		ServiceResponseBO response = taskService.createTask(user.getId(), taskName, projectId, images);
+		ServiceResponseBO response = taskService.createTask(user.getId(), taskName, projectId, null, images);
 		if (response.isSuccess()) {
 			return CommonAjaxResponse.toSuccess(response.getResult());
 		} else {

@@ -33,17 +33,19 @@
 	    <table class="table table-bordered table-hover ">
 	          <thead>
 	                <tr class='tableColorSet'>
+	                    <th style="width:15%">项目</th>
 	                    <th style="width:25%">任务名</th>
 	                    <th style="width:20%">任务Id</th>
-	                    <th style="width:15%">类型</th>
-	                    <th style="width:15%">更新时间</th>
-	                    <th style="width:15%">状态</th>
+	                    <th style="width:10%">类型</th>
+	                    <th style="width:10%">更新时间</th>
+	                    <th style="width:10%">状态</th>
 	                    <th style="width:10%">操作</th>
 	                </tr>
 	          </thead>
 	          <tbody>
 	          <#list tasks as task>
 	               <tr>
+	                   <td style="word-break: break-all;">${task.projectName!""}</td>
 	                   <td style="word-break: break-all;">${task.name!""}</td>
 	                   <td>${task.id!""}</td>
 	                   <td>${task.majorTypeName!""}</td>

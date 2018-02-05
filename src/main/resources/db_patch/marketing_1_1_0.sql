@@ -146,6 +146,7 @@ BEGIN
 		alter table `admin_service_apply`  modify column `apply_status` enum('created','opened','rejected', 'closed') DEFAULT 'created';
 		
 		alter table `task` Add column `project_id` varchar(40) DEFAULT NULL AFTER `user_id`;
+		alter table `task` Add column `store_code` varchar(40) DEFAULT NULL AFTER `project_id`;
 		
 		alter table `api_calling_count` Add column `project_id` varchar(40) DEFAULT NULL AFTER `user_name`;
 		alter table `api_calling_count` Add column `store_code` varchar(40) DEFAULT NULL AFTER `project_id`;
@@ -154,6 +155,7 @@ BEGIN
 		ALTER TABLE `admin_service_apply` ADD INDEX project_service_apply_fk_idx (`project_id`);
 		
 		ALTER TABLE `task` ADD INDEX project_task_fk_idx (`project_id`);
+		ALTER TABLE `task` ADD INDEX store_task_fk_idx (`store_code`);
 		
 		ALTER TABLE `api_calling_count` ADD INDEX project_api_calling_fk_idx (`project_id`);
 		ALTER TABLE `api_calling_count` ADD INDEX store_api_calling_fk_idx (`store_code`);

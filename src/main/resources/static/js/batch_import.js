@@ -12,10 +12,6 @@ batchImport=(function(){
     	$('#barch_import').click(function(){
     		var majorType = $('#majorType').val();
     		var projectId = $('#project').val();
-    		if(!projectId || projectId==''){
-    			noty({text: '请选择一个项目', layout: "topCenter", type: "warning", timeout: 1000});
-    			return;
-    		}
     		if(!majorType || majorType==''){
     			noty({text: '请选择一个主类型', layout: "topCenter", type: "warning", timeout: 1000});
     			return;

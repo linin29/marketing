@@ -77,6 +77,7 @@
 				</div>
 				<div class="text-right" style='margin-bottom: 5px;;margin-right: 0%;'>
 					<button class='btn btn-success' id="query">查询</button>
+					<button class='btn btn-success' id="export">导出</button>
 				</div>
 			</section>
 		    <section class="content_list">

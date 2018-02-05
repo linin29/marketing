@@ -14,7 +14,8 @@ import com.tunicorn.marketing.vo.MajorTypeVO;
 public interface MajorTypeMapper {
 
 	@Results({ @Result(property = "createTime", column = "create_time") })
-	@Select("select mt.* from admin_major_type_service_apply_mapping am "
+	@Select("select DISTINCT(mt.id), mt.name, mt.description, mt.`status`, mt.version, mt.create_time"
+			+ " from admin_major_type_service_apply_mapping am "
 			+ "left join admin_service_apply asa on asa.id=am.service_apply_id"
 			+ " left join major_type mt on mt.id=am.major_type_id "
 			+ " left join `user` u on u.username=asa.username "

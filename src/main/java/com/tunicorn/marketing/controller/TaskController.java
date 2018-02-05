@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -109,8 +110,15 @@ public class TaskController extends BaseController {
 	@RequestMapping(value = "/majorType/list", method = RequestMethod.GET)
 	@ResponseBody
 	public CommonAjaxResponse getMajorTypeByProjectId(HttpServletRequest request) {
+		UserVO user = getCurrentUser(request);
+		
+		List<MajorTypeVO> majorTypes = new ArrayList<MajorTypeVO>();
 		String projectId = request.getParameter("projectId");
-		List<MajorTypeVO> majorTypes = majorTypeService.getMajorTypeListByProjectId(projectId);
+		if(StringUtils.isNotBlank(projectId)){
+			majorTypes = majorTypeService.getMajorTypeListByProjectId(projectId);
+		}else{
+			majorTypes = taskService.getMajorTypeVOList(user.getUserName());
+		}
 		return CommonAjaxResponse.toSuccess(majorTypes);
 	}
 

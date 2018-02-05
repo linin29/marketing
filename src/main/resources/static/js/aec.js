@@ -16,6 +16,9 @@ aec = (function(){
 	 	$('#zip_import').click(function(){
 	 		 $('#file_select').click();
 	 	});
+    	$('#project').change(function(){
+    		getMajorType($(this).val());
+    	});
 	 	$('#file_select').change(function(){
 	 		 var _file = $(this)[0];
 	 		 var files = _file.files;
@@ -258,7 +261,28 @@ aec = (function(){
 	};
   function downloadUploadResult(filePath){
 	  window.open(marketing_url + "/aec/uploadResult/download?filePath=" + filePath);
-  }
+  };
+	function getMajorType(projectId){
+		$.ajax({ 
+			url : m_url + '/majorType/list?projectId=' + projectId, 
+			type : 'GET', 
+			success : function(resp) { 
+				if(resp.success){
+					if(resp.data && resp.data.length > 0){
+						var html = "<option value=''>请选择</option>";
+						for(var i = 0; i < resp.data.length; i++){
+							html += "<option value='"+ resp.data[i].name +"'>"+ resp.data[i].description +"</option>"
+						}
+						$("#majorType").html(html);
+					}
+				}
+			}, 
+			error : function(resp) { 
+				 noty({text: '获取品类列表失败', layout: "topCenter", type: "warning", timeout: 2000});
+				 return;
+			} 
+		});
+	};
 	return {
 		_init:init
 	}

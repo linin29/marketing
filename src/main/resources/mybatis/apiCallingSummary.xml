@@ -58,7 +58,7 @@
     	limit #{startNum}, #{perPage}
     </select>
     <select id="getApiCallingSummaryListByVO" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.vo.ApiCallingSummaryVO">
-    	select id, api_method, api_name, calling_day, user_name, calling_times, create_time, last_update, status
+    	select a.id, a.api_method, a.api_name, a.calling_day, a.user_name, a.calling_times, a.create_time, a.last_update, a.status
     	from api_calling_count a
     	left join project b on a.project_id = b.id and b.`status` = 'active' 
     	left join major_type c on c.name=a.major_type and c.`status` = 'active'

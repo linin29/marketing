@@ -13,6 +13,9 @@ adminCountList=(function(){
     		$('#query').click(function(){
     			searchApiCalling(1);
     		});
+        	$('#project').change(function(){
+        		getMajorType($(this).val());
+        	});
      };
      
      function initPagination(currentPage, totalCount) {
@@ -102,6 +105,28 @@ adminCountList=(function(){
  		});
  		
  	};
+ 	
+	function getMajorType(projectId){
+		$.ajax({ 
+			url : m_url + '/majorType/list?projectId=' + projectId, 
+			type : 'GET', 
+			success : function(resp) { 
+				if(resp.success){
+					if(resp.data && resp.data.length > 0){
+						var html = "<option value=''>请选择</option>";
+						for(var i = 0; i < resp.data.length; i++){
+							html += "<option value='"+ resp.data[i].name +"'>"+ resp.data[i].description +"</option>"
+						}
+						$("#majorType").html(html);
+					}
+				}
+			}, 
+			error : function(resp) { 
+				 noty({text: '获取品类列表失败', layout: "topCenter", type: "warning", timeout: 2000});
+				 return;
+			} 
+		});
+	};
      
      return {
           _init:init

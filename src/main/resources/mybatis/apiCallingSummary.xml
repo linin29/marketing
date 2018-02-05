@@ -80,12 +80,30 @@
     	<if test="callingTimes != null and callingTimes != ''">
     		and a.calling_times = #{callingTimes}
     	</if>
-    	<if test="majorType != null and majorType != ''">
-			and a.`major_type` = #{majorType}
-		</if>
-    	<if test="projectId != null and projectId != ''">
-    		and a.project_id  = #{projectId}
-    	</if>
+    	<choose> 
+    		<when test="majorType != null and majorType !=''">  
+    			and a.`major_type` = #{majorType}
+    		</when>
+    		<otherwise>
+    			and a.`major_type` is NULL
+    		</otherwise>
+    	</choose> 
+    	<choose> 
+    		<when test="storeCode != null and storeCode != ''">
+    			and a.store_code = #{storeCode}
+    		</when>
+    		<otherwise>
+    			and a.`store_code` is NULL
+    		</otherwise>
+    	</choose> 
+    	<choose> 
+    		<when test="projectId != null and projectId != ''">
+    			and a.project_id = #{projectId}
+    		</when>
+    		<otherwise>
+    			and a.`project_id` is NULL
+    		</otherwise>
+    	</choose> 
     </select>
     <select id="getApiCallingSummary" resultType="int" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
     	select count(*)

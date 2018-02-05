@@ -319,7 +319,11 @@ public class TaskController extends BaseController {
 		}
 		List<Map<String, Object>> pMaps = projectService.getProjectsByUserId(user.getId());
 		model.addAttribute("projects", pMaps);
-		model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
+		if(taskVO!=null && StringUtils.isNotBlank(taskVO.getProjectId())){
+			model.addAttribute("majorTypes", majorTypeService.getMajorTypeListByProjectId(taskVO.getProjectId()));
+		}else{
+			model.addAttribute("majorTypes", taskService.getMajorTypeVOList(user.getUserName()));
+		}
 		model.addAttribute("task", taskVO);
 		model.addAttribute("images", imagesVOs);
 		return "list/new_list";

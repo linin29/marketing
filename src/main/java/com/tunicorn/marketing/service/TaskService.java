@@ -96,6 +96,8 @@ import com.tunicorn.util.JsonUtil;
 import com.tunicorn.util.MessageUtils;
 import com.tunicorn.util.RegexUtil;
 
+import freemarker.template.utility.StringUtil;
+
 @Service
 public class TaskService {
 	private static Logger logger = Logger.getLogger(TaskService.class);
@@ -533,10 +535,12 @@ public class TaskService {
 				return new ServiceResponseBO(false,"marketing_api_max_count");
 			}
 		}
-		StoreVO storeVO = new StoreVO();
-		storeVO.setCode(taskVO.getStoreCode());
-		storeVO.setProjectId(taskVO.getProjectId());
-		storeService.insertStore(storeVO);
+		if (StringUtils.isNotBlank(taskVO.getStoreCode())&&StringUtils.isNotBlank(taskVO.getProjectId())) {
+			StoreVO storeVO = new StoreVO();
+			storeVO.setCode(taskVO.getStoreCode());
+			storeVO.setProjectId(taskVO.getProjectId());
+			storeService.insertStore(storeVO);
+		}
 		
 		String apiName = MarketingConstants.API_MARKETING + taskId + "/stitcher";
 		String apiMethod = MarketingConstants.POST;

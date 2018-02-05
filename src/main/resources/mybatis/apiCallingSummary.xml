@@ -7,116 +7,134 @@
 		<result column="api_name" property="apiName" jdbcType="VARCHAR" />
 		<result column="calling_day" property="callingDay" jdbcType="VARCHAR" />
 		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="project_id" property="projectId" jdbcType="VARCHAR" />
+		<result column="projectType" property="projectType" jdbcType="VARCHAR" />
+		<result column="major_type" property="majorType" jdbcType="VARCHAR" />
+		<result column="majorTypeDesc" property="majorTypeDesc" jdbcType="VARCHAR" />
 		<result column="calling_times" property="callingTimes" jdbcType="INTEGER" />
 		<result column="create_time" property="createTime" javaType="java.sql.Date" jdbcType="TIMESTAMP" />
 		<result column="last_update" property="lastUpdateTime"  javaType="java.sql.Date" jdbcType="TIMESTAMP" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
+		<collection property="project" ofType="com.tunicorn.marketing.vo.ProjectVO">
+        	<result column="project_id" property="id" jdbcType="VARCHAR" />
+			<result column="project_name" property="name" jdbcType="VARCHAR" />
+			<result column="project_type" property="type" jdbcType="VARCHAR" />
+			<result column="project_store_number" property="storeNumber" jdbcType="INTEGER" />
+			<result column="project_call_number" property="callNumber" jdbcType="INTEGER" />
+			<result column="project_image_number" property="imageNumber" jdbcType="INTEGER" />
+			<result column="project_threshhold" property="threshhold" jdbcType="FLOAT"/>
+        </collection>
 	 </resultMap>
     
     <select id="getApiCallingSummaryList" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
-    	select id, api_method, api_name, calling_day, user_name, calling_times, create_time, last_update, status
-    	from api_calling_count 
-    	where `status` = 'active'
+    	select a.id, a.api_method, a.api_name, a.calling_day, a.user_name, a.calling_times, a.create_time, a.last_update, a.status,
+    	a.project_id, b.type as project_type, a.major_type, c.description as majorTypeDesc
+    	from api_calling_count a, project b, major_type c
+    	where a.`status` = 'active' and b.`status` = 'active'
+    	and a.project_id = b.id and c.name=a.major_type
     	<if test="apiMethod != null and apiMethod != ''">
-    		and api_method = #{apiMethod}
+    		and a.api_method = #{apiMethod}
     	</if>
     	<if test="apiName != null and apiName != ''">
-    		and api_name = #{apiName}
+    		and a.api_name = #{apiName}
     	</if>
     	<if test="startDate != null and startDate != ''">
-    		and calling_day <![CDATA[ >= #{startDate}]]>
+    		and a.calling_day <![CDATA[ >= #{startDate}]]>
     	</if>
     	<if test="endDate != null and endDate != ''">
-    		and calling_day <![CDATA[ <= #{endDate}]]>
+    		and a.calling_day <![CDATA[ <= #{endDate}]]>
     	</if>
     	<if test="userName != null and userName != ''">
-    		and `user_name` like concat(concat('%',#{userName}),'%')
+    		and a.`user_name` like concat(concat('%',#{userName}),'%')
     	</if>
     	<if test="majorType != null and majorType != ''">
-			and `major_type` = #{majorType}
+			and a.`major_type` = #{majorType}
 		</if>
     	<if test="projectId != null and projectId != ''">
-    		and project_id  = #{projectId}
+    		and a.project_id  = #{projectId}
     	</if>
-    	order by calling_day DESC
+    	order by a.calling_day DESC
     	limit #{startNum}, #{perPage}
     </select>
     <select id="getApiCallingSummaryListByVO" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.vo.ApiCallingSummaryVO">
     	select id, api_method, api_name, calling_day, user_name, calling_times, create_time, last_update, status
-    	from api_calling_count 
-    	where `status` = 'active'
+    	from api_calling_count a, project b 
+    	where a.`status` = 'active' and b.`status` = 'active'
+    	and a.project_id = b.id 
     	<if test="apiMethod != null and apiMethod != ''">
-    		and api_method = #{apiMethod}
+    		and a.api_method = #{apiMethod}
     	</if>
     	<if test="apiName != null and apiName != ''">
-    		and api_name = #{apiName}
+    		and a.api_name = #{apiName}
     	</if>
     	<if test="callingDay != null and callingDay != ''">
-    		and calling_day = #{callingDay}
+    		and a.calling_day = #{callingDay}
     	</if>
     	<if test="userName != null and userName != ''">
-    		and `user_name` like concat(concat('%',#{userName}),'%')
+    		and a.`user_name` like concat(concat('%',#{userName}),'%')
     	</if>
     	<if test="callingTimes != null and callingTimes != ''">
-    		and calling_times = #{callingTimes}
+    		and a.calling_times = #{callingTimes}
     	</if>
     	<if test="majorType != null and majorType != ''">
-			and `major_type` = #{majorType}
+			and a.`major_type` = #{majorType}
 		</if>
     	<if test="projectId != null and projectId != ''">
-    		and project_id  = #{projectId}
+    		and a.project_id  = #{projectId}
     	</if>
     </select>
     <select id="getApiCallingSummary" resultType="int" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
     	select count(*)
-    	from api_calling_count 
-    	where `status` = 'active'
+    	from api_calling_count a, project b 
+    	where a.`status` = 'active' and b.`status` = 'active'
+    	and a.project_id = b.id 
     	<if test="apiMethod != null and apiMethod != ''">
-    		and api_method = #{apiMethod}
+    		and a.api_method = #{apiMethod}
     	</if>
     	<if test="apiName != null and apiName != ''">
-    		and api_name = #{apiName}
+    		and a.api_name = #{apiName}
     	</if>
     	<if test="startDate != null and startDate != ''">
-    		and calling_day <![CDATA[ >= #{startDate}]]>
+    		and a.calling_day <![CDATA[ >= #{startDate}]]>
     	</if>
     	<if test="endDate != null and endDate != ''">
-    		and calling_day <![CDATA[ <= #{endDate}]]>
+    		and a.calling_day <![CDATA[ <= #{endDate}]]>
     	</if>
     	<if test="userName != null and userName != ''">
-    		and `user_name` like concat(concat('%',#{userName}),'%')
+    		and a.`user_name` like concat(concat('%',#{userName}),'%')
     	</if>
     	<if test="majorType != null and majorType != ''">
-			and `major_type` = #{majorType}
+			and a.`major_type` = #{majorType}
 		</if>
     	<if test="projectId != null and projectId != ''">
-    		and project_id  = #{projectId}
+    		and a.project_id  = #{projectId}
     	</if>
     </select>
     <select id="getApiCallingSum" resultType="int" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
     	select IFNULL(sum(calling_times), 0)
-    	from api_calling_count 
-    	where `status` = 'active'
+    	from api_calling_count a, project b  
+    	where a.`status` = 'active' and b.`status` = 'active'
+    	and a.project_id=b.id
     	<if test="apiMethod != null and apiMethod != ''">
-    		and api_method = #{apiMethod}
+    		and a.api_method = #{apiMethod}
     	</if>
     	<if test="apiName != null and apiName != ''">
-    		and api_name = #{apiName}
+    		and a.api_name = #{apiName}
     	</if>
     	<if test="startDate != null and startDate != ''">
-    		and calling_day <![CDATA[ >= #{startDate}]]>
+    		and a.calling_day <![CDATA[ >= #{startDate}]]>
     	</if>
     	<if test="endDate != null and endDate != ''">
-    		and calling_day <![CDATA[ <= #{endDate}]]>
+    		and a.calling_day <![CDATA[ <= #{endDate}]]>
     	</if>
     	<if test="userName != null and userName != ''">
-    		and `user_name` like concat(concat('%',#{userName}),'%')
+    		and a.`user_name` like concat(concat('%',#{userName}),'%')
     	</if>
     	<if test="majorType != null and majorType != ''">
-			and `major_type` = #{majorType}
+			and a.`major_type` = #{majorType}
 		</if>
     	<if test="projectId != null and projectId != ''">
-    		and project_id  = #{projectId}
+    		and a.project_id  = #{projectId}
     	</if>
     </select>
 </mapper>

@@ -15,6 +15,8 @@ public class ApiCallingSummaryVO {
 	private Date createTime;
 	private Date lastUpdateTime;
 	private String status;
+	private ProjectVO project;
+	private String majorTypeDesc;
 
 	public long getId() {
 		return id;
@@ -111,4 +113,21 @@ public class ApiCallingSummaryVO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	public ProjectVO getProject() {
+		return project;
+	}
+
+	public void setProject(ProjectVO project) {
+		this.project = project;
+	}
+
+	public String getMajorTypeDesc() {
+		return majorTypeDesc;
+	}
+
+	public void setMajorTypeDesc(String majorTypeDesc) {
+		this.majorTypeDesc = majorTypeDesc;
+	}
+
 }

@@ -129,4 +129,11 @@ public class MarketingConstants {
 	public static final String AEC_PATH = "aec";
 	
 	public static final String MD5 = "MD5";
+	
+	public static Map<String, String> PROJECT_TYPE_NAME_MAPPING = new HashMap<String, String>();
+	static {
+		PROJECT_TYPE_NAME_MAPPING.put("free", "免费测试");
+		PROJECT_TYPE_NAME_MAPPING.put("paid", "付费测试");
+		PROJECT_TYPE_NAME_MAPPING.put("official", "正式合同");
+	}
 }

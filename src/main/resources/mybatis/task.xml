@@ -136,7 +136,7 @@
 	</select>
 	<select id="getTaskListByVO" resultMap="TaskResultMap" parameterType="com.tunicorn.marketing.vo.TaskVO">
 		select id, `name`, task_status, user_id, create_time,
-		stitch_image_path, result, rows, major_type, goods_info,identify_success_times
+		stitch_image_path, result, rows, major_type, goods_info,identify_success_times, ,project_id
 		from task
 		where `status` = 'active'
 		<if test="userId != null and userId != ''">

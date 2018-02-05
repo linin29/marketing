@@ -96,7 +96,6 @@ public class CallingController extends BaseController{
 		model.addAttribute("endDate", apiCallingSummaryBO.getEndDate());
 		model.addAttribute("currentPage", apiCallingSummaryBO.getPageNum() + 1);
 		
-		model.addAttribute("majorTypes", majorTypeService.getAllMajorTypeList());
 		model.addAttribute("projects",  projectService.getProjects());
 		return "admin/list/count_list";
 	}

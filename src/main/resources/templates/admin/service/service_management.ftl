@@ -58,8 +58,8 @@
 					    	    <th style="width:6%">项目编码</th>
 					    		<th style="width:6%">项目名称</th>
 					    		<th style="width:6%">申请服务</th>
-					    		<th style="width:8%">调用总次数</th>
 					    		<th style="width:7%">任务数</th>
+					    		<th style="width:8%">调用总次数</th>
 					    		<th style="width:6%">完成率</th>
 					    		<th style="width:8%">合同图片</th>
 					    		<th style="width:9%">创建人</th>
@@ -80,8 +80,8 @@
 	   		                           </#list>
    								    </#if>
 								</td>
+								<td>${adminServiceApply.taskCount}</td>
 					    		<td>${adminServiceApply.callCount}</td>
-					    		<td>${adminServiceApply.taskCount}</td>
 					    		<td>${adminServiceApply.callCount/adminServiceApply.project.callNumber}%</td>
 					    		<td><a href="javascript:void(0)" applyid="${adminServiceApply.id}" class="showAgreementModel">查看</a></td>
 					    		<td>${adminServiceApply.creator.name}</td>
@@ -219,7 +219,7 @@
 			                			<td><input  class="application-name total newline" type="text" id="pic-number" placeholder="请输入图片数"/></td>
 			                		</tr>
 			                		<tr>
-			                			<td class="wid">申请次数：</td>
+			                			<td class="wid">调用次数：</td>
 			                			<td><input  class="application-name total newline" type="text" id="application-number" placeholder="输入申请次数"/></td>
 			                		</tr>
 			                		<tr>
@@ -305,7 +305,7 @@
 				        </div>
 					</div>
 					<div class="modal-footer" style="border-top-color: #fff;padding: 0px 15px 15px 15px;">
-						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<#-- <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> -->
 					</div>
 				</div>
 			</div>

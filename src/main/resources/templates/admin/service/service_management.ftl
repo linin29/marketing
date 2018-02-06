@@ -20,10 +20,10 @@
   			<div class="panel-heading">服务管理</div>
   			<div class="panel-body">
     			<div id="request-header" class="row" style='margin-left:-14px;'>
-					<div class="col-sm-2">
+					<div class="col-sm-3">
   						<input id="projectId" <#if projectId??> value="${projectId}"</#if> type="text" class="form-control" placeholder="请输入项目编码">
 					</div>
-					<div class="col-sm-2">
+					<div class="col-sm-3">
   						<input id="projectName" <#if projectName??> value="${projectName}"</#if> type="text" class="form-control" placeholder="请输入项目名称">
 					</div>
 					<div class="col-sm-2">
@@ -36,7 +36,7 @@
 					</div>
 					<div class="col-sm-2">
 					<input id="initApplyStatus" type="hidden" <#if applyStatus??> value="${applyStatus}"</#if>>
-  						<select id="applyStatus" style="width:70%;height: 34px;">
+  						<select id="applyStatus" style="width:100%;height: 34px;">
   							<option value="">请选择状态</option>
   							<option value="created" <#if applyStatus?? && applyStatus=='created'>selected</#if>>已创建</option>
   							<option value="opened" <#if applyStatus?? && applyStatus=='opened'>selected</#if>>已开通</option>
@@ -44,10 +44,8 @@
   							<option value="closed" <#if applyStatus?? && applyStatus=='closed'>selected</#if>>已关闭</option>
   						</select>
 					</div> 
-					<div class="pull-right col-sm-4" style="padding-right: 0px;">
-						<div class="col-sm-3">
+					<div class="pull-right " style="margin-right: -8px;">
   						   <input id="query" type="button" class=" btn btn-success" value="搜索" style="width:100px;" />
-					   </div>
 					</div>
 
 				</div>
@@ -88,7 +86,7 @@
 					    		<td id="service_${adminServiceApply.id}">${adminServiceApply.statusStr}</td>
 					    		<td>${adminServiceApply.createTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
 					    		<td>${.now?string('yyyy-MM-dd HH:mm:ss')!""}</td>
-					    		<td>
+					    		<td style="padding:0px;vertical-align: middle;">
 					    			<button class="info btn btn-success btn-sm" applyid="${adminServiceApply.id}">详情</button>
 					    			<#if adminServiceApply.applyStatus == 'created'>
 					    			<button id="approve_${adminServiceApply.id}" class="btn btn-success btn-sm approve" applyid="${adminServiceApply.id}">审批</button>

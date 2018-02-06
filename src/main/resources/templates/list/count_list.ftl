@@ -40,19 +40,19 @@
 						</select>               
 	                </div>
 				</div>
-       			<div class="col-sm-5">
-       				<div style="float: left; width: 16%;line-height:34px;">时间段：</div>
-				 	<div style="float: left; width: 35%;" class="form-group input-group date form_datetime1" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
+       			<div class="col-sm-4">
+       				<div style="float: left; width: 18%;line-height:34px;">时间段：</div>
+				 	<div style="float: left; width: 39%;" class="form-group input-group date form_datetime1" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
 				        <input class="form-control" size="16" type="text" value="" id="startDate">
 				        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 				    </div>
-				    <div  style="float: left;line-height: 34px;width:2%;" class="form-group glyphicon glyphicon-minus"></div>
-				     <div style="float: left;width: 35%;" class=" input-group date form_datetime2" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
+				    <div  style="float: left;line-height: 34px;width:3%;margin-right:1%;" class="form-group glyphicon glyphicon-minus"></div>
+				     <div style="float: left;width: 39%;" class=" input-group date form_datetime2" data-date="2016-11-1" data-date-format="yyyy-mm-dd" >
 				        <input class="form-control" size="16" type="text" value="" id="endDate">
 				        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 				    </div>
        			</div>
-			    <div class="col-sm-1">
+			    <div class="col-sm-2">
 			    	<button class='btn btn-success' id="query">查询</button>
 			    	<button class='btn btn-success' id="export">导出</button>
 			    </div>

@@ -153,8 +153,11 @@ public class CallingController extends BaseController {
 		String majorType = request.getParameter("majorType");
 		String startTime = request.getParameter("startTime");
 		String endTime = request.getParameter("endTime");
-		List<String> dataList = callingService.getCallingExportData(projectId, majorType, startTime, endTime,
-				user.getUserName());
+		String username = "";
+		if (user != null) {
+			username = user.getUserName();
+		}
+		List<String> dataList = callingService.getCallingExportData(projectId, majorType, startTime, endTime, username);
 		response.setCharacterEncoding("UTF-8");
 		SimpleDateFormat dfs = new SimpleDateFormat("yyyyMMddHHmmss");
 		Date time = new Date();

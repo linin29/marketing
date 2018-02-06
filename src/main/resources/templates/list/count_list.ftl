@@ -65,8 +65,6 @@
                     <th style='width:10%;'>项目类型</th>
                     <th style='width:10%;'>品类</th>
                     <th style='width:15%;'>调用API</th>
-                    <th style='width:10%;'>调用方法</th>
-                    <th style='width:15%;'>用户</th>
                     <th style='width:10%;'>调用日期</th>
                     <th style='width:15%;'>调用次数</th>
                 </tr>
@@ -78,8 +76,6 @@
                     <td><#if calling.project??>${calling.project.typeStr!""}</#if></td>
                     <td>${calling.majorTypeDesc!""}</td>
                     <td>${calling.apiName!""}</td>
-                    <td>${calling.apiMethod!""}</td>
-                    <td>${calling.userName!""}</td>
                     <td>${calling.callingDay!""}</td>
                     <td>${calling.callingTimes!""}</td>
                 </tr>

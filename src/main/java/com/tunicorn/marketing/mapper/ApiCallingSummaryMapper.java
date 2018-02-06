@@ -30,4 +30,6 @@ public interface ApiCallingSummaryMapper {
 	
 	@Select("select sum(calling_times) as totalCount from api_calling_count where project_id=#{projectId}")
 	public Integer getAPICallCountByProjectId(String projectId);
+	
+	public List<ApiCallingSummaryVO> getAllApiCallingSummary(ApiCallingSummaryVO apiCallingSummaryVO);
 }

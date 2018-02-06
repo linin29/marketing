@@ -24,7 +24,9 @@ public class CallingService {
 			apiCallingSummaryVO.setProjectId(projectId);
 		}
 		apiCallingSummaryVO.setMajorType(majorType);
-		apiCallingSummaryVO.setUserName(userName);
+		if(StringUtils.isNotBlank(userName)){
+			apiCallingSummaryVO.setUserName(userName);
+		}
 		if (StringUtils.isNotBlank(startTime)) {
 			apiCallingSummaryVO.setStartDate(startTime);
 		}
@@ -32,33 +34,40 @@ public class CallingService {
 			apiCallingSummaryVO.setEndDate(endTime);
 		}
 		List<ApiCallingSummaryVO> apiCallingSummarys = apiCallingSummaryMapper
-				.getApiCallingSummaryListByVO(apiCallingSummaryVO);
+				.getAllApiCallingSummary(apiCallingSummaryVO);
 		if (apiCallingSummarys != null && apiCallingSummarys.size() > 0) {
 			String goodSkuHead = getDataHead(majorType);
 			result.add(goodSkuHead);
 			for (ApiCallingSummaryVO apiCallingSummary : apiCallingSummarys) {
 				StringBuffer taskBodyBuffer = new StringBuffer();
 				String type = "";
+				String tempProjectId = "";
 				if (apiCallingSummary.getProject() != null
 						&& StringUtils.isNotBlank(apiCallingSummary.getProject().getTypeStr())) {
 					type = apiCallingSummary.getProject().getTypeStr();
 				}
-				taskBodyBuffer.append(apiCallingSummary.getProjectId()).append(",")
-						.append(type).append(",")
+				if (StringUtils.isNotBlank(apiCallingSummary.getProjectId())) {
+					tempProjectId = apiCallingSummary.getProjectId();
+				}
+				taskBodyBuffer.append(tempProjectId).append(",").append(type).append(",")
 						.append(apiCallingSummary.getMajorTypeDesc()).append(",").append(apiCallingSummary.getApiName())
-						.append(",").append(apiCallingSummary.getApiMethod()).append(",")
-						.append(apiCallingSummary.getUserName()).append(",").append(apiCallingSummary.getCallingDay())
-						.append(",").append(apiCallingSummary.getCallingTimes());
+						.append(",").append(apiCallingSummary.getUserName()).append(",")
+						.append(apiCallingSummary.getCallingDay()).append(",")
+						.append(apiCallingSummary.getCallingTimes());
 				result.add(taskBodyBuffer.toString());
 			}
 		}
 		return result;
 	}
 
+	public List<ApiCallingSummaryVO> getAllApiCallingSummary(ApiCallingSummaryVO apiCallingSummaryVO) {
+		return apiCallingSummaryMapper.getAllApiCallingSummary(apiCallingSummaryVO);
+	}
+
 	private String getDataHead(String majorType) {
 		StringBuffer result = new StringBuffer();
 
-		return result.append("项目编码").append(",项目类型").append(",品类").append(",调用API").append(",调用方法").append(",用户")
-				.append(",调用日期").append(",调用次数").toString();
+		return result.append("项目编码").append(",项目类型").append(",品类").append(",调用API").append(",用户").append(",调用日期")
+				.append(",调用次数").toString();
 	}
 }

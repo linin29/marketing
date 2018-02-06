@@ -16,7 +16,7 @@ public class ApiCallingSummaryVO {
 	private Date lastUpdateTime;
 	private String status;
 	private ProjectVO project;
-	private String majorTypeDesc;
+	private String majorTypeDesc = "";
 	private String startDate;
 	private String endDate;
 

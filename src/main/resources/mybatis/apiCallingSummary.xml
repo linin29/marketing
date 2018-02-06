@@ -46,7 +46,7 @@
     		and a.calling_day <![CDATA[ <= #{endDate}]]>
     	</if>
     	<if test="userName != null and userName != ''">
-    		and a.`user_name` like concat(concat('%',#{userName}),'%')
+    		and a.`user_name`= #{userName}
     	</if>
     	<if test="majorType != null and majorType != ''">
 			and a.`major_type` = #{majorType}
@@ -57,6 +57,37 @@
     	order by a.calling_day DESC
     	limit #{startNum}, #{perPage}
     </select>
+    <select id="getAllApiCallingSummary" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.bo.ApiCallingSummaryBO">
+    	select a.id, a.api_method, a.api_name, a.calling_day, a.user_name, a.calling_times, a.create_time, a.last_update, a.status,
+    	a.project_id, b.type as project_type, a.major_type, c.description as majorTypeDesc
+    	from api_calling_count a
+    	left join project b on a.project_id = b.id and b.`status` = 'active' 
+    	left join major_type c on c.name=a.major_type and c.`status` = 'active'
+    	where a.`status` = 'active'
+    	<if test="apiMethod != null and apiMethod != ''">
+    		and a.api_method = #{apiMethod}
+    	</if>
+    	<if test="apiName != null and apiName != ''">
+    		and a.api_name = #{apiName}
+    	</if>
+    	<if test="startDate != null and startDate != ''">
+    		and a.calling_day <![CDATA[ >= #{startDate}]]>
+    	</if>
+    	<if test="endDate != null and endDate != ''">
+    		and a.calling_day <![CDATA[ <= #{endDate}]]>
+    	</if>
+    	<if test="userName != null and userName != ''">
+    		and a.`user_name`= #{userName}
+    	</if>
+    	<if test="majorType != null and majorType != ''">
+			and a.`major_type` = #{majorType}
+		</if>
+    	<if test="projectId != null and projectId != ''">
+    		and a.project_id  = #{projectId}
+    	</if>
+    	order by a.calling_day DESC
+    </select>
+    
     <select id="getApiCallingSummaryListByVO" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.vo.ApiCallingSummaryVO">
     	select a.id, a.api_method, a.api_name, a.calling_day, a.user_name, a.calling_times, a.create_time, a.last_update, a.status,
     	a.project_id,
@@ -86,7 +117,7 @@
     		and a.calling_day = #{callingDay}
     	</if>
     	<if test="userName != null and userName != ''">
-    		and a.`user_name` like concat(concat('%',#{userName}),'%')
+    		and a.`user_name` = #{userName}
     	</if>
     	<if test="callingTimes != null and callingTimes != ''">
     		and a.calling_times = #{callingTimes}
@@ -135,7 +166,7 @@
     		and a.calling_day <![CDATA[ <= #{endDate}]]>
     	</if>
     	<if test="userName != null and userName != ''">
-    		and a.`user_name` like concat(concat('%',#{userName}),'%')
+    		and a.`user_name` = #{userName}
     	</if>
     	<if test="majorType != null and majorType != ''">
 			and a.`major_type` = #{majorType}
@@ -163,7 +194,7 @@
     		and a.calling_day <![CDATA[ <= #{endDate}]]>
     	</if>
     	<if test="userName != null and userName != ''">
-    		and a.`user_name` like concat(concat('%',#{userName}),'%')
+    		and a.`user_name` = #{userName}
     	</if>
     	<if test="majorType != null and majorType != ''">
 			and a.`major_type` = #{majorType}

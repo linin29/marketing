@@ -30,7 +30,7 @@
                    	<span>项目</span>
                    	<div class="modal-body" style="padding-left: 25px;">
                  	  	<select class="form-control" id="project_id" name="project_id" style="width:300px;" <#if task??>disabled="disabled"</#if>>
-                 	  	   <option value="">请选择项目编码</option>
+                 	  	   <option value="">请选择项目</option>
                  	  	   <#if projects?? && (projects?size > 0)>
 		                       <#list projects as project>
 		                       		<option value="${project.id}" <#if (task.projectId)?? && project.id==task.projectId>selected</#if>>${project.name}</option>

@@ -24,7 +24,7 @@
                    </div>
                </h4>               
            </li>
-           <#if projects?? && (projects?size > 0) && task?? && (task.projectId!='')>
+           <#if projects?? && (projects?size > 0)>
            <li>
                <h4>
                		<img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">

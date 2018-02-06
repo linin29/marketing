@@ -17,6 +17,8 @@ public class ApiCallingSummaryVO {
 	private String status;
 	private ProjectVO project;
 	private String majorTypeDesc;
+	private String startDate;
+	private String endDate;
 
 	public long getId() {
 		return id;
@@ -128,6 +130,22 @@ public class ApiCallingSummaryVO {
 
 	public void setMajorTypeDesc(String majorTypeDesc) {
 		this.majorTypeDesc = majorTypeDesc;
+	}
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
 	}
 
 }

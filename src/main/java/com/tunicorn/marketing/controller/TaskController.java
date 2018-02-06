@@ -175,6 +175,10 @@ public class TaskController extends BaseController {
 
 		TaskBO taskBO = new TaskBO();
 		taskBO.setUserId(user.getId());
+		if (StringUtils.isNotBlank(request.getParameter("projectId"))) {
+			String projectId = request.getParameter("projectId");
+			taskBO.setProjectId(projectId);
+		}
 		if (StringUtils.isNotBlank(request.getParameter("majorType"))) {
 			String majorType = request.getParameter("majorType");
 			taskBO.setMajorType(majorType);
@@ -198,10 +202,11 @@ public class TaskController extends BaseController {
 	@RequestMapping("/exportData")
 	public String exportIpMac(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		UserVO user = getCurrentUser(request);
+		String projectId = request.getParameter("projectId");
 		String majorType = request.getParameter("majorType");
 		String startTime = request.getParameter("startTime");
 		String endTime = request.getParameter("endTime");
-		List<String> dataList = taskService.getTaskExportData(majorType, startTime, endTime, user.getId());
+		List<String> dataList = taskService.getTaskExportData(projectId, majorType, startTime, endTime, user.getId());
 		response.setCharacterEncoding("UTF-8");
 		SimpleDateFormat dfs = new SimpleDateFormat("yyyyMMddHHmmss");
 		Date time = new Date();

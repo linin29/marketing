@@ -58,7 +58,12 @@
     	limit #{startNum}, #{perPage}
     </select>
     <select id="getApiCallingSummaryListByVO" resultMap="ApiCallingSummaryResultMap" parameterType="com.tunicorn.marketing.vo.ApiCallingSummaryVO">
-    	select a.id, a.api_method, a.api_name, a.calling_day, a.user_name, a.calling_times, a.create_time, a.last_update, a.status
+    	select a.id, a.api_method, a.api_name, a.calling_day, a.user_name, a.calling_times, a.create_time, a.last_update, a.status,
+    	a.project_id,
+    	<if test="projectId != null and projectId != ''">
+    	 b.type as project_type, 
+    	 </if>
+    	 a.major_type, c.description as majorTypeDesc
     	from api_calling_count a
     	<if test="projectId != null and projectId != ''">
     	left join project b on a.project_id = b.id and b.`status` = 'active' 
@@ -70,6 +75,12 @@
     	</if>
     	<if test="apiName != null and apiName != ''">
     		and a.api_name = #{apiName}
+    	</if>
+    	<if test="startDate != null and startDate != ''">
+    		and a.calling_day <![CDATA[ >= #{startDate}]]>
+    	</if>
+    	<if test="endDate != null and endDate != ''">
+    		and a.calling_day <![CDATA[ <= #{endDate}]]>
     	</if>
     	<if test="callingDay != null and callingDay != ''">
     		and a.calling_day = #{callingDay}

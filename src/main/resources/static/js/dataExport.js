@@ -32,9 +32,9 @@ dataExport=(function(){
 				 },
 				 success: function(data) {
 				 	if(data && data.success && data.data > 0){
-				 		window.open(marketing_url +"/exportData?majorType=" + majorType+"&startTime=" + startTime + "&endTime=" + endTime);  
+				 		window.open(marketing_url +"/exportData?majorType=" + majorType+"&startTime=" + startTime + "&endTime=" + endTime + "&projectId=" + projectId);  
 				 	}else{
-				 		noty({text: '当前品类无可导出数据', layout: "topCenter", type: "warning", timeout: 2000});
+				 		noty({text: '当前无可导出数据', layout: "topCenter", type: "warning", timeout: 2000});
 				 		return;
 				 	}
 		    	},
@@ -99,10 +99,6 @@ dataExport=(function(){
 		$('input:checkbox[name=taskStatus]:checked').each(function(i){
 			taskStatus = $(this).val();
 		});
-		if(!projectId){
-			 noty({text: '请选择项目', layout: "topCenter", type: "warning", timeout: 2000});
-			 return;
-		}
 		if(!majorType){
 			 noty({text: '请选择品类', layout: "topCenter", type: "warning", timeout: 2000});
 			 return;

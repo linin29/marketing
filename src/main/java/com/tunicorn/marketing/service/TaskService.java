@@ -96,8 +96,6 @@ import com.tunicorn.util.JsonUtil;
 import com.tunicorn.util.MessageUtils;
 import com.tunicorn.util.RegexUtil;
 
-import freemarker.template.utility.StringUtil;
-
 @Service
 public class TaskService {
 	private static Logger logger = Logger.getLogger(TaskService.class);
@@ -1468,10 +1466,13 @@ public class TaskService {
 		return result;
 	}
 
-	public List<String> getTaskExportData(String majorType, String startTime, String endTime, String userId) {
+	public List<String> getTaskExportData(String projectId, String majorType, String startTime, String endTime, String userId) {
 		List<String> result = new ArrayList<String>();
 		TaskVO taskVO = new TaskVO();
 		taskVO.setTaskStatus(MarketingConstants.TASK_STATUS_IDENTIFY_SUCCESS);
+		if (StringUtils.isNotBlank(projectId)) {
+			taskVO.setProjectId(projectId);
+		}
 		taskVO.setMajorType(majorType);
 		taskVO.setUserId(userId);
 		if (StringUtils.isNotBlank(startTime)) {

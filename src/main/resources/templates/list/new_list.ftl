@@ -30,19 +30,11 @@
                		<img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
                    	<span>项目</span>
                    	<div class="modal-body" style="padding-left: 25px;">
-<<<<<<< HEAD
-                 	  	<select id="project_id" name="project_id" style="width:20%;" <#if task??>disabled="disabled"</#if>>
-                 	  	   <option value="">请选择项目编码</option>
-                 	  	   
-=======
                  	  	<select class="form-control" id="project_id" name="project_id" style="width:300px;" <#if task??>disabled="disabled"</#if>>
                  	  	   <option value="">请选择项目</option>
-                 	  	   <#if projects?? && (projects?size > 0)>
->>>>>>> branch 'v1.1' of weixiaokai@172.16.58.42:Tunicorn_Application/web-marketing.git
 		                       <#list projects as project>
 		                       		<option value="${project.id}" <#if (task.projectId)?? && project.id==task.projectId>selected</#if>>${project.name}</option>
 		                       </#list>
-		                   
                     	</select>
                    	</div>
                </h4>

@@ -24,6 +24,7 @@
                    </div>
                </h4>               
            </li>
+           <#if projects?? && (projects?size > 0) && task?? && (task.projectId!='')>
            <li>
                <h4>
                		<img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
@@ -31,15 +32,16 @@
                    	<div class="modal-body" style="padding-left: 25px;">
                  	  	<select id="project_id" name="project_id" style="width:20%;" <#if task??>disabled="disabled"</#if>>
                  	  	   <option value="">请选择项目编码</option>
-                 	  	   <#if projects?? && (projects?size > 0)>
+                 	  	   
 		                       <#list projects as project>
 		                       		<option value="${project.id}" <#if (task.projectId)?? && project.id==task.projectId>selected</#if>>${project.name}</option>
 		                       </#list>
-		                   </#if>
+		                   
                     	</select>
                    	</div>
                </h4>
            </li>
+           </#if>
            <li>
                <h4>
                    <img class="img_icorn" src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">

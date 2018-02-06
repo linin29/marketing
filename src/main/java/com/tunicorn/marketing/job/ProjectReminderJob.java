@@ -75,13 +75,14 @@ public class ProjectReminderJob {
 				AdminServiceApplyVO service = projectService.getServiceByProjectId(projectId);
 				String emailAddress = service.getEmail().trim();
 				String emailSubject = ConfigUtils.getInstance().getConfigValue("email.reminder.project.subject");
+				String bcc = ConfigUtils.getInstance().getConfigValue("email.bcc.address");
 				StringBuffer emailContent = new StringBuffer();
 				emailContent.append("<p>").append(service.getUsername()).append("您好,</p>");
 				emailContent.append("<p>您的项目:<strong>").append(project.getName()).append("</strong>,已使用情况如下:</p>");
 				emailContent.append("<p>已使用门店数:").append(currentStoreCount).append("(总门店数:").append(totalStoreCount).append(")</p>");
 				emailContent.append("<p>已使用调用数:").append(currentCallCount).append("(总调用数:").append(totalCallCount).append(")</p>");
 				emailContent.append("<p>已使用图片数:").append(currentImageCount).append("(总图片数:").append(totalImageCount).append(")</p>");
-				if (EmailUtils.sendHtmlMail(new String[]{emailAddress}, emailSubject, emailContent.toString())) {
+				if (EmailUtils.sendHtmlMail(new String[]{emailAddress}, bcc, emailSubject, emailContent.toString())) {
 					ProjectReminderUpdateVO update = new ProjectReminderUpdateVO();
 					update.setProjectId(projectId);
 					update.setRemiderDay(currentDateString);

@@ -614,8 +614,8 @@ adminService = (function(){
 		    $('.form_datetime2').datetimepicker('setStartDate',startTime);
 		}).on('hide', function(e) {  
             $('#service-form').data('bootstrapValidator')  
-            .updateStatus('toDate', 'NOT_VALIDATED', null)  
-            .validateField('toDate');
+            .updateStatus('fromDate', 'NOT_VALIDATED', null)  
+            .validateField('fromDate');
 		});
 		
 		$('.form_datetime2').datetimepicker({

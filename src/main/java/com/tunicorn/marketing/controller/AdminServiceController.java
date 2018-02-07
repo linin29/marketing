@@ -111,12 +111,21 @@ public class AdminServiceController extends BaseController {
 		adminServiceApplyVO.setCreatorId(user.getId());
 
 		/*********** 输入验证开始 *************/
-		List<String> validate = validate(adminServiceApplyVO);
-		if (validate.size() > 0) {
+		List<String> serviceValidate = validate(adminServiceApplyVO);
+		List<String> projectValidate = validate(projectVO);
+		if (serviceValidate.size() > 0) {
 			Message mess = MessageUtils.getInstance().getMessage("bad_request");
 			String errorMessage = mess.getMessage() + ":";
-			for (int i = 0; i < validate.size(); i++) {
-				errorMessage += validate.get(i).toString() + ";";
+			for (int i = 0; i < serviceValidate.size(); i++) {
+				errorMessage += serviceValidate.get(i).toString() + ";";
+			}
+			return AjaxResponse.toFailure(mess.getCode(), errorMessage);
+		}
+		if (projectValidate.size() > 0) {
+			Message mess = MessageUtils.getInstance().getMessage("bad_request");
+			String errorMessage = mess.getMessage() + ":";
+			for (int i = 0; i < projectValidate.size(); i++) {
+				errorMessage += projectValidate.get(i).toString() + ";";
 			}
 			return AjaxResponse.toFailure(mess.getCode(), errorMessage);
 		}
@@ -140,12 +149,21 @@ public class AdminServiceController extends BaseController {
 		adminServiceApplyVO.setId(applyId);
 
 		/*********** 输入验证开始 *************/
-		List<String> validate = validate(adminServiceApplyVO);
-		if (validate.size() > 0) {
+		List<String> serviceValidate = validate(adminServiceApplyVO);
+		List<String> projectValidate = validate(projectVO);
+		if (serviceValidate.size() > 0) {
 			Message mess = MessageUtils.getInstance().getMessage("bad_request");
 			String errorMessage = mess.getMessage() + ":";
-			for (int i = 0; i < validate.size(); i++) {
-				errorMessage += validate.get(i).toString() + ";";
+			for (int i = 0; i < serviceValidate.size(); i++) {
+				errorMessage += serviceValidate.get(i).toString() + ";";
+			}
+			return AjaxResponse.toFailure(mess.getCode(), errorMessage);
+		}
+		if (projectValidate.size() > 0) {
+			Message mess = MessageUtils.getInstance().getMessage("bad_request");
+			String errorMessage = mess.getMessage() + ":";
+			for (int i = 0; i < projectValidate.size(); i++) {
+				errorMessage += projectValidate.get(i).toString() + ";";
 			}
 			return AjaxResponse.toFailure(mess.getCode(), errorMessage);
 		}

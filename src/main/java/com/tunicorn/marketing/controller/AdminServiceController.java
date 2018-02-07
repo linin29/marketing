@@ -113,20 +113,20 @@ public class AdminServiceController extends BaseController {
 		/*********** 输入验证开始 *************/
 		List<String> serviceValidate = validate(adminServiceApplyVO);
 		List<String> projectValidate = validate(projectVO);
+
+		Message mess = MessageUtils.getInstance().getMessage("bad_request");
+		String errorMessage = mess.getMessage() + ":";
 		if (serviceValidate.size() > 0) {
-			Message mess = MessageUtils.getInstance().getMessage("bad_request");
-			String errorMessage = mess.getMessage() + ":";
 			for (int i = 0; i < serviceValidate.size(); i++) {
 				errorMessage += serviceValidate.get(i).toString() + ";";
 			}
-			return AjaxResponse.toFailure(mess.getCode(), errorMessage);
 		}
 		if (projectValidate.size() > 0) {
-			Message mess = MessageUtils.getInstance().getMessage("bad_request");
-			String errorMessage = mess.getMessage() + ":";
 			for (int i = 0; i < projectValidate.size(); i++) {
 				errorMessage += projectValidate.get(i).toString() + ";";
 			}
+		}
+		if (serviceValidate.size() > 0 || projectValidate.size() > 0) {
 			return AjaxResponse.toFailure(mess.getCode(), errorMessage);
 		}
 		/*********** 输入验证结束 *************/
@@ -151,20 +151,20 @@ public class AdminServiceController extends BaseController {
 		/*********** 输入验证开始 *************/
 		List<String> serviceValidate = validate(adminServiceApplyVO);
 		List<String> projectValidate = validate(projectVO);
+
+		Message mess = MessageUtils.getInstance().getMessage("bad_request");
+		String errorMessage = mess.getMessage() + ":";
 		if (serviceValidate.size() > 0) {
-			Message mess = MessageUtils.getInstance().getMessage("bad_request");
-			String errorMessage = mess.getMessage() + ":";
 			for (int i = 0; i < serviceValidate.size(); i++) {
 				errorMessage += serviceValidate.get(i).toString() + ";";
 			}
-			return AjaxResponse.toFailure(mess.getCode(), errorMessage);
 		}
 		if (projectValidate.size() > 0) {
-			Message mess = MessageUtils.getInstance().getMessage("bad_request");
-			String errorMessage = mess.getMessage() + ":";
 			for (int i = 0; i < projectValidate.size(); i++) {
 				errorMessage += projectValidate.get(i).toString() + ";";
 			}
+		}
+		if (serviceValidate.size() > 0 || projectValidate.size() > 0) {
 			return AjaxResponse.toFailure(mess.getCode(), errorMessage);
 		}
 		/*********** 输入验证结束 *************/

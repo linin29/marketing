@@ -5,6 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.tunicorn.marketing.constant.MarketingConstants;
@@ -23,7 +27,12 @@ public class AdminServiceApplyVO {
 	private List<MajorTypeVO> majorTypes;
 	private UserVO creator;
 	private String statusStr;
+	@NotNull(message="用户名不能为空")
+	@Size(max=80, min=1, message="用户名长度在1-80个字符之内")
+	@Pattern(regexp="^[a-zA-Z0-9_\u4e00-\u9fa5]+$", message="用户名只能包含字母、数字和下划线")
 	private String username;
+	@NotNull(message="邮箱不能为空")
+	@Pattern(regexp = "^(\\w)+(.\\w+)*@(\\w)+((.\\w+)+)$", message="邮箱格式不正确")
 	private String email;
 	private String rejectReason;
 	private String appKey;

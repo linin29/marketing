@@ -109,6 +109,19 @@ public class AdminServiceController extends BaseController {
 		ProjectVO projectVO = new ProjectVO();
 		setServiceApplyAndProjectVO(request, adminServiceApplyVO, projectVO);
 		adminServiceApplyVO.setCreatorId(user.getId());
+
+		/*********** 输入验证开始 *************/
+		List<String> validate = validate(adminServiceApplyVO);
+		if (validate.size() > 0) {
+			Message mess = MessageUtils.getInstance().getMessage("bad_request");
+			String errorMessage = mess.getMessage() + ":";
+			for (int i = 0; i < validate.size(); i++) {
+				errorMessage += validate.get(i).toString() + ";";
+			}
+			return AjaxResponse.toFailure(mess.getCode(), errorMessage);
+		}
+		/*********** 输入验证结束 *************/
+
 		int result = adminServiceApplyService.createAdminServiceApply(adminServiceApplyVO, projectVO, images,
 				user.getId());
 		if (result == 0) {
@@ -125,6 +138,19 @@ public class AdminServiceController extends BaseController {
 		ProjectVO projectVO = new ProjectVO();
 		setServiceApplyAndProjectVO(request, adminServiceApplyVO, projectVO);
 		adminServiceApplyVO.setId(applyId);
+
+		/*********** 输入验证开始 *************/
+		List<String> validate = validate(adminServiceApplyVO);
+		if (validate.size() > 0) {
+			Message mess = MessageUtils.getInstance().getMessage("bad_request");
+			String errorMessage = mess.getMessage() + ":";
+			for (int i = 0; i < validate.size(); i++) {
+				errorMessage += validate.get(i).toString() + ";";
+			}
+			return AjaxResponse.toFailure(mess.getCode(), errorMessage);
+		}
+		/*********** 输入验证结束 *************/
+
 		AdminServiceApplyVO applyVO = adminServiceApplyService.getAdminServiceApplyById(applyId);
 		if (applyVO == null) {
 			Message message = MessageUtils.getInstance().getMessage("marketing_service_apply_not_existed");

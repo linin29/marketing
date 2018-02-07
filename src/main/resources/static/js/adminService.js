@@ -7,7 +7,7 @@ adminService = (function(){
 			initPagination(currentPage, totalCount, serviceApplyUrl);
 		}
 		initDate();
-		//serviceDataValidator();
+		serviceDataValidator();
 		$("#query").click(function(){
 			queryService(serviceApplyUrl);
 		});
@@ -79,8 +79,14 @@ adminService = (function(){
         	liveSearch:true
         });
         $("#new-server-model").on("hidden.bs.modal", function() {
-        	$("#new-server-model").find("input").val("");
+        	//$("#new-server-model").find("input").val("");
+        	$('#service-form')[0].reset();
+        	initDate();
+        	$("#project-type").find("option[value='']").prop("selected", true);
 			$(this).removeData("bs.modal");
+			$("#service-form").data("bootstrapValidator").destroy();
+			$('#service-form').data('bootstrapValidator', null);
+			serviceDataValidator();
         });
 	};
 	function serviceManageInit(currentPage, totalCount){
@@ -192,39 +198,15 @@ adminService = (function(){
 		var imageNumber =$("#pic-number").val();
 		var threshhold = $("#threshhold").val();
 		var projectType = $("#project-type").val();
-		if(appBusinessName == "") {
-			$('#errorMsg').text("请输入项目名称");
-			return;
-		};
-		if(appBusinessAddress == "") {
-			$('#errorMsg').text("请输入项目地址");
-			return;
-		}
-		if(appBusinessContacts == "") {
-			$('#errorMsg').text("请输入联系人");
-			return;
-		}
-		var regex = /^\d{11}$/;
-		if(!appBusinessMobile || !regex.test(appBusinessMobile)){
-			$('#errorMsg').text("联系方式格式不对");
-			return;
-		}
+		
 		var formData = new FormData();
 		var files =  document.getElementById("upload-book").files;
-		if(!majorTypes) {
-			$('#errorMsg').text("请选择服务");
-			return;
-		}
-		if(!projectType) {
-			$('#errorMsg').text("请选择项目类型");
-			return;
-		}
 		if(projectType && projectType != 'free'){
 			if (files.length == 0 && !applyId) {
 				$('#errorMsg').text("请选择合同图片");
 				return;
 			}
-			if(!contractedValue) {
+			if(!contractedValue && contractedValue != "0") {
 				$('#errorMsg').text("请输入项目金额");
 				return;
 			}
@@ -233,42 +215,9 @@ adminService = (function(){
 				return;
 			}
 		}
-		if(startTime == "") {
-			$('#errorMsg').text("请输入开始时间");
-			return;
-		}
-		if(endTime == "") {
-			$('#errorMsg').text("请输入结束时间");
-			return;
-		}
-		if(storeNumber == "" || !/^\+?[1-9][0-9]*$/.test(storeNumber)) {
-			$('#errorMsg').text("门店数输入正整数");
-			return;
-		}
-		if(imageNumber == "" || !/^\+?[1-9][0-9]*$/.test(imageNumber)) {
-			$('#errorMsg').text("图片数输入正整数");
-			return;
-		}
-		if(maxCallNumber == "" || !/^\+?[1-9][0-9]*$/.test(maxCallNumber)) {
-			$('#errorMsg').text("调用次数输入正整数");
-			return;
-		}
 		if(projectType == 'free' && maxCallNumber > 100) {
 			$('#errorMsg').text("免费测试调用次数不能大于100");
 			return;
-		}
-		if(threshhold == "") {
-			$('#errorMsg').text("请输入调用率提醒");
-			return;
-		}
-		if(username == "") {
-			$('#errorMsg').text("请输入用户名");
-			return;
-		};
-		var regex = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
-		if(!email || !regex.test(email)){
-			noty({text: "Email格式不正确", layout: "topCenter", type: "warning", timeout: 2000});
-			return false;
 		}
 		var url ='';
 		if(applyId){
@@ -300,8 +249,8 @@ adminService = (function(){
 		formData.append('threshhold', parseFloat(threshhold)/100);
 		formData.append('projectType', projectType);
 		
-		//$("#service-form").data("bootstrapValidator").validate();
-		//if($("#service-form").data('bootstrapValidator').isValid()){
+		$("#service-form").data("bootstrapValidator").validate();
+		if($("#service-form").data('bootstrapValidator').isValid()){
 		tunicorn.utils.postFormData(url, formData, function(err, result){
 			if(err){
 				noty({text: "服务器异常", layout: "topCenter", type: "error", timeout: 2000});
@@ -334,7 +283,7 @@ adminService = (function(){
 				return;
 			}
 		});
-	  //}
+	  }
 	}
 	function detail(applyId, isRejectReasonShow){
 		$.ajax({
@@ -663,6 +612,10 @@ adminService = (function(){
 		}).on('changeDate',function(e){
 		    var startTime = e.date;
 		    $('.form_datetime2').datetimepicker('setStartDate',startTime);
+		}).on('hide', function(e) {  
+            $('#service-form').data('bootstrapValidator')  
+            .updateStatus('toDate', 'NOT_VALIDATED', null)  
+            .validateField('toDate');
 		});
 		
 		$('.form_datetime2').datetimepicker({
@@ -676,6 +629,10 @@ adminService = (function(){
 		}).on('changeDate',function(e){
 		    var endTime = e.date;
 		    $('.form_datetime1').datetimepicker('setEndDate',endTime);
+		}).on('hide', function(e) {  
+            $('#service-form').data('bootstrapValidator')  
+            .updateStatus('toDate', 'NOT_VALIDATED', null)  
+            .validateField('toDate');
 		});
 		$('.form_datetime3').datetimepicker({
 			format: 'hh:ii:00',
@@ -715,59 +672,197 @@ adminService = (function(){
 				message: 'The name is not valid',
 				validators: {
 					notEmpty: {
-						message: 'IPC名称不能为空'
+						message: '项目名称不能为空'
 					},
 					stringLength: {
 						min: 1,
-						max: 20,
-						message: 'IPC名称长度在1-20个字符之内'
+						max: 40,
+						message: '项目名称长度在1-40个字符之内'
 					},
 					regexp: {
 						regexp: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/,
-						message: 'IPC名称只能是中文、英文、数字和下划线组合'
+						message: '项目名称只能是中文、英文、数字和下划线组合'
 					}
 				}
 			},
-			rtsp:{
-				message: 'The rtsp is not valid',
+			address:{
+				message: 'The address is not valid',
 				validators: {
 					notEmpty: {
-						message: '视频流地址不能为空'
+						message: '地址不能为空'
 					},
 					stringLength: {
 						min: 1,
-						max: 100,
-						message: '视频流地址长度在1-100个字符之内'
+						max: 200,
+						message: '地址长度在1-200个字符之内'
 					},
 				}
 			},
-			location: {
-				message: 'The location is not valid',
+			contacts: {
+				message: 'The contacts is not valid',
 				validators: {
 					notEmpty: {
-						message: 'IPC位置不能为空'
+						message: '联系人不能为空'
 					},
 					stringLength: {
 						min: 1,
 						max: 80,
-						message: 'IPC位置长度在1-80个字符之内'
+						message: '联系人长度在1-80个字符之内'
 					},
 					regexp: {
 						regexp: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/,
-						message: 'IPC位置只能是中文、英文、数字和下划线组合'
+						message: '联系人只能是中文、英文、数字和下划线组合'
 					}
 				}
 			}, 
-			comment: {
-				message: 'The comment is not valid',
+			mobile: {
+				message: 'The mobile is not valid',
 				validators: {
-					stringLength: {
-						min: 0,
-						max: 100,
-						message: '备注长度在0-100个字符之内'
+        			notEmpty: {
+        				message: '联系方式不能为空'
+        			},
+        			regexp: {
+						regexp: /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/,
+						message: '联系方式格式不正确'
 					}
 				}
+			},
+			serverType: {
+				message: 'The serverType is not valid',
+				validators: {
+        			notEmpty: {
+        				message: '服务不能为空'
+        			}
+				}
+			},
+			projectType: {
+				message: 'The projectType is not valid',
+				validators: {
+        			notEmpty: {
+        				message: '项目类型不能为空'
+        			}
+				}
+			},
+			fromDate:{
+				message: 'The fromDate is not valid',
+				validators: {
+					notEmpty: {
+						message: '项目开始时间不能为空'
+					},
+					date: {
+                        format: 'YYYY-MM-DD hh:mm:ss',
+                        message: '项目开始时间格式不正确'
+                    }
+				}
+			},
+			toDate:{
+				message: 'The toDate is not valid',
+				validators: {
+					notEmpty: {
+						message: '项目结束时间不能为空'
+					},
+					date: {
+                        format: 'YYYY-MM-DD hh:mm:ss',
+                        message: '项目结束时间格式不正确'
+                    }
+				}
+			},
+			storeNumber: {
+				message: 'The storeNumber is not valid',
+				validators: {
+					callback: {
+				        message: '门店数是1-999999999之间的正整数',
+				        callback: function(value, validator) {
+				        	var flag = false;
+				        	if(!(/(^[1-9]\d*$)/.test(value))){
+				        		return false;
+				        	}
+				            if (0 < parseInt(value) &&  parseInt(value) <= 999999999) {
+				                flag = true;
+				            }
+				            return flag;
+				        }
+				    }
+				}
+
+			},
+			imageNumber: {
+				message: 'The imageNumber is not valid',
+				validators: {
+					callback: {
+				        message: '图片数是1-999999999之间的正整数',
+				        callback: function(value, validator) {
+				        	var flag = false;
+				        	if(!(/(^[1-9]\d*$)/.test(value))){
+				        		return false;
+				        	}
+				            if (0 < parseInt(value) &&  parseInt(value) <= 999999999) {
+				                flag = true;
+				            }
+				            return flag;
+				        }
+				    }
+				}
+			},
+			callNumber: {
+				message: 'The callNumber is not valid',
+				validators: {
+					callback: {
+				        message: '调用数是1-999999999之间的正整数',
+				        callback: function(value, validator) {
+				        	var flag = false;
+				        	if(!(/(^[1-9]\d*$)/.test(value))){
+				        		return false;
+				        	}
+				            if (0 < parseInt(value) &&  parseInt(value) <= 999999999) {
+				                flag = true;
+				            }
+				            return flag;
+				        }
+				    }
+				}
+			},
+			threshhold: {
+				message: 'The threshhold is not valid',
+				validators: {
+					notEmpty: {
+						message: '调用率提醒不能为空'
+					},
+					regexp: {
+						regexp: /^(([1-9]\d?)|100)$/,
+						message: '调用率提醒只能输入1-100之间的正整数'
+					}
+				}
+			},
+			username: {
+				message: 'The username is not valid',
+				validators: {
+					notEmpty: {
+						message: '用户名不能为空'
+					},
+					stringLength: {
+						min: 1,
+						max: 80,
+						message: '用户名长度在1-80个字符之内'
+					},
+					regexp: {
+						regexp: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/,
+						message: '用户名只能是中文、英文、数字和下划线组合'
+					}
+				}
+			},
+			email: {
+				message: 'The email is not valid',
+				validators: {
+					notEmpty: {
+						message: '邮箱不能为空'
+					},
+					 emailAddress: {
+	                    message: '邮箱格式有误'
+	                }
+				}
 			}
+			
 		}
 	});
   };

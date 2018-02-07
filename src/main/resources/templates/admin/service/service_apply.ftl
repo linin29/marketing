@@ -121,46 +121,64 @@
 			      	</div>
 			      	<div class="modal-body">
 			      	 <form id="service-form">
-			        	<div class="form-group">
+			        	<div>
 			                <h5><strong>项目信息</strong></h5>
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
 			                		<tr>
 			                			<td class="wid">名称：</td>
-			                			<td><input name="name" class="application-name total newline" type="text" id="ser-name" placeholder="输入名称"/></td>
+			                			<td>
+			                				<div class="form-group" style="margin-bottom:0px;">
+			                					<input name="name" class="total newline form-control" type="text" id="ser-name" placeholder="输入名称"/>
+											</div>
+										</td>
 			                		</tr>
 			                		<tr id="project-id-tr">
 			                			<td class="wid">项目编码：</td>
-			                			<td><input class="application-name total newline" type="text" id="project-id" placeholder="输入项目编码"/></td>
+			                			<td>
+			                				<div class="form-group" style="margin-bottom:0px;">
+			                					<input class="total newline form-control" type="text" id="project-id" placeholder="输入项目编码"/>
+											</div>
+			                			</td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">地址：</td>
-			                			<td><input name="address" class="application-name total newline" type="text" id="ser-address" placeholder="输入地址"/></td>
+			                			<td>
+			                			<div class="form-group" style="margin-bottom:0px;">
+			                			  <input name="address" class="total newline form-control" type="text" id="ser-address" placeholder="输入地址"/>
+			                			</div>
+			                			</td>
 			                		<tr>
 			                			<td class="wid">联系人：</td>
-			                			<td><input name="contacts" class="application-name total newline" type="text" id="ser-phone-person" placeholder="输入联系人"/></td>
+			                			<td>
+			                			<div class="form-group" style="margin-bottom:0px;">
+			                			  <input name="contacts" class="total newline form-control" type="text" id="ser-phone-person" placeholder="输入联系人"/>
+			                			</div>
+			                			</td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">联系方式：</td>
-			                			<td><input name="mobile" class="application-name total newline" type="text" id="ser-phone" placeholder="输入联系方式"/></td>
+			                			<td>
+			                			<div class="form-group" style="margin-bottom:0px;">
+			                			<input name="mobile" class="total newline form-control" type="text" id="ser-phone" placeholder="输入联系方式"/>
+			                			</div>
+			                			</td>
 			                		</tr>
 			                	</tbody>
 			                </table>
 			           	</div>
-			           	<div class="form-group" id="upload-book-div">
+			           	<div id="upload-book-div">
 			                <h5><strong>合同信息</strong></h5>
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
 			                		<tr id="upload-book-tr">
 			                			<td class="wid">上传合同：</td>
-			                			<td><input  class="application-name total" multiple type="file" id="upload-book" /></td>
+			                			<td><input class="application-name total" multiple  type="file" id="upload-book" /></td>
 			                		</tr>
 			                		<tr id="contracted-value-tr">
-			                			<td class="wid">合同金额：</td>
+			                			<td class="wid">合同金额(¥)：</td>
 			                			<td>
-				                			¥
 				                			<input name="contractedValue" type="text" placeholder="请输入金额" class="money-style" id="contracted-value">
-				                			元人民币
 				                		</td>
 			                		</tr>
 			                		<tr id="contracted-no-tr">
@@ -170,31 +188,35 @@
 			                	</tbody>
 			                </table>
 			           	</div>	
-			      	    <div class="form-group">
+			      	    <div>
 			                <h5><strong>服务信息</strong></h5>
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
 			                		<tr>
 			                			<td class="wid">申请服务：</td>
 			                			<td>
-			                				<select name="serverType" class="selectpicker" multiple id="server-type">
+			                			  <div class="form-group" style="margin-bottom:0px;">
+			                			 	<select name="serverType" class="selectpicker" multiple id="server-type">
 											<#if majorTypes?? && (majorTypes?size > 0)>
 				         						<#list majorTypes as majorType>
 					      							 <option value='${majorType.id}'>${majorType.description}</option>
 					     						</#list>
 				     						</#if>
 											</select>
+											</div>
 			                			</td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">项目类型：</td>
 			                			<td>
+			                			  <div class="form-group" style="margin-bottom:0px;">
 			                				<select name="projectType" id="project-type" class="select-style">
 			                				    <option value=''>选择项目类型</option>
 					      						<option value='free'>免费测试</option>
 					      						<option value='paid'>付费测试</option>
 					      						<option value='official'>正式合同</option>
 											</select>
+										  </div>
 			                			</td>
 			                		</tr>
 			                		<tr>
@@ -221,42 +243,64 @@
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">门店数：</td>
-			                			<td><input name="storeNumber" class="application-name total" type="text" id="store-no"  placeholder="输入门店数"/></td>
+			                			<td>
+			                			<div class="form-group" style="margin-bottom:0px;">
+			                			<input name="storeNumber" class="total form-control" type="text" id="store-no"  placeholder="输入门店数"/>
+			                			</div>
+			                			</td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">图片数：</td>
-			                			<td><input name="imageNumber" class="application-name total newline" type="text" id="pic-number" placeholder="请输入图片数"/></td>
+			                			<td>
+			                			<div class="form-group" style="margin-bottom:0px;">
+			                			<input name="imageNumber" class="total newline form-control" type="text" id="pic-number" placeholder="请输入图片数"/>
+			                			</div>
+			                			</td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">调用次数：</td>
-			                			<td><input name="callNumber" class="application-name total newline" type="text" id="application-number" placeholder="输入申请次数"/></td>
+			                			<td>
+			                			<div class="form-group" style="margin-bottom:0px;">
+			                			<input name="callNumber" class="total newline form-control" type="text" id="application-number" placeholder="输入申请次数"/>
+			                			</div>
+			                			</td>
 			                		</tr>
 			                		<tr>
-			                			<td class="wid">调用率提醒：</td>
+			                			<td class="wid">调用率提醒(%)：</td>
 			                			<td>
-			                				<input name="threshhold" id="threshhold" type="number" min="1" max="100" style="width:50px;">%
+			                			<div class="form-group" style="margin-bottom:0px;">
+			                				<input class="form-control" name="threshhold" id="threshhold" type="number" placeholder="输入调用率">
+			                				</div>
 			                				<#-- <input type="checkbox" style="margin-left:20px;">邮件提醒 -->
 			                			</td>
 			                		</tr>
 			                	</tbody>
 			                </table>
 			           	</div>
-			      	    <div class="form-group">
+			      	    <div>
 			                <h5><strong>账户信息</strong></h5>
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
 			                		<tr>
 			                			<td class="wid">申请用户名：</td>
-			                			<td><input name="username" class="application-name total newline" type="text" id="ser-user-name" placeholder="输入用户名"/></td>
+			                			<td>
+			                			<div class="form-group" style="margin-bottom:0px;">
+			                			<input name="username" class="total newline form-control" type="text" id="ser-user-name" placeholder="输入用户名"/>
+			                			</div>
+			                			</td>
 			                		</tr>
 			                		<tr>
 			                			<td class="wid">邮箱：</td>
-			                			<td><input name="email" class="application-name total newline" type="text" id="ser-email" placeholder="输入邮箱"/></td>
+			                			<td>
+			                			<div class="form-group" style="margin-bottom:0px;">
+			                			<input name="email" class="total newline form-control" type="text" id="ser-email" placeholder="输入邮箱"/>
+			                			</div>
+			                			</td>
 			                		</tr>
 			                	</tbody>
 			                </table>
 			           	</div>
-			           	<div id="rejectReasonDiv" class="form-group" style="display:none;">
+			           	<div id="rejectReasonDiv" style="display:none;">
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
 			                		<tr>

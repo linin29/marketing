@@ -129,6 +129,20 @@ newList=(function(){
                         $('#status').attr('status', 'image_uploaded');
                         $('#status').text('(当前状态：image_uploaded)');
                         noty({text: '成功上传图片张数：'+result.data.length, layout: "topCenter", type: "success", timeout: 3000});
+                        //补充拼接的类型选择
+                        console.log(1111);
+                        var majorTypeTemplate="<option value=\"\">请选择一个类型</option>";
+                        console.log(result.data.majorTypes);
+                    	if(result.data.majorTypes != undefined && result.data.majorTypes!=''){
+                    		var majorTypes = jQuery.parseJSON(result.data.majorTypes);
+                    		console.log(majorTypes);
+                    		console.log(majorTypes.length);
+	                    	for(i=0;i<majorTypes.length;i++){
+	                    		majorTypeTemplate += "<option value=\""+majorTypes[i].name + "\">" + majorTypes[i].description + majorTypes[i].version + "</option>";
+	                    	}
+	                    	console.log(majorTypeTemplate);
+	                    	$("#majorType").html(majorTypeTemplate);
+                    	}
                     }else{
                         if (taskId=='0'){
                             $('#taskId').val(-1);
@@ -141,6 +155,8 @@ newList=(function(){
                     $("#brandListp").hide();
                     $("#stitch_image .brand-list").remove();
                     $("#countInfo").html('<tr><th colspan=2>货架总层数</th><td colspan=1>0</td><th colspan="2">货架总面积</th><td colspan="1">0</td></tr>');
+                    
+                    
                 },
                 error:function(XmlHttpRequest,textStatus,errorThrown){
                     var taskId = $('#taskId').val();

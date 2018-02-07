@@ -60,6 +60,8 @@ import com.tunicorn.marketing.vo.TaskVO;
 import com.tunicorn.marketing.vo.UserVO;
 import com.tunicorn.util.MessageUtils;
 
+import net.sf.json.JSONArray;
+
 @Controller
 @EnableAutoConfiguration
 public class TaskController extends BaseController {
@@ -447,10 +449,15 @@ public class TaskController extends BaseController {
 		UserVO user = getCurrentUser(request);
 		model.addAttribute("user", user);
 
-//		ServiceResponseBO response = taskService.createTask(user.getId(), taskName, images);
 		ServiceResponseBO response = taskService.createTask(user.getId(), taskName, projectId, null, images);
 		if (response.isSuccess()) {
-			return CommonAjaxResponse.toSuccess(response.getResult());
+			ObjectNode node = (ObjectNode) response.getResult();
+			if (StringUtils.isNotBlank(projectId)) {
+				List<MajorTypeVO> majorTypes = majorTypeService.getMajorTypeListByProjectId(projectId);
+				JSONArray jArray = JSONArray.fromObject(majorTypes);
+				node.put("majorTypes", jArray.toString());
+			}
+			return CommonAjaxResponse.toSuccess(node);
 		} else {
 			Message message = MessageUtils.getInstance().getMessage(String.valueOf(response.getResult()));
 			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());

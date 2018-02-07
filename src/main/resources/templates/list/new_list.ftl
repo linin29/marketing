@@ -25,20 +25,39 @@
                </h4>               
            </li>
            <#if projects?? && (projects?size > 0)>
-           <li>
-               <h4>
-               		<img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
-                   	<span>项目</span>
-                   	<div class="modal-body" style="padding-left: 25px;">
-                 	  	<select class="form-control" id="project_id" name="project_id" style="width:300px;" <#if task??>disabled="disabled"</#if>>
-                 	  	   <option value="">请选择项目</option>
-		                       <#list projects as project>
-		                       		<option value="${project.id}" <#if (task.projectId)?? && project.id==task.projectId>selected</#if>>${project.name}</option>
-		                       </#list>
-                    	</select>
-                   	</div>
-               </h4>
-           </li>
+	           <#if task??><!--编辑-->
+		           <#if (task.projectId)?? && task.projectId !=''>
+		           <li>
+		               <h4>
+		               		<img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
+		                   	<span>项目</span>
+		                   	<div class="modal-body" style="padding-left: 25px;">
+		                 	  	<select class="form-control" id="project_id" name="project_id" style="width:300px;" disabled="disabled">
+		                 	  	   <option value="">请选择项目</option>
+				                       <#list projects as project>
+				                       		<option value="${project.id}" <#if (task.projectId)?? && project.id==task.projectId>selected</#if>>${project.name}</option>
+				                       </#list>
+		                    	</select>
+		                   	</div>
+		               </h4>
+		           </li>
+		           </#if>
+	           <#else><!--新建-->
+	           <li>
+	               <h4>
+	               		<img class="img_icorn"  src="${springMacroRequestContext.contextPath}/image/icon.png" alt="">
+	                   	<span>项目</span>
+	                   	<div class="modal-body" style="padding-left: 25px;">
+	                 	  	<select class="form-control" id="project_id" name="project_id" style="width:300px;">
+	                 	  	   <option value="">请选择项目</option>
+			                       <#list projects as project>
+			                       		<option value="${project.id}" <#if (task.projectId)?? && project.id==task.projectId>selected</#if>>${project.name}</option>
+			                       </#list>
+	                    	</select>
+	                   	</div>
+	               </h4>
+	           </li>
+	           </#if>
            </#if>
            <li>
                <h4>

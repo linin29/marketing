@@ -164,7 +164,7 @@
 	</select>
 	<select id="getTaskCount" resultType="int" parameterType="com.tunicorn.marketing.bo.TaskBO">
 		select count(*)
-		from task use index (idx_last_update) 
+		from task  
 		where `status` = 'active'
 		<if test="userId != null and userId != ''">
 			and user_id = #{userId}

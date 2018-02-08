@@ -379,18 +379,17 @@ adminService = (function(){
 			 	if(data && data.success && data.data){
 			 		$("#applyId").val(applyId);
 			 		var html = '';
-			 		var	htmlmore='';
-			 		var  applyAsset_0 = data.data[0];
-		 			html='<div id="applyAsset_' + applyAsset_0.id +'" class="item active" style="text-align: center;">'+
-		 			'<img style="width: 100%;height: 450px;border: 1px solid #ddd;" src="' + applyAsset_0.realPath + '" alt="">' +
-		 			'</div>'
-			 		for(var i = 1; i<data.data.length; i++){		 			
+			 		for(var i = 0; i<data.data.length; i++){
 			 			var applyAsset = data.data[i];
-			 			htmlmore +='<div id="applyAsset_' + applyAsset.id +'" class="item" style="text-align: center;">'+
-			 			'<img style="width:100%;height: 450px;border: 1px solid #ddd;" src="' + applyAsset.realPath + '" alt="">' +
-			 			'</div>'
+			 			html += '<div id="applyAsset_' + applyAsset.id + '" class="col-sm-3">' +
+								'<div class="thumbnail" style="">' + 
+								'<div class="pull-right">';
+			 			html += '</div>' + 
+								/*'<img style="width: 200px;height: 200px" src="' + applyAsset.realPath + '" alt="">' +*/
+								'<a href="' + applyAsset.realPath + '" download="'+applyAsset.displayName+'" >'+applyAsset.displayName+'</a>' +
+								'</div>' + 										   
+								'</div>';
 			 		}
-		 			html+=htmlmore;
 			 		$("#agreement-show").html(html);
 			 	}
 	    	},

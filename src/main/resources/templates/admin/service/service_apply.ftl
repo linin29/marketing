@@ -328,7 +328,7 @@
 				<div class="modal-content">
 					<div class="modal-header" style='height: 44px;'>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4  class="modal-title pull-left">合同管理</h4>
+						<h4  class="modal-title pull-left">合同管理(点击文件进行下载)</h4>
 					</div>
 					<div class="modal-body">
 						<div class="form-group" style='margin-bottom: 36px;'>

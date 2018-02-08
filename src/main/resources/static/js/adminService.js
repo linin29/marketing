@@ -354,7 +354,7 @@ adminService = (function(){
 			 			}
 			 			html += '</div>' + 
 								/*'<img style="width: 200px;height: 200px" src="' + applyAsset.realPath + '" alt="">' +*/
-								'<a href="' + applyAsset.realPath + '" >'+applyAsset.displayName+'</a>' +
+								'<a href="' + applyAsset.realPath + '" download="'+applyAsset.displayName+'" >'+applyAsset.displayName+'</a>' +
 								'</div>' + 										   
 								'</div>';
 			 		}

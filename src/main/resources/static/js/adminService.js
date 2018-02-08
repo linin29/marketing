@@ -356,7 +356,7 @@ adminService = (function(){
 			 		for(var i = 0; i<data.data.length; i++){
 			 			var applyAsset = data.data[i];
 			 			html += '<div id="applyAsset_' + applyAsset.id + '" class="col-sm-3">' +
-								'<div class="thumbnail newline" style="">' + 
+								'<div class="thumbnail newline">' + 
 								'<div class="pull-right">';
 			 			if(isDelete){
 			 				html += '<a href="javascript:void(0)" onclick="adminService.deleteApplyAsset(' + applyAsset.id + ');" class=" glyphicon glyphicon-remove" style="color:red"></a>';
@@ -391,11 +391,11 @@ adminService = (function(){
 			 		for(var i = 0; i<data.data.length; i++){
 			 			var applyAsset = data.data[i];
 			 			html += '<div id="applyAsset_' + applyAsset.id + '" class="col-sm-3">' +
-								'<div class="thumbnail" style="">' + 
+								'<div class="thumbnail newline">' + 
 								'<div class="pull-right">';
-			 			html += '</div>' + 
+			 			html += '</div style="width:120px;">' + 
 								/*'<img style="width: 200px;height: 200px" src="' + applyAsset.realPath + '" alt="">' +*/
-								'<a href="' + applyAsset.realPath + '" download="'+applyAsset.displayName+'" >'+applyAsset.displayName+'</a>' +
+								'<a href="' + applyAsset.realPath + '" download="'+applyAsset.displayName+'" title="'+applyAsset.displayName+'" >'+applyAsset.displayName+'</a>' +
 								'</div>' + 										   
 								'</div>';
 			 		}

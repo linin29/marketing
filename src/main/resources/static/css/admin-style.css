@@ -1,4 +1,40 @@
 /*common*/
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    background-color: #007d3b;
+    border-color: #007d3b;
+}
+.pagination > li> a {
+    display: inline;
+    cursor: pointer;
+}
+/***********************************adminService.ftl and service_management.ftl*****************************/
+.tdCenter td,.thCenter th{
+	text-align:center;
+}
+.total{
+	width:100%;
+}
+.newline{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.select-style{
+	width: 343px;
+   	height: 34px;
+}
+.money-style{
+	border: none;
+    outline: none;
+    width: 70px;
+}
+.uploadBtn img{
+	width:50px;
+	height:50px;
+	cursor: pointer;
+	position: absolute;
+    top: -16px;
+    z-index: 100;
+    left: 24px;
+}
+/*********************************************************************************************************/
+
 ul li{
 	list-style: none;
 }

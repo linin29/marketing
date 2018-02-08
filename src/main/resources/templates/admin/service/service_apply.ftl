@@ -1,34 +1,3 @@
-<style type='text/css'>
-	.tdCenter td,.thCenter th{
-		text-align:center;
-	}
-	.total{
-		width:100%;
-	}
-	.newline{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-	.select-style{
-		width: 343px;
-    	height: 34px;
-	}
-	.money-style{
-		border: none;
-	    outline: none;
-	    width: 70px;
-	}
-	/* .dowloadBtn img:hover{
-		background:rgba(238, 238, 238, 0.69);
-	} */
-	.uploadBtn img{
-		width:50px;
-		height:50px;
-		cursor: pointer;
-		position: absolute;
-	    top: -16px;
-	    z-index: 100;
-	    left: 24px;
-	}
-</style>
-
 	<div class="panel-default clearBottom">
   			<div class="panel-heading">服务申请</div>
   			<div class="panel-body">
@@ -88,7 +57,7 @@
 				         		<#list adminServiceApplys as adminServiceApply>
 					    		<tr class='tdCenter'>
 					    		<td>${adminServiceApply.projectId}</td>
-					    		<td><p class="newline" style="width:100px;word-break:break-all;" title="${adminServiceApply.project.name}">${adminServiceApply.project.name}</p></td>
+					    		<td><p class="newline" style="width:100px;" title="${adminServiceApply.project.name}">${adminServiceApply.project.name}</p></td>
 					    		<td>
 					    		   <#if adminServiceApply.majorTypes?? && (adminServiceApply.majorTypes?size>0)>
 	   								   <#list adminServiceApply.majorTypes as majorType>

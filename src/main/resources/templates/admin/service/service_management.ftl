@@ -1,21 +1,3 @@
-<style type='text/css'>
-	.tdCenter td,.thCenter th{
-		text-align:center;
-	}
-	.total{
-		width:100%;
-	}
-	.newline{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-	.select-style{
-		width: 343px;
-    	height: 34px;
-	}
-	.money-style{
-		border: none;
-	    outline: none;
-	    width: 70px;
-	}
-</style>
 <div class="panel-default clearBottom">
   			<div class="panel-heading">服务管理</div>
   			<div class="panel-body">
@@ -70,7 +52,7 @@
 				         	  <#list adminServiceApplys as adminServiceApply>
 					    		<tr class="tableTr tdCenter" applyid="${adminServiceApply.id}">
 					    		<td>${adminServiceApply.projectId}</td>
-					    		<td>${adminServiceApply.project.name}</td>
+					    		<td><p class="newline" style="width:100px;" title="${adminServiceApply.project.name}">${adminServiceApply.project.name}</p></td>
 					    		<td>
 					    			<#if adminServiceApply.majorTypes?? && (adminServiceApply.majorTypes?size>0)>
 	   								   <#list adminServiceApply.majorTypes as majorType>

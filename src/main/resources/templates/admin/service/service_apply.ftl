@@ -149,7 +149,7 @@
 			                </table>
 			           	</div>
 			           	<div id="upload-book-div">
-			                <h5><strong>合同信息(支持图片，word文档和pdf文件上传)</strong></h5>
+			                <h5><strong>合同信息<small>(支持图片，word文档和pdf文件上传)</small></strong></h5>
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
 			                		<tr id="upload-book-tr">
@@ -309,7 +309,7 @@
 				<div class="modal-content">
 					<div class="modal-header" style='height: 44px;'>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4  class="modal-title pull-left">合同管理(点击文件进行下载)</h4>
+						<h4  class="modal-title pull-left">合同管理<small>(点击文件进行下载)</small></h4>
 					</div>
 					<div class="modal-body">
 						<div class="form-group" style='margin-bottom: 36px;position: relative;'>

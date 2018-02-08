@@ -48,12 +48,7 @@ ul li{
 	word-break:break-all;
 	width:10%;
 }
-.newline{
-	width:90%; 
-	white-space:nowrap;
-	overflow:hidden;
-	text-overflow:ellipsis;
-}
+
 /*service-request.html*/
 #request-header{
 	margin: 10px;

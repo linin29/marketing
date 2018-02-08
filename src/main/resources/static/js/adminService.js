@@ -89,6 +89,15 @@ adminService = (function(){
 			$('#service-form').data('bootstrapValidator', null);
 			serviceDataValidator();
         });
+        
+        $("#uploadBtn").on("click",function(){
+        	$("#addAgreementPic").click();
+        })
+        
+       $("#addAgreementPic").on('change', function(e){
+    	 addAsset();
+    	   
+       })
 	};
 	function serviceManageInit(currentPage, totalCount){
 		var serviceManageUrl = '/admin/service/manage/search';
@@ -347,14 +356,14 @@ adminService = (function(){
 			 		for(var i = 0; i<data.data.length; i++){
 			 			var applyAsset = data.data[i];
 			 			html += '<div id="applyAsset_' + applyAsset.id + '" class="col-sm-3">' +
-								'<div class="thumbnail" style="">' + 
+								'<div class="thumbnail newline" style="">' + 
 								'<div class="pull-right">';
 			 			if(isDelete){
 			 				html += '<a href="javascript:void(0)" onclick="adminService.deleteApplyAsset(' + applyAsset.id + ');" class=" glyphicon glyphicon-remove" style="color:red"></a>';
 			 			}
-			 			html += '</div>' + 
+			 			html += '</div style="width:120px;">' + 
 								/*'<img style="width: 200px;height: 200px" src="' + applyAsset.realPath + '" alt="">' +*/
-								'<a href="' + applyAsset.realPath + '" download="'+applyAsset.displayName+'" >'+applyAsset.displayName+'</a>' +
+								'<a href="' + applyAsset.realPath + '" download="'+applyAsset.displayName+'" title="'+applyAsset.displayName+'" >'+applyAsset.displayName+'</a>' +
 								'</div>' + 										   
 								'</div>';
 			 		}
@@ -401,7 +410,7 @@ adminService = (function(){
 	};
 	
     function checkFile(file) {
-    	debugger;
+    	
 		if(file){
 			var index = file.name.lastIndexOf(".");
 			var fileExt = file.name.substring(index + 1, file.name.length).toLowerCase();
@@ -879,7 +888,6 @@ adminService = (function(){
 	return {
 		serviceApplyInit:serviceApplyInit,
 		serviceManageInit:serviceManageInit,
-		deleteApplyAsset:deleteApplyAsset,
-		addAsset:addAsset
+		deleteApplyAsset:deleteApplyAsset
 	}
 })()

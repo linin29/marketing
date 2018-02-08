@@ -15,6 +15,18 @@
 	    outline: none;
 	    width: 70px;
 	}
+	/* .dowloadBtn img:hover{
+		background:rgba(238, 238, 238, 0.69);
+	} */
+	.uploadBtn img{
+		width:50px;
+		height:50px;
+		cursor: pointer;
+		position: absolute;
+	    top: -16px;
+	    z-index: 100;
+	    left: 24px;
+	}
 </style>
 
 	<div class="panel-default clearBottom">
@@ -60,23 +72,23 @@
 					    <tbody class="">
 					    	<tr class='thCenter' style="background-color:#ddd;">
 					    	    <th style="width:7%">项目编码</th>
-					    		<th style="width:6%">项目名称</th>
+					    		<th style="width:5%">项目名称</th>
 					    		<th style="width:7%">申请服务</th>
 					    		<th style="width:7%">任务数</th>
 					    		<th style="width:10%">调用总次数</th>
 					    		<th style="width:6%">完成率</th>
-					    		<th style="width:8%">合同</th>
+					    		<th style="width:9%">合同</th>
 					    		<th style="width:9%">创建人</th>
 					    		<th style="width:7%">状态</th>
 					    		<th style="width:9%">创建时间</th>
-					    		<th style="width:10%">统计时间节点</th>
-					    		<th style="width:14%">操作</th>
+					    		<th style="width:9%">统计时间节点</th>
+					    		<th style="width:15%">操作</th>
 					    	</tr>
 					    	<#if adminServiceApplys?? && (adminServiceApplys?size > 0)>
 				         		<#list adminServiceApplys as adminServiceApply>
 					    		<tr class='tdCenter'>
 					    		<td>${adminServiceApply.projectId}</td>
-					    		<td>${adminServiceApply.project.name}</td>
+					    		<td><p class="newline" style="width:100px;word-break:break-all;" title="${adminServiceApply.project.name}">${adminServiceApply.project.name}</p></td>
 					    		<td>
 					    		   <#if adminServiceApply.majorTypes?? && (adminServiceApply.majorTypes?size>0)>
 	   								   <#list adminServiceApply.majorTypes as majorType>
@@ -331,10 +343,11 @@
 						<h4  class="modal-title pull-left">合同管理(点击文件进行下载)</h4>
 					</div>
 					<div class="modal-body">
-						<div class="form-group" style='margin-bottom: 36px;'>
-				            <span class="control-label col-sm-7 .col-md-offset-3 text-right" style="line-height: 25px;">上传文件(支持图片，word文档和pdf文件)</span>
+						<div class="form-group" style='margin-bottom: 36px;position: relative;'>
+				            <span class="control-label col-sm-7 text-right" style="line-height: 25px;">上传文件(支持图片，word文档和pdf文件)</span>
 				            <div class="col-sm-5" style="boder:1px solid #ddd">
-				                <input id="addAgreementPic" style="margin-bottom: 24px;" multiple type="file" accept="image/jpg, image/jpeg, image/png, image/bmp,.docx, .doc, .pdf" onchange="adminService.addAsset();">
+				                <input id="addAgreementPic" style="margin-bottom: 24px;display:none;" multiple type="file" accept="image/jpg, image/jpeg, image/png, image/bmp,.docx, .doc, .pdf" >
+				            	<div id="uploadBtn" class="uploadBtn" title="上传文件"><img  src="${springMacroRequestContext.contextPath}/image/ulI.png"></div>
 				            </div>
 				        </div>
 				        <div class="form-group" >

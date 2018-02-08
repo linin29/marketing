@@ -84,7 +84,7 @@
 	                    		    <td>${task.projectId!""}</td>
 	                    			<td>${task.name!""}</td>
                        				<td>${task.id!""}</td>
-                      				<td>${task.createTime!""}</td>
+                      				<td>${task.createTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
                       				<td>${task.lastUpdateTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
                       				<td>${task.taskStatus!""}</td>
 	                    			<td>

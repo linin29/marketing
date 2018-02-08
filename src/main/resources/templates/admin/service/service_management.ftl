@@ -59,7 +59,7 @@
 					    		<th style="width:7%">任务数</th>
 					    		<th style="width:8%">调用总次数</th>
 					    		<th style="width:6%">完成率</th>
-					    		<th style="width:8%">合同图片</th>
+					    		<th style="width:8%">合同</th>
 					    		<th style="width:9%">创建人</th>
 					    		<th style="width:7%">状态</th>
 					    		<th style="width:9%">创建时间</th>
@@ -278,7 +278,7 @@
 				<div class="modal-content">
 					<div class="modal-header" style='height: 44px;'>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4  class="modal-title pull-left">合同预览</h4>
+						<h4  class="modal-title pull-left">合同管理</h4>
 					</div>
 					<div class="modal-body">
 				        <!-- <div class="form-group" >

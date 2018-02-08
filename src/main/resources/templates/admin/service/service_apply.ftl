@@ -65,7 +65,7 @@
 					    		<th style="width:7%">任务数</th>
 					    		<th style="width:10%">调用总次数</th>
 					    		<th style="width:6%">完成率</th>
-					    		<th style="width:8%">合同图片</th>
+					    		<th style="width:8%">合同</th>
 					    		<th style="width:9%">创建人</th>
 					    		<th style="width:7%">状态</th>
 					    		<th style="width:9%">创建时间</th>
@@ -87,7 +87,7 @@
 								<td>${adminServiceApply.taskCount}</td>
 					    		<td>${adminServiceApply.callCount}</td>
 					    		<td>${adminServiceApply.callCount/adminServiceApply.project.callNumber}%</td>
-					    		<td><a href="javascript:void(0)"  applyid="${adminServiceApply.id}" class="showAgreementModel">图片管理</a></td>
+					    		<td><a href="javascript:void(0)"  applyid="${adminServiceApply.id}" class="showAgreementModel">合同管理</a></td>
 					    		<td>${adminServiceApply.creator.name}</td>
 					    		<td>${adminServiceApply.statusStr}</td>
 					    		<td>${adminServiceApply.createTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>
@@ -168,12 +168,12 @@
 			                </table>
 			           	</div>
 			           	<div id="upload-book-div">
-			                <h5><strong>合同信息</strong></h5>
+			                <h5><strong>合同信息(支持图片，word文档和pdf文件上传)</strong></h5>
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
 			                		<tr id="upload-book-tr">
 			                			<td class="wid">上传合同：</td>
-			                			<td><input class="application-name total" multiple  type="file" id="upload-book" /></td>
+			                			<td><input class="application-name total" multiple  type="file" accept="image/jpg, image/jpeg, image/png, image/bmp,.docx, .doc, .pdf" id="upload-book" /></td>
 			                		</tr>
 			                		<tr id="contracted-value-tr">
 			                			<td class="wid">合同金额(¥)：</td>
@@ -328,13 +328,13 @@
 				<div class="modal-content">
 					<div class="modal-header" style='height: 44px;'>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4  class="modal-title pull-left">合同预览</h4>
+						<h4  class="modal-title pull-left">合同管理</h4>
 					</div>
 					<div class="modal-body">
-						<div class="form-group" style='margin-bottom: 36px;margin-left: 20%;'>
-				            <span class="control-label col-sm-3 .col-md-offset-3 text-right" style="line-height: 25px;">上传图片</span>
-				            <div class="col-sm-9" style="boder:1px solid #ddd">
-				                <input id="addAgreementPic" style="margin-bottom: 24px;" multiple type="file" accept="image/jpg, image/jpeg, image/png, image/bmp" onchange="adminService.addAsset();">
+						<div class="form-group" style='margin-bottom: 36px;'>
+				            <span class="control-label col-sm-7 .col-md-offset-3 text-right" style="line-height: 25px;">上传文件(支持图片，word文档和pdf文件)</span>
+				            <div class="col-sm-5" style="boder:1px solid #ddd">
+				                <input id="addAgreementPic" style="margin-bottom: 24px;" multiple type="file" accept="image/jpg, image/jpeg, image/png, image/bmp,.docx, .doc, .pdf" onchange="adminService.addAsset();">
 				            </div>
 				        </div>
 				        <div class="form-group" >

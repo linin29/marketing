@@ -1,6 +1,7 @@
 var marketing_url = '/marketing';
 var adminService = adminService || {};
 adminService = (function(){
+	var formatArray = ['doc', 'docx', 'pdf', 'png', 'jpeg', 'jpg', 'bmp'];
 	function serviceApplyInit(currentPage, totalCount){
 		var serviceApplyUrl =  '/admin/service/apply/search';
 		if(totalCount != "0"){
@@ -352,7 +353,8 @@ adminService = (function(){
 			 				html += '<a href="javascript:void(0)" onclick="adminService.deleteApplyAsset(' + applyAsset.id + ');" class=" glyphicon glyphicon-remove" style="color:red"></a>';
 			 			}
 			 			html += '</div>' + 
-								'<img style="width: 200px;height: 200px" src="' + applyAsset.realPath + '" alt="">' +
+								/*'<img style="width: 200px;height: 200px" src="' + applyAsset.realPath + '" alt="">' +*/
+								'<a href="' + applyAsset.realPath + '" >'+applyAsset.displayName+'</a>' +
 								'</div>' + 										   
 								'</div>';
 			 		}
@@ -400,8 +402,17 @@ adminService = (function(){
 	};
 	
     function checkFile(file) {
+    	debugger;
+		if(file){
+			var index = file.name.lastIndexOf(".");
+			var fileExt = file.name.substring(index + 1, file.name.length).toLowerCase();
+			if($.inArray(fileExt, formatArray) == -1){
+				noty({text: "文件格式不支持!", layout: "topCenter", type: "warning", timeout: 2000});
+				return;
+			}
+		}
         if ((file.size/1024/1024) > 5) {
-			$('#errorMsg').text("您选择的图片大于5M, 请重新选择小于5M的图片上传");
+        	noty({text: "您选择的文件大于5M, 请重新选择小于5M的文件上传", layout: "topCenter", type: "warning", timeout: 2000});
 			return false;
 		}
         return true;

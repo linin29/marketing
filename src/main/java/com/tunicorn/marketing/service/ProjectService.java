@@ -60,4 +60,14 @@ public class ProjectService {
 	public ProjectVO getProjectsByUserIdAndProjectId(String userId,String id) {
 		return projectMapper.getProjectsByUserIdAndProjectId(userId,id);
 	}
+	/**
+	 * 根据项目名称获取
+	 * @auther weixiaokai
+	 * @date 2018年2月9日 下午2:44:08
+	 * @param projectId
+	 * @return
+	 */
+	public ProjectVO getProjectByName(String name){
+		return projectMapper.getProjectByName(name);
+	}
 }

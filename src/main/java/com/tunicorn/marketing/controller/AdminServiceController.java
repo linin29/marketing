@@ -27,6 +27,7 @@ import com.tunicorn.marketing.bo.AdminServiceApplyBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
 import com.tunicorn.marketing.service.AdminServiceApplyService;
 import com.tunicorn.marketing.service.MajorTypeService;
+import com.tunicorn.marketing.service.ProjectService;
 import com.tunicorn.marketing.vo.AdminServiceApplyAssetVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyVO;
 import com.tunicorn.marketing.vo.AdminUserVO;
@@ -44,6 +45,9 @@ public class AdminServiceController extends BaseController {
 	private AdminServiceApplyService adminServiceApplyService;
 	@Autowired
 	private MajorTypeService majorTypeService;
+	
+	@Autowired
+	private ProjectService projectService;
 
 	@RequestMapping(value = "/apply", method = RequestMethod.GET)
 	public String serviceApply(HttpServletRequest request, HttpServletResponse resp, Model model) {
@@ -131,6 +135,12 @@ public class AdminServiceController extends BaseController {
 		}
 		/*********** 输入验证结束 *************/
 
+		//项目名称不能重复
+		ProjectVO po = projectService.getProjectByName(projectVO.getName().trim());
+		if (po!=null) {//项目已存在
+			Message message = MessageUtils.getInstance().getMessage("marketing_major_type_create_failed");
+			return AjaxResponse.toFailure(mess.getCode(), mess.getMessage() + ":项目名称已存在,请更换项目名称");
+		}
 		int result = adminServiceApplyService.createAdminServiceApply(adminServiceApplyVO, projectVO, images,
 				user.getId());
 		if (result == 0) {

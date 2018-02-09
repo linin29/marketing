@@ -180,6 +180,7 @@ BEGIN
           `rows` varchar(100) DEFAULT NULL,
           `major_type` varchar(20) DEFAULT NULL,
           `project_id` varchar(40) DEFAULT NULL,
+          `store_code` varchar(40) DEFAULT NULL,
           `host` VARCHAR(50) DEFAULT NULL,
           `need_stitch` INT(11) DEFAULT '1' COMMENT '是否去重,默认为去重',
           `goods_info` mediumtext,
@@ -193,7 +194,8 @@ BEGIN
 		  KEY `major_type_task_fk_idx` (`major_type`),
 		  KEY `idx_last_update` (`last_update`),
 		  KEY `idx_task_name` (`name`),
-		  KEY `project_task_fk_idx` (`project_id`)
+		  KEY `project_task_fk_idx` (`project_id`),
+		  KEY `store_task_fk_idx` (`store_code`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 		CREATE TABLE IF NOT EXISTS `task_images` (

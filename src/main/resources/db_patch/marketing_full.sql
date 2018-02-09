@@ -209,6 +209,7 @@ BEGIN
 		  `create_time` datetime DEFAULT NULL,
 		  `last_update` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		  `status` enum('active','deleted','inactive') DEFAULT 'active',
+		  `result` mediumtext,
 		  PRIMARY KEY (`id`),
 		  KEY `user_task_fk_idx` (`user_id`),
 		  KEY `task_image_fk_idx` (`task_id`)

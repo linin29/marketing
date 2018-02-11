@@ -46,7 +46,7 @@
 	          <tbody>
 	          <#list tasks as task>
 	               <tr>
-	                   <td style="word-break: break-all;">${task.projectName!"NA"}</td>
+	                   <td style="word-break: break-all;">${task.projectName!"N/A"}</td>
 	                   <td style="word-break: break-all;">${task.name!""}</td>
 	                   <td>${task.id!""}</td>
 	                   <td>${task.majorTypeName!""}</td>

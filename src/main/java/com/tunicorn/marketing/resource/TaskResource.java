@@ -58,8 +58,8 @@ public class TaskResource extends BaseResource {
 	@ResponseBody
 	public CommonAjaxResponse tasks(HttpServletRequest request,
 			@RequestParam(value = "images", required = false) List<MultipartFile> images,
-			@RequestParam(value = "taskLabel") String taskName, @RequestParam(value="projectId") String projectId, 
-			@RequestParam(value="storeCode") String storeCode) {
+			@RequestParam(value = "taskLabel") String taskName, @RequestParam(value="projectId", required = false) String projectId, 
+			@RequestParam(value="storeCode", required = false) String storeCode) {
 
 		AjaxResponse tokenStatus = checkToken(request);
 		if (!tokenStatus.getSuccess()) {

@@ -230,6 +230,11 @@ public class TaskService {
 				ProjectVO projectVO = projectService.getProjectsByUserIdAndProjectId(userId, projectId);//验证是否有该项目权限
 				if(projectVO==null){//项目不存在
 					return new ServiceResponseBO(false, "marketing_project_not_existed");
+				}else{//项目存在,则验证该项目下所有任务的图片数量
+					int imageNum = taskMapper.getTaskImagesByProjectId(projectId);
+					if (imageNum+images.size()>projectVO.getImageNumber()) {//图片超过上限
+						return new ServiceResponseBO(false, "marketing_project_images_max_count");
+					}
 				}
 			}else{
 				return new ServiceResponseBO(false, "marketing_project_id_max_length");

@@ -39,4 +39,14 @@ public interface TaskMapper {
 	@Select("select id, major_type as majorType, need_stitch as needStitch "
 			+ "from task where task_status='pending' and host is null and status = 'active' limit 200")
 	public List<TaskVO> getPendingWithoutHostTasks ();
+	
+	/**
+	 * @TODO 根据项目id获取该项目下的所有图片数量
+	 * @auther weixiaokai
+	 * @date 2018年2月12日 上午10:38:54
+	 * @param projectId
+	 * @return
+	 */
+	@Select("SELECT COUNT(t2.`id`) FROM task t1,task_images t2 WHERE t1.`id`=t2.`task_id` AND t1.`project_id`=#{projectId}")
+	public int getTaskImagesByProjectId(@Param("projectId") String projectId);
 }

@@ -633,6 +633,10 @@ BEGIN
 		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (20, 1, now());
 		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (20, 2, now());
 		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (20, 3, now());
+		
+		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (22, 1, now());
+		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (22, 2, now());
+		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (22, 3, now());
 	END IF;
 END//
 
@@ -674,6 +678,8 @@ BEGIN
 		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestleconfectionery', '雀巢糕点糖果', '1.0', now());
 		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestledairy', '雀巢奶制品', '1.0', now());
 		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nielsenchips', '尼尔森薯片', '4.0', now());
+		
+		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nielsencoco', '尼尔森可乐', '1.0', now());
 		
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('coffee', 'NesCafe', 'NesCafe', 0, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('coffee', 'Maxwell', 'Maxwell', 1, now());
@@ -2178,6 +2184,82 @@ BEGIN
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsenchips', 'doritos16', 'doritos16', 236, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsenchips', 'doritos17', 'doritos17', 237, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('nielsenchips', 'doritos18', 'doritos18', 238, now());
+
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink72','nielsencoco','Fanta Zero',now(),now(),71,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink73','nielsencoco','Powerade 口味1',now(),now(),72,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink74','nielsencoco','Powerade 口味2',now(),now(),73,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink32','nielsencoco','百事可乐汽水极度可乐塑料瓶500/600ML',now(),now(),31,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink33','nielsencoco','百事可乐汽水可乐罐装330ML',now(),now(),32,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink34','nielsencoco','百事可乐汽水可乐塑料瓶1/1.25/1.5/2L',now(),now(),33,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink35','nielsencoco','百事可乐汽水可乐塑料瓶500/550/600/700ML',now(),now(),34,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink69','nielsencoco','宝矿力塑料瓶500ML(所有符合条件的产品即可)',now(),now(),68,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink26','nielsencoco','贝纳颂咖啡塑料瓶装250ML（所有符合条件的产品即可）',now(),now(),25,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink1','nielsencoco','冰露纯悦包装饮用水550ML(所有符合条件的产品即可)',now(),now(),0,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink2','nielsencoco','冰露纯悦包装饮用水塑料瓶800ML',now(),now(),1,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink17','nielsencoco','茶π塑料瓶装500ML（所有符合条件的产品即可）',now(),now(),16,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink23','nielsencoco','淳茶舍红茶480ML',now(),now(),22,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink22','nielsencoco','淳茶舍绿茶480ML',now(),now(),21,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink24','nielsencoco','淳茶舍铁观音480ML',now(),now(),23,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink42','nielsencoco','芬达汽水橙味罐装（包含摩登罐）330ML',now(),now(),41,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink43','nielsencoco','芬达汽水橙味塑料瓶500ML',now(),now(),42,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink44','nielsencoco','芬达汽水橙味塑料瓶600ML',now(),now(),43,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink70','nielsencoco','佳得乐塑料瓶600ML(所有符合条件的产品即可)',now(),now(),69,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink3','nielsencoco','景田百岁山矿泉水塑料瓶570ML',now(),now(),2,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink7','nielsencoco','康师傅冰糖雪梨果汁饮料塑料瓶500ML',now(),now(),6,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink6','nielsencoco','康师傅橙汁饮品/鲜果橙塑料瓶450ML',now(),now(),5,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink45','nielsencoco','可口可乐汽水可乐罐装330ML',now(),now(),44,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink46','nielsencoco','可口可乐汽水可乐摩登罐装330ML',now(),now(),45,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink51','nielsencoco','可口可乐汽水可乐塑料瓶1000ML',now(),now(),50,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink52','nielsencoco','可口可乐汽水可乐塑料瓶1250ML',now(),now(),51,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink53','nielsencoco','可口可乐汽水可乐塑料瓶1500ML',now(),now(),52,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink54','nielsencoco','可口可乐汽水可乐塑料瓶2000ML',now(),now(),53,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink47','nielsencoco','可口可乐汽水可乐塑料瓶500ML',now(),now(),46,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink48','nielsencoco','可口可乐汽水可乐塑料瓶600ML',now(),now(),47,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink49','nielsencoco','可口可乐汽水可乐塑料瓶680ML',now(),now(),48,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink50','nielsencoco','可口可乐汽水可乐塑料瓶888ML',now(),now(),49,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink55','nielsencoco','可口可乐汽水零度可乐塑料瓶500ML',now(),now(),54,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink56','nielsencoco','可口可乐汽水零度可乐塑料瓶600ML',now(),now(),55,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink71','nielsencoco','脉动塑料瓶装600ML(所有符合条件的产品即可)',now(),now(),70,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink36','nielsencoco','美年达汽水橙味塑料瓶500/550/600ML',now(),now(),35,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink9','nielsencoco','美汁源果粒橙橙汁饮料塑料瓶1250ML',now(),now(),8,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink10','nielsencoco','美汁源果粒橙橙汁饮料塑料瓶1800ML',now(),now(),9,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink8','nielsencoco','美汁源果粒橙橙汁饮料塑料瓶450ML',now(),now(),7,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink11','nielsencoco','美汁源热带•果粒热带风味复合果汁饮料塑料瓶420ML',now(),now(),10,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink13','nielsencoco','美汁源三重果粒橙/槐花风味葡萄汁/玫瑰风味葡萄汁/热带果粒塑料瓶1000ML',now(),now(),12,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink12','nielsencoco','美汁源三重果粒橙橙汁饮料塑料瓶420ML',now(),now(),11,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink14','nielsencoco','美汁源爽粒花语槐花风味葡萄汁饮料塑料瓶420ML',now(),now(),13,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink15','nielsencoco','美汁源爽粒花语玫瑰风味葡萄汁饮料塑料瓶420ML',now(),now(),14,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink4','nielsencoco','农夫山泉饮用天然水塑料瓶550ML',now(),now(),3,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink37','nielsencoco','七喜汽水柠檬味罐装330ML',now(),now(),36,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink39','nielsencoco','七喜汽水柠檬味塑料瓶1/1.25/1.5/2L',now(),now(),38,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink38','nielsencoco','七喜汽水柠檬味塑料瓶500/550/600/700ML',now(),now(),37,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink30','nielsencoco','乔雅醇香拿铁咖啡罐装220ML',now(),now(),29,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink28','nielsencoco','乔雅醇香拿铁咖啡塑料杯装340ML',now(),now(),27,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink31','nielsencoco','乔雅浓香美式咖啡罐装220ML',now(),now(),30,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink29','nielsencoco','乔雅浓香美式咖啡塑料杯装340ML',now(),now(),28,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink25','nielsencoco','雀巢咖啡罐装180ML（所有符合条件的产品即可）',now(),now(),24,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink27','nielsencoco','雀巢丝滑拿铁咖啡塑料瓶装268ML',now(),now(),26,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink18','nielsencoco','三得利黑乌龙茶无糖塑料瓶350ML',now(),now(),17,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink19','nielsencoco','三得利乌龙茶原味无糖塑料瓶500ML',now(),now(),18,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink68','nielsencoco','水动乐塑料瓶600ml（所有符合条件的产品即可）',now(),now(),67,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink16','nielsencoco','统一海之言柠檬果味饮料塑料瓶500ML',now(),now(),15,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink21','nielsencoco','统一小茗同学500ML（所有符合条件的产品即可）',now(),now(),20,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink20','nielsencoco','统一小茗同学冷泡冰橘绿茶含糖塑料瓶480ML',now(),now(),19,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink75','nielsencoco','雪碧Plus 500ml',now(),now(),74,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink57','nielsencoco','雪碧零卡汽水柠檬味塑料瓶500ML',now(),now(),56,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink58','nielsencoco','雪碧汽水柠檬味罐装330ML',now(),now(),57,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink59','nielsencoco','雪碧汽水柠檬味摩登罐装330ML',now(),now(),58,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink64','nielsencoco','雪碧汽水柠檬味塑料瓶1000ML',now(),now(),63,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink65','nielsencoco','雪碧汽水柠檬味塑料瓶1250ML',now(),now(),64,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink66','nielsencoco','雪碧汽水柠檬味塑料瓶1500ML',now(),now(),65,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink67','nielsencoco','雪碧汽水柠檬味塑料瓶2000ML',now(),now(),66,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink60','nielsencoco','雪碧汽水柠檬味塑料瓶500ML',now(),now(),59,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink61','nielsencoco','雪碧汽水柠檬味塑料瓶600ML',now(),now(),60,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink62','nielsencoco','雪碧汽水柠檬味塑料瓶680ML',now(),now(),61,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink63','nielsencoco','雪碧汽水柠檬味塑料瓶888ML',now(),now(),62,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink5','nielsencoco','怡宝纯净水塑料瓶555ML',now(),now(),4,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink40','nielsencoco','怡泉+C柠檬味汽水罐装(包含摩登罐)330ML',now(),now(),39,1);
+		insert into goods_sku(name,major_type,description,create_time,last_update,`order`,is_show) values ('drink41','nielsencoco','怡泉+C柠檬味汽水塑料瓶400/500ML',now(),now(),40,1);
 
 	END IF;
 END//

@@ -68,7 +68,7 @@
 								<td>${adminServiceApply.taskCount}</td>
 					    		<td>${adminServiceApply.callCount}</td>
 					    		<td>${adminServiceApply.callCount/adminServiceApply.project.callNumber*100}%</td>
-					    		<td><a href="javascript:void(0)"  applyid="${adminServiceApply.id}" class="showAgreementModel">合同管理</a></td>
+					    		<td><a href="javascript:void(0)"  applyid="${adminServiceApply.id}" applyStatus="${adminServiceApply.applyStatus}" class="showAgreementModel">合同管理</a></td>
 					    		<td>${adminServiceApply.creator.name}</td>
 					    		<td>${adminServiceApply.statusStr}</td>
 					    		<td>${adminServiceApply.createTime?string('yyyy-MM-dd HH:mm:ss')!""}</td>

@@ -68,7 +68,12 @@ adminService = (function(){
 		});
 		$(".showAgreementModel").click(function(){
 			$("#showagreementModel").modal("show");
-			view($(this).attr("applyid"), true);
+			var applyStatus =$(this).attr("applyStatus");
+			if(applyStatus=="opened"||applyStatus=="closed"){
+				view($(this).attr("applyid"), false);
+			}else{
+				view($(this).attr("applyid"), true);
+			}
 		});
 		
 		$('#server-type').selectpicker({

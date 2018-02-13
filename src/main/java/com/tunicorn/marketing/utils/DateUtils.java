@@ -344,7 +344,7 @@ public class DateUtils {
 		return du.toDateFormat();
 	}
 	
-	public static void main(String[] args){
+	/*public static void main(String[] args){
 		//DateUtils du = new DateUtils(DateUtils.getCurrentTimeMillis());
-	}
+	}*/
 }

@@ -10,7 +10,7 @@ import com.tunicorn.marketing.vo.MajorTypeVO;
 public class GetDiffUtils {
 
 	/**
-	 * @TODO 比较preList和currList不同元素，返回preList-currList
+	 * @TODO 比较preList和currList不同元素，返回currList-preList
 	 * @auther weixiaokai
 	 * @date 2018年2月12日 下午6:28:27
 	 * @param preList

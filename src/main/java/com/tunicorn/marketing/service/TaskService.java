@@ -295,7 +295,7 @@ public class TaskService {
 	}
 
 	@Transactional
-	public ServiceResponseBO createZipTask(String userId, String taskName, MultipartFile zipFile) {
+	public ServiceResponseBO createZipTask(String userId, String taskName, String projectId, MultipartFile zipFile) {
 		logger.info("params of createTask: taskName: " + taskName + ", userId:" + userId);
 		TaskVO taskVO = taskMapper.getTaskByNameAndUserId(taskName, userId);
 		if (taskVO != null) {
@@ -312,6 +312,9 @@ public class TaskService {
 					(Long.toHexString(new Date().getTime()) + RandomStringUtils.randomAlphanumeric(13)).toLowerCase());
 			createTaskVO.setName(taskName);
 			createTaskVO.setUserId(userId);
+			if (StringUtils.isNotBlank(projectId)) {
+				createTaskVO.setProjectId(projectId);
+			}
 			createTaskVO.setTaskStatus(MarketingConstants.TASK_INIT_STATUS);
 			taskMapper.createTask(createTaskVO);
 
@@ -319,7 +322,7 @@ public class TaskService {
 					+ MarketingConstants.MARKETING + File.separator + createTaskVO.getId() + File.separator
 					+ ConfigUtils.getInstance().getConfigValue("marketing.image.sub.dir");
 
-			// String basePath = "D:\\";
+//			String basePath = "D:\\mnt\\storage4";
 			ZipInputStream zin = new ZipInputStream(zipFile.getInputStream());
 			ZipEntry ze;
 			int i = 0;

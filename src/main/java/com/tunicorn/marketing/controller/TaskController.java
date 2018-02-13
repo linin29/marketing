@@ -468,11 +468,11 @@ public class TaskController extends BaseController {
 	@ResponseBody
 	public CommonAjaxResponse createZipTask(HttpServletRequest request,
 			@RequestParam(value = "zipFile", required = false) MultipartFile zipFile,
-			@RequestParam(value = "taskLabel") String taskName, Model model) {
+			@RequestParam(value = "taskLabel") String taskName,@RequestParam(value="projectId", required = false) String projectId, Model model) {
 		UserVO user = getCurrentUser(request);
 		model.addAttribute("user", user);
 
-		ServiceResponseBO response = taskService.createZipTask(user.getId(), taskName, zipFile);
+		ServiceResponseBO response = taskService.createZipTask(user.getId(), taskName, projectId, zipFile);
 		if (response.isSuccess()) {
 			return CommonAjaxResponse.toSuccess(response.getResult());
 		} else {

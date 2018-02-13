@@ -118,12 +118,16 @@ public class CallingController extends BaseController {
 	@RequestMapping(value = { "/calling/count", "/admin/calling/count" }, method = RequestMethod.GET)
 	@ResponseBody
 	public CommonAjaxResponse callingCount(HttpServletRequest request) {
-		UserVO user = getCurrentUser(request);
-
 		ApiCallingSummaryBO apiCallingSummaryBO = new ApiCallingSummaryBO();
-		if (user != null) {
-			apiCallingSummaryBO.setUserName(user.getUserName());
+		if (request.getRequestURI().contains("admin")) {//由admin请求
+			
+		}else {
+			UserVO user = getCurrentUser(request);
+			if (user != null) {
+				apiCallingSummaryBO.setUserName(user.getUserName());
+			}
 		}
+		
 		if (StringUtils.isNotBlank(request.getParameter("projectId"))) {
 			String projectId = request.getParameter("projectId");
 			apiCallingSummaryBO.setProjectId(projectId);
@@ -148,7 +152,11 @@ public class CallingController extends BaseController {
 	@ResponseBody
 	@RequestMapping({ "/calling/exportData", "/admin/calling/exportData" })
 	public String exportIpMac(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		UserVO user = getCurrentUser(request);
+		
+		UserVO user = null;
+		if (!request.getRequestURI().contains("admin")) {//由admin请求
+			user = getCurrentUser(request);
+		}
 		String projectId = request.getParameter("projectId");
 		String majorType = request.getParameter("majorType");
 		String startTime = request.getParameter("startTime");

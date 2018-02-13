@@ -25,5 +25,11 @@
     <delete id="deleteMajorTypeApplicationMappingByApplyId">
         delete from admin_major_type_service_apply_mapping where service_apply_id = #{applyId}
     </delete>
+    <delete id="deleteMajorTypeApplicationMappingByApplyIdAndMajorType">
+        delete from admin_major_type_service_apply_mapping where service_apply_id = #{applyId} and major_type_id in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
 </mapper> 
 

@@ -123,7 +123,18 @@ adminService = (function(){
 			$("#applyId").val($(this).attr("applyid"));
 			$("#server-management-model").modal("show");
 			$("#server-management-model").find("input").attr("disabled","disabled"); 
-			$("#server-type").attr("disabled","disabled");
+			var applyStatus = $(this).attr("applyStatus");
+			var projectType = $("#project-type").val();
+			console.log(projectType);
+			if(projectType=="free"){
+//				$("#server-type").removeAttr("disabled");
+				$('#server-type').prop('disabled', false);
+				$('#server-type').selectpicker('refresh');
+			}else{
+//				$("#server-type").attr("disabled","disabled");
+  				$('#server-type').prop('disabled', true);
+  				$('#server-type').selectpicker('refresh');
+			}
 			$("#project-type").attr("disabled","disabled");
 			$("#rejectReason").removeAttr("disabled"); 
 			$("#rejectReason").val("");
@@ -165,6 +176,7 @@ adminService = (function(){
 		});
 		$("#openService").click(function(){
 			var applyId = $("#applyId").val();
+			var majorType = $("#server-type").val();
 			openService(applyId);
 		});
 		$("#rejectService").click(function(){
@@ -303,6 +315,7 @@ adminService = (function(){
 	function detail(applyId, isRejectReasonShow){
 		$.ajax({
 			 type: 'GET',
+			 async: false,
 			 url: marketing_url + '/admin/service/detail/' + applyId,
 			 success: function(data) {
 			 	if(data && data.success){
@@ -463,7 +476,12 @@ adminService = (function(){
 		var applyStatus = 'opened';
 		var username = $("#ser-user-name").val();
 		var email = $("#ser-email").val();
-		var tempData = {applyStatus:applyStatus, username:username, email:email};
+		var majorType = $("#server-type").val();
+		var mt = [];
+		for(i=0;i<majorType.length;i++){
+			mt[i]={"id":majorType[i]};
+		}
+		var tempData = {"applyStatus":applyStatus, "username":username, "email":email, "majorTypes":mt};
 		 $.ajax({
 				type: 'POST',
 				url:  marketing_url + '/admin/service/' + applyId + '/approve',

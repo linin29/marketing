@@ -71,7 +71,7 @@
 					    		<td style="padding:0px;vertical-align: middle;">
 					    			<button class="info btn btn-success btn-sm" applyid="${adminServiceApply.id}">详情</button>
 					    			<#if adminServiceApply.applyStatus == 'created'>
-					    			<button id="approve_${adminServiceApply.id}" class="btn btn-success btn-sm approve" applyid="${adminServiceApply.id}">审批</button>
+					    			<button id="approve_${adminServiceApply.id}" class="btn btn-success btn-sm approve" applyid="${adminServiceApply.id}" typeStr="<#if (adminServiceApply.project.typeStr)??>${adminServiceApply.project.typeStr}</#if>">审批</button>
 					    			<button id="delete_${adminServiceApply.id}" class="btn btn-danger btn-sm deleteService" applyid="${adminServiceApply.id}">关闭</button>
 					    			<#else>
 					    			<input type="button" class="btn" style="width:54px;height:30px;background-color:#fff;border:none;cursor: default;outline: none;box-shadow: none">

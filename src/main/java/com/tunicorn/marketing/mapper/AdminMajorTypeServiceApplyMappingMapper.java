@@ -2,6 +2,7 @@ package com.tunicorn.marketing.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 
 import com.tunicorn.marketing.vo.AdminMajorTypeServiceApplyMappingVO;
@@ -16,4 +17,6 @@ public interface AdminMajorTypeServiceApplyMappingMapper {
 	
 	@Update("Update admin_major_type_service_apply_mapping set status='inactive' where service_apply_id=#{applyId}")
 	public void inactiveMajorTypeApplicationMappingByApplyId(long applyId);
+	
+	public void deleteMajorTypeApplicationMappingByApplyIdAndMajorType(@Param("applyId") long applyId,@Param("list") List<Long> ids);
 }

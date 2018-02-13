@@ -27,7 +27,7 @@ public class ProjectService {
 		return projectMapper.getProjectList();
 	}
 
-	public Integer getAPICallCountByProjectId(String projectId) {
+	public int getAPICallCountByProjectId(String projectId) {
 		return apiCallingMapper.getAPICallCountByProjectId(projectId);
 	}
 

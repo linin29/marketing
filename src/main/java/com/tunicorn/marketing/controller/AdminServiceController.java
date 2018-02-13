@@ -25,9 +25,12 @@ import com.tunicorn.common.entity.AjaxResponse;
 import com.tunicorn.marketing.api.CommonAjaxResponse;
 import com.tunicorn.marketing.bo.AdminServiceApplyBO;
 import com.tunicorn.marketing.constant.MarketingConstants;
+import com.tunicorn.marketing.mapper.AdminMajorTypeServiceApplyMappingMapper;
 import com.tunicorn.marketing.service.AdminServiceApplyService;
 import com.tunicorn.marketing.service.MajorTypeService;
 import com.tunicorn.marketing.service.ProjectService;
+import com.tunicorn.marketing.utils.GetDiffUtils;
+import com.tunicorn.marketing.vo.AdminMajorTypeServiceApplyMappingVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyAssetVO;
 import com.tunicorn.marketing.vo.AdminServiceApplyVO;
 import com.tunicorn.marketing.vo.AdminUserVO;
@@ -48,6 +51,8 @@ public class AdminServiceController extends BaseController {
 	
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private AdminMajorTypeServiceApplyMappingMapper adminMajorTypeServiceApplyMappingMapper;
 
 	@RequestMapping(value = "/apply", method = RequestMethod.GET)
 	public String serviceApply(HttpServletRequest request, HttpServletResponse resp, Model model) {
@@ -201,6 +206,21 @@ public class AdminServiceController extends BaseController {
 		}
 
 		adminServiceApplyService.approveAdminServiceApply(adminServiceApplyVO);
+		/****************weixiaokai添加于2018-02-13*start***************/
+		//更新majorTypes字段  
+		//待删除
+		List<Long> deleteIds = GetDiffUtils.getDiffMajorTypeVO(applyVO.getMajorTypes(), adminServiceApplyVO.getMajorTypes());
+		adminMajorTypeServiceApplyMappingMapper.deleteMajorTypeApplicationMappingByApplyIdAndMajorType(applyId, deleteIds);
+		//待插入
+		List<Long> insertIds = GetDiffUtils.getDiffMajorTypeVO(adminServiceApplyVO.getMajorTypes(), applyVO.getMajorTypes());
+		List<AdminMajorTypeServiceApplyMappingVO> applyMappingVOs = new ArrayList<AdminMajorTypeServiceApplyMappingVO>();
+		for(Long id:insertIds){
+			AdminMajorTypeServiceApplyMappingVO ad = new AdminMajorTypeServiceApplyMappingVO();
+			ad.setMajorTypeId(id);
+			ad.setServiceApplyId(applyId);
+		}
+		adminMajorTypeServiceApplyMappingMapper.batchInsertMajorTypeApplicationMapping(applyMappingVOs);
+		/****************weixiaokai添加于2018-02-13*end***************/
 		applyVO.setAppKey(adminServiceApplyVO.getAppKey());
 		applyVO.setAppSecret(adminServiceApplyVO.getAppSecret());
 		return AjaxResponse.toSuccess(applyVO);

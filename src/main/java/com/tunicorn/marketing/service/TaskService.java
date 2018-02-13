@@ -330,6 +330,10 @@ public class TaskService {
 				if (!ze.isDirectory()) {
 					File imageFile = new File(basePath + File.separator + ze.getName());
 					if (!imageFile.exists()) {
+						File fileParent = imageFile.getParentFile(); 
+						if(!fileParent.exists()){ 
+						 fileParent.mkdirs(); 
+						} 
 						imageFile.createNewFile();
 					}
 					FileOutputStream fos = new FileOutputStream(imageFile);

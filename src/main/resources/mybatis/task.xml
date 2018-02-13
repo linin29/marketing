@@ -160,6 +160,9 @@
     	<if test="endTime != null and endTime != ''">
     		and last_update <![CDATA[ <= #{endTime}]]> 
     	</if>
+    	<if test="projectId != null and projectId != ''">
+    		and project_id  = #{projectId}
+    	</if>
 		order by last_update desc
 	</select>
 	<select id="getTaskCount" resultType="int" parameterType="com.tunicorn.marketing.bo.TaskBO">

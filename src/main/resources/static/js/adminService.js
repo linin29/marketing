@@ -378,6 +378,9 @@ adminService = (function(){
 								'<div class="pull-right">';
 			 			if(isDelete){
 			 				html += '<a href="javascript:void(0)" onclick="adminService.deleteApplyAsset(' + applyAsset.id + ');" class=" glyphicon glyphicon-remove" style="color:red"></a>';
+			 				$("#upload_div").show();
+			 			}else{
+			 				$("#upload_div").hide();
 			 			}
 			 			html += '</div style="width:120px;">' + 
 								/*'<img style="width: 200px;height: 200px" src="' + applyAsset.realPath + '" alt="">' +*/

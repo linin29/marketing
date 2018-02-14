@@ -312,7 +312,7 @@
 						<h4  class="modal-title pull-left">合同管理<small>(点击文件进行下载)</small></h4>
 					</div>
 					<div class="modal-body">
-						<div class="form-group" style='margin-bottom: 36px;position: relative;'>
+						<div id="upload_div" class="form-group" style='margin-bottom: 36px;position: relative;'>
 				            <span class="control-label col-sm-7 text-right" style="line-height: 25px;">上传文件(支持图片，word文档和pdf文件)</span>
 				            <div class="col-sm-5" style="boder:1px solid #ddd">
 				                <input id="addAgreementPic" style="margin-bottom: 24px;display:none;" multiple type="file" accept="image/jpg, image/jpeg, image/png, image/bmp,.docx, .doc, .pdf" >

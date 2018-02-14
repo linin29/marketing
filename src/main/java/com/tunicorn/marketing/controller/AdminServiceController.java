@@ -208,22 +208,24 @@ public class AdminServiceController extends BaseController {
 		adminServiceApplyService.approveAdminServiceApply(adminServiceApplyVO);
 		/****************weixiaokai添加于2018-02-13*start***************/
 		//更新majorTypes字段  
-		//待删除
-		List<Long> insertIds = GetDiffUtils.getDiffMajorTypeVO(applyVO.getMajorTypes(), adminServiceApplyVO.getMajorTypes());
-		if (insertIds.size()>0) {
-			List<AdminMajorTypeServiceApplyMappingVO> applyMappingVOs = new ArrayList<AdminMajorTypeServiceApplyMappingVO>();
-			for(Long id:insertIds){
-				AdminMajorTypeServiceApplyMappingVO ad = new AdminMajorTypeServiceApplyMappingVO();
-				ad.setMajorTypeId(id);
-				ad.setServiceApplyId(applyId);
-				applyMappingVOs.add(ad);
+		if(applyVO.getMajorTypes()!=null&&adminServiceApplyVO.getMajorTypes()!=null){
+			//待删除
+			List<Long> insertIds = GetDiffUtils.getDiffMajorTypeVO(applyVO.getMajorTypes(), adminServiceApplyVO.getMajorTypes());
+			if (insertIds.size()>0) {
+				List<AdminMajorTypeServiceApplyMappingVO> applyMappingVOs = new ArrayList<AdminMajorTypeServiceApplyMappingVO>();
+				for(Long id:insertIds){
+					AdminMajorTypeServiceApplyMappingVO ad = new AdminMajorTypeServiceApplyMappingVO();
+					ad.setMajorTypeId(id);
+					ad.setServiceApplyId(applyId);
+					applyMappingVOs.add(ad);
+				}
+				adminMajorTypeServiceApplyMappingMapper.batchInsertMajorTypeApplicationMapping(applyMappingVOs);
 			}
-			adminMajorTypeServiceApplyMappingMapper.batchInsertMajorTypeApplicationMapping(applyMappingVOs);
-		}
-		//待插入
-		List<Long> deleteIds = GetDiffUtils.getDiffMajorTypeVO(adminServiceApplyVO.getMajorTypes(), applyVO.getMajorTypes());
-		if(deleteIds.size()>0){
-			adminMajorTypeServiceApplyMappingMapper.deleteMajorTypeApplicationMappingByApplyIdAndMajorType(applyId, deleteIds);
+			//待插入
+			List<Long> deleteIds = GetDiffUtils.getDiffMajorTypeVO(adminServiceApplyVO.getMajorTypes(), applyVO.getMajorTypes());
+			if(deleteIds.size()>0){
+				adminMajorTypeServiceApplyMappingMapper.deleteMajorTypeApplicationMappingByApplyIdAndMajorType(applyId, deleteIds);
+			}
 		}
 		/****************weixiaokai添加于2018-02-13*end***************/
 		applyVO.setAppKey(adminServiceApplyVO.getAppKey());

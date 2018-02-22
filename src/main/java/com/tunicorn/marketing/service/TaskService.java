@@ -399,10 +399,10 @@ public class TaskService {
 		if (images != null && images.size() > MarketingConstants.IMAGE_MAX_COUNT) {
 			return new ServiceResponseBO(false, "marketing_image_max_count");
 		}
-		int imageCount = taskImagesMapper.getTaskImagesCountByTaskId(taskId);
+		/*int imageCount = taskImagesMapper.getTaskImagesCountByTaskId(taskId);
 		if (images != null && (images.size() + imageCount > MarketingConstants.IMAGE_MAX_COUNT)) {
 			return new ServiceResponseBO(false, "marketing_image_max_count");
-		}
+		}*/
 		if (images != null && images.size() > 0) {
 			for (int i = 0; i < images.size(); i++) {
 				MultipartFile file = images.get(i);

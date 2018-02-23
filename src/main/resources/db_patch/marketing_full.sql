@@ -634,6 +634,10 @@ BEGIN
 		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (20, 2, now());
 		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (20, 3, now());
 		
+		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (21, 1, now());
+		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (21, 2, now());
+		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (21, 3, now());
+		
 		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (22, 1, now());
 		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (22, 2, now());
 		INSERT INTO `admin_major_type_service_apply_mapping`(`major_type_id`, `service_apply_id`, `create_time`) VALUES (22, 3, now());
@@ -658,28 +662,28 @@ BEGIN
 	SET @ret = 0;
 	CALL CheckDataExist("major_type", "id=1", @ret);
 	IF @ret = 0 THEN
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`, `status`) VALUES ('coffee', '咖啡', NULL, now(), 'deleted');
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('chocolate', '巧克力', '2.0', now());
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('beer', '啤酒', '9.0', now());
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`, `status`) VALUES ('driedmilk', '奶粉', '3.0', now(), 'deleted');
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('cookie', '饼干', '6.0', now());
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('extra', '口香糖', '4.0', now());
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('colgate', '高露洁', '2.0', now());
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nielsennv', '尼尔森女性护理', '1.0', now());
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nielsendrink', '尼尔森饮料', '1.0', now());
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`, `status`) VALUES ('nestlemilk', '雀巢炼奶', '3.0', now(), 'deleted');
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestlecoffee', '雀巢咖啡', '5.0', now());
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`, `status`) VALUES ('nestlemilkpowder', '雀巢奶粉', '3.0', now(), 'deleted');
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`, `status`) VALUES ('nestleoatmeal', '雀巢麦片', '3.0', now(), 'deleted');
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`, `status`) VALUES ('nestlericeflour', '雀巢营养品', '3.0', now(), 'deleted');
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`, `status`) VALUES ('nestlesugar', '雀巢糖果', '3.0', now(), 'deleted');
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`, `status`) VALUES ('nestlebiscuit', '雀巢饼干', '3.0', now(), 'deleted');
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestlenutrition', '雀巢营养品', '1.0', now());
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestleconfectionery', '雀巢糕点糖果', '1.0', now());
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nestledairy', '雀巢奶制品', '1.0', now());
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nielsenchips', '尼尔森薯片', '4.0', now());
-		
-		INSERT INTO `major_type`(`name`, `description`, `version`, `create_time`) VALUES ('nielsencoco', '尼尔森可乐', '1.0', now());
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (1,'coffee','咖啡',NULL,'2017-05-11 16:51:03','deleted');
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (2,'chocolate','巧克力','2.0','2017-05-11 16:51:03','active') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (3,'beer','啤酒','9.0','2017-05-11 16:51:03','active') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (4,'driedmilk','奶粉','3.0','2017-05-11 16:51:03','deleted') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (5,'cookie','饼干','6.0','2017-05-11 16:51:03','active') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (6,'extra','口香糖','4.0','2017-06-16 16:29:26','active') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (7,'colgate','高露洁','2.0','2017-08-11 18:00:34','active') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (8,'nielsennv','尼尔森女性护理','1.0','2017-09-06 09:27:37','active') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (9,'nielsendrink','尼尔森饮料','1.0','2017-09-06 09:27:37','active') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (10,'nestlemilk','雀巢炼奶','3.0','2017-09-08 14:43:39','deleted') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (11,'nestlecoffee','雀巢咖啡','5.0','2017-09-08 14:43:39','active') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (12,'nestlemilkpowder','雀巢奶粉','3.0','2017-09-08 14:43:39','deleted') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (13,'nestleoatmeal','雀巢麦片','3.0','2017-09-08 14:43:39','deleted') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (14,'nestlericeflour','雀巢营养品','3.0','2017-09-08 14:43:39','deleted') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (15,'nestlesugar','雀巢糖果','3.0','2017-09-08 14:43:39','deleted') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (16,'nestlebiscuit','雀巢饼干','3.0','2017-09-08 14:43:39','deleted') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (17,'nestlenutrition','雀巢营养品','2.0','2017-09-25 19:06:04','active') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (18,'nestleconfectionery','雀巢糕点糖果','2.0','2017-09-25 19:06:04','active') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (19,'nestledairy','雀巢奶制品','2.0','2017-09-25 19:06:04','active') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (20,'nielsenchips','尼尔森薯片','4.0','2017-11-13 14:57:00','active') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (21,'nestle4goods','雀巢','1.0','2018-01-25 16:00:37','active') ;
+		INSERT INTO `major_type`(`id`, `name`, `description`, `version`, `create_time`, `status`) VALUES (22,'nielsencoco','尼尔森可乐','1.0','2018-02-12 10:30:12','active') ;
 		
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('coffee', 'NesCafe', 'NesCafe', 0, now());
 		INSERT INTO `goods_sku`(`major_type`, `name`, `description`, `order`, `create_time`) VALUES ('coffee', 'Maxwell', 'Maxwell', 1, now());

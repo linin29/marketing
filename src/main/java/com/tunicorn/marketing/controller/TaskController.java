@@ -489,12 +489,14 @@ public class TaskController extends BaseController {
 			@RequestParam(value = "taskId") String taskId, @RequestParam(value = "projectId") String projectId, Model model) {
 		UserVO user = getCurrentUser(request);
 		model.addAttribute("user", user);
-		ProjectVO projectVO = projectService.getProjectsByUserIdAndProjectId(user.getId(), projectId);//验证是否有该项目权限
-		int imageCount = taskService.getTaskImagesCountByTaskId(taskId);
-		if (images != null && (images.size() + imageCount > projectVO.getImageNumber())) {
-			ServiceResponseBO responseBO = new ServiceResponseBO(false, "marketing_project_images_max_count");
-			Message message = MessageUtils.getInstance().getMessage(String.valueOf(responseBO.getResult()));
-			return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
+		if (StringUtils.isNotBlank(projectId)) {
+			ProjectVO projectVO = projectService.getProjectsByUserIdAndProjectId(user.getId(), projectId);
+			int imageCount = taskService.getTaskImagesCountByTaskId(taskId);
+			if (images != null && (images.size() + imageCount > projectVO.getImageNumber())) {
+				ServiceResponseBO responseBO = new ServiceResponseBO(false, "marketing_project_images_max_count");
+				Message message = MessageUtils.getInstance().getMessage(String.valueOf(responseBO.getResult()));
+				return CommonAjaxResponse.toFailure(message.getCode(), message.getMessage());
+			}
 		}
 		ServiceResponseBO response = taskService.taskImages(images, taskId, user.getId());
 		if (response.isSuccess()) {

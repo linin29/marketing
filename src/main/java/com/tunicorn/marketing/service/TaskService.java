@@ -541,7 +541,7 @@ public class TaskService {
 		if (projectVO!=null) {//项目存在才验证
 			int callNum = projectVO.getCallNumber();//该项目接口允许的调用次数
 			Integer calledNum = projectService.getAPICallCountByProjectId(taskVO.getProjectId());//获取已经调用的接口次数
-			int currCallTimes = new Double(Math.ceil(imagesVOs.size()/MarketingConstants.FIVE_IMAGES)).intValue()*2;
+			int currCallTimes = new Double(Math.ceil((float)imagesVOs.size()/MarketingConstants.FIVE_IMAGES)).intValue()*2;
 			if (calledNum!=null&&(calledNum.intValue()+currCallTimes)>=callNum) {//达到接口调用次数上限,禁止再进行调用
 				return new ServiceResponseBO(false,"marketing_api_max_count");
 			}

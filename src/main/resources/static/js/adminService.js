@@ -236,10 +236,14 @@ adminService = (function(){
 			if(!contractedValue && contractedValue != "0") {
 				$('#errorMsg').text("请输入项目金额");
 				return;
+			}else{
+				$("#service-form").data("bootstrapValidator").validateField('contractedValue');
 			}
 			if(!contractedNo) {
 				$('#errorMsg').text("请输入合同编号");
 				return;
+			}else{
+				$("#service-form").data("bootstrapValidator").validateField('contractedNo');
 			}
 		}
 		if(projectType == 'free' && maxCallNumber > 100) {
@@ -835,13 +839,13 @@ adminService = (function(){
 				message: 'The imageNumber is not valid',
 				validators: {
 					callback: {
-				        message: '图片数是1-999999999之间的正整数',
+				        message: '图片数是1-2147483647之间的正整数',
 				        callback: function(value, validator) {
 				        	var flag = false;
 				        	if(!(/(^[1-9]\d*$)/.test(value))){
 				        		return false;
 				        	}
-				            if (0 < parseInt(value) &&  parseInt(value) <= 999999999) {
+				            if (0 < parseInt(value) &&  parseInt(value) <= 2147483647) {
 				                flag = true;
 				            }
 				            return flag;
@@ -853,13 +857,13 @@ adminService = (function(){
 				message: 'The callNumber is not valid',
 				validators: {
 					callback: {
-				        message: '调用数是1-999999999之间的正整数',
+				        message: '调用数是1-2147483647之间的正整数',
 				        callback: function(value, validator) {
 				        	var flag = false;
 				        	if(!(/(^[1-9]\d*$)/.test(value))){
 				        		return false;
 				        	}
-				            if (0 < parseInt(value) &&  parseInt(value) <= 999999999) {
+				            if (0 < parseInt(value) &&  parseInt(value) <= 2147483647) {
 				                flag = true;
 				            }
 				            return flag;
@@ -906,8 +910,29 @@ adminService = (function(){
 	                    message: '邮箱格式有误'
 	                }
 				}
+			},
+			contractedNo: {
+				message: 'The contractedNo is not valid',
+				validators: {
+					stringLength: {
+						min: 0,
+						max: 20,
+						message: '合同编号长度在0-20个字符之内'
+					},
+					regexp: {
+						regexp: /^[a-zA-Z0-9_]+$/,
+						message: '项目名称只能是英文、数字和下划线组合'
+					}
+				}
+			},
+			contractedValue: {
+				message: 'The contractedNo is not valid',
+				validators: {
+					numeric: {
+						message: '合同金额必须是整数或小数'
+					}
+				}
 			}
-			
 		}
 	});
   };

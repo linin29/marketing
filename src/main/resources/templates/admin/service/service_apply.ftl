@@ -148,7 +148,7 @@
 			                	</tbody>
 			                </table>
 			           	</div>
-			           	<div id="upload-book-div">
+			           	<div id="upload-book-div" >
 			                <h5><strong>合同信息<small>(支持图片，word文档和pdf文件上传)</small></strong></h5>
 			                <table class="table table-bordered" style="width: 90%;">
 			                	<tbody>
@@ -158,13 +158,17 @@
 			                		</tr>
 			                		<tr id="contracted-value-tr">
 			                			<td class="wid">合同金额(¥)：</td>
-			                			<td>
+			                			<td><div class="form-group">
 				                			<input name="contractedValue" type="text" placeholder="请输入金额" class="money-style" id="contracted-value">
-				                		</td>
+				                		</div></td>
 			                		</tr>
 			                		<tr id="contracted-no-tr">
 			                			<td class="wid">合同编号：</td>
-			                			<td><input name="contractedNo" class="application-name total" type="text" id="contracted-no"  placeholder="输入合同编号"/></td>
+			                			<td>
+			                				<div class="form-group">
+			                				<input name="contractedNo" class="application-name total" type="text" id="contracted-no"  placeholder="输入合同编号"/>
+			                				</div>
+			                			</td>
 			                		</tr>
 			                	</tbody>
 			                </table>

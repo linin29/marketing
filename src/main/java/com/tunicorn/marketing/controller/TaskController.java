@@ -491,7 +491,7 @@ public class TaskController extends BaseController {
 		model.addAttribute("user", user);
 		if (StringUtils.isNotBlank(projectId)) {
 			ProjectVO projectVO = projectService.getProjectsByUserIdAndProjectId(user.getId(), projectId);
-			int imageCount = taskService.getTaskImagesCountByTaskId(taskId);
+			int imageCount = taskService.getImageCountByProjectId(projectId);
 			if (images != null && (images.size() + imageCount > projectVO.getImageNumber())) {
 				ServiceResponseBO responseBO = new ServiceResponseBO(false, "marketing_project_images_max_count");
 				Message message = MessageUtils.getInstance().getMessage(String.valueOf(responseBO.getResult()));

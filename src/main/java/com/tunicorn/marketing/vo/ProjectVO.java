@@ -16,17 +16,17 @@ public class ProjectVO {
 
 	private String id;
 	@NotNull(message="项目名称不能为空")
-	@Size(max=40, min=1, message="项目名称长度在1-40个字符之内")
+	@Size(max=40, min=1, message="项目名称长度应在1-40个字符之内")
 	@Pattern(regexp="^[a-zA-Z0-9_\u4e00-\u9fa5]+$", message="项目名称只能是中文、英文、数字和下划线组合")
 	private String name;
 	@NotNull(message="地址不能为空")
-	@Size(max=200, min=1, message="地址长度在1-200个字符之内")
+	@Size(max=200, min=1, message="地址长度应在1-200个字符之内")
 	private String address;
 	@NotNull(message="联系方式不能为空")
 	@Pattern(regexp = "^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$", message="手机号格式不正确")
 	private String mobile;
 	@NotNull(message="联系人不能为空")
-	@Size(max=80, min=1, message="联系人长度在1-80个字符之内")
+	@Size(max=80, min=1, message="联系人长度应在1-80个字符之内")
 	@Pattern(regexp="^[a-zA-Z0-9_\u4e00-\u9fa5]+$", message="联系人只能是中文、英文、数字和下划线组合")
 	private String contacts;
 	private String type;

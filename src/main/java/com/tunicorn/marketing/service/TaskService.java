@@ -27,6 +27,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import javax.imageio.ImageIO;
+import javax.validation.constraints.Null;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
@@ -232,7 +233,7 @@ public class TaskService {
 					return new ServiceResponseBO(false, "marketing_project_not_existed");
 				}else{//项目存在,则验证该项目下所有任务的图片数量
 					int imageNum = taskMapper.getTaskImagesByProjectId(projectId);
-					if (imageNum+images.size()>projectVO.getImageNumber()) {//图片超过上限
+					if (images!=null&&(imageNum+images.size()>projectVO.getImageNumber())) {//图片超过上限
 						return new ServiceResponseBO(false, "marketing_project_images_max_count");
 					}
 				}

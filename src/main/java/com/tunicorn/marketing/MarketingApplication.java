@@ -39,7 +39,9 @@ public class MarketingApplication extends WebMvcConfigurerAdapter {
 		.excludePathPatterns("/api/**")
 		.excludePathPatterns("/user/**")
 		.excludePathPatterns("/showView/**")
-		.excludePathPatterns("/**/crops/**").excludePathPatterns("/admin/**");
+		.excludePathPatterns("/**/crops/**")
+		.excludePathPatterns("/admin/**")
+		.excludePathPatterns("/error");
 		
 		registry.addInterceptor(new AdminLoginInterceptor()).addPathPatterns("/admin/**")
 		.excludePathPatterns("/admin/login");

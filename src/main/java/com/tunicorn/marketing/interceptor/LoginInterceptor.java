@@ -47,7 +47,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 		if (user == null) {
 			logger.error("Login required for : " + request.getRequestURL());
-
+			
 			String ajaxRquestFlag = request.getHeader("X-Requested-With");
 			if (StringUtils.equals(ajaxRquestFlag, "XMLHttpRequest")) {
 				response.setStatus(911);
@@ -57,7 +57,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			} else {
 				response.sendRedirect(contextPath + "/login");
 			}
-
 			return false;
 		}
 

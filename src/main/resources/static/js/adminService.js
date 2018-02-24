@@ -820,13 +820,13 @@ adminService = (function(){
 				message: 'The storeNumber is not valid',
 				validators: {
 					callback: {
-				        message: '门店数是1-999999999之间的正整数',
+				        message: '门店数是1-2147483647之间的正整数',
 				        callback: function(value, validator) {
 				        	var flag = false;
 				        	if(!(/(^[1-9]\d*$)/.test(value))){
 				        		return false;
 				        	}
-				            if (0 < parseInt(value) &&  parseInt(value) <= 999999999) {
+				            if (0 < parseInt(value) &&  parseInt(value) <= 2147483647) {
 				                flag = true;
 				            }
 				            return flag;

@@ -32,15 +32,15 @@ public class ProjectVO {
 	private String type;
 	@NotNull(message="门店数不能为空")
 	@Min(1)
-	@Max(999999999)
+	@Max(2147483647)
 	private int storeNumber;
 	@NotNull(message="调用次数不能为空")
 	@Min(1)
-	@Max(999999999)
+	@Max(2147483647)
 	private int callNumber;
 	@NotNull(message="图片数不能为空")
 	@Min(1)
-	@Max(999999999)
+	@Max(2147483647)
 	private int imageNumber;
 	private float threshhold;
 	private Date createTime;

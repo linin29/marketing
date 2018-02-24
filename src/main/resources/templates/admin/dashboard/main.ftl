@@ -29,7 +29,7 @@
     <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/bootstrap-paginator.js" ></script>
     <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/cropper.js" ></script>
     <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/tunicorn-cloud.js" ></script>
-    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/bootstrap-datetimepicker.min.js" ></script>
+    <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/bootstrap-datetimepicker.js" ></script>
     <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/bootstrap-datetimepicker.zh-CN1.js" ></script>
     <script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/bootstrapValidator.js"></script>
     <link href="${springMacroRequestContext.contextPath}/css/bootstrap-datetimepicker.min.css" rel="stylesheet">

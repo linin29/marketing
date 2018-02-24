@@ -643,7 +643,7 @@ adminService = (function(){
 	};
 	
 	function initDate() {
-		$('.datetimepicker').remove();
+		//$('.datetimepicker').remove();
 		var dateData = getInitDate();
 		$("#toDate").val(dateData['endDate']);
 		$("#fromDate").val(dateData['startDate']);

@@ -209,7 +209,9 @@
 			                			<td>
 			                				<div class="form-group" id="startTime">							          							                  
 							                    <div style="float: left" class=" input-group date form_datetime1 " data-date="2016-11-1T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii:ss" >
+							                    <span style="position: relative; z-index: 9999;">
 								                    <input class="form-control" size="16" type="text" value="" id="fromDate" name="fromDate">
+								                </span>
 								                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 								                </div>							               
 							                </div>

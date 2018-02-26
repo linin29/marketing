@@ -383,10 +383,12 @@ public class TaskService {
 			return new ServiceResponseBO(false, "marketing_image_max_count");
 		}
 		/*****************新增图片数量验证,验证完图片的数量之后再进行任务创建******************/
-		ProjectVO projectVO = projectService.getProjectsByUserIdAndProjectId(userId, projectId);
-		int imgCount = this.getImageCountByProjectId(projectId);
-		if(taskImagesVOs.size() + imgCount > projectVO.getImageNumber()){
-			return new ServiceResponseBO(false, "marketing_project_images_max_count");
+		if (StringUtils.isNotBlank(projectId)) {
+			ProjectVO projectVO = projectService.getProjectsByUserIdAndProjectId(userId, projectId);
+			int imgCount = this.getImageCountByProjectId(projectId);
+			if(taskImagesVOs.size() + imgCount > projectVO.getImageNumber()){
+				return new ServiceResponseBO(false, "marketing_project_images_max_count");
+			}
 		}
 		taskMapper.createTask(createTaskVO);
 		/**************************************************/
